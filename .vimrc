@@ -278,7 +278,6 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 			let g:Tex_ViewRule_pdf = 'texworks'
 			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL SumatraPDF -reuse-instance -inverse-search "C:\vim\gvim.exe -n -c \":RemoteOpen +\%l \%f\""'
 			""let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL firefox -new-window'
-			"let g:Tex_ViewRule_pdf = 'powershell -Command & {$p =[System.String]::Concat(''"""'',[System.IO.Path]::GetFullPath($args),''"""'');Start-Process chrome -ArgumentList (''--new-window'',$p)}"'
 			""let g:Tex_ViewRule_pdf = 'pdfopen --rxi --file'
 			
 	   endfunction
