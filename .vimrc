@@ -16,6 +16,7 @@ set wrap                " 長いテキストの折り返し
 set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
 
+
 " 前時代的スクリーンベルを無効化
 set t_vb=
 set novisualbell
@@ -159,7 +160,7 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 " 読み込まない
 		let s:noplugin = 1
 		else
-" NeoBundleを'runtimepath'に追加し初期化を行う
+		" NeoBundleを'runtimepath'に追加し初期化を行う
 		if has('vim_starting')
 				execute "set runtimepath+=" . s:neobundle_root
 		endif
@@ -179,8 +180,10 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 				\   "unix"      : "make -f make_unix.mak",
 				\ }}
 
-		" (ry
-		
+ 		" カラースキーム一覧表示に Unite.vim を使う
+		NeoBundle 'Shougo/unite.vim'
+		NeoBundle 'ujihisa/unite-colorscheme'
+ 
 		NeoBundleLazy "Shougo/vimfiler", {
 				\ "depends": ["Shougo/unite.vim"],          
 				\ "autoload": {
@@ -188,6 +191,7 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 				\   "mappings": ['<Plug>(vimfiler_switch)'],
 				\   "explorer": 1,
 				\ }}
+
 		nnoremap <Leader>e :VimFilerExplorer<CR>
 		" close vimfiler automatically when there are only vimfiler open
 		autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
@@ -225,19 +229,74 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 	         \ }}
 	   let s:hooks = neobundle#get_hooks("jedi-vim")
 	   function! s:hooks.on_source(bundle)
-			   " jediにvimの設定を任せると'completeopt+=preview'するので
-			   " 自動設定機能をOFFにし手動で設定を行う
-			   let g:jedi#auto_vim_configuration = 0
-			   
-			   "補完の最初の項目が選択された状態だと使いにくいためオフにする
-			    let g:jedi#popup_on_dot = 1
-			    let g:jedi#popup_select_first = 0
-			   "quickrunと被るため大文字に変更
-				let g:jedi#rename_command = '<Leader>R'
-				" gundoと被るため大文字に変更 (2013-06-2410:00 追記）
-				let g:jedi#goto_assignments_command = '<Leader>G'
+			" jediにvimの設定を任せると'completeopt+=preview'するので
+			" 自動設定機能をOFFにし手動で設定を行う
+			let g:jedi#auto_vim_configuration = 0
+			
+			"補完の最初の項目が選択された状態だと使いにくいためオフにする
+			let g:jedi#popup_on_dot = 1
+			let g:jedi#popup_select_first = 0
+			"quickrunと被るため大文字に変更
+			let g:jedi#rename_command = '<Leader>R'
+			" gundoと被るため大文字に変更 (2013-06-2410:00 追記）
+			let g:jedi#goto_assignments_command = '<Leader>G'
 	   endfunction
-                   
+	   
+		NeoBundleLazy 'git://git.code.sf.net/p/vim-latex/vim-latex', {
+			\ "autoload":{
+			\	"filetypes" : ["tex"],
+			\}}
+		
+	   let s:hooks = neobundle#get_hooks("vim-latex")
+	   function! s:hooks.on_source(bundle)
+			set shellslash
+			set grepprg=grep\ -nH\ $*
+			let g:tex_flavor='latex'
+			let g:Imap_UsePlaceHolders = 1
+			let g:Imap_DeleteEmptyPlaceHolders = 1
+			let g:Imap_StickyPlaceHolders = 0
+			let g:Tex_DefaultTargetFormat = 'pdf'
+			"let g:Tex_FormatDependency_pdf = 'pdf'
+			"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+			""let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
+			let g:Tex_FormatDependency_ps = 'dvi,ps'
+			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -u -ot "-kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
+			"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode "-file-line-error-style $*'
+			""let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode "-file-line-error-style $*'
+			""let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'dvipdfmx $*.dvi'
+			""let g:Tex_CompileRule_pdf = 'ps2pdf.bat $*.ps'
+			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+			let g:Tex_CompileRule_dvi = 'uplatex -kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			let g:Tex_BibtexFlavor = 'upbibtex'
+			"let g:Tex_BibtexFlavor = 'bibtex'
+			"let g:Tex_BibtexFlavor = 'bibtexu'
+			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+			"let g:Tex_MakeIndexFlavor = 'makeindex $*.idx'
+			""let g:Tex_MakeIndexFlavor = 'texindy $*.idx'
+			let g:Tex_ViewRule_pdf = 'texworks'
+			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL SumatraPDF -reuse-instance -inverse-search "C:\vim\gvim.exe -n -c \":RemoteOpen +\%l \%f\""'
+			""let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL firefox -new-window'
+			"let g:Tex_ViewRule_pdf = 'powershell -Command & {$p =[System.String]::Concat(''"""'',[System.IO.Path]::GetFullPath($args),''"""'');Start-Process chrome -ArgumentList (''--new-window'',$p)}"'
+			""let g:Tex_ViewRule_pdf = 'pdfopen --rxi --file'
+			
+	   endfunction
+		
+	   
+		"Solarized カラースキーム
+		NeoBundle 'altercation/vim-colors-solarized'
+		NeoBundle 'croaker/mustang-vim'
+		NeoBundle 'jeffreyiacono/vim-colors-wombat'
+		NeoBundle 'nanotech/jellybeans.vim'
+		NeoBundle 'vim-scripts/Lucius'
+		NeoBundle 'vim-scripts/Zenburn'
+		NeoBundle 'mrkn/mrkn256.vim'
+		NeoBundle 'jpo/vim-railscasts-theme'
+		NeoBundle 'therubymug/vim-pyte'
+		NeoBundle 'tomasr/molokai'
+		colorscheme molokai
+
 		" インストールされていないプラグインのチェックおよびダウンロード
 		NeoBundleCheck
 endif
@@ -245,3 +304,5 @@ endif
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
 filetype plugin indent on
+
+

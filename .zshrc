@@ -26,6 +26,10 @@ setopt list_packed             # 補完候補をできるだけ詰めて表示�
 setopt list_types              # 補完候補にファイルの種類も表示する
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' format '%B%d%b'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name ''
 
 ### Glob ###
 setopt extended_glob # グロブ機能を拡張する
@@ -121,6 +125,7 @@ esac
 ### Aliases ###
 alias r=rails
 alias v=vim
+alias ls='ls -G --color'
 
 # cdコマンド実行後、lsを実行する
 function cd() {
