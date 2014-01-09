@@ -18,7 +18,7 @@ set colorcolumn=80      " その代わり80文字目にラインを入れる
 
 
 " 前時代的スクリーンベルを無効化
-set t_vb=
+set t_vb=4
 set novisualbell
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
@@ -69,6 +69,8 @@ set noswapfile
 
 "素早くjj と押すことでESCとみなす
 inoremap jj <Esc>
+nnoremap ; :
+nnoremap : ;
 
 " ESCを二回押すことでハイライトを消す
 nmap <silent> <Esc><Esc> :nohlsearch<CR>
@@ -82,7 +84,7 @@ nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
 nnoremap g* g*zz
-nnoremap g# g#zz
+nnoremap g# g#zz    
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
 nnoremap j gj
@@ -171,14 +173,14 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 
 		" 非同期通信を可能にする
 		" 'build'が指定されているのでインストール時に自動的に
-				" 指定されたコマンドが実行され vimproc がコンパイルされる
+		" 指定されたコマンドが実行され vimproc がコンパイルされる
 		NeoBundle "Shougo/vimproc", {
-				\ "build": {
-				\   "windows"   : "make -f make_mingw32.mak",
-				\   "cygwin"    : "make -f make_cygwin.mak",
-				\   "mac"       : "make -f make_mac.mak",
-				\   "unix"      : "make -f make_unix.mak",
-				\ }}
+					\ "build": {
+					\   "windows"   : "make -f make_mingw32.mak",
+					\   "cygwin"    : "make -f make_cygwin.mak",
+					\   "mac"       : "make -f make_mac.mak",
+					\   "unix"      : "make -f make_unix.mak",
+					\ }}
 
  		" カラースキーム一覧表示に Unite.vim を使う
 		NeoBundle 'Shougo/unite.vim'
@@ -197,76 +199,74 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 		autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
 		let s:hooks = neobundle#get_hooks("vimfiler")
 		function! s:hooks.on_source(bundle)
-				let g:vimfiler_as_default_explorer = 1
-				let g:vimfiler_enable_auto_cd = 1
-				" 2013-08-14 追記
-				let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
-				" vimfiler specific key mappings
-				autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
-				function! s:vimfiler_settings()
-						" ^^ to go up
-						nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-						" use R to refresh
-						nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-						" overwrite C-l
-						nmap <buffer> <C-l> <C-w>l
-				endfunction
+			let g:vimfiler_as_default_explorer = 1
+			let g:vimfiler_enable_auto_cd = 1
+			" 2013-08-14 追記
+			let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
+			" vimfiler specific key mappings
+			autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+			function! s:vimfiler_settings()
+				" ^^ to go up
+				nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+				" use R to refresh
+				nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+				" overwrite C-l
+				nmap <buffer> <C-l> <C-w>l
+			endfunction
 		endfunction
 
-		NeoBundle 'tpope/vim-surround'
-		NeoBundle 'vim-scripts/Align'
-		NeoBundle 'vim-scripts/YankRing.vim'
-        NeoBundle 'tpope/vim-fugitive'
+	   NeoBundle 'tpope/vim-surround'
+	   NeoBundle 'vim-scripts/Align'
+	   NeoBundle 'vim-scripts/YankRing.vim'
+       NeoBundle 'tpope/vim-fugitive'
 
-		NeoBundleLazy "davidhalter/jedi-vim", {
-			 \'rev':'3934359',
-			 \ "autoload": {
-	         \   "filetypes": ["python", "python3", "djangohtml"],
-	         \ },
-	         \ "build": {
-	         \   "mac": "pip install jedi",
-	         \   "unix": "pip install jedi",
-	         \ }}
+	   NeoBundleLazy "davidhalter/jedi-vim", {
+				   \'rev':'3934359',
+				   \ "autoload": {
+				   \   "filetypes": ["python", "python3", "djangohtml"],
+				   \ },
+				   \ "build": {
+				   \   "mac": "pip install jedi",
+				   \   "unix": "pip install jedi",
+				   \ }}
 	   let s:hooks = neobundle#get_hooks("jedi-vim")
 	   function! s:hooks.on_source(bundle)
-			" jediにvimの設定を任せると'completeopt+=preview'するので
-			" 自動設定機能をOFFにし手動で設定を行う
-			let g:jedi#auto_vim_configuration = 0
-			
-			"補完の最初の項目が選択された状態だと使いにくいためオフにする
+		   " jediにvimの設定を任せると'completeopt+=preview'するので
+		   " 自動設定機能をOFFにし手動で設定を行う
+		   let g:jedi#auto_vim_configuration = 0
+
+		   "補完の最初の項目が選択された状態だと使いにくいためオフにする
 			let g:jedi#popup_on_dot = 1
 			let g:jedi#popup_select_first = 0
 			"quickrunと被るため大文字に変更
 			let g:jedi#rename_command = '<Leader>R'
 			" gundoと被るため大文字に変更 (2013-06-2410:00 追記）
 			let g:jedi#goto_assignments_command = '<Leader>G'
-	   endfunction
-	   
-		NeoBundleLazy 'git://git.code.sf.net/p/vim-latex/vim-latex', {
-			\ "autoload":{
-			\	"filetypes" : ["tex"],
-			\}}
-		
-	   let s:hooks = neobundle#get_hooks("vim-latex")
-	   function! s:hooks.on_source(bundle)
+		endfunction
+
+		NeoBundleLazy 'git://git.code.sf.net/p/vim-latex/vim-latex',{ 
+				\ "autoload":{
+				\	"filetypes" : ["tex"],
+				\}}
+		let s:hooks = neobundle#get_hooks("vim-latex")
+		function! s:hooks.on_source(bundle) 
 			set shellslash
 			set grepprg=grep\ -nH\ $*
 			let g:tex_flavor='latex'
 			let g:Imap_UsePlaceHolders = 1
 			let g:Imap_DeleteEmptyPlaceHolders = 1
 			let g:Imap_StickyPlaceHolders = 0
-			let g:Tex_DefaultTargetFormat = 'pdf'
 			"let g:Tex_FormatDependency_pdf = 'pdf'
-			"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
-			""let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
+			let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+			"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
 			let g:Tex_FormatDependency_ps = 'dvi,ps'
 			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -u -ot "-kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
-			"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode "-file-line-error-style $*'
-			""let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode "-file-line-error-style $*'
-			""let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+			"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
 			"let g:Tex_CompileRule_pdf = 'dvipdfmx $*.dvi'
-			""let g:Tex_CompileRule_pdf = 'ps2pdf.bat $*.ps'
+			"let g:Tex_CompileRule_pdf = 'ps2pdf.bat $*.ps'
 			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
 			let g:Tex_CompileRule_dvi = 'uplatex -kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
 			let g:Tex_BibtexFlavor = 'upbibtex'
@@ -274,15 +274,22 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 			"let g:Tex_BibtexFlavor = 'bibtexu'
 			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
 			"let g:Tex_MakeIndexFlavor = 'makeindex $*.idx'
-			""let g:Tex_MakeIndexFlavor = 'texindy $*.idx'
+			"let g:Tex_MakeIndexFlavor = 'texindy $*.idx'
 			let g:Tex_ViewRule_pdf = 'texworks'
 			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL SumatraPDF -reuse-instance -inverse-search "C:\vim\gvim.exe -n -c \":RemoteOpen +\%l \%f\""'
-			""let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL firefox -new-window'
-			""let g:Tex_ViewRule_pdf = 'pdfopen --rxi --file'
+			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL firefox -new-window'
+			"let g:Tex_ViewRule_pdf = 'powershell -Command "& {$p = [System.String]::Concat(''"""'',[System.IO.Path]::GetFullPath($args),''"""'');Start-Process chrome -ArgumentList (''--new-window'',$p)}"'
+			"let g:Tex_ViewRule_pdf = 'pdfopen --rxi --file'.on_source(bundle) 
+			B
 			
-	   endfunction
-		
-	   
+			noremap <Leader>p <ESC>:call GENPDF()<Enter> 
+			function! GENPDF()
+				:w|!ptex2pdf -l -u -ot "-kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $* %
+			endfunction
+					
+		endfunction
+
+
 		"Solarized カラースキーム
 		NeoBundle 'altercation/vim-colors-solarized'
 		NeoBundle 'croaker/mustang-vim'
