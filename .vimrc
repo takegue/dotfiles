@@ -236,79 +236,61 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 		   let g:jedi#auto_vim_configuration = 0
 
 		   "補完の最初の項目が選択された状態だと使いにくいためオフにする
-			let g:jedi#popup_on_dot = 1
-			let g:jedi#popup_select_first = 0
-			"quickrunと被るため大文字に変更
-			let g:jedi#rename_command = '<Leader>R'
-			" gundoと被るため大文字に変更 (2013-06-2410:00 追記）
-			let g:jedi#goto_assignments_command = '<Leader>G'
-		endfunction
+		   let g:jedi#popup_on_dot = 1
+		   let g:jedi#popup_select_first = 0
+		   "quickrunと被るため大文字に変更
+		   let g:jedi#rename_command = '<Leader>R'
+		   " gundoと被るため大文字に変更 (2013-06-2410:00 追記）
+		   let g:jedi#goto_assignments_command = '<Leader>G'
+	   endfunction
 
-		NeoBundleLazy 'git://git.code.sf.net/p/vim-latex/vim-latex',{ 
-				\ "autoload":{
-				\	"filetypes" : ["tex"],
-				\}}
-		let s:hooks = neobundle#get_hooks("vim-latex")
-		function! s:hooks.on_source(bundle) 
-			set shellslash
-			set grepprg=grep\ -nH\ $*
-			let g:tex_flavor='latex'
-			let g:Imap_UsePlaceHolders = 1
-			let g:Imap_DeleteEmptyPlaceHolders = 1
-			let g:Imap_StickyPlaceHolders = 0
-			"let g:Tex_FormatDependency_pdf = 'pdf'
-			let g:Tex_FormatDependency_pdf = 'dvi,pdf'
-			"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
-			let g:Tex_FormatDependency_ps = 'dvi,ps'
-			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -u -ot "-kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
-			"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			"let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			"let g:Tex_CompileRule_pdf = 'dvipdfmx $*.dvi'
-			"let g:Tex_CompileRule_pdf = 'ps2pdf.bat $*.ps'
-			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-			let g:Tex_CompileRule_dvi = 'uplatex -kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-			let g:Tex_BibtexFlavor = 'upbibtex'
-			"let g:Tex_BibtexFlavor = 'bibtex'
-			"let g:Tex_BibtexFlavor = 'bibtexu'
-			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
-			"let g:Tex_MakeIndexFlavor = 'makeindex $*.idx'
-			"let g:Tex_MakeIndexFlavor = 'texindy $*.idx'
-			let g:Tex_ViewRule_pdf = 'texworks'
-			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL SumatraPDF -reuse-instance -inverse-search "C:\vim\gvim.exe -n -c \":RemoteOpen +\%l \%f\""'
-			"let g:Tex_ViewRule_pdf = 'rundll32 shell32,ShellExec_RunDLL firefox -new-window'
-			"let g:Tex_ViewRule_pdf = 'powershell -Command "& {$p = [System.String]::Concat(''"""'',[System.IO.Path]::GetFullPath($args),''"""'');Start-Process chrome -ArgumentList (''--new-window'',$p)}"'
-			"let g:Tex_ViewRule_pdf = 'pdfopen --rxi --file'.on_source(bundle) 
-			B
-			
-			noremap <Leader>p <ESC>:call GENPDF()<Enter> 
-			function! GENPDF()
-				:w|!ptex2pdf -l -u -ot "-kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error-style" $* %
-			endfunction
-					
-		endfunction
+	   NeoBundleLazy "jcf/vim-latex", {
+				   \ "autoload": {
+				   \   "filetypes": ["tex"],
+				   \ }}
+	   let s:hooks = neobundle#get_hooks("vim-latex")
+	   function! s:hooks.on_source(bundle)
+		   set shellslash
+		   set grepprg=grep\ -nH\ $*
+		   let g:tex_flavor='platex'
+		   let g:Imap_UsePlaceHolders = 1
+		   let g:Imap_DeleteEmptyPlaceHolders = 1
+		   let g:Imap_StickyPlaceHolders = 0
+		   let g:Tex_DefaultTargetFormat = 'pdf'
+		   let g:Tex_FormatDependency_ps = 'dvi,ps'
+		   let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
+		   let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+		   let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8'
+		   let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+		   let g:Tex_ViewRule_pdf = 'texworks'
 
+		   "キー配置の変更
+		   ""<Ctrl + J>はパネルの移動と被るので番うのに変える
+		   imap <C-n> <Plug>IMAP_JumpForward
+		   nmap <C-n> <Plug>IMAP_JumpForward
+		   vmap <C-n> <Plug>IMAP_DeleteAndJumpForward
+		                           
+	   endfunction
+	   "Solarized カラースキーム
+	   NeoBundle 'altercation/vim-colors-solarized'
+	   NeoBundle 'croaker/mustang-vim'
+	   NeoBundle 'jeffreyiacono/vim-colors-wombat'
+	   NeoBundle 'nanotech/jellybeans.vim'
+	   NeoBundle 'vim-scripts/Lucius'
+	   NeoBundle 'vim-scripts/Zenburn'
+	   NeoBundle 'mrkn/mrkn256.vim'
+	   NeoBundle 'jpo/vim-railscasts-theme'
+	   NeoBundle 'therubymug/vim-pyte'
+	   NeoBundle 'tomasr/molokai'
 
-		"Solarized カラースキーム
-		NeoBundle 'altercation/vim-colors-solarized'
-		NeoBundle 'croaker/mustang-vim'
-		NeoBundle 'jeffreyiacono/vim-colors-wombat'
-		NeoBundle 'nanotech/jellybeans.vim'
-		NeoBundle 'vim-scripts/Lucius'
-		NeoBundle 'vim-scripts/Zenburn'
-		NeoBundle 'mrkn/mrkn256.vim'
-		NeoBundle 'jpo/vim-railscasts-theme'
-		NeoBundle 'therubymug/vim-pyte'
-		NeoBundle 'tomasr/molokai'
-		colorscheme molokai
+	   " インストールされていないプラグインのチェックおよびダウンロード
+	   NeoBundleCheck
 
-		" インストールされていないプラグインのチェックおよびダウンロード
-		NeoBundleCheck
-endif
+	   colorscheme molokai
+   endif
 
-" ファイルタイププラグインおよびインデントを有効化
-" これはNeoBundleによる処理が終了したあとに呼ばなければならない
-filetype plugin indent on
+   " ファイルタイププラグインおよびインデントを有効化
+   " これはNeoBundleによる処理が終了したあとに呼ばなければならない
+   filetype plugin indent on
 
 
