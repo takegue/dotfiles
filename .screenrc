@@ -6,7 +6,8 @@
 # @see http://www.limy.org/program/screen_command.html  
 #  
 	
-# Escape key is C-t, literal is t.  
+# Escape key is C-t, literal is .  
+escape a
 
 altscreen on   
 # I like a large scrollback  
@@ -64,7 +65,7 @@ bind j focus down
 bind k focus up  
 bind t focus top  
 bind b focus bottom  
-	
+
 # continuous resion focus(like vi)  
 bind ^J eval 'focus down' 'echo "Focus region: "' 'command -c cfocus'  
 bind ^K eval 'focus up'   'echo "Focus region: "' 'command -c cfocus'  

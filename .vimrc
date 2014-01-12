@@ -192,8 +192,7 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 				\   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
 				\   "mappings": ['<Plug>(vimfiler_switch)'],
 				\   "explorer": 1,
-				\ }}
-
+				\ }} 
 		nnoremap <Leader>e :VimFilerExplorer<CR>
 		" close vimfiler automatically when there are only vimfiler open
 		autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
@@ -215,82 +214,90 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 			endfunction
 		endfunction
 
-	   NeoBundle 'tpope/vim-surround'
-	   NeoBundle 'vim-scripts/Align'
-	   NeoBundle 'vim-scripts/YankRing.vim'
-       NeoBundle 'tpope/vim-fugitive'
+		"エディタ関係の便利ツール
+		NeoBundle 'tpope/vim-surround'
+		NeoBundle 'vim-scripts/Align'
+		NeoBundle 'vim-scripts/YankRing.vim'
+		NeoBundle 'tpope/vim-fugitive'
 
-	   NeoBundleLazy "davidhalter/jedi-vim", {
-				   \'rev':'3934359',
-				   \ "autoload": {
-				   \   "filetypes": ["python", "python3", "djangohtml"],
-				   \ },
-				   \ "build": {
-				   \   "mac": "pip install jedi",
-				   \   "unix": "pip install jedi",
-				   \ }}
-	   let s:hooks = neobundle#get_hooks("jedi-vim")
-	   function! s:hooks.on_source(bundle)
-		   " jediにvimの設定を任せると'completeopt+=preview'するので
-		   " 自動設定機能をOFFにし手動で設定を行う
-		   let g:jedi#auto_vim_configuration = 0
+		NeoBundleLazy "vim-scripts/TaskList.vim", {
+		      \ "autoload": {
+		      \   "mappings": ['<Plug>TaskList'],
+		      \}}
+		nmap <Leader>T <plug>TaskList
 
-		   "補完の最初の項目が選択された状態だと使いにくいためオフにする
-		   let g:jedi#popup_on_dot = 1
-		   let g:jedi#popup_select_first = 0
-		   "quickrunと被るため大文字に変更
-		   let g:jedi#rename_command = '<Leader>R'
-		   " gundoと被るため大文字に変更 (2013-06-2410:00 追記）
-		   let g:jedi#goto_assignments_command = '<Leader>G'
-	   endfunction
+		"プログラミング関係の便利ツール
+		NeoBundleLazy "davidhalter/jedi-vim", {
+					\'rev':'3934359',
+					\ "autoload": {
+					\   "filetypes": ["python", "python3", "djangohtml"],
+					\ },
+					\ "build": {
+					\   "mac": "pip install jedi",
+					\   "unix": "pip install jedi",
+					\ }}
+		let s:hooks = neobundle#get_hooks("jedi-vim")
+		function! s:hooks.on_source(bundle)
+			" jediにvimの設定を任せると'completeopt+=preview'するので
+			" 自動設定機能をOFFにし手動で設定を行う
+			let g:jedi#auto_vim_configuration = 0
 
-	   NeoBundleLazy "jcf/vim-latex", {
-				   \ "autoload": {
-				   \   "filetypes": ["tex"],
-				   \ }}
-	   let s:hooks = neobundle#get_hooks("vim-latex")
-	   function! s:hooks.on_source(bundle)
-		   set shellslash
-		   set grepprg=grep\ -nH\ $*
-		   let g:tex_flavor='platex'
-		   let g:Imap_UsePlaceHolders = 1
-		   let g:Imap_DeleteEmptyPlaceHolders = 1
-		   let g:Imap_StickyPlaceHolders = 0
-		   let g:Tex_DefaultTargetFormat = 'pdf'
-		   let g:Tex_FormatDependency_ps = 'dvi,ps'
-		   let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
-		   let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-		   let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8'
-		   let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
-		   let g:Tex_ViewRule_pdf = 'texworks'
+			"補完の最初の項目が選択された状態だと使いにくいためオフにする
+			let g:jedi#popup_on_dot = 1
+			let g:jedi#popup_select_first = 0
+			"quickrunと被るため大文字に変更
+			let g:jedi#rename_command = '<Leader>R'
+			" gundoと被るため大文字に変更 (2013-06-2410:00 追記）
+			let g:jedi#goto_assignments_command = '<Leader>G'
+		endfunction
 
-		   "キー配置の変更
-		   ""<Ctrl + J>はパネルの移動と被るので番うのに変える
-		   imap <C-n> <Plug>IMAP_JumpForward
-		   nmap <C-n> <Plug>IMAP_JumpForward
-		   vmap <C-n> <Plug>IMAP_DeleteAndJumpForward
-		                           
-	   endfunction
-	   "Solarized カラースキーム
-	   NeoBundle 'altercation/vim-colors-solarized'
-	   NeoBundle 'croaker/mustang-vim'
-	   NeoBundle 'jeffreyiacono/vim-colors-wombat'
-	   NeoBundle 'nanotech/jellybeans.vim'
-	   NeoBundle 'vim-scripts/Lucius'
-	   NeoBundle 'vim-scripts/Zenburn'
-	   NeoBundle 'mrkn/mrkn256.vim'
-	   NeoBundle 'jpo/vim-railscasts-theme'
-	   NeoBundle 'therubymug/vim-pyte'
-	   NeoBundle 'tomasr/molokai'
+		NeoBundleLazy "jcf/vim-latex", {
+					\ "autoload": {
+					\   "filetypes": ["tex"],
+					\ }}
+		let s:hooks = neobundle#get_hooks("vim-latex")
+		function! s:hooks.on_source(bundle)
+			set shellslash
+			set grepprg=grep\ -nH\ $*
+			let g:tex_flavor='platex'
+			let g:Imap_UsePlaceHolders = 1
+			let g:Imap_DeleteEmptyPlaceHolders = 1
+			let g:Imap_StickyPlaceHolders = 0
+			let g:Tex_DefaultTargetFormat = 'pdf'
+			let g:Tex_FormatDependency_ps = 'dvi,ps'
+			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
+			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+			let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8'
+			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+			let g:Tex_ViewRule_pdf = 'texworks'
 
-	   " インストールされていないプラグインのチェックおよびダウンロード
-	   NeoBundleCheck
+			"キー配置の変更
+			""<Ctrl + J>はパネルの移動と被るので番うのに変える
+			imap <C-n> <Plug>IMAP_JumpForward
+			nmap <C-n> <Plug>IMAP_JumpForward
+			vmap <C-n> <Plug>IMAP_DeleteAndJumpForward
 
-	   colorscheme molokai
-   endif
+		endfunction
+		"Solarized カラースキーム
+		NeoBundle 'altercation/vim-colors-solarized'
+		NeoBundle 'croaker/mustang-vim'
+		NeoBundle 'jeffreyiacono/vim-colors-wombat'
+		NeoBundle 'nanotech/jellybeans.vim'
+		NeoBundle 'vim-scripts/Lucius'
+		NeoBundle 'vim-scripts/Zenburn'
+		NeoBundle 'mrkn/mrkn256.vim'
+		NeoBundle 'jpo/vim-railscasts-theme'
+		NeoBundle 'therubymug/vim-pyte'
+		NeoBundle 'tomasr/molokai'
 
-   " ファイルタイププラグインおよびインデントを有効化
-   " これはNeoBundleによる処理が終了したあとに呼ばなければならない
-   filetype plugin indent on
+		" インストールされていないプラグインのチェックおよびダウンロード
+		NeoBundleCheck
+
+		colorscheme molokai
+	endif
+
+	" ファイルタイププラグインおよびインデントを有効化
+	" これはNeoBundleによる処理が終了したあとに呼ばなければならない
+	filetype plugin indent on
 
 
