@@ -107,7 +107,6 @@ case "${TERM}" in
 	;;
 esac
 
-
 # ------------------------------
 # Other Settings
 # ------------------------------
@@ -126,6 +125,12 @@ esac
 alias r=rails
 alias v=vim
 alias ls='ls -G --color'
+
+if [ -e "$HOME/Dropbox" ]; then
+  alias todo="$EDITOR ~\/Dropbox\/.todo"
+else
+  alias todo="$EDITOR ~\/.todo"
+fi  
 
 # cdコマンド実行後、lsを実行する
 function cd() {
