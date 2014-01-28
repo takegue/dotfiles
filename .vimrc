@@ -77,6 +77,13 @@ else
 	autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
 endif
 
+" .vimrc設定編集反映用
+let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
+nnoremap <silent>  <Space>ef :<C-u>call <SID>openFTPluginFile()<CR>
+function! s:openFTPluginFile()
+	let l:ftpFileName = g:ftpPath . &filetype . ".vim"
+	edit `=l:ftpFileName`
+endfunction 
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
@@ -107,7 +114,7 @@ nnoremap ; :
 nnoremap : ;
 
 " ESCを二回押すことでハイライトを消す
-nmap <silent> <Esc><Esc> :noh<CR>
+"nmap <silent> <Esc><Esc> :noh<CR>
 
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
