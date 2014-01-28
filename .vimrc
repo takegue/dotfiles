@@ -15,6 +15,8 @@ set number              " 行番号の表示
 set wrap                " 長いテキストの折り返し
 set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
+set encoding=utf8
+set nocompatible
 
 " 前時代的スクリーンベルを無効化
 set t_vb=4
@@ -45,8 +47,43 @@ set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
 
 " TODO用のコマンド
-command! Todo sp ~/Dropbox/.todo  
-au BufNewFile,BufRead .todo	set filetype=markdown
+command! Todo call s:OpenTodo()
+au BufNewFile,BufRead .todo set filetype=markdown
+function! s:OpenTodo()
+	if filereadable('~/Dropbox/.todo')
+		e  ~/Dropbox/.todo  
+	else
+        e ~/.todo
+	endif	
+endfunction
+
+" .vimrc設定編集反映用
+nnoremap <silent> <Space>ev  :<C-u>edit $MYVIMRC<CR>
+nnoremap <silent> <Space>eg  :<C-u>edit $MYGVIMRC<CR>
+
+" Load .gvimrc after .vimrc edited at GVim.
+nnoremap <silent> <Space>rv :<C-u>source $MYVIMRC \| if has('gui_running')
+" \| source $MYGVIMRC \| endif <CR>
+nnoremap <silent> <Space>rg :<C-u>source $MYGVIMRC<CR>
+
+" Set augroup.  
+if !has('gui_running') && !(has('win32') || has('win64'))
+	" .vimrcの再読込時にも色が変化するようにする
+	autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
+else
+	" .vimrcの再読込時にも色が変化するようにする
+	autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | 
+				\if has('gui_running') | source $MYGVIMRC  
+	autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
+endif
+
+" .vimrc設定編集反映用
+let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
+nnoremap <silent>  <Space>ef :<C-u>call <SID>openFTPluginFile()<CR>
+function! s:openFTPluginFile()
+	let l:ftpFileName = g:ftpPath . &filetype . ".vim"
+	edit `=l:ftpFileName`
+endfunction 
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
@@ -77,7 +114,10 @@ nnoremap ; :
 nnoremap : ;
 
 " ESCを二回押すことでハイライトを消す
+
 nmap <silent> <Esc><Esc> :noh<CR>
+"nmap <silent> <Esc><Esc> :noh<CR>
+
 
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
@@ -133,36 +173,35 @@ cmap w!! w !sudo tee > /dev/null %
 
 " :e などでファイルを開く際にフォルダが存在しない場合は自動作成
 function! s:mkdir(dir, force)
-if !isdirectory(a:dir) && (a:force ||
-			\ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-	call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-endif
+	if !isdirectory(a:dir) && (a:force ||
+				\ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+		call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+	endif
 endfunction
 
 autocmd MyAutoCmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
 " vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
 autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
 function! s:ChangeCurrentDir(directory, bang)
-if a:directory == ''
-	lcd %:p:h
-else
-	execute 'lcd' . a:directory
-endif
-if a:bang == ''
-	pwd
-endif
+	if a:directory == ''
+		lcd %:p:h
+	else
+		execute 'lcd' . a:directory
+	endif
+	if a:bang == ''
+		pwd
+	endif
 endfunction
 " ~/.vimrc.localが存在する場合のみ設定を読み込む
 let s:local_vimrc = expand('~/.vimrc.local')
 if filereadable(s:local_vimrc)
-execute 'source ' . s:local_vimrc
+	execute 'source ' . s:local_vimrc
 endif
 
 "##### Plug-in #######
 let s:noplugin = 0
 let s:bundle_root = expand('~/.vim/bundle')
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
-
 
 
 if (!isdirectory(s:neobundle_root) || v:version < 702 )
@@ -183,7 +222,7 @@ else
 	" 非同期通信を可能にする
 	" 'build'が指定されているのでインストール時に自動的に
 	" 指定されたコマンドが実行され vimproc がコンパイルされる
-	NeoBundle "Shougo/vimproc", {
+	NeoBundle "Shougo/vimproc.vim", {
 				\ "build": {
 				\   "windows"   : "make -f make_mingw32.mak",
 				\   "cygwin"    : "make -f make_cygwin.mak",
@@ -195,7 +234,7 @@ else
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'ujihisa/unite-colorscheme'
 
-	NeoBundleLazy "Shougo/vimfiler", {
+	NeoBundleLazy "Shougo/vimfiler.vim", {
 				\ "depends": ["Shougo/unite.vim"],          
 				\ "autoload": {
 				\   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
@@ -228,62 +267,14 @@ else
 	NeoBundle 'vim-scripts/Align'
 	NeoBundle 'vim-scripts/YankRing.vim'
 	NeoBundle 'tpope/vim-fugitive' 
-   
 
 	NeoBundleLazy "rcmdnk/vim-markdown", {
 				\ "autoload": {
 				\   "filetypes" : ["markdown"] 
 				\}}
- 	let s:hooks = neobundle#get_hooks("vim-markdown")
+	let s:hooks = neobundle#get_hooks("vim-markdown")
 	function! s:hooks.on_source(bundle)
-		" todoリストを簡単に入力する
-		iab <buffer> tl - [ ]
-
-		" 入れ子のリストを折りたたむ
-		setlocal foldmethod=expr foldexpr=MkdCheckboxFold(v:lnum) foldtext=MkdCheckboxFoldText()
-		function! MkdCheckboxFold(lnum)
-			let line = getline(a:lnum)
-			let next = getline(a:lnum + 1)
-			if MkdIsNoIndentCheckboxLine(line) && MkdHasIndentLine(next)
-				return 1
-			elseif (MkdIsNoIndentCheckboxLine(next) || next =~ '^$') && !MkdHasIndentLine(next)
-				return '<1'
-			endif
-			return '='
-		endfunction
-		function! MkdIsNoIndentCheckboxLine(line)
-			return a:line =~ '^- \[[ x]\] '
-		endfunction
-		function! MkdHasIndentLine(line)
-			return a:line =~ '^[[:blank:]]\+'
-		endfunction
-		function! MkdCheckboxFoldText()
-			return getline(v:foldstart) . ' (' . (v:foldend - v:foldstart) . ' lines) '
-		endfunction
-
-		" todoリストのon/offを切り替える
-		nnoremap <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
-		vnoremap <buffer> <Leader><Leader> :call ToggleCheckbox()<CR>
-
-		" 選択行のチェックボックスを切り替える
-		function! ToggleCheckbox()
-			let l:line = getline('.')
-			if l:line =~ '\-\s\[\s\]'
-				" 完了時刻を挿入する
-				let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '') . ' [' . strftime("%Y/%m/%d (%a) %H:%M") . ']'
-				call setline('.', l:result)
-			elseif l:line =~ '\-\s\[x\]'
-				let l:result = substitute(substitute(l:line, '-\s\[x\]', '- [ ]', ''), '\s\[\d\{4}.\+]$', '', '')
-				call setline('.', l:result)
-			end
-		endfunction
-
-		syn match MkdCheckboxMark /-\s\[x\]\s.\+/ display containedin=ALL
-		hi MkdCheckboxMark ctermfg=green
-		syn match MkdCheckboxUnmark /-\s\[\s\]\s.\+/ display containedin=ALL
-		hi MkdCheckboxUnmark ctermfg=red 
 	endfunction 
-
 
 	NeoBundleLazy "vim-scripts/TaskList.vim", {
 				\ "autoload": {
@@ -293,7 +284,6 @@ else
 	function! s:hooks.on_source(bundle)
 		nmap <Leader>T <plug>TaskList
 	endfunction
-
 
 	"プログラミング関係の便利ツール
 	NeoBundleLazy "davidhalter/jedi-vim", {
@@ -320,8 +310,7 @@ else
 		let g:jedi#goto_assignments_command = '<Leader>G'
 	endfunction
 
- 
-	"#############日本語 文書作成向けプラグイン############### 
+ "#############日本語 文書作成向けプラグイン############### 
 	"WORD移動用文書区切り用
 	NeoBundle "deton/jasegment.vim" 
 	"`
@@ -330,7 +319,67 @@ else
 				\   "filetypes": ["tex"],
 				\ } 
 				\ }
+	NeoBundle 'Shougo/neocomplcache.vim'
 	
+	let s:hooks = neobundle#get_hooks('neosnippet')
+	function! s:hooks.on_source(bundle)
+	" Disable AutoComplPop.
+		let g:acp_enableAtStartup = 0
+		" Use neocomplcache.
+		let g:neocomplcache_enable_at_startup = 1
+		" Use smartcase.
+		let g:neocomplcache_enable_smart_case = 1
+		" Set minimum syntax keyword length.
+		let g:neocomplcache_min_syntax_length = 3
+		let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+		" Define dictionary.
+		let g:neocomplcache_dictionary_filetype_lists = {
+					\ 'default' : ''
+					\ }
+
+		" Plugin key-mappings.
+		inoremap <expr><C-g>     neocomplcache#undo_completion()
+		inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+		" Recommended key-mappings.
+		" <CR>: close popup and save indent.
+		inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+		function! s:my_cr_function()
+			return neocomplcache#smart_close_popup() . "\<CR>"
+		endfunction
+		" <TAB>: completion.
+		inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+		" <C-h>, <BS>: close popup and delete backword char.
+		inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+		inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+		inoremap <expr><C-y>  neocomplcache#close_popup()
+		inoremap <expr><C-e>  neocomplcache#cancel_popup()
+	endfunction
+
+	NeoBundle 'Shougo/neosnippet'
+	NeoBundle 'Shougo/neosnippet-snippets'
+	let s:hooks = neobundle#get_hooks('neosnippet')
+	function! s:hooks.on_source(bundle)
+		" Plugin key-mappings.
+		imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+		smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+		xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+		" SuperTab like snippets behavior.
+		imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+					\ "\<Plug>(neosnippet_expand_or_jump)"
+					\: pumvisible() ? "\<C-n>" : "\<TAB>"
+		smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+					\ "\<Plug>(neosnippet_expand_or_jump)"
+					\: "\<TAB>"
+
+		" For snippet_complete marker.
+		if has('conceal')
+			set conceallevel=2 concealcursor=i
+		endif
+	endfunction
+
 	NeoBundleLazy "jcf/vim-latex", {
 				\ "autoload": {
 				\   "filetypes": ["tex"],
@@ -355,9 +404,9 @@ else
 		""<Ctrl + J>はパネルの移動と被るので番うのに変える
 		imap <C-n> <Plug>IMAP_JumpForward
 		nmap <C-n> <Plug>IMAP_JumpForward
-		vmap <C-n> <Plug>IMAP_DeleteAndJumpForward
-
+		vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
 	endfunction
+
 	"Solarized カラースキーム
 	NeoBundle 'altercation/vim-colors-solarized'
 	NeoBundle 'croaker/mustang-vim'
@@ -375,7 +424,6 @@ else
 
 	colorscheme molokai
 endif
-
 
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
