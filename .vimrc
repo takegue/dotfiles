@@ -77,7 +77,7 @@ nnoremap ; :
 nnoremap : ;
 
 " ESCを二回押すことでハイライトを消す
-nmap <silent> <Esc><Esc> :nohlsearch<CR>
+nmap <silent> <Esc><Esc> :noh<CR>
 
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
@@ -282,8 +282,7 @@ else
 		hi MkdCheckboxMark ctermfg=green
 		syn match MkdCheckboxUnmark /-\s\[\s\]\s.\+/ display containedin=ALL
 		hi MkdCheckboxUnmark ctermfg=red 
-	endfunction
-
+	endfunction 
 
 
 	NeoBundleLazy "vim-scripts/TaskList.vim", {
@@ -321,6 +320,17 @@ else
 		let g:jedi#goto_assignments_command = '<Leader>G'
 	endfunction
 
+ 
+	"#############日本語 文書作成向けプラグイン############### 
+	"WORD移動用文書区切り用
+	NeoBundle "deton/jasegment.vim" 
+	"`
+	NeoBundleLazy "kana/vim-smartchr", { 
+				\ "autoload": {
+				\   "filetypes": ["tex"],
+				\ } 
+				\ }
+	
 	NeoBundleLazy "jcf/vim-latex", {
 				\ "autoload": {
 				\   "filetypes": ["tex"],
@@ -337,7 +347,7 @@ else
 		let g:Tex_FormatDependency_ps = 'dvi,ps'
 		let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
 		let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-		let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8'
+		let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
 		let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
 		let g:Tex_ViewRule_pdf = 'texworks'
 
