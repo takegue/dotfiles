@@ -11,7 +11,12 @@ if [ -e /bin/zsh ]; then
 	chsh /bin/zsh
 fi 
 
-ln -s $path/vimfiles ~/.vim
+echo "$path/vimfiles => ~/.vim"
+ln -s $path/vimfiles ~/
+mv ~/vimfiles ~/.vim
+mkdir -p  ~/.vim/bundle/
+git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim 
+
 for dotfile in $dir/.*rc ; do
 	echo $dotfile ⇒  ~/${dotfile##*/}
 	ln -s $dotfile ~/${dotfile##*/}

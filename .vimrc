@@ -274,7 +274,7 @@ else
 				\}}
 	let s:hooks = neobundle#get_hooks("vim-markdown")
 	function! s:hooks.on_source(bundle)
-	endfunction 
+    endfunction
 
 	NeoBundleLazy "vim-scripts/TaskList.vim", {
 				\ "autoload": {
@@ -320,10 +320,10 @@ else
 				\ } 
 				\ }
 	NeoBundle 'Shougo/neocomplcache.vim'
-	
+
 	let s:hooks = neobundle#get_hooks('neosnippet')
 	function! s:hooks.on_source(bundle)
-	" Disable AutoComplPop.
+		" Disable AutoComplPop.
 		let g:acp_enableAtStartup = 0
 		" Use neocomplcache.
 		let g:neocomplcache_enable_at_startup = 1
@@ -408,15 +408,12 @@ else
 	endfunction
 
 	"Solarized カラースキーム
-	NeoBundle 'altercation/vim-colors-solarized'
-	NeoBundle 'croaker/mustang-vim'
-	NeoBundle 'jeffreyiacono/vim-colors-wombat'
 	NeoBundle 'nanotech/jellybeans.vim'
 	NeoBundle 'vim-scripts/Lucius'
 	NeoBundle 'vim-scripts/Zenburn'
 	NeoBundle 'mrkn/mrkn256.vim'
 	NeoBundle 'jpo/vim-railscasts-theme'
-	NeoBundle 'therubymug/vim-pyte'
+
 	NeoBundle 'tomasr/molokai'
 
 	" インストールされていないプラグインのチェックおよびダウンロード
