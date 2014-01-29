@@ -247,8 +247,7 @@ function! s:Todo()
 		 NeoBundle 'tomasr/molokai'
 		 NeoBundle 'vim-scripts/Wombat'
          
-         colorscheme molokai
-
+         
          " ステータスバー
 		 NeoBundle 'itchyny/lightline.vim'
 
@@ -490,7 +489,7 @@ function! s:Todo()
 
 		 " インストールされていないプラグインのチェックおよびダウンロード
 		 NeoBundleCheck
-
+		 colorscheme molokai 
 	 endif
 
 	 " ファイルタイププラグインおよびインデントを有効化
