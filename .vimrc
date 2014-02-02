@@ -51,7 +51,7 @@ command! Todo call s:Todo()
 au BufNewFile,BufRead .todo set filetype=markdown
 function! s:Todo()
 	let l:path  =  '~/.todo'   
-	if filereadable("~/Dropbox/.todo")
+	if filereadable('~/Dropbox/.todo')
 	   let l:path = "~/Dropbox/.todo"
 	endif
 	if bufwinnr(l:path) < 0
