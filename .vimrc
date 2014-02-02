@@ -51,9 +51,8 @@ command! Todo call s:Todo()
 au BufNewFile,BufRead .todo set filetype=markdown
 function! s:Todo()
 	let l:path  =  '~/.todo'   
-
-	if filereadable('~/Dropbox/.todo')
-	   let l:path = '~/Dropbox/.todo'
+	if filereadable(expand('~/Dropbox/.todo'))
+	   let l:path = expand('~/Dropbox/.todo')
 	endif
 	if bufwinnr(l:path) < 0
 		execute 'silent bo 40vs +set\ nonumber ' . l:path 
@@ -343,9 +342,27 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 		NeoBundle 'tpope/vim-fugitive' 
 		NeoBundle 'osyo-manga/vim-over'
 
+		NeoBundle 'thinca/vim-template' 
+		"置換キーワードを定義する: >
+		autocmd User plugin-template-loaded call s:template_keywords()
+		function! s:template_keywords()
+			silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+			silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+			silent! %s/<+MONTH+>/\=strftime('%m')/g
+			" And more...
+		endfunction
+		"<%= %> の中身をvimで評価して展開する: >
+		autocmd User plugin-template-loaded
+					\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+		autocmd User plugin-template-loaded
+					\ if search('<+CURSOR+>')
+					\ | execute 'normal! "_da>'
+					\ | endif 
+
+
 		"WORD移動用文書区切り用
 		NeoBundle "deton/jasegment.vim" 
-		"`
+
 		NeoBundleLazy "kana/vim-smartchr", { 
 					\ "autoload": {
 					\   "filetypes": ["tex"],
@@ -382,7 +399,7 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 						\	"runner/vimproc/updatetime" : "60",
 						\ 	"outputter/buffer/split": ":bo vsplit"
 						\},
-			\}
+						\}
 		endfunction
 
 		NeoBundleLazy "davidhalter/jedi-vim", {
@@ -409,6 +426,34 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 			let g:jedi#goto_assignments_command = '<Leader>G'
 		endfunction
 
+
+		"Plugin:Configuration for vim-latex
+		NeoBundleLazy "jcf/vim-latex", {
+					\ "autoload": {
+					\   "filetypes": ["tex"],
+					\ }}
+		let g:tex_flavor = 'platex'
+		let s:hooks = neobundle#get_hooks("vim-latex")
+		function! s:hooks.on_source(bundle)
+			set shellslash
+			set grepprg=grep\ -nH\ $*
+			let g:Imap_UsePlaceHolders = 1
+			let g:Imap_DeleteEmptyPlaceHolders = 1
+			let g:Imap_StickyPlaceHolders = 0
+			let g:Tex_DefaultTargetFormat = 'pdf'
+			let g:Tex_FormatDependency_ps = 'dvi,ps'
+			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
+			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+			let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
+			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+			let g:Tex_ViewRule_pdf = 'texworks'
+
+			"キー配置の変更
+			""<Ctrl + J>はパネルの移動と被るので番うのに変える
+			imap <C-n> <Plug>IMAP_JumpForward
+			nmap <C-n> <Plug>IMAP_JumpForward
+			vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
+		endfunction
 
 		NeoBundle 'Shougo/neocomplcache.vim'
 		NeoBundle 'Shougo/neosnippet.vim'
@@ -476,36 +521,9 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 		let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/neosnippet-snippets/snippets'
 
 
-		"Plugin:Configuration for vim-latex
-		NeoBundleLazy "jcf/vim-latex", {
-					\ "autoload": {
-					\   "filetypes": ["tex"],
-					\ }}
-		let s:hooks = neobundle#get_hooks("vim-latex")
-		function! s:hooks.on_source(bundle)
-			set shellslash
-			set grepprg=grep\ -nH\ $*
-			let g:tex_flavor='platex'
-			let g:Imap_UsePlaceHolders = 1
-			let g:Imap_DeleteEmptyPlaceHolders = 1
-			let g:Imap_StickyPlaceHolders = 0
-			let g:Tex_DefaultTargetFormat = 'pdf'
-			let g:Tex_FormatDependency_ps = 'dvi,ps'
-			let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
-			let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-			let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
-			let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
-			let g:Tex_ViewRule_pdf = 'texworks'
-
-			"キー配置の変更
-			""<Ctrl + J>はパネルの移動と被るので番うのに変える
-			imap <C-n> <Plug>IMAP_JumpForward
-			nmap <C-n> <Plug>IMAP_JumpForward
-			vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
-		endfunction
-
 		" インストールされていないプラグインのチェックおよびダウンロード
 		NeoBundleCheck
+
 		colorscheme molokai 
 	endif
 
