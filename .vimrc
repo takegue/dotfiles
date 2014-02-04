@@ -342,6 +342,7 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 		NeoBundle 'tpope/vim-fugitive' 
 		NeoBundle 'osyo-manga/vim-over'
 
+		NeoBundle 'rcmdnk/vim-markdown'
 		NeoBundle 'thinca/vim-template' 
 		"置換キーワードを定義する: >
 		"autocmd User plugin-template-loaded call s:template_keywords()
@@ -368,11 +369,6 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 					\   "filetypes": ["tex"],
 					\ } 
 					\ }
-
-		NeoBundleLazy "rcmdnk/vim-markdown", {
-					\ "autoload": {
-					\   "filetypes" : ["markdown"] 
-					\}}
 
 
 		NeoBundleLazy "vim-scripts/TaskList.vim", {
@@ -459,6 +455,7 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 		NeoBundle 'Shougo/neosnippet.vim'
 		NeoBundle 'Shougo/neosnippet-snippets'
 		NeoBundle 'honza/vim-snippets'
+		
 
 		"Plugin:Configuration for NeoComplCache
 		"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
