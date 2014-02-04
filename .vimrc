@@ -344,20 +344,20 @@ nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 
 		NeoBundle 'thinca/vim-template' 
 		"置換キーワードを定義する: >
-		autocmd User plugin-template-loaded call s:template_keywords()
-		function! s:template_keywords()
-			silent! %s/<+FILE NAME+>/\=expand('%:t')/g
-			silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-			silent! %s/<+MONTH+>/\=strftime('%m')/g
-			" And more...
-		endfunction
-		"<%= %> の中身をvimで評価して展開する: >
-		autocmd User plugin-template-loaded
-					\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-		autocmd User plugin-template-loaded
-					\ if search('<+CURSOR+>')
-					\ | execute 'normal! "_da>'
-					\ | endif 
+		"autocmd User plugin-template-loaded call s:template_keywords()
+		"function! s:template_keywords()
+		"	silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+		"	silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+		"	silent! %s/<+MONTH+>/\=strftime('%m')/g
+		"	" And more...
+		"endfunction
+		""<%= %> の中身をvimで評価して展開する: >
+		"autocmd User plugin-template-loaded
+		"			\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+		"autocmd User plugin-template-loaded
+		"			\ if search('<+CURSOR+>')
+		"			\ | execute 'normal! "_da>'
+		"			\ | endif 
 
 
 		"WORD移動用文書区切り用
