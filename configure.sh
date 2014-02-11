@@ -11,6 +11,8 @@ ln -s $dir/vimfiles ~/.vim
 mkdir -p  ~/.vim/bundle/
 git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim 
 
+ln -s $dir/.tmux.conf  ~/.tmux.conf
+
 for dotfile in $dir/.*rc ; do
 	dstpath="$HOME/${dotfile##*/}" 
 
