@@ -15,6 +15,12 @@ set relativenumber      " 相対行番号の表示
 set wrap                " 長いテキストの折り返し
 set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
+set cursorline          " 編集中の行のハイライト 
+au MyAutoCmd WinLeave * set nocursorline norelativenumber 
+au MyAutoCmd WinEnter * set cursorline relativenumber
+"helpファイルでは番号表示しないようにする
+au MyAutoCmd WinEnter */doc/*.txt set nocursorline norelativenumber
+
 set encoding=utf8
 set helplang=ja,en
 
@@ -29,18 +35,9 @@ set list                " 不可視文字の可視化
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
 
-set number              " 行番号の表示
-set wrap                " 長いテキストの折り返し
-set textwidth=0         " 自動的に改行が入るのを無効化
-set colorcolumn=80      " その代わり80文字目にラインを入れる
-set cursorline          " 編集中の行のハイライト 
-au MyAutoCmd WinLeave * set nocursorline 
-au MyAutoCmd WinEnter * set cursorline 
-
 " 前時代的スクリーンベルを無効化
 set t_vb=
 set novisualbell
-
 
 "#####検索設定#####
 set ignorecase          "大文字/小文字の区別なく検索する
@@ -269,14 +266,14 @@ else
     colorscheme molokai
 
     NeoBundle 'yonchu/accelerated-smooth-scroll'
-    let s:hooks = neobundle#get_hooks('lightline.vim')
+    let s:hooks = neobundle#get_hooks('accelerated-smooth-scroll')
     function! s:hooks.on_source(bundle)
         " <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
         " Default : 10
         let g:ac_smooth_scroll_du_sleep_time_msec = 3 
         " <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
         " Default : 10
-        let g:ac_smooth_scroll_fb_sleep_time_msec = 2
+        let g:ac_smooth_scroll_fb_sleep_time_msec = 5
     endfunction
     " ヘルプの日本語化
     NeoBundle 'vim-jp/vimdoc-ja'
@@ -288,7 +285,7 @@ else
         let g:lightline = {
                     \ 'colorscheme': 'wombat',
                     \ 'mode_map': {'c': 'NORMAL'},
-                    \ 'active': {
+                   \ 'active': {
                     \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
                     \ },
                     \ 'component_function': {
