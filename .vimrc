@@ -1,4 +1,4 @@
-"arelease autogroup in MyAutoCmd
+"release autogroup in MyAutoCmd
 augroup MyAutoCmd
     autocmd!
 augroup END
@@ -19,7 +19,8 @@ set cursorline          " 編集中の行のハイライト
 au MyAutoCmd WinLeave * set nocursorline norelativenumber 
 au MyAutoCmd WinEnter * set cursorline relativenumber
 "helpファイルでは番号表示しないようにする
-au MyAutoCmd WinEnter */doc/*.txt set nocursorline norelativenumber
+au MyAutoCmd WinEnter */doc/* set nocursorline norelativenumber
+
 
 set encoding=utf8
 set helplang=ja,en
@@ -69,10 +70,9 @@ function! s:Todo()
     endif
     if bufwinnr(l:path) < 0
         execute 'silent bo 40vs +set\ nonumber ' . l:path 
-    endif       
+    endif
     unlet! l:path
 endfunction
-
 
 " .vimrc設定編集反映用
 nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
@@ -86,7 +86,6 @@ else
     autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | \if has('gui_running') | source $MYGVIMRC  
     autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
 endif
-
 " ftplugin設定編集反映用
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
 nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
@@ -104,11 +103,11 @@ set backspace=indent,eol,start
 
 " クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
 " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
-if has('unnamedplus') 
-    set clipboard& clipboard+=unnamedplus,unnamed 
-else 
-    set clipboard& clipboard+=unnamed
-endif
+"if has('unnamedplus') 
+"    set clipboard& clipboard+=unnamedplus,unnamed 
+"else 
+"    set clipboard& clipboard+=unnamed
+"endif
 
 " Swapファイル？Backupファイル？前時代的すぎ
 " なので全て無効化する
@@ -117,7 +116,7 @@ set nobackup
 set noswapfile
 
 "<Leader>を,に変更
-"let mapleader="\"
+let mapleader=','
 
 "素早くjj と押すことでESCとみなす
 inoremap jj <Esc>
@@ -155,15 +154,14 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" カーソル位置を保持しながらページ移動
-"nnoremap <expr><C-F> window<C-D>
-"nnoremap <expr><C-B> `window`<C-U>
+nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
+nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
 
 " Shift + 矢印でウィンドウサイズを変更
-nnoremap <S-Left>  <C-w><<CR>
-nnoremap <S-Right> <C-w>><CR>
-nnoremap <S-Up>    <C-w>-<CR>
-nnoremap <S-Down>  <C-w>+<CR>
+nnoremap <S-Left>  <C-w><
+nnoremap <S-Right> <C-w>>
+nnoremap <S-Up>    <C-w>-
+nnoremap <S-Down>  <C-w>+
 
 " T + ? で各種設定をトグル
 nnoremap [toggle] <Nop>
@@ -173,11 +171,21 @@ nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
 
+
 "自動で括弧内に移動
 inoremap {} {}<left>
 inoremap [] []<left>
 inoremap () ()<left>
 inoremap <> <><left>
+inoremap '' ''<left>
+inoremap `` ``<left>
+inoremap "" ""<left>
+
+"自動で---, ===を変換"
+iab <buffer> --- --------------------------------------------------<CR>
+iab <buffer> === ==================================================<CR>
+
+
 
 " make, grep などのコマンド後に自動的にQuickFixを開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
@@ -247,12 +255,26 @@ else
                 \   "unix"      : "make -f make_unix.mak",
                 \ }}
 
-    " カラースキーム一覧表示に Unite.vim を使う
     NeoBundle 'Shougo/unite.vim'
+    let s:hooks = neobundle#get_hooks('unite.vim')
+    function! s:hooks.on_source(bundle)
+        nnoremap [unite]    <Nop>
+        nmap    <Leader>f  [unite]
+        nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
+        nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
+        nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
+    endfunction
+
+    NeoBundle "h1mesuke/unite-outline", {
+                \ "depends": ["Shougo/unite.vim"]
+                \ } 
+    let s:hooks = neobundle#get_hooks("unite-outline")
+    function! s:hooks.on_source(bundle) 
+        nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
+    endfunction
 
     " カラースキーム
-    NeoBundle 'ujihisa/unite-colorscheme'
-
+    NeoBundle 'ujihisa/unite-colorscheme' 
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'vim-scripts/Lucius'
     NeoBundle 'vim-scripts/Zenburn'
@@ -262,10 +284,9 @@ else
     NeoBundle 'vim-scripts/Wombat'
     NeoBundle 'altercation/solarized'
 
-
     colorscheme molokai
 
-    NeoBundle 'yonchu/accelerated-smooth-scroll'
+    "NeoBundle 'yonchu/accelerated-smooth-scroll'
     let s:hooks = neobundle#get_hooks('accelerated-smooth-scroll')
     function! s:hooks.on_source(bundle)
         " <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
@@ -285,7 +306,7 @@ else
         let g:lightline = {
                     \ 'colorscheme': 'wombat',
                     \ 'mode_map': {'c': 'NORMAL'},
-                   \ 'active': {
+                    \ 'active': {
                     \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
                     \ },
                     \ 'component_function': {
@@ -344,8 +365,6 @@ else
             return winwidth(0) > 60 ? lightline#mode() : ''
         endfunction  
     endfunction 
-
-
 
     NeoBundleLazy "Shougo/vimfiler.vim", {
                 \ "depends": ["Shougo/unite.vim"],          
@@ -427,22 +446,12 @@ else
                 \ } 
                 \ } 
 
-    NeoBundleLazy "vim-scripts/TaskList.vim", {
-                \ "autoload": {
-                \   "mappings": ['<Plug>TaskList'],
-                \}}
-    let s:hooks = neobundle#get_hooks("Tasklist.vim")
-    function! s:hooks.on_source(bundle)
-        nmap <Leader>T <plug>TaskList
-    endfunction
-
-    "Plugin:Programming
-
+    "Plugin:Programming 
     NeoBundleLazy "thinca/vim-quickrun", {
                 \ "autoload": {
                 \   "mappings": [['nxo', '<Plug>(quickrun)']]
                 \ }}
-    nmap <Leader>r <Plug>(quickrun)
+    nmap <Leader>r <Plug>(quickrun)<CR>
     let s:hooks = neobundle#get_hooks("vim-quickrun")
     function! s:hooks.on_source(bundle)
         let g:quickrun_config = {
@@ -474,9 +483,9 @@ else
         let g:jedi#popup_on_dot = 1
         let g:jedi#popup_select_first = 0
         "quickrunと被るため大文字に変更
-        let g:jedi#rename_command = '<leader>r'
+        let g:jedi#rename_command = '<Leader>R'
         " gundoと被るため大文字に変更 (2013-06-2410:00 追記）
-        let g:jedi#goto_assignments_command = '<leader>g'
+        let g:jedi#goto_assignments_command = '<Leader>G'
     endfunction
 
     NeoBundleLazy "nvie/vim-flake8", { 
@@ -591,7 +600,7 @@ else
         " Enable snipMate compatibility feature.
         let g:neosnippet#enable_snipmate_compatibility = 1 
         " Tell Neosnippet about the other snippets
-        let g:neosnippet#snippets_directory= '~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/neosnippet-snippets/snippets' 
+        let g:neosnippet#snippets_directory= '~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/neosnippet-snippets/neosnippets, ~/.vim/snippets' 
         " For snippet_complete marker.
         if has('conceal')
             set conceallevel=2 concealcursor=i
