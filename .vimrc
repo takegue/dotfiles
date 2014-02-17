@@ -295,6 +295,9 @@ else
 
     NeoBundle 'ujihisa/unite-colorscheme'
     NeoBundle 'tsukkee/unite-help'
+    NeoBundle 'Shougo/unite-ssh.vim', {
+                \ "depends": ["Shougo/unite.vim"]
+                \ } 
     NeoBundleLazy 'Shougo/vimfiler.vim', {
                 \ "depends": ["Shougo/unite.vim"],          
                 \ "autoload": {

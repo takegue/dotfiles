@@ -6,6 +6,6 @@ setl shiftwidth=4        "オートインデントの幅
 setl softtabstop=4       "インデントをスペース4つ分に設定
 setl expandtab
 
-iab <buffer> code # -*- coding:utf-8 -*-
-iab <buffer> pypath # !/usr/bin/env Python 
+iab <buffer> code # -*- coding:utf-8 -*-<CR>
+iab <buffer> pypath # !/usr/bin/env Python<CR>
 
