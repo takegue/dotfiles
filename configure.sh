@@ -1,7 +1,6 @@
-
+#/bin/zsh
 
 #新しい環境に取り込んだ時のインストール
-#TODO:ln -s
 
 
 path=`dirname $0`
@@ -17,5 +16,7 @@ for dotfile in $dir/.*rc ; do
 	ln -s $dotfile ~/${dotfile##*/}
 done
 
-
-
+mkdir -p ~/.vim/bundle
+if [ ! -e ./.vim/bundle/neobundle.vim ] ; then
+	git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+fi
