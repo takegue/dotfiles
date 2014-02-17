@@ -384,29 +384,37 @@ else
     NeoBundle 'tpope/vim-fugitive' 
     NeoBundle 'osyo-manga/vim-over'
 
-    NeoBundle 'rcmdnk/vim-markdown'
+
     NeoBundle 'thinca/vim-template' 
     "置換キーワードを定義する: >
-    autocmd User plugin-template-loaded call s:template_keywords()
-    function! s:template_keywords()
-        silent! %s/<+FILE NAME+>/\=expand('%:t')/g
-        silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-        silent! %s/<+MONTH+>/\=strftime('%m')/g
-        " And more...
-    endfunction
-    "<%= %> の中身をvimで評価して展開する: >
-    autocmd User plugin-template-loaded
-                \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-    autocmd User plugin-template-loaded
-                \ if search('<+CURSOR+>')
-                \ | execute 'normal! "_da>'
-                \ | endif 
-    nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
-    function! s:template_open()
-        let l:path=template#search(expand('%:p')) 
-        execute 'botright vsplit ' . l:path
+    let s:hooks = neobundle#get_hooks("vim-template")
+    function! s:hooks.on_source(bundle) 
+        autocmd User plugin-template-loaded call s:template_keywords()
+        function! s:template_keywords()
+            silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+            silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+            silent! %s/<+MONTH+>/\=strftime('%m')/g
+            " And more...
+        endfunction
+        "<%= %> の中身をvimで評価して展開する: >
+        autocmd User plugin-template-loaded
+                    \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+        autocmd User plugin-template-loaded
+                    \ if search('<+CURSOR+>')
+                    \ | execute 'normal! "_da>'
+                    \ | endif 
+        nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
+        function! s:template_open()
+            let l:path=template#search(expand('%:p')) 
+            execute 'botright vsplit ' . l:path
+        endfunction 
     endfunction
 
+    NeoBundleLazy 'rcmdnk/vim-markdown', {
+                \ 'autoload' : {
+                \ 'filetypes' : ['markdown'] 
+                \ }}
+ 
     NeoBundle "nathanaelkane/vim-indent-guides" 
     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
