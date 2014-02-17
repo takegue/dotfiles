@@ -5,7 +5,9 @@ augroup END
 
 set nocompatible        "vi互換を消す．Vimの時代
 
-"####表示設定#####"" 
+"--------------------------------------------------
+" 表示設定
+"-------------------------------------------------- 
 set title               "編集中のファイル名を表示
 set showmatch           "括弧入力時の対応する括弧を表示
 syntax on               "コードの色分け
@@ -40,7 +42,10 @@ set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
 set t_vb=
 set novisualbell
 
-"#####検索設定#####
+"--------------------------------------------------
+" 検索設定
+"--------------------------------------------------
+ 
 set ignorecase          "大文字/小文字の区別なく検索する
 set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
 set wrapscan            "検索時に最後まで行ったら最初に戻る
@@ -51,7 +56,10 @@ set hlsearch            " 検索マッチテキストをハイライト (2013-07
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
-"#### 編集関係 #####
+
+"--------------------------------------------------
+" 編集設定
+"--------------------------------------------------
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
 set virtualedit=all     " カーソルを文字が存在しない部分でも動けるようにする
@@ -94,8 +102,8 @@ function! s:openFTPluginFile()
     execute 'botright vsplit ' . l:ftpFileName
 endfunction 
 
-" 対応括弧に'<'と'>'のペアを追加
-set matchpairs& matchpairs+=<:>
+    " 対応括弧に'<'と'>'のペアを追加
+    set matchpairs& matchpairs+=<:>
 
 " バックスペースでなんでも消せるようにする
 set backspace=indent,eol,start
@@ -103,17 +111,21 @@ set backspace=indent,eol,start
 
 " クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
 " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
-"if has('unnamedplus') 
-"    set clipboard& clipboard+=unnamedplus,unnamed 
-"else 
-"    set clipboard& clipboard+=unnamed
-"endif
+if has('unnamedplus') 
+    set clipboard& clipboard+=unnamedplus,unnamed 
+else 
+    set clipboard& clipboard+=unnamed
+endif
 
 " Swapファイル？Backupファイル？前時代的すぎ
 " なので全て無効化する
 set nowritebackup
 set nobackup
 set noswapfile
+
+"--------------------------------------------------
+" Key Mapping
+"--------------------------------------------------
 
 "<Leader>を,に変更
 let mapleader=','
@@ -223,7 +235,10 @@ if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
 endif
 
-"##### Plug-in #######
+
+"--------------------------------------------------
+" NeoBundle Plugin
+"--------------------------------------------------
 let s:noplugin = 0
 let s:bundle_root = expand('~/.vim/bundle')
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
@@ -234,7 +249,7 @@ if (!isdirectory(s:neobundle_root) || v:version < 702 )
     " 読み込まない
     let s:noplugin = 1
 else
-    "###################### NeoBundle Configuration###########################"
+    
     " NeoBundleを'runtimepath'に追加し初期化を行う
     if has('vim_starting')
         execute "set runtimepath+=" . s:neobundle_root
@@ -247,7 +262,7 @@ else
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
     " 指定されたコマンドが実行され vimproc がコンパイルされる
-    NeoBundle "Shougo/vimproc.vim", {
+    NeoBundle 'Shougo/vimproc.vim', {
                 \ "build": {
                 \   "windows"   : "make -f make_mingw32.mak",
                 \   "cygwin"    : "make -f make_cygwin.mak",
@@ -265,7 +280,11 @@ else
         nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
     endfunction
 
-    NeoBundle "h1mesuke/unite-outline", {
+    "--------------------------------------------------
+    " Unite-Source
+    "-------------------------------------------------- 
+    
+    NeoBundle 'Shougo/unite-outline', {
                 \ "depends": ["Shougo/unite.vim"]
                 \ } 
     let s:hooks = neobundle#get_hooks("unite-outline")
@@ -273,8 +292,44 @@ else
         nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
     endfunction
 
-    " カラースキーム
-    NeoBundle 'ujihisa/unite-colorscheme' 
+    NeoBundle 'ujihisa/unite-colorscheme'
+
+    NeoBundleLazy 'Shougo/vimfiler.vim', {
+                \ "depends": ["Shougo/unite.vim"],          
+                \ "autoload": {
+                \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
+                \   "mappings": ['<Plug>(vimfiler_switch)'],
+                \   "explorer": 1,
+                \ }} 
+    nnoremap <Leader>e :VimFilerExplorer<CR>
+    " close vimfiler automatically when there are only vimfiler open
+    autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+    let s:hooks = neobundle#get_hooks("vimfiler.vim")
+    function! s:hooks.on_source(bundle)
+        let g:vimfiler_as_default_explorer = 1
+        let g:vimfiler_enable_auto_cd = 1
+        " 2013-08-14 追記
+        let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
+        " vimfiler specific key mappings
+        autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
+        function! s:vimfiler_settings()
+            " ^^ to go up 
+            nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+            " use R to refresh
+            nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+            " overwrite C-l
+            nmap <buffer> <C-l> <C-w>l
+        endfunction
+    endfunction
+
+    NeoBundle 'tacroe/unite-mark', {
+                \ "depends": ["Shougo/unite.vim"]
+                \ } 
+
+    "--------------------------------------------------
+    " Colorscheme
+    "-------------------------------------------------- 
+    
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'vim-scripts/Lucius'
     NeoBundle 'vim-scripts/Zenburn'
@@ -286,6 +341,21 @@ else
 
     colorscheme molokai
 
+    "--------------------------------------------------
+    " Design
+    "-------------------------------------------------- 
+
+    NeoBundle 'nathanaelkane/vim-indent-guides' 
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
+    let s:hooks = neobundle#get_hooks("vim-indent-guides")
+    function! s:hooks.on_source(bundle)
+        let g:indent_guides_auto_colors = 0
+        let g:indent_guides_start_level = 1
+        let g:indent_guides_guide_size = 1 
+        IndentGuidesEnable 
+    endfunction 
+ 
     "NeoBundle 'yonchu/accelerated-smooth-scroll'
     let s:hooks = neobundle#get_hooks('accelerated-smooth-scroll')
     function! s:hooks.on_source(bundle)
@@ -336,8 +406,7 @@ else
                         \  &ft == 'vimshell' ? vimshell#get_status_string() :
                         \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
                         \ ('' != MyModified() ? ' ' . MyModified() : '')
-        endfunction
-
+        endfunction 
 
         function! MyFugitive()
             try
@@ -366,37 +435,9 @@ else
         endfunction  
     endfunction 
 
-    NeoBundleLazy "Shougo/vimfiler.vim", {
-                \ "depends": ["Shougo/unite.vim"],          
-                \ "autoload": {
-                \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-                \   "mappings": ['<Plug>(vimfiler_switch)'],
-                \   "explorer": 1,
-                \ }} 
-    nnoremap <Leader>e :VimFilerExplorer<CR>
-    " close vimfiler automatically when there are only vimfiler open
-    autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-    let s:hooks = neobundle#get_hooks("vimfiler.vim")
-    function! s:hooks.on_source(bundle)
-        let g:vimfiler_as_default_explorer = 1
-        let g:vimfiler_enable_auto_cd = 1
-        " 2013-08-14 追記
-        let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
-        " vimfiler specific key mappings
-        autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
-        function! s:vimfiler_settings()
-            " ^^ to go up 
-            nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-            " use R to refresh
-            nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-            " overwrite C-l
-            nmap <buffer> <C-l> <C-w>l
-        endfunction
-    endfunction
-
-
-    "#############文書作成向けプラグイン############### 
-    "Plugin:Editor
+    "--------------------------------------------------
+    " 文書作成プラグイン 
+    "-------------------------------------------------- 
     NeoBundle 'tpope/vim-surround'
     NeoBundle 'vim-scripts/Align'
     NeoBundle 'vim-scripts/YankRing.vim'
@@ -426,28 +467,19 @@ else
         execute 'botright vsplit ' . l:path
     endfunction
 
-    NeoBundle "nathanaelkane/vim-indent-guides" 
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
-    let s:hooks = neobundle#get_hooks("vim-indent-guides")
-    function! s:hooks.on_source(bundle)
-        let g:indent_guides_auto_colors = 0
-        let g:indent_guides_start_level = 1
-        let g:indent_guides_guide_size = 1 
-        IndentGuidesEnable 
-    endfunction 
+    NeoBundle 'deton/jasegment.vim' 
 
-    "WORD移動用文書区切り用
-    NeoBundle "deton/jasegment.vim" 
-
-    NeoBundleLazy "kana/vim-smartchr", { 
+    NeoBundleLazy 'kana/vim-smartchr', { 
                 \ "autoload": {
                 \   "filetypes": ["tex"],
                 \ } 
                 \ } 
 
-    "Plugin:Programming 
-    NeoBundleLazy "thinca/vim-quickrun", {
+    "--------------------------------------------------
+    " Programming
+    "--------------------------------------------------
+    
+    NeoBundleLazy 'thinca/vim-quickrun', {
                 \ "autoload": {
                 \   "mappings": [['nxo', '<Plug>(quickrun)']]
                 \ }}
@@ -463,7 +495,7 @@ else
                     \}
     endfunction
 
-    NeoBundleLazy "davidhalter/jedi-vim", {
+    NeoBundleLazy 'davidhalter/jedi-vim', {
                 \'rev':'3934359',
                 \ "autoload": {
                 \   "filetypes": ["python", "python3", "djangohtml"],
@@ -488,7 +520,7 @@ else
         let g:jedi#goto_assignments_command = '<Leader>G'
     endfunction
 
-    NeoBundleLazy "nvie/vim-flake8", { 
+    NeoBundleLazy 'nvie/vim-flake8', { 
                 \ "autoload": {
                 \   "filetypes": ["python", "python3", "djangohtml"],
                 \ },
@@ -503,7 +535,7 @@ else
 
     endfunction
 
-    NeoBundleLazy "tell-k/vim-autopep8", { 
+    NeoBundleLazy 'tell-k/vim-autopep8', { 
                 \ "autoload": {
                 \   "filetypes": ["python", "python3", "djangohtml"],
                 \ },
@@ -518,7 +550,7 @@ else
 
     endfunction
     "Plugin:Configuration for vim-latex
-    NeoBundleLazy "jcf/vim-latex", {
+    NeoBundleLazy 'jcf/vim-latex', {
                 \ "autoload": {
                 \   "filetypes": ["tex"],
                 \ }}
@@ -578,7 +610,6 @@ else
         inoremap <expr><C-e> neocomplcache#cancel_popup() 
     endfunction
 
-    "Plugin: Configuration for neosnippets
     NeoBundle 'Shougo/neosnippet-snippets'
     NeoBundle 'honza/vim-snippets'
     NeoBundle 'Shougo/neosnippet.vim' , {
