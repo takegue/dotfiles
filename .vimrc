@@ -237,9 +237,9 @@ if filereadable(s:local_vimrc)
 endif
 
 
-"--------------------------------------------------
+"==================================================
 " NeoBundle Plugin
-"--------------------------------------------------
+"==================================================
 let s:noplugin = 0
 let s:bundle_root = expand('~/.vim/bundle')
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
@@ -283,7 +283,7 @@ else
 
     "--------------------------------------------------
     " Unite-Source
-    "-------------------------------------------------- 
+    "------------------------------------------------- 
     
     NeoBundle 'Shougo/unite-outline', {
                 \ "depends": ["Shougo/unite.vim"]
@@ -294,7 +294,7 @@ else
     endfunction
 
     NeoBundle 'ujihisa/unite-colorscheme'
-
+    NeoBundle 'tsukkee/unite-help'
     NeoBundleLazy 'Shougo/vimfiler.vim', {
                 \ "depends": ["Shougo/unite.vim"],          
                 \ "autoload": {
@@ -329,7 +329,7 @@ else
 
     "--------------------------------------------------
     " Colorscheme
-    "-------------------------------------------------- 
+    "------------------------------------------------- 
     
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'vim-scripts/Lucius'
@@ -342,7 +342,7 @@ else
 
     colorscheme molokai
 
-    "--------------------------------------------------
+    "---------------------------------------------------
     " Design
     "-------------------------------------------------- 
 
@@ -496,6 +496,19 @@ else
                     \}
     endfunction
 
+    "--------------------------------------------------
+    " Programming - Python
+    "--------------------------------------------------
+    NeoBundleLazy 'alfredodeza/pytest.vim', {
+                \ 'autoload' : {
+                \   'filetypes' :['python', 'python3'],
+                \ },
+                \ 'build': {
+                \   "cygwin": "pip install pytest",
+                \   "mac": "pip install pytest",
+                \   "unix": "pip install pytest"
+                \ }}
+
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \'rev':'3934359',
                 \ "autoload": {
@@ -547,10 +560,12 @@ else
                 \ }}
 
     let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
-    function! s:hooks.on_source(bundle)
-
+    function! s:hooks.on_source(bundle) 
     endfunction
-    "Plugin:Configuration for vim-latex
+
+    "--------------------------------------------------
+    " Programming - LaTex
+    "--------------------------------------------------
     NeoBundleLazy 'jcf/vim-latex', {
                 \ "autoload": {
                 \   "filetypes": ["tex"],
