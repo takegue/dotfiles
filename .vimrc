@@ -19,9 +19,7 @@ set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
 set cursorline          " 編集中の行のハイライト 
 au MyAutoCmd WinLeave * set nocursorline norelativenumber 
-au MyAutoCmd WinEnter * set cursorline relativenumber
-"helpファイルでは番号表示しないようにする
-au MyAutoCmd WinEnter */doc/* set nocursorline norelativenumber
+au MyAutoCmd WinEnter * if &number | set cursorline relativenumber
 
 set encoding=utf8
 set helplang=ja,en
@@ -45,7 +43,7 @@ set novisualbell
 "--------------------------------------------------
 " 検索設定
 "--------------------------------------------------
- 
+
 set ignorecase          "大文字/小文字の区別なく検索する
 set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
 set wrapscan            "検索時に最後まで行ったら最初に戻る
@@ -68,16 +66,16 @@ set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバ
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
-" TODO用のコマンド
+" TODOコマンド
 command! Todo call s:Todo()
-au BufNewFile,BufRead .todo set filetype=markdown
+au BufNewFile,BufRead .todo set nonumber norelativenumber filetype=markdown
 function! s:Todo()
     let l:path  =  '~/.todo'   
     if filereadable(expand('~/Dropbox/.todo'))
         let l:path = expand('~/Dropbox/.todo')
     endif
     if bufwinnr(l:path) < 0
-        execute 'silent bo 40vs +set\ nonumber ' . l:path 
+        execute 'silent bo 60vs +set\ nonumber ' . l:path 
     endif
     unlet! l:path
 endfunction
@@ -175,14 +173,18 @@ nnoremap <S-Right> <C-w>>
 nnoremap <S-Up>    <C-w>-
 nnoremap <S-Down>  <C-w>+
 
-" T + ? で各種設定をトグル
+"--------------------------------------------------
+" Toggle
+"--------------------------------------------------
 nnoremap [toggle] <Nop>
-nmap T [toggle]
+nmap <Leader>t [toggle]
 nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
-
+nnoremap <silent> [toggle]c :setl cursorline!<CR>:setl cursorline?<CR>
+nnoremap <silent> [toggle]n :setl number!<CR>:setl number?<CR>
+nnoremap <silent> [toggle]r :setl relativenumber!<CR>:setl relativenumber?<CR>
 
 "自動で括弧内に移動
 inoremap {} {}<left>
@@ -196,7 +198,6 @@ inoremap "" ""<left>
 "自動で---, ===を変換"
 iab <buffer> --- --------------------------------------------------<CR>
 iab <buffer> === ==================================================<CR>
-
 
 
 " make, grep などのコマンド後に自動的にQuickFixを開く
@@ -236,9 +237,9 @@ if filereadable(s:local_vimrc)
 endif
 
 
-"--------------------------------------------------
+"==================================================
 " NeoBundle Plugin
-"--------------------------------------------------
+"==================================================
 let s:noplugin = 0
 let s:bundle_root =  has('win32') || has('win64') ?
             \ expand('~/vimfiles/bundle') : expand('~/.vim/bundle') 
@@ -283,7 +284,7 @@ else
 
     "--------------------------------------------------
     " Unite-Source
-    "-------------------------------------------------- 
+    "------------------------------------------------- 
     NeoBundle 'Shougo/unite-outline', {
                 \ "depends": ["Shougo/unite.vim"]
                 \ } 
@@ -293,7 +294,10 @@ else
     endfunction
 
     NeoBundle 'ujihisa/unite-colorscheme'
-
+    NeoBundle 'tsukkee/unite-help'
+    NeoBundle 'Shougo/unite-ssh', {
+                \ "depends": ["Shougo/unite.vim"]
+                \ } 
     NeoBundleLazy 'Shougo/vimfiler.vim', {
                 \ "depends": ["Shougo/unite.vim"],          
                 \ "autoload": {
@@ -328,7 +332,7 @@ else
 
     "--------------------------------------------------
     " Colorscheme
-    "-------------------------------------------------- 
+    "------------------------------------------------- 
     
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'vim-scripts/Lucius'
@@ -341,7 +345,7 @@ else
 
     colorscheme molokai
 
-    "--------------------------------------------------
+    "---------------------------------------------------
     " Design
     "-------------------------------------------------- 
 
@@ -499,6 +503,19 @@ else
                     \}
     endfunction
 
+    "--------------------------------------------------
+    " Programming - Python
+    "--------------------------------------------------
+    NeoBundleLazy 'alfredodeza/pytest.vim', {
+                \ 'autoload' : {
+                \   'filetypes' :['python', 'python3'],
+                \ },
+                \ 'build': {
+                \   "cygwin": "pip install pytest",
+                \   "mac": "pip install pytest",
+                \   "unix": "pip install pytest"
+                \ }}
+
     NeoBundleLazy 'davidhalter/jedi-vim', {
                 \'rev':'3934359',
                 \ "autoload": {
@@ -550,10 +567,12 @@ else
                 \ }}
 
     let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
-    function! s:hooks.on_source(bundle)
-
+    function! s:hooks.on_source(bundle) 
     endfunction
-    "Plugin:Configuration for vim-latex
+
+    "--------------------------------------------------
+    " Programming - LaTex
+    "--------------------------------------------------
     NeoBundleLazy 'jcf/vim-latex', {
                 \ "autoload": {
                 \   "filetypes": ["tex"],
