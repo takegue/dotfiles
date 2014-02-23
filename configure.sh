@@ -7,6 +7,7 @@ if [ -e /bin/zsh ]; then
 fi 
 
 echo "$dir/vimfiles => ~/.vim"
+rm ~/.vim
 ln -s $dir/vimfiles ~/.vim
 mkdir -p  ~/.vim/bundle/
 git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim 
@@ -16,7 +17,7 @@ ln -s $dir/.tmux.conf  ~/.tmux.conf
 for dotfile in $dir/.*rc ; do
 	dstpath="$HOME/${dotfile##*/}" 
 
-	if [ -e "${dstpath}" ]; then
+	if [ -e $dstpath ]; then
 		rm $dstpath
 		echo "remove $dstpath"
 	fi 
