@@ -21,7 +21,6 @@ set cursorline          " 編集中の行のハイライト
 au MyAutoCmd WinLeave * set nocursorline norelativenumber 
 au MyAutoCmd WinEnter * if &number | set cursorline relativenumber
 
-
 set encoding=utf8
 set helplang=ja,en
 
@@ -31,6 +30,7 @@ set tabstop=8
 set shiftwidth=4        "オートインデントの幅
 set softtabstop=4       "インデントをスペース4つ分に設定
 set expandtab           "タブ→スペースの変換
+set wildmenu wildmode=longest,full "コマンドラインの補間表示
 
 set list                " 不可視文字の可視化
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
@@ -89,8 +89,8 @@ if !has('gui_running') && !(has('win32') || has('win64'))
     autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
 else
     " .vimrcの再読込時にも色が変化するようにする
-    autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | \if has('gui_running') | source $MYGVIMRC  
-    autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
+    autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | if has('gui_running') | source $MYVIMRC  
+    "autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
 endif
 " ftplugin設定編集反映用
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
@@ -241,7 +241,8 @@ endif
 " NeoBundle Plugin
 "==================================================
 let s:noplugin = 0
-let s:bundle_root = expand('~/.vim/bundle')
+let s:bundle_root =  has('win32') || has('win64') ?
+            \ expand('~/vimfiles/bundle') : expand('~/.vim/bundle') 
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
 
 
@@ -284,7 +285,6 @@ else
     "--------------------------------------------------
     " Unite-Source
     "------------------------------------------------- 
-    
     NeoBundle 'Shougo/unite-outline', {
                 \ "depends": ["Shougo/unite.vim"]
                 \ } 
@@ -294,7 +294,12 @@ else
     endfunction
 
     NeoBundle 'ujihisa/unite-colorscheme'
+    NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'tsukkee/unite-help'
+    NeoBundle 'Shougo/unite-ssh', {
+                \ "depends": ['Shougo/unite.vim']
+                \}
+
     NeoBundleLazy 'Shougo/vimfiler.vim', {
                 \ "depends": ["Shougo/unite.vim"],          
                 \ "autoload": {
@@ -303,6 +308,7 @@ else
                 \   "explorer": 1,
                 \ }} 
     nnoremap <Leader>e :VimFilerExplorer<CR>
+    nnoremap <Leader>E :VimFiler<CR>
     " close vimfiler automatically when there are only vimfiler open
     autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
     let s:hooks = neobundle#get_hooks("vimfiler.vim")
@@ -441,34 +447,38 @@ else
     "-------------------------------------------------- 
     NeoBundle 'tpope/vim-surround'
     NeoBundle 'vim-scripts/Align'
-    NeoBundle 'vim-scripts/YankRing.vim'
+    "NeoBundle 'vim-scripts/YankRing.vim'
     NeoBundle 'tpope/vim-fugitive' 
     NeoBundle 'osyo-manga/vim-over'
 
-    NeoBundle 'rcmdnk/vim-markdown'
+
     NeoBundle 'thinca/vim-template' 
     "置換キーワードを定義する: >
-    autocmd User plugin-template-loaded call s:template_keywords()
-    function! s:template_keywords()
-        silent! %s/<+FILE NAME+>/\=expand('%:t')/g
-        silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-        silent! %s/<+MONTH+>/\=strftime('%m')/g
-        " And more...
-    endfunction
-    "<%= %> の中身をvimで評価して展開する: >
-    autocmd User plugin-template-loaded
-                \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-    autocmd User plugin-template-loaded
-                \ if search('<+CURSOR+>')
-                \ | execute 'normal! "_da>'
-                \ | endif 
-    nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
-    function! s:template_open()
-        let l:path=template#search(expand('%:p')) 
-        execute 'botright vsplit ' . l:path
-    endfunction
+    let s:hooks = neobundle#get_hooks("vim-template")
+    function! s:hooks.on_source(bundle) 
+        autocmd User plugin-template-loaded call s:template_keywords()
+        function! s:template_keywords()
+            silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+            silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+            silent! %s/<+MONTH+>/\=strftime('%m')/g
+            " And more...
+        endfunction
+        "<%= %> の中身をvimで評価して展開する: >
+        autocmd User plugin-template-loaded
+                    \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+        autocmd User plugin-template-loaded
+                    \ if search('<+CURSOR+>')
+                    \ | execute 'normal! "_da>'
+                    \ | endif 
+        nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
+        function! s:template_open()
+            let l:path=template#search(expand('%:p')) 
+            execute 'botright vsplit ' . l:path
+        endfunction 
+    endfunction 
 
-    NeoBundle 'deton/jasegment.vim' 
+    "WORD移動用文書区切り用
+    NeoBundle "deton/jasegment.vim" 
 
     NeoBundleLazy 'kana/vim-smartchr', { 
                 \ "autoload": {
@@ -597,7 +607,6 @@ else
     let g:neocomplcache_enable_at_startup = 1 " Use neocomplcache.
     let s:hooks = neobundle#get_hooks("neocomplcache.vim")
     function! s:hooks.on_source(bundle)
-        "Plugin:Configuration for NeoComplCache
         "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)! 
         let g:acp_enableAtStartup = 0       "Disable AutoComplPop.
 
@@ -647,7 +656,9 @@ else
         " Enable snipMate compatibility feature.
         let g:neosnippet#enable_snipmate_compatibility = 1 
         " Tell Neosnippet about the other snippets
-        let g:neosnippet#snippets_directory= '~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/neosnippet-snippets/neosnippets, ~/.vim/snippets' 
+        let g:neosnippet#snippets_directory=  s:bundle_root.'/vim-snippets/snippets,'
+                                \            .s:bundle_root.'/neosnippet-snippets/neosnippets,'
+                                \            .s:bundle_root.'/snippets' 
         " For snippet_complete marker.
         if has('conceal')
             set conceallevel=2 concealcursor=i

@@ -1,3 +1,4 @@
+set nowrap
 
 " todoリストを簡単に入力する
 iab <buffer> tl - [ ]
