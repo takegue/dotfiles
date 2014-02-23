@@ -294,11 +294,12 @@ else
     endfunction
 
     NeoBundle 'ujihisa/unite-colorscheme'
-    NeoBundle 'tsukkee/unite-help' 
     NeoBundle 'Shougo/neomru.vim'
+    NeoBundle 'tsukkee/unite-help'
     NeoBundle 'Shougo/unite-ssh', {
-                \ "depends": ["Shougo/unite.vim"]
-                \ } 
+                \ "depends": ['Shougo/unite.vim']
+                \}
+
     NeoBundleLazy 'Shougo/vimfiler.vim', {
                 \ "depends": ["Shougo/unite.vim"],          
                 \ "autoload": {
@@ -307,6 +308,7 @@ else
                 \   "explorer": 1,
                 \ }} 
     nnoremap <Leader>e :VimFilerExplorer<CR>
+    nnoremap <Leader>E :VimFiler<CR>
     " close vimfiler automatically when there are only vimfiler open
     autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
     let s:hooks = neobundle#get_hooks("vimfiler.vim")
@@ -445,7 +447,7 @@ else
     "-------------------------------------------------- 
     NeoBundle 'tpope/vim-surround'
     NeoBundle 'vim-scripts/Align'
-    NeoBundle 'vim-scripts/YankRing.vim'
+    "NeoBundle 'vim-scripts/YankRing.vim'
     NeoBundle 'tpope/vim-fugitive' 
     NeoBundle 'osyo-manga/vim-over'
 
@@ -605,7 +607,6 @@ else
     let g:neocomplcache_enable_at_startup = 1 " Use neocomplcache.
     let s:hooks = neobundle#get_hooks("neocomplcache.vim")
     function! s:hooks.on_source(bundle)
-        "Plugin:Configuration for NeoComplCache
         "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)! 
         let g:acp_enableAtStartup = 0       "Disable AutoComplPop.
 
