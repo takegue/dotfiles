@@ -1,7 +1,5 @@
 #/bin/zsh
-
 #新しい環境に取り込んだ時のインストール
-
 
 path=`dirname $0`
 dir=`readlink -f $path` 
@@ -10,10 +8,22 @@ if [ -e /bin/zsh ]; then
 	chsh /bin/zsh
 fi 
 
-ln -s $path/vimfiles ~/.vim
+echo "$dir/vimfiles => ~/.vim"
+ln -s $dir/vimfiles ~/.vim
+mkdir -p  ~/.vim/bundle/
+
+ln -s $dir/.tmux.conf  ~/.tmux.conf
+
 for dotfile in $dir/.*rc ; do
-	echo $dotfile ⇒  ~/${dotfile##*/}
-	ln -s $dotfile ~/${dotfile##*/}
+	dstpath="$HOME/${dotfile##*/}" 
+
+	if [ -e "${dstpath}" ]; then
+		rm $dstpath
+		echo "remove $dstpath"
+	fi 
+	
+	echo "$dotfile => $dstpath" 
+	ln -s $dotfile ~/ 
 done
 
 mkdir -p ~/.vim/bundle

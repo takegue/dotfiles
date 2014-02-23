@@ -4,8 +4,9 @@
 # ------------------------------
 export EDITOR=vim        # エディタをvimに設定
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-export KCODE=u           # KCODEにUTF-8を設定
+export KCODE=UTF8           # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
+export LESSCHARSET=UTF-8
 
 bindkey -v              # キーバインドをviモードに設定
 
@@ -107,7 +108,6 @@ case "${TERM}" in
 	;;
 esac
 
-
 # ------------------------------
 # Other Settings
 # ------------------------------
@@ -115,8 +115,7 @@ esac
 if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
 ### Macports ###
-case "${OSTYPE}" in
-	darwin*)
+case "${OSTYPE}" in darwin*)
 	export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 	export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
 	;;
@@ -126,6 +125,18 @@ esac
 alias r=rails
 alias v=vim
 alias ls='ls -G --color -X'
+alias sort="LC_ALL=C sort"
+alias uniq="LC_ALL=C uniq"
+
+#### Export Configurations #### 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
+export PATH=$PATH:"/usr/local/bin"
+
+if [ -e "$HOME/Dropbox" ]; then
+  alias todo="$EDITOR ~\/Dropbox\/.todo"
+else
+  alias todo="$EDITOR ~\/.todo"
+fi  
 
 # cdコマンド実行後、lsを実行する
 function cd() {
