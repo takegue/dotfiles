@@ -89,8 +89,8 @@ if !has('gui_running') && !(has('win32') || has('win64'))
     autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
 else
     " .vimrcの再読込時にも色が変化するようにする
-    autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | \if has('gui_running') | source $MYGVIMRC  
-    autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
+    autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | if has('gui_running') | source $MYVIMRC  
+    "autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
 endif
 " ftplugin設定編集反映用
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
@@ -294,7 +294,8 @@ else
     endfunction
 
     NeoBundle 'ujihisa/unite-colorscheme'
-    NeoBundle 'tsukkee/unite-help'
+    NeoBundle 'tsukkee/unite-help' 
+    NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'Shougo/unite-ssh', {
                 \ "depends": ["Shougo/unite.vim"]
                 \ } 
