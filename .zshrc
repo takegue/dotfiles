@@ -8,6 +8,10 @@ export KCODE=UTF8           # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 
+#PROXY設定
+export HTTP_PROXY=http://proxy.nagaokaut.ac.jp:8080
+export HTTPS_PROXY=http://proxy.nagaokaut.ac.jp:8080
+
 bindkey -v              # キーバインドをviモードに設定
 
 setopt no_beep           # ビープ音を鳴らさないようにする
