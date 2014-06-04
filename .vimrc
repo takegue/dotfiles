@@ -5,10 +5,9 @@ augroup END
 
 set nocompatible        "vi互換を消す．Vimの時代
 
-
 "--------------------------------------------------
 " 表示設定
-"-------------------------------------------------- 
+"--------------------------------------------------
 set title               "編集中のファイル名を表示
 set showmatch           "括弧入力時の対応する括弧を表示
 syntax on               "コードの色分け
@@ -20,7 +19,7 @@ set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
 set cursorline          " 編集中の行のハイライト 
 au MyAutoCmd WinLeave * set nocursorline norelativenumber 
-au MyAutoCmd WinEnter * if &number | set cursorline relativenumber
+au MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
 
 set encoding=utf8
 set helplang=ja,en
@@ -63,8 +62,9 @@ set hidden              " バッファを閉じる代わりに隠す（Undo履�
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
-
+set nrformats=hex,alpha
 " TODOコマンド
+
 command! Todo call s:Todo()
 au BufNewFile,BufRead *.todo set nonumber norelativenumber filetype=markdown
 function! s:Todo()
@@ -102,7 +102,7 @@ if !has('gui_running') && !(has('win32') || has('win64'))
 else
     " .vimrcの再読込時にも色が変化するようにする
     autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | if has('gui_running') | source $MYVIMRC | endif
-        "autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
+     "autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
 endif
 
     " ftplugin設定編集反映用
@@ -118,7 +118,6 @@ endif
 
     " バックスペースでなんでも消せるようにする
     set backspace=indent,eol,start
-
 
     " クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
     " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
@@ -194,11 +193,11 @@ endif
     nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
     nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
     nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
-    nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
+    nnoremap <silent> [toggle]w :setl wrap!<CR> :setl wrap?<CR>
     nnoremap <silent> [toggle]c :setl cursorline!<CR>:setl cursorline?<CR>
     nnoremap <silent> [toggle]n :setl number!<CR>:setl number?<CR>
     nnoremap <silent> [toggle]r :setl relativenumber!<CR>:setl relativenumber?<CR>
-
+    highlight CursorLine ctermbg=Yellow
 
     "自動で括弧内に移動
     inoremap {} {}<left>
@@ -217,7 +216,6 @@ endif
 
     " make, grep などのコマンド後に自動的にQuickFixを開く
     autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
-
     " QuickFixおよびHelpでは q でバッファを閉じる
     autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
 
@@ -286,6 +284,37 @@ endif
                     \   "unix"      : "make -f make_unix.mak",
                     \ }}
 
+
+        "--------------------------------------------------
+        " Vim-Operator
+        "------------------------------------------------- 
+        NeoBundle 'tpope/vim-commentary'                        "コメント切り替えオペレータ
+        NeoBundle 'tpope/vim-surround'                          "surround記号編集オペレータ
+        "sort用オペレータ
+        NeoBundle 'emonkak/vim-operator-sort', {                
+                    \ 'depends' : ['tpope/vim-operator-user']   
+                    \}
+        "tabularオペレータ
+        NeoBundle 'pekepeke/vim-operator-tabular', {
+                    \ 'depends' : ['pekepeke/vim-csvutil'] 
+                    \}
+        NeoBundle 'tyru/operator-camelize.vim'                  "Camelizeまたはdecamelize(snake_case) オペレータ
+        NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
+
+        "--------------------------------------------------
+        " Vim-TextObj
+        "------------------------------------------------- 
+        NeoBundle "kana/vim-textobj-user"
+        NeoBundle "kana/vim-textobj-entire"                     "全体選択オブジェクト   #
+        NeoBundle "kana/vim-textobj-datetime"                   "日付選択オブジェクト   #
+        NeoBundle "thinca/vim-textobj-comment"                  "コメントオブジェクト   #
+        NeoBundle "mattn/vim-textobj-url"                       "URLオブジェクト        #
+        NeoBundle "rbonvall/vim-textobj-latex"                  "LaTeXオブジェクト      #
+        NeoBundle "bps/vim-textobj-python"                      "Pythonオブジェクト     #
+
+        "--------------------------------------------------
+        " Unite-Source
+        "------------------------------------------------- 
         NeoBundle 'Shougo/unite.vim'
         let s:hooks = neobundle#get_hooks('unite.vim')
         function! s:hooks.on_source(bundle)
@@ -296,9 +325,6 @@ endif
             nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
         endfunction
 
-        "--------------------------------------------------
-        " Unite-Source
-        "------------------------------------------------- 
         NeoBundle 'Shougo/unite-outline', {
                     \ "depends": ["Shougo/unite.vim"]
                     \ } 
@@ -310,6 +336,9 @@ endif
         NeoBundle 'ujihisa/unite-colorscheme'
         NeoBundle 'Shougo/neomru.vim'
         NeoBundle 'tsukkee/unite-help'
+        nnoremap <C-h> :<C-u>Unite -start-insert help<CR>
+        nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
+
         NeoBundle 'Shougo/unite-ssh', {
                     \ "depends": ['Shougo/unite.vim']
                     \}
@@ -350,7 +379,6 @@ endif
         "--------------------------------------------------
         " Colorscheme
         "------------------------------------------------- 
-
         NeoBundle 'nanotech/jellybeans.vim'
         NeoBundle 'vim-scripts/Lucius'
         NeoBundle 'vim-scripts/Zenburn'
@@ -368,7 +396,6 @@ endif
         "---------------------------------------------------
         " Design
         "-------------------------------------------------- 
-
         NeoBundle 'nathanaelkane/vim-indent-guides' 
         autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
         autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
@@ -390,6 +417,7 @@ endif
             " Default : 10
             let g:ac_smooth_scroll_fb_sleep_time_msec = 5
         endfunction
+
         " ヘルプの日本語化
         NeoBundle 'vim-jp/vimdoc-ja'
 
@@ -462,10 +490,9 @@ endif
         "--------------------------------------------------
         " 文書作成プラグイン 
         "-------------------------------------------------- 
-        NeoBundle 'tpope/vim-surround'
         NeoBundle 'vim-scripts/Align'
         "NeoBundle 'vim-scripts/YankRing.vim'
-        NeoBundle 'tpope/vim-fugitive' 
+        NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
         NeoBundle 'osyo-manga/vim-over'
         let s:hooks = neobundle#get_hooks("vim-over")
         function! s:hooks.on_source(bundle) 
@@ -539,12 +566,8 @@ endif
         "--------------------------------------------------
         " Programming
         "--------------------------------------------------
-
-        NeoBundleLazy 'thinca/vim-quickrun', {
-                    \ "autoload": {
-                    \   "mappings": [['nxo', '<Plug>(quickrun)']]
-                    \ }}
-        nmap <Leader>r <Plug>(quickrun)<CR>
+        NeoBundle 'thinca/vim-quickrun'
+        nnoremap <silent> <Leader>r :QuickRun<CR>
         let s:hooks = neobundle#get_hooks("vim-quickrun")
         function! s:hooks.on_source(bundle)
             let g:quickrun_config = {
@@ -552,10 +575,54 @@ endif
                         \   "runner": "vimproc",
                         \   "runner/vimproc/updatetime" : "60",
                         \   "outputter/buffer/split": ":bo vsplit"
-                        \},
+                        \,}}
+            let g:quickrun_config.sql ={
+                        \ 'command' : 'mysql',
+                        \ 'cmdopt': '%{MakeMySQLCommandOptions()}',
+                        \ 'exec' : ['%c %o < %s' ] ,
                         \}
         endfunction
 
+        function! MakeMySQLCommandOptions()
+            if !exists("g:mysql_config_usr")
+                let g:mysql_config_user = input("user> ")
+            endif
+            if !exists("g:mysql_config_host") 
+                let g:mysql_config_host = input("host> ")
+            endif
+            if !exists("g:mysql_config_port")
+                let g:mysql_config_port = input("port> ")
+            endif
+            if !exists("g:mysql_config_pass")
+                let g:mysql_config_pass = inputsecret("password> ")
+            endif
+            if !exists("g:mysql_config_db") 
+                let g:mysql_config_db = input("database> ")
+            endif
+
+            let optlist = []
+            if g:mysql_config_user != ''
+                call add(optlist, '-u ' . g:mysql_config_user)
+            endif
+            if g:mysql_config_host != ''
+                call add(optlist, '-h ' . g:mysql_config_host)
+            endif
+            if g:mysql_config_db != ''
+                call add(optlist, '-D ' . g:mysql_config_db)
+            endif
+            if g:mysql_config_pass != ''
+                call add(optlist, '-p' . g:mysql_config_pass)
+            endif
+            if g:mysql_config_port != ''
+                call add(optlist, '-P ' . g:mysql_config_port)
+            endif
+            if exists("g:mysql_config_otheropts")
+                call add(optlist, g:mysql_config_otheropts)
+            endif
+
+            return join(optlist, ' ')
+
+        endfunction 
         "--------------------------------------------------
         " Programming - Python
         "--------------------------------------------------
@@ -714,11 +781,7 @@ endif
                 set conceallevel=2 concealcursor=i
             endif 
         endfunction
-
-        " 
-        " --
-        "==
-
+        
 
         " インストールされていないプラグインのチェックおよびダウンロード
         NeoBundleCheck 
