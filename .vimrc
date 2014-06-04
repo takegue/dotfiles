@@ -26,6 +26,7 @@ set helplang=ja,en
 
 set smartindent         "オートインデント
 set autoindent 
+"set cindent
 set tabstop=8
 set shiftwidth=4        "オートインデントの幅
 set softtabstop=4       "インデントをスペース4つ分に設定
@@ -194,14 +195,13 @@ else
     "--------------------------------------------------
     nnoremap [toggle] <Nop>
     nmap <Leader>t [toggle]
-    nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
-    nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
-    nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
-    nnoremap <silent> [toggle]w :setl wrap!<CR> :setl wrap?<CR>
-    nnoremap <silent> [toggle]c :setl cursorline!<CR>:setl cursorline?<CR>
-    nnoremap <silent> [toggle]n :setl number!<CR>:setl number?<CR>
-    nnoremap <silent> [toggle]r :setl relativenumber!<CR>:setl relativenumber?<CR>
-    highlight CursorLine ctermbg=Yellow
+    nnoremap <silent> [toggle]s : setl spell!<CR>          : setl spell?<CR>
+    nnoremap <silent> [toggle]l : setl list!<CR>           : setl list?<CR>
+    nnoremap <silent> [toggle]t : setl expandtab!<CR>      : setl expandtab?<CR>
+    nnoremap <silent> [toggle]w : setl wrap!<CR>           : setl wrap?<CR>
+    nnoremap <silent> [toggle]c : setl cursorline!<CR>     : setl cursorline?<CR>
+    nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
+    nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
 
     "自動で括弧内に移動
     inoremap {} {}<left>
@@ -310,6 +310,8 @@ else
         "------------------------------------------------- 
         NeoBundle "kana/vim-textobj-user"
         NeoBundle 'kana/vim-textobj-function'                   "関数オブジェクト(C, Java, Vim)
+
+
         NeoBundle "kana/vim-textobj-entire"                     "全体選択オブジェクト   #
         NeoBundle "kana/vim-textobj-datetime"                   "日付選択オブジェクト   #
         NeoBundle "thinca/vim-textobj-comment"                  "コメントオブジェクト   #
@@ -331,7 +333,7 @@ else
         endfunction
 
         NeoBundle 'Shougo/unite-outline', {
-                    \ "depends": ["Shougo/unite.vim"]
+                    \ "depends": ["Shougo/unite.vim"],
                     \ } 
         let s:hooks = neobundle#get_hooks("unite-outline")
         function! s:hooks.on_source(bundle) 
@@ -577,16 +579,17 @@ else
         function! s:hooks.on_source(bundle)
             let g:quickrun_config = {
                         \ "_": {
-                        \   "runner": "vimproc",
+                        \   "runner"                    : "vimproc",
                         \   "runner/vimproc/updatetime" : "60",
-                        \   "outputter/buffer/split": ":bo vsplit"
+                        \   "outputter/buffer/split"    : ":bo vsplit"
                         \,}}
             let g:quickrun_config.sql ={
                         \ 'command' : 'mysql',
-                        \ 'cmdopt': '%{MakeMySQLCommandOptions()}',
-                        \ 'exec' : ['%c %o < %s' ] ,
+                        \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
+                        \ 'exec'    : ['%c %o < %s' ] ,
                         \}
         endfunction
+        
 
         function! MakeMySQLCommandOptions()
             if !exists("g:mysql_config_usr")
@@ -632,24 +635,24 @@ else
         " Programming - Python
         "--------------------------------------------------
         NeoBundleLazy 'alfredodeza/pytest.vim', {
-                    \ 'autoload' : {
-                    \   'filetypes' :['python', 'python3'],
+                    \ 'autoload'    : {
+                    \   'filetypes' : ['python', 'python3'],
                     \ },
-                    \ 'build': {
-                    \   "cygwin": "pip install pytest",
-                    \   "mac": "pip install pytest",
-                    \   "unix": "pip install pytest"
+                    \ 'build'       : {
+                    \   "cygwin"    : "pip install pytest",
+                    \   "mac"       : "pip install pytest",
+                    \   "unix"      : "pip install pytest"
                     \ }}
 
         NeoBundleLazy 'davidhalter/jedi-vim', {
-                    \'rev':'3934359',
-                    \ "autoload": {
-                    \   "filetypes": ["python", "python3", "djangohtml"],
+                    \'rev'          : '3934359',
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
                     \ },
-                    \ "build": {
-                    \   "cygwin": "pip install jedi",
-                    \   "mac": "pip install jedi",
-                    \   "unix": "pip install jedi"
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install jedi",
+                    \   "mac"       : "pip install jedi",
+                    \   "unix"      : "pip install jedi"
                     \ }}
         let s:hooks = neobundle#get_hooks("jedi-vim")
         function! s:hooks.on_source(bundle)
@@ -667,13 +670,13 @@ else
         endfunction
 
         NeoBundleLazy 'nvie/vim-flake8', { 
-                    \ "autoload": {
-                    \   "filetypes": ["python", "python3", "djangohtml"],
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
                     \ },
-                    \ "build": {
-                    \   "cygwin": "pip install flake8",
-                    \   "mac": "pip install flake8",
-                    \   "unix": "pip install flake8",
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install flake8",
+                    \   "mac"       : "pip install flake8",
+                    \   "unix"      : "pip install flake8",
                     \ }}
 
         let s:hooks = neobundle#get_hooks("nvie/vim-flake8")
@@ -682,13 +685,13 @@ else
         endfunction
 
         NeoBundleLazy 'tell-k/vim-autopep8', { 
-                    \ "autoload": {
-                    \   "filetypes": ["python", "python3", "djangohtml"],
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
                     \ },
-                    \ "build": { 
-                    \   "cygwin": "pip install autopep8",
-                    \   "mac": "pip install autopep8",
-                    \   "unix": "sudo pip install autopep8",
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install autopep8",
+                    \   "mac"       : "pip install autopep8",
+                    \   "unix"      : "sudo pip install autopep8",
                     \ }}
 
         let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
@@ -757,6 +760,7 @@ else
             " Plugin key-mappings.
             inoremap <expr><C-g>     neocomplcache#undo_completion()
             inoremap <expr><C-l>     neocomplcache#complete_common_string()
+            
 
             " Recommended key-mappings.
             " <CR>: close popup and save indent.
@@ -773,8 +777,10 @@ else
             inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
             inoremap <expr><C-y>  neocomplcache#close_popup()
             inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
             " Close popup by <Space>.
             "inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+
 
             " For cursor moving in insert mode(Not recommended)
             "inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
@@ -791,7 +797,7 @@ else
 
             " Shell like behavior(not recommended).
             "set completeopt+=longest
-            "let g:neocomplcache_enable_auto_select = 1
+            let g:neocomplcache_enable_auto_select = 1
             "let g:neocomplcache_disable_auto_complete = 1
             "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
@@ -824,22 +830,6 @@ else
             let g:neocomplcache_dictionary_filetype_lists = {
                         \ 'default' : ''
                         \ }
-
-            inoremap <expr><C-g> neocomplcache#undo_completion()
-            inoremap <expr><C-l> neocomplcache#complete_common_string() 
-            " Recommended key-mappings.
-            " <CR>: close popup and save indent.
-            inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-            function! s:my_cr_function()
-                return neocomplcache#smart_close_popup() .  "\<CR>"
-            endfunction 
-            " <TAB>: completion.
-            inoremap <expr><TAB>  pumvisible() ?  "\<C-n>" : "\<TAB>" 
-            " <C-h>, <BS>: close popup and delete backword char.
-            inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-            inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-            inoremap <expr><C-y> neocomplcache#close_popup()
-            inoremap <expr><C-e> neocomplcache#cancel_popup() 
         endfunction
 
         NeoBundle 'Shougo/neosnippet-snippets'
