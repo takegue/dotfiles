@@ -203,6 +203,7 @@ else
     nnoremap <silent> [toggle]c : setl cursorline!<CR>     : setl cursorline?<CR>
     nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
     nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
+    nnoremap <silent> [toggle]p : set paste!<CR> 
 
     "自動で括弧内に移動
     inoremap {} {}<left>
@@ -292,14 +293,14 @@ else
 
         "--------------------------------------------------
         " Vim-Operator
-        "------------------------------------------------- 
+        " "------------------------------------------------- 
+        NeoBundle 'kana/vim-operator-user'
         NeoBundle 'tpope/vim-commentary'                        "コメント切り替えオペレータ
         NeoBundle 'tpope/vim-surround'                          "surround記号編集オペレータ
-        "sort用オペレータ
+        "sort用オtpope/vim-operator-userペレータ
         NeoBundle 'emonkak/vim-operator-sort', {                
                     \ 'depends' : ['tpope/vim-operator-user']   
                     \}
-        "tabularオペレータ
         NeoBundle 'pekepeke/vim-operator-tabular', {
                     \ 'depends' : ['pekepeke/vim-csvutil'] 
                     \}
@@ -311,7 +312,6 @@ else
         "------------------------------------------------- 
         NeoBundle "kana/vim-textobj-user"
         NeoBundle 'kana/vim-textobj-function'                   "関数オブジェクト(C, Java, Vim)
-
 
         NeoBundle "kana/vim-textobj-entire"                     "全体選択オブジェクト   #
         NeoBundle "kana/vim-textobj-datetime"                   "日付選択オブジェクト   #
@@ -344,7 +344,7 @@ else
         NeoBundle 'ujihisa/unite-colorscheme'
         NeoBundle 'Shougo/neomru.vim'
         NeoBundle 'tsukkee/unite-help'
-        nnoremap <C-h> :<C-u>Unite -start-insert help<CR>
+        " nnoremap <silent> :<C-u>Unite -start-insert help<CR>
         nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
 
         NeoBundle 'Shougo/unite-ssh', {
@@ -415,16 +415,6 @@ else
             IndentGuidesEnable 
         endfunction 
 
-        "NeoBundle 'yonchu/accelerated-smooth-scroll'
-        let s:hooks = neobundle#get_hooks('accelerated-smooth-scroll')
-        function! s:hooks.on_source(bundle)
-            " <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
-            " Default : 10
-            let g:ac_smooth_scroll_du_sleep_time_msec = 3 
-            " <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
-            " Default : 10
-            let g:ac_smooth_scroll_fb_sleep_time_msec = 5
-        endfunction
 
         " ヘルプの日本語化
         NeoBundle 'vim-jp/vimdoc-ja'
@@ -448,8 +438,7 @@ else
                         \   'filetype': 'MyFiletype',
                         \   'fileencoding': 'MyFileencoding',
                         \   'mode': 'MyMode'
-                        \ }
-                        \ }
+                        \ }}
 
             function! MyModified()
                 return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -501,6 +490,13 @@ else
         NeoBundle 'vim-scripts/Align'
         "NeoBundle 'vim-scripts/YankRing.vim'
         NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
+        function! s:SwitchToActualFile()
+            let fname = resolve(expand('%:p'))
+            bwipeout #
+            exec "e " . fname
+        endfunction
+        command! FollowSymlink call s:SwitchToActualFile()
+
         NeoBundle 'osyo-manga/vim-over'
         let s:hooks = neobundle#get_hooks("vim-over")
         function! s:hooks.on_source(bundle) 
@@ -590,7 +586,7 @@ else
                         \ 'exec'    : ['%c %o < %s' ] ,
                         \}
         endfunction
-        
+
 
         function! MakeMySQLCommandOptions()
             if !exists("g:mysql_config_usr")
@@ -761,7 +757,7 @@ else
             " Plugin key-mappings.
             inoremap <expr><C-g>     neocomplcache#undo_completion()
             inoremap <expr><C-l>     neocomplcache#complete_common_string()
-            
+
 
             " Recommended key-mappings.
             " <CR>: close popup and save indent.
@@ -865,7 +861,7 @@ else
 
 
         " インストールされていないプラグインのチェックおよびダウンロード
-        NeoBundleCheck 
+        NeoBundleCheck
 
     endif
     "壁紙設定
