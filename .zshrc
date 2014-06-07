@@ -8,9 +8,6 @@ export KCODE=UTF8           # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 
-#PROXY設定
-export HTTP_PROXY=http://proxy.nagaokaut.ac.jp:8080
-export HTTPS_PROXY=http://proxy.nagaokaut.ac.jp:8080
 
 bindkey -v              # キーバインドをviモードに設定
 
@@ -22,6 +19,7 @@ setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 setopt prompt_subst      # プロンプト定義内で変数置換やコマンド置換を扱う
 setopt notify            # バックグラウンドジョブの状態変化を即時報告する
 setopt equals            # =commandを`which command`と同じ処理にする
+
 
 ### Complement ###
 autoload -U compinit; compinit # 補完機能を有効にする
@@ -40,10 +38,11 @@ zstyle ':completion:*' group-name ''
 setopt extended_glob # グロブ機能を拡張する
 unsetopt caseglob    # ファイルグロブで大文字小文字を区別しない
 
+
 ### History ###
 HISTFILE=~/.zsh_history   # ヒストリを保存するファイル
-HISTSIZE=10000            # メモリに保存されるヒストリの件数
-SAVEHIST=10000            # 保存されるヒストリの件数
+HISTSIZE=20000            # メモリに保存されるヒストリの件数
+SAVEHIST=20000            # 保存されるヒストリの件数
 setopt bang_hist          # !を使ったヒストリ展開を行う(d)
 setopt extended_history   # ヒストリに実行時間も保存する
 setopt hist_ignore_dups   # 直前と同じコマンドはヒストリに追加しない
@@ -58,7 +57,7 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # すべてのヒストリを表示する
-function history-all { history -E 1 }
+function history-all { history -E -D 1  }
 
 
 # ------------------------------
@@ -76,6 +75,7 @@ export CLICOLOR=true
 # 補完候補に色を付ける
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
+
 ### Prompt ###
 # プロンプトに色を付ける
 autoload -U colors; colors
@@ -87,10 +87,10 @@ tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_co
 
 # rootユーザ時(太字にし、アンダーバーをつける)
 if [ ${UID} -eq 0 ]; then
-	tmp_prompt="%B%U${tmp_prompt}%u%b"
-	tmp_prompt2="%B%U${tmp_prompt2}%u%b"
-	tmp_rprompt="%B%U${tmp_rprompt}%u%b"
-	tmp_sprompt="%B%U${tmp_sprompt}%u%b"
+    tmp_prompt="%B%U${tmp_prompt}%u%b"
+    tmp_prompt2="%B%U${tmp_prompt2}%u%b"
+    tmp_rprompt="%B%U${tmp_rprompt}%u%b"
+    tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
 PROMPT=$tmp_prompt    # 通常のプロンプト
@@ -100,16 +100,22 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-	PROMPT="%{${fg[yellow]}%}${HOST%%.*} ${PROMPT}"
+    PROMPT="%{${fg[yellow]}%}${HOST%%.*} ${PROMPT}"
 ;
+
 
 ### Title (user@hostname) ###
 case "${TERM}" in
-	kterm*|xterm*|)
-   	precmd() {
-   		echo -ne "\033]0;${USER}@${HOST%%.*}\007"
-	}
-	;;
+    kterm*|xterm*)
+        preexec() {
+            TMP_COMMAND=$1
+            mycmd=(${(s: :)${1}})
+            echo -ne "\033]0;${USER}@${HOST%%.*}:$mycmd[1]\007"
+        }
+        precmd() {
+            echo -ne "\033]0;${USER}@${HOST%%.*}\007"
+        }
+        ;;
 esac
 
 # ------------------------------
@@ -120,9 +126,9 @@ if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
 ### Macports ###
 case "${OSTYPE}" in darwin*)
-	export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-	export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
-	;;
+    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+    export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
+    ;;
 esac
 
 ### Aliases ###
@@ -131,18 +137,28 @@ alias v=vim
 alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
+alias NOTE=mail_alart 
+function mail_alart(){
+     echo 'Command:\n'$TMP_COMMAND '\nContents:\n'  \
+     | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp
+}
+
 
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
 export PATH=$PATH:"/usr/local/bin"
 
+#PROXY設定
+export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
+export https_proxy="http://proxy.nagaokaut.ac.jp:8080"
+
 if [ -e "$HOME/Dropbox" ]; then
-  alias todo="$EDITOR ~\/Dropbox\/.todo"
+    alias todo="$EDITOR ~\/Dropbox\/.todo"
 else
-  alias todo="$EDITOR ~\/.todo"
+    alias todo="$EDITOR ~\/.todo"
 fi  
 
 # cdコマンド実行後、lsを実行する
 function cd() {
-	builtin cd $@ && ls;
+    builtin cd $@ && ls;
 }
