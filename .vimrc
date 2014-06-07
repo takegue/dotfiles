@@ -399,7 +399,6 @@ else
         "--------------------------------------------------
         " Syntax
         "--------------------------------------------------
-        NeoBundle 'zaiste/tmux.vim'
 
         "---------------------------------------------------
         " Design
@@ -415,11 +414,6 @@ else
             IndentGuidesEnable 
         endfunction 
 
-
-        " ヘルプの日本語化
-        NeoBundle 'vim-jp/vimdoc-ja'
-
-        " ステータスバー
         NeoBundle 'itchyny/lightline.vim'
         let s:hooks = neobundle#get_hooks('lightline.vim')
         function! s:hooks.on_source(bundle)
@@ -438,16 +432,13 @@ else
                         \   'filetype': 'MyFiletype',
                         \   'fileencoding': 'MyFileencoding',
                         \   'mode': 'MyMode'
-                        \ }}
-
+                        \ }} 
             function! MyModified()
                 return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-            endfunction
-
+            endfunction 
             function! MyReadonly()
                 return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
-            endfunction
-
+            endfunction 
             function! MyFilename()
                 return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
                             \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
@@ -456,7 +447,6 @@ else
                             \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
                             \ ('' != MyModified() ? ' ' . MyModified() : '')
             endfunction 
-
             function! MyFugitive()
                 try
                     if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
@@ -483,6 +473,9 @@ else
                 return winwidth(0) > 60 ? lightline#mode() : ''
             endfunction  
         endfunction 
+
+        " ヘルプの日本語化
+        NeoBundle 'vim-jp/vimdoc-ja'
 
         "--------------------------------------------------
         " 文書作成プラグイン 
@@ -572,6 +565,7 @@ else
         "--------------------------------------------------
         NeoBundle 'thinca/vim-quickrun'
         nnoremap <silent> <Leader>r :QuickRun<CR>
+        nnoremap <silent> <Leader>se :QuickRun sql<CR>
         let s:hooks = neobundle#get_hooks("vim-quickrun")
         function! s:hooks.on_source(bundle)
             let g:quickrun_config = {
@@ -828,6 +822,8 @@ else
                         \ 'default' : ''
                         \ }
         endfunction
+        " ステータスバー
+
 
         NeoBundle 'Shougo/neosnippet-snippets'
         NeoBundle 'honza/vim-snippets'
