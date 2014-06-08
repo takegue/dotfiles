@@ -361,34 +361,34 @@ else
                     \ "depends": ['tyru/open-browser.vim', 'mattn/webapi-vim'],
                     \}
 
-        " NeoBundleLazy 'Shougo/vimfiler.vim', {
-        "             \ "depends": ["Shougo/unite.vim"],          
-        "             \ "autoload": {
-        "             \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-        "             \   "mappings": ['<Plug>(vimfiler_switch)'],
-        "             \   "explorer": 1,
-        "             \ }} 
-        " nnoremap <Leader>e :VimFilerExplorer<CR>
-        " nnoremap <Leader>E :VimFiler<CR>
-        " " close vimfiler automatically when there are only vimfiler open
-        " autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-        " let s:hooks = neobundle#get_hooks("vimfiler.vim")
-        " function! s:hooks.on_source(bundle)
-        "     let g:vimfiler_as_default_explorer = 1
-        "     let g:vimfiler_enable_auto_cd = 1
-        "     " 2013-08-14 追記
-        "     let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
-        "     " vimfiler specific key mappings
-        "     autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
-        "     function! s:vimfiler_settings()
-        "         " ^^ to go up 
-        "         nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-        "         " use R to refresh
-        "         nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-        "         " overwrite C-l
-        "         nmap <buffer> <C-l> <C-w>l
-        "     endfunction
-        " endfunction
+        NeoBundleLazy 'Shougo/vimfiler.vim', {
+                    \ "depends": ["Shougo/unite.vim"],          
+                    \ "autoload": {
+                    \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
+                    \   "mappings": ['<Plug>(vimfiler_switch)'],
+                    \   "explorer": 1,
+                    \ }} 
+        nnoremap <Leader>e :VimFilerExplorer<CR>
+        nnoremap <Leader>E :VimFiler<CR>
+        " close vimfiler automatically when there are only vimfiler open
+        autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+        let s:hooks = neobundle#get_hooks("vimfiler.vim")
+        function! s:hooks.on_source(bundle)
+            let g:vimfiler_as_default_explorer = 1
+            let g:vimfiler_enable_auto_cd = 1
+            " 2013-08-14 追記
+            let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
+            " vimfiler specific key mappings
+            autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
+            function! s:vimfiler_settings()
+                " ^^ to go up 
+                nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+                " use R to refresh
+                nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+                " overwrite C-l
+                nmap <buffer> <C-l> <C-w>l
+            endfunction
+        endfunction
 
         NeoBundle 'tacroe/unite-mark', {
                     \ "depends": ["Shougo/unite.vim"]
@@ -503,381 +503,381 @@ else
         NeoBundle 'osyo-manga/vim-over'
         let s:hooks = neobundle#get_hooks("vim-over")
         function! s:hooks.on_source(bundle) 
-            " over.vimの起動
-            nnoremap <silent> <Leader>m :OverCommandLine<CR> 
-            " カーソル下の単語をハイライト付きで置換
-            nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
-            " コピーした文字列をハイライト付きで置換
-            nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
+            let g:over_enable_cmd_windw = 1
+            " over.vimの起動  
+            nnoremap <silent> <Leader>ss :OverCommandLine<CR> 
+            " " カーソル下の単語をハイライト付きで置換
+            " nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
+            " " コピーした文字列をハイライト付きで置換
+            " nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
         endfunction
 
+        NeoBundle 'vim-tabpagecd' "Tabpageごとにプロジェクト管理を行う
         NeoBundle 'xolox/vim-session', {
-                  \ 'depends' : 'xolox/vim-misc',
-                  \ } 
+                    \ 'depends' : 'xolox/vim-misc',
+                    \ } 
         let s:hooks = neobundle#get_hooks("vim-session")
         function! s:hooks.on_source(bundle) 
-          " 現在のディレクトリ直下の .vimsessions/ を取得 
-          let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
-          if isdirectory(s:local_session_directory)
-              " session保存ディレクトリをそのディレクトリの設定
-              let g:session_directory = s:local_session_directory
-              " vimを辞める時に自動保存
-              let g:session_autosave = 'yes'
-              " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
-              let g:session_autoload = 'yes'
-              " 1分間に1回自動保存
-              let g:session_autosave_periodic = 1
-          else
-              let g:session_autosave = 'no'
-              let g:session_autoload = 'no'
-          endif
-          unlet s:local_session_directory
-          function! MkDirSession()
-              let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
-              mkdir(s:local_session_directory)
-              let g:session_directory = s:local_session_directory
-              unlet s:local_session_directory
-          endfunction
-      endfunction
+            " 現在のディレクトリ直下の .vimsessions/ を取得 
+            let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+            if isdirectory(s:local_session_directory)
+                " session保存ディレクトリをそのディレクトリの設定
+                let g:session_directory = s:local_session_directory
+                " vimを辞める時に自動保存
+                let g:session_autosave = 'yes'
+                " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+                let g:session_autoload = 'yes'
+                " 1分間に1回自動保存
+                let g:session_autosave_periodic = 1
+            else
+                let g:session_autosave = 'no'
+                let g:session_autoload = 'no'
+            endif
+            unlet s:local_session_directory
+        endfunction 
+        function! MkDirSession()    "session用のディレクトリ作成関数
+            let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+            mkdir(s:local_session_directory)
+            let g:session_directory = s:local_session_directory
+            unlet s:local_session_directory
+        endfunction
 
-      "置換キーワードを定義する: >
-      NeoBundle 'thinca/vim-template' 
-      "置換キーワードを定義する: >
-      let s:hooks = neobundle#get_hooks("vim-template")
-      function! s:hooks.on_source(bundle) 
-          autocmd User plugin-template-loaded call s:template_keywords()
-          function! s:template_keywords()
-              silent! %s/<+FILE NAME+>/\=expand('%:t')/g
-              silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-              silent! %s/<+MONTH+>/\=strftime('%m')/g
-              " And more...
-          endfunction
-          "<%= %> の中身をvimで評価して展開する: >
-          autocmd User plugin-template-loaded
-                      \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-          autocmd User plugin-template-loaded
-                      \ if search('<+CURSOR+>')
-                      \ | execute 'normal! "_da>"'
-                      \ | endif 
-          nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
-          function! s:template_open()
-              let l:path=template#search(expand('%:p')) 
-              execute 'botright vsplit ' . l:path
-          endfunction 
-      endfunction 
+        "置換キーワードを定義する: >
+        NeoBundle 'thinca/vim-template' 
+        "置換キーワードを定義する: >
+        let s:hooks = neobundle#get_hooks("vim-template")
+        function! s:hooks.on_source(bundle) 
+            autocmd User plugin-template-loaded call s:template_keywords()
+            function! s:template_keywords()
+                silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+                silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+                silent! %s/<+MONTH+>/\=strftime('%m')/g
+                " And more...
+            endfunction
+            "<%= %> の中身をvimで評価して展開する: >
+            autocmd User plugin-template-loaded
+                        \ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+            autocmd User plugin-template-loaded
+                        \ if search('<+CURSOR+>')
+                        \ | execute 'normal! "_da>"'
+                        \ | endif 
+            nnoremap <Space>/  :<C-u>call <SID>template_open()<CR> 
+            function! s:template_open()
+                let l:path=template#search(expand('%:p')) 
+                execute 'botright vsplit ' . l:path
+            endfunction 
+        endfunction 
 
-      "WORD移動用文書区切り用
-      NeoBundle "deton/jasegment.vim" 
+        "WORD移動用文書区切り用
+        NeoBundle "deton/jasegment.vim" 
 
-      NeoBundleLazy 'kana/vim-smartchr', { 
-                  \ "autoload": {
-                  \   "filetypes": ["tex"],
-                  \ } 
-                  \ } 
+        NeoBundleLazy 'kana/vim-smartchr', { 
+                    \ "autoload": {
+                    \   "filetypes": ["tex"],
+                    \ } 
+                    \ } 
 
-      "--------------------------------------------------
-      " Programming
-      "--------------------------------------------------
-      NeoBundle 'thinca/vim-quickrun'
-      nnoremap <silent> <Leader>r :QuickRun<CR>
-      nnoremap <silent> <Leader>se :QuickRun sql<CR>
-      let s:hooks = neobundle#get_hooks("vim-quickrun")
-      function! s:hooks.on_source(bundle)
-          let g:quickrun_config = {
-                      \ "_": {
-                      \   "runner"                    : "vimproc",
-                      \   "runner/vimproc/updatetime" : "60",
-                      \   "outputter/buffer/split"    : ":bo vsplit"
-                      \,}}
-          let g:quickrun_config.sql ={
-                      \ 'command' : 'mysql',
-                      \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
-                      \ 'exec'    : ['%c %o < %s' ] ,
-                      \}
-      endfunction
+        "--------------------------------------------------
+        " Programming
+        "--------------------------------------------------
+        NeoBundle 'thinca/vim-quickrun'
+        nnoremap <silent> <Leader>r :QuickRun<CR>
+        nnoremap <silent> <Leader>se :QuickRun sql<CR>
+        let s:hooks = neobundle#get_hooks("vim-quickrun")
+        function! s:hooks.on_source(bundle)
+            let g:quickrun_config = {
+                        \ "_": {
+                        \   "runner"                    : "vimproc",
+                        \   "runner/vimproc/updatetime" : "60",
+                        \   "outputter/buffer/split"    : ":bo vsplit"
+                        \,}}
+            let g:quickrun_config.sql ={
+                        \ 'command' : 'mysql',
+                        \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
+                        \ 'exec'    : ['%c %o < %s' ] ,
+                        \}
+        endfunction 
 
+        function! MakeMySQLCommandOptions()
+            if !exists("g:mysql_config_usr")
+                let g:mysql_config_user = input("user> ")
+            endif
+            if !exists("g:mysql_config_host") 
+                let g:mysql_config_host = input("host> ")
+            endif
+            if !exists("g:mysql_config_port")
+                let g:mysql_config_port = input("port> ")
+            endif
+            if !exists("g:mysql_config_pass")
+                let g:mysql_config_pass = inputsecret("password> ")
+            endif
+            if !exists("g:mysql_config_db") 
+                let g:mysql_config_db = input("database> ")
+            endif
 
-      function! MakeMySQLCommandOptions()
-          if !exists("g:mysql_config_usr")
-              let g:mysql_config_user = input("user> ")
-          endif
-          if !exists("g:mysql_config_host") 
-              let g:mysql_config_host = input("host> ")
-          endif
-          if !exists("g:mysql_config_port")
-              let g:mysql_config_port = input("port> ")
-          endif
-          if !exists("g:mysql_config_pass")
-              let g:mysql_config_pass = inputsecret("password> ")
-          endif
-          if !exists("g:mysql_config_db") 
-              let g:mysql_config_db = input("database> ")
-          endif
+            let optlist = []
+            if g:mysql_config_user != ''
+                call add(optlist, '-u ' . g:mysql_config_user)
+            endif
+            if g:mysql_config_host != ''
+                call add(optlist, '-h ' . g:mysql_config_host)
+            endif
+            if g:mysql_config_db != ''
+                call add(optlist, '-D ' . g:mysql_config_db)
+            endif
+            if g:mysql_config_pass != ''
+                call add(optlist, '-p' . g:mysql_config_pass)
+            endif
+            if g:mysql_config_port != ''
+                call add(optlist, '-P ' . g:mysql_config_port)
+            endif
+            if exists("g:mysql_config_otheropts")
+                call add(optlist, g:mysql_config_otheropts)
+            endif
 
-          let optlist = []
-          if g:mysql_config_user != ''
-              call add(optlist, '-u ' . g:mysql_config_user)
-          endif
-          if g:mysql_config_host != ''
-              call add(optlist, '-h ' . g:mysql_config_host)
-          endif
-          if g:mysql_config_db != ''
-              call add(optlist, '-D ' . g:mysql_config_db)
-          endif
-          if g:mysql_config_pass != ''
-              call add(optlist, '-p' . g:mysql_config_pass)
-          endif
-          if g:mysql_config_port != ''
-              call add(optlist, '-P ' . g:mysql_config_port)
-          endif
-          if exists("g:mysql_config_otheropts")
-              call add(optlist, g:mysql_config_otheropts)
-          endif
+            return join(optlist, ' ')
 
-          return join(optlist, ' ')
+        endfunction 
+        "--------------------------------------------------
+        " Programming - Python
+        "--------------------------------------------------
+        NeoBundleLazy 'alfredodeza/pytest.vim', {
+                    \ 'autoload'    : {
+                    \   'filetypes' : ['python', 'python3'],
+                    \ },
+                    \ 'build'       : {
+                    \   "cygwin"    : "pip install pytest",
+                    \   "mac"       : "pip install pytest",
+                    \   "unix"      : "pip install pytest"
+                    \ }}
 
-      endfunction 
-      "--------------------------------------------------
-      " Programming - Python
-      "--------------------------------------------------
-      NeoBundleLazy 'alfredodeza/pytest.vim', {
-                  \ 'autoload'    : {
-                  \   'filetypes' : ['python', 'python3'],
-                  \ },
-                  \ 'build'       : {
-                  \   "cygwin"    : "pip install pytest",
-                  \   "mac"       : "pip install pytest",
-                  \   "unix"      : "pip install pytest"
-                  \ }}
+        NeoBundleLazy 'davidhalter/jedi-vim', {
+                    \'rev'          : '3934359',
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
+                    \ },
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install jedi",
+                    \   "mac"       : "pip install jedi",
+                    \   "unix"      : "pip install jedi"
+                    \ }}
+        let s:hooks = neobundle#get_hooks("jedi-vim")
+        function! s:hooks.on_source(bundle)
+            " jediにvimの設定を任せると'completeopt+=preview'するので
+            " 自動設定機能をoffにし手動で設定を行う
+            let g:jedi#auto_vim_configuration = 0
 
-      NeoBundleLazy 'davidhalter/jedi-vim', {
-                  \'rev'          : '3934359',
-                  \ "autoload"    : {
-                  \   "filetypes" : ["python", "python3", "djangohtml"],
-                  \ },
-                  \ "build"       : {
-                  \   "cygwin"    : "pip install jedi",
-                  \   "mac"       : "pip install jedi",
-                  \   "unix"      : "pip install jedi"
-                  \ }}
-      let s:hooks = neobundle#get_hooks("jedi-vim")
-      function! s:hooks.on_source(bundle)
-          " jediにvimの設定を任せると'completeopt+=preview'するので
-          " 自動設定機能をoffにし手動で設定を行う
-          let g:jedi#auto_vim_configuration = 0
+            "補完の最初の項目が選択された状態だと使いにくいためオフにする
+            let g:jedi#popup_on_dot = 1
+            let g:jedi#popup_select_first = 0
+            "quickrunと被るため大文字に変更
+            let g:jedi#rename_command = '<Leader>R'
+            " gundoと被るため大文字に変更 (2013-06-2410:00 追記）
+            let g:jedi#goto_assignments_command = '<Leader>G'
+        endfunction
 
-          "補完の最初の項目が選択された状態だと使いにくいためオフにする
-          let g:jedi#popup_on_dot = 1
-          let g:jedi#popup_select_first = 0
-          "quickrunと被るため大文字に変更
-          let g:jedi#rename_command = '<Leader>R'
-          " gundoと被るため大文字に変更 (2013-06-2410:00 追記）
-          let g:jedi#goto_assignments_command = '<Leader>G'
-      endfunction
+        NeoBundleLazy 'nvie/vim-flake8', { 
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
+                    \ },
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install flake8",
+                    \   "mac"       : "pip install flake8",
+                    \   "unix"      : "pip install flake8",
+                    \ }}
 
-      NeoBundleLazy 'nvie/vim-flake8', { 
-                  \ "autoload"    : {
-                  \   "filetypes" : ["python", "python3", "djangohtml"],
-                  \ },
-                  \ "build"       : {
-                  \   "cygwin"    : "pip install flake8",
-                  \   "mac"       : "pip install flake8",
-                  \   "unix"      : "pip install flake8",
-                  \ }}
+        let s:hooks = neobundle#get_hooks("nvie/vim-flake8")
+        function! s:hooks.on_source(bundle)
+        endfunction
 
-      let s:hooks = neobundle#get_hooks("nvie/vim-flake8")
-      function! s:hooks.on_source(bundle)
+        NeoBundleLazy 'tell-k/vim-autopep8', { 
+                    \ "autoload"    : {
+                    \   "filetypes" : ["python", "python3", "djangohtml"],
+                    \ },
+                    \ "build"       : {
+                    \   "cygwin"    : "pip install autopep8",
+                    \   "mac"       : "pip install autopep8",
+                    \   "unix"      : "sudo pip install autopep8",
+                    \ }}
 
-      endfunction
+        let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
+        function! s:hooks.on_source(bundle) 
+        endfunction
 
-      NeoBundleLazy 'tell-k/vim-autopep8', { 
-                  \ "autoload"    : {
-                  \   "filetypes" : ["python", "python3", "djangohtml"],
-                  \ },
-                  \ "build"       : {
-                  \   "cygwin"    : "pip install autopep8",
-                  \   "mac"       : "pip install autopep8",
-                  \   "unix"      : "sudo pip install autopep8",
-                  \ }}
+        "--------------------------------------------------
+        " Programming - LaTex
+        "--------------------------------------------------
+        NeoBundleLazy 'jcf/vim-latex', {
+                    \ "autoload": {
+                    \   "filetypes": ["tex"],
+                    \ }}
+        let g:tex_flavor = 'platex'
+        let s:hooks = neobundle#get_hooks("vim-latex")
+        function! s:hooks.on_source(bundle)
+            set shellslash
+            set grepprg=grep\ -nH\ $*
+            let g:Imap_UsePlaceHolders = 1
+            let g:Imap_DeleteEmptyPlaceHolders = 1
+            let g:Imap_StickyPlaceHolders = 0
+            let g:Tex_DefaultTargetFormat = 'pdf'
+            let g:Tex_FormatDependency_ps = 'dvi,ps'
+            let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
+            let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+            let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
+            let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+            let g:Tex_ViewRule_pdf = 'texworks'
 
-      let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
-      function! s:hooks.on_source(bundle) 
-      endfunction
+            "キー配置の変更
+            ""<Ctrl + J>はパネルの移動と被るので番うのに変える
+            imap <C-n> <Plug>IMAP_JumpForward
+            nmap <C-n> <Plug>IMAP_JumpForward
+            vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
+        endfunction
 
-      "--------------------------------------------------
-      " Programming - LaTex
-      "--------------------------------------------------
-      NeoBundleLazy 'jcf/vim-latex', {
-                  \ "autoload": {
-                  \   "filetypes": ["tex"],
-                  \ }}
-      let g:tex_flavor = 'platex'
-      let s:hooks = neobundle#get_hooks("vim-latex")
-      function! s:hooks.on_source(bundle)
-          set shellslash
-          set grepprg=grep\ -nH\ $*
-          let g:Imap_UsePlaceHolders = 1
-          let g:Imap_DeleteEmptyPlaceHolders = 1
-          let g:Imap_StickyPlaceHolders = 0
-          let g:Tex_DefaultTargetFormat = 'pdf'
-          let g:Tex_FormatDependency_ps = 'dvi,ps'
-          let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
-          let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-          let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
-          let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
-          let g:Tex_ViewRule_pdf = 'texworks'
+        NeoBundle 'Shougo/neocomplcache.vim'
+        let g:neocomplcache_enable_at_startup = 1 " Use neocomplcache.
+        let s:hooks = neobundle#get_hooks("neocomplcache.vim")
+        function! s:hooks.on_source(bundle)
+            "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)! 
+            let g:acp_enableAtStartup = 0                   "Disable AutoComplPop.
+            let g:neocomplcache_enable_smart_case = 1       " Use smartcase.
+            let g:neocomplcache_min_syntax_length = 3       " Set minimum syntax keyword length.
+            let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*' 
 
-          "キー配置の変更
-          ""<Ctrl + J>はパネルの移動と被るので番うのに変える
-          imap <C-n> <Plug>IMAP_JumpForward
-          nmap <C-n> <Plug>IMAP_JumpForward
-          vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
-      endfunction
+            " Enable heavy features.
+            " Use camel case completion.
+            let g:neocomplcache_enable_camel_case_completion = 1
+            " Use underbar completion.
+            let g:neocomplcache_enable_underbar_completion = 1
 
-      NeoBundle 'Shougo/neocomplcache.vim'
-      let g:neocomplcache_enable_at_startup = 1 " Use neocomplcache.
-      let s:hooks = neobundle#get_hooks("neocomplcache.vim")
-      function! s:hooks.on_source(bundle)
-          "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)! 
-          let g:acp_enableAtStartup = 0                   "Disable AutoComplPop.
-          let g:neocomplcache_enable_smart_case = 1       " Use smartcase.
-          let g:neocomplcache_min_syntax_length = 3       " Set minimum syntax keyword length.
-          let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*' 
+            " Define dictionary.
+            let g:neocomplcache_dictionary_filetype_lists = {
+                        \ 'default' : '',
+                        \ 'vimshell' : $HOME.'/.vimshell_hist',
+                        \ 'scheme' : $HOME.'/.gosh_completions'
+                        \ }
 
-          " Enable heavy features.
-          " Use camel case completion.
-          let g:neocomplcache_enable_camel_case_completion = 1
-          " Use underbar completion.
-          let g:neocomplcache_enable_underbar_completion = 1
+            " Define keyword.
+            if !exists('g:neocomplcache_keyword_patterns')
+                let g:neocomplcache_keyword_patterns = {}
+            endif
+            let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-          " Define dictionary.
-          let g:neocomplcache_dictionary_filetype_lists = {
-                      \ 'default' : '',
-                      \ 'vimshell' : $HOME.'/.vimshell_hist',
-                      \ 'scheme' : $HOME.'/.gosh_completions'
-                      \ }
-
-          " Define keyword.
-          if !exists('g:neocomplcache_keyword_patterns')
-              let g:neocomplcache_keyword_patterns = {}
-          endif
-          let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-          " Plugin key-mappings.
-          inoremap <expr><C-g>     neocomplcache#undo_completion()
-          inoremap <expr><C-l>     neocomplcache#complete_common_string()
+            " Plugin key-mappings.
+            inoremap <expr><C-g>     neocomplcache#undo_completion()
+            inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
 
-          " Recommended key-mappings.
-          " <CR>: close popup and save indent.
-          inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-          function! s:my_cr_function()
-              return neocomplcache#smart_close_popup() . "\<CR>"
-              " For no inserting <CR> key.
-              "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-          endfunction
-          " <TAB>: completion.
-          inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-          " <C-h>, <BS>: close popup and delete backword char.
-          inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-          inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-          inoremap <expr><C-y>  neocomplcache#close_popup()
-          inoremap <expr><C-e>  neocomplcache#cancel_popup()
+            " Recommended key-mappings.
+            " <CR>: close popup and save indent.
+            inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+            function! s:my_cr_function()
+                return neocomplcache#smart_close_popup() . "\<CR>"
+                " For no inserting <CR> key.
+                "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+            endfunction
+            " <TAB>: completion.
+            inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+            " <C-h>, <BS>: close popup and delete backword char.
+            inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+            inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+            inoremap <expr><C-y>  neocomplcache#close_popup()
+            inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-          " Close popup by <Space>.
-          "inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
-
-
-          " For cursor moving in insert mode(Not recommended)
-          "inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
-          "inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
-          "inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
-          "inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
-          " Or set this.
-          "let g:neocomplcache_enable_cursor_hold_i = 1
-          " Or set this.
-          "let g:neocomplcache_enable_insert_char_pre = 1
-
-          " AutoComplPop like behavior.
-          "let g:neocomplcache_enable_auto_select = 1
-
-          " Shell like behavior(not recommended).
-          "set completeopt+=longest
-          let g:neocomplcache_enable_auto_select = 1
-          "let g:neocomplcache_disable_auto_complete = 1
-          "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-          " Enable omni completion.
-          autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-          autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-          autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-          autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-          autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-          " Enable heavy omni completion.
-          if !exists('g:neocomplcache_omni_patterns')
-              let g:neocomplcache_omni_patterns = {}
-          endif
-          if !exists('g:neocomplcache_force_omni_patterns')
-              let g:neocomplcache_force_omni_patterns = {}
-          endif
-          let g:neocomplcache_omni_patterns.php =
-                      \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-          let g:neocomplcache_omni_patterns.c =
-                      \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-          let g:neocomplcache_omni_patterns.cpp =
-                      \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-
-          " For perlomni.vim setting.
-          " https://github.com/c9s/perlomni.vim
-          let g:neocomplcache_omni_patterns.perl =
-                      \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-          " Define dictionary.
-          let g:neocomplcache_dictionary_filetype_lists = {
-                      \ 'default' : ''
-                      \ }
-      endfunction
-      " ステータスバー
+            " Close popup by <Space>.
+            "inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
 
-      NeoBundle 'Shougo/neosnippet-snippets'
-      NeoBundle 'honza/vim-snippets'
-      NeoBundle 'Shougo/neosnippet.vim' , {
-                  \  'depends' : "Shougo/neocomplcache.vim"
-                  \}
-      let s:hooks = neobundle#get_hooks("neosnippet.vim")
-      function! s:hooks.on_source(bundle)
-          " Plugin key-mappings.
-          imap <C-k>  <Plug>(neosnippet_expand_or_jump)
-          smap <C-k>  <Plug>(neosnippet_expand_or_jump)
-          xmap <C-k>  <Plug>(neosnippet_expand_target) 
-          " SuperTab like snippets behavior.
-          imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                      \ "\<Plug>(neosnippet_expand_or_jump)"
-                      \: pumvisible() ? "\<C-n>" : "\<TAB>"
-          smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                      \ "\<Plug>(neosnippet_expand_or_jump)"
-                      \: "\<TAB>"
-          " Enable snipMate compatibility feature.
-          let g:neosnippet#enable_snipmate_compatibility = 1 
-          " Tell Neosnippet about the other snippets
-          let g:neosnippet#snippets_directory=  s:bundle_root.'/vim-snippets/snippets,'
-                      \            .s:bundle_root.'/neosnippet-snippets/neosnippets,'
-                      \            .s:bundle_root.'/snippets' 
-          " For snippet_complete marker.
-          if has('conceal')
-              set conceallevel=2 concealcursor=i
-          endif 
-      endfunction
+            " For cursor moving in insert mode(Not recommended)
+            "inoremap <expr><Left>  neocomplcache#close_popup() . "\<Left>"
+            "inoremap <expr><Right> neocomplcache#close_popup() . "\<Right>"
+            "inoremap <expr><Up>    neocomplcache#close_popup() . "\<Up>"
+            "inoremap <expr><Down>  neocomplcache#close_popup() . "\<Down>"
+            " Or set this.
+            "let g:neocomplcache_enable_cursor_hold_i = 1
+            " Or set this.
+            "let g:neocomplcache_enable_insert_char_pre = 1
+
+            " AutoComplPop like behavior.
+            "let g:neocomplcache_enable_auto_select = 1
+
+            " Shell like behavior(not recommended).
+            "set completeopt+=longest
+            let g:neocomplcache_enable_auto_select = 1
+            "let g:neocomplcache_disable_auto_complete = 1
+            "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+            " Enable omni completion.
+            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+            autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+            autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+            " Enable heavy omni completion.
+            if !exists('g:neocomplcache_omni_patterns')
+                let g:neocomplcache_omni_patterns = {}
+            endif
+            if !exists('g:neocomplcache_force_omni_patterns')
+                let g:neocomplcache_force_omni_patterns = {}
+            endif
+            let g:neocomplcache_omni_patterns.php =
+                        \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+            let g:neocomplcache_omni_patterns.c =
+                        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+            let g:neocomplcache_omni_patterns.cpp =
+                        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+            " For perlomni.vim setting.
+            " https://github.com/c9s/perlomni.vim
+            let g:neocomplcache_omni_patterns.perl =
+                        \ '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+            " Define dictionary.
+            let g:neocomplcache_dictionary_filetype_lists = {
+                        \ 'default' : ''
+                        \ }
+        endfunction
+        " ステータスバー
 
 
-      " インストールされていないプラグインのチェックおよびダウンロード
-      NeoBundleCheck
+        NeoBundle 'Shougo/neosnippet-snippets'
+        NeoBundle 'honza/vim-snippets'
+        NeoBundle 'Shougo/neosnippet.vim' , {
+                    \  'depends' : "Shougo/neocomplcache.vim"
+                    \}
+        let s:hooks = neobundle#get_hooks("neosnippet.vim")
+        function! s:hooks.on_source(bundle)
+            " Plugin key-mappings.
+            imap <C-k>  <Plug>(neosnippet_expand_or_jump)
+            smap <C-k>  <Plug>(neosnippet_expand_or_jump)
+            xmap <C-k>  <Plug>(neosnippet_expand_target) 
+            " SuperTab like snippets behavior.
+            imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                        \ "\<Plug>(neosnippet_expand_or_jump)"
+                        \: pumvisible() ? "\<C-n>" : "\<TAB>"
+            smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                        \ "\<Plug>(neosnippet_expand_or_jump)"
+                        \: "\<TAB>"
+            " Enable snipMate compatibility feature.
+            let g:neosnippet#enable_snipmate_compatibility = 1 
+            " Tell Neosnippet about the other snippets
+            let g:neosnippet#snippets_directory=  s:bundle_root.'/vim-snippets/snippets,'
+                        \            .s:bundle_root.'/neosnippet-snippets/neosnippets,'
+                        \            .s:bundle_root.'/snippets' 
+            " For snippet_complete marker.
+            if has('conceal')
+                set conceallevel=2 concealcursor=i
+            endif 
+        endfunction
 
-  endif
-  "壁紙設定
-  colorscheme molokai
-  " ファイルタイププラグインおよびインデントを有効化
-  " これはNeoBundleによる処理が終了したあとに呼ばなければならない
-  filetype plugin indent on
+
+        " インストールされていないプラグインのチェックおよびダウンロード
+        NeoBundleCheck
+
+    endif
+    "壁紙設定
+    colorscheme molokai
+    " ファイルタイププラグインおよびインデントを有効化
+    " これはNeoBundleによる処理が終了したあとに呼ばなければならない
+    filetype plugin indent on
 
