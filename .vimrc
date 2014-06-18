@@ -565,7 +565,7 @@ else
         "--------------------------------------------------
         NeoBundle 'thinca/vim-quickrun'
         nnoremap <silent> <Leader>r :QuickRun<CR>
-        nnoremap <silent> <Leader>se :QuickRun sql<CR>
+        vnoremap <silent> <Leader>se :QuickRun sql<CR>
         let s:hooks = neobundle#get_hooks("vim-quickrun")
         function! s:hooks.on_source(bundle)
             let g:quickrun_config = {
@@ -583,7 +583,7 @@ else
 
 
         function! MakeMySQLCommandOptions()
-            if !exists("g:mysql_config_usr")
+            if !exists("g:mysql_config_user")
                 let g:mysql_config_user = input("user> ")
             endif
             if !exists("g:mysql_config_host") 
