@@ -28,6 +28,7 @@ endfunction
 " todoリストのon/offを切り替える
 nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
 vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+inoremap <silent> <CR>  <Space><Space><CR>
 
 " 選択行のチェックボックスを切り替える
 function! ToggleCheckbox()
@@ -46,5 +47,7 @@ syn match MkdCheckboxMark /-\s\[x\]\s.\+/ display containedin=ALL
 hi MkdCheckboxMark ctermfg=green
 syn match MkdCheckboxUnmark /-\s\[\s\]\s.\+/ display containedin=ALL
 hi MkdCheckboxUnmark ctermfg=red 
+
+
 
 
