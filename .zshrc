@@ -1,4 +1,3 @@
-
 #------------------------------
 # General Settings
 # ------------------------------
@@ -139,10 +138,15 @@ alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 alias NOTE=mail_alart 
 function mail_alart(){
-     echo 'Command:\n'$TMP_COMMAND '\nContents:\n'  \
-     | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp
+    if [ -p /dev/stdin ]; then
+        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
+        cat - | sed '1iCOMMAND:\n'$TMP_COMMAND'\nCONTENTS:\n' | head -n 10 | nkf -w \
+            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp
+    else
+        echo 'Command\n'$TMP_COMMAND\
+            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp 
+    fi
 }
-
 
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
