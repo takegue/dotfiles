@@ -156,7 +156,7 @@ set noswapfile
 let mapleader=','
 
 "素早くjj と押すことでESCとみなす
-inoremap jj <Esc>
+" inoremap jj <Esc>
 nnoremap ; :
 nnoremap : ;
 
@@ -486,6 +486,7 @@ else
     "--------------------------------------------------
     NeoBundle 'plasticboy/vim-markdown'
     NeoBundle 'kannokanno/previm'
+    NeoBundle 'tejr/vim-tmux'
 
 
     "---------------------------------------------------
