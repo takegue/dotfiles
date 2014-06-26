@@ -677,7 +677,6 @@ else
         " nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
     endfunction
 
-    NeoBundle 'vim-tabpagecd' "Tabpageごとにプロジェクト管理を行う
     NeoBundle 'xolox/vim-session', {
                 \ 'depends' : 'xolox/vim-misc',
                 \ } 
