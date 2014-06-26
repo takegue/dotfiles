@@ -4,7 +4,7 @@ colorscheme molokai
 
 if has('win64')
   " Windows用
-  set guifont=Ricty:h12:cDEFAULT
+  set guifont=Ricty:h14:cDEFAULT
   "set guifont=MS_Mincho:h12:cSHIFTJIS
   " 行間隔の設定
   set linespace=1
@@ -18,6 +18,7 @@ elseif has('xfontset')
   " UNIX用 (xfontsetを使用)
   set guifontset=a14,r14,k14
 endif
+
 
 
 "IME関係
