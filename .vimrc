@@ -4,6 +4,7 @@ augroup END
 
 set nocompatible        "vi互換を消す．VIMの時代
 
+
 "--------------------------------------------------
 " 表示設定
 "--------------------------------------------------
@@ -11,6 +12,7 @@ set encoding=utf8
 scriptencoding utf-8
 set helplang=ja,en
 set title               "編集中のファイル名を表示
+set ambiwidth=double
 
 set showmatch           "括弧入力時の対応する括弧を表示
 syntax on               "コードの色分け
@@ -36,8 +38,7 @@ set wildmenu wildmode=longest,full "コマンドラインの補間表示
 
 set list                " 不可視文字の可視化
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:♩ "⏎ "
-            \u ;
+set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ " ♩
 
 " 前時代的スクリーンベルを無
 set t_vb=
@@ -101,6 +102,8 @@ endfunction
 command! -nargs=1 -complete=filetype Tmp edit ~/.vim_tmp/tmp.<args>
 command! -nargs=1 -complete=filetype Temp edit ~/.vim_tmp/tmp.<args>
 
+
+
 " Load .gvimrc after .vimrc edited at GVim.
 " Set augroup.  
 if !has('gui_running') && !(has('win32') || has('win64'))
@@ -148,6 +151,7 @@ set nowritebackup
 set nobackup
 set noswapfile
 
+
 "--------------------------------------------------
 " Key Mapping
 "--------------------------------------------------
@@ -157,8 +161,12 @@ let mapleader=','
 
 "素早くjj と押すことでESCとみなす
 " inoremap jj <Esc>
+" nnoremap ; q:a
 nnoremap ; :
 nnoremap : ;
+" nnoremap / q/a
+" nnoremap Q q
+" nnoremap q Q
 
 " ESCを二回押すことでハイライトを消す
 nnoremap <silent> <Esc><Esc>    :noh<CR>
@@ -199,12 +207,15 @@ nnoremap <S-Left>  <C-w><
 nnoremap <S-Right> <C-w>>
 nnoremap <S-Up>    <C-w>-
 nnoremap <S-Down>  <C-w>+
+  
+
+"tmux向け設定"
 
 "--------------------------------------------------
 " Toggle
 "--------------------------------------------------
 nnoremap [toggle] <Nop>
-nmap <Leader>t [toggle]
+nmap <Leader>c [toggle]
 nnoremap <silent> [toggle]s : setl spell!<CR>          : setl spell?<CR>
 nnoremap <silent> [toggle]l : setl list!<CR>           : setl list?<CR>
 nnoremap <silent> [toggle]t : setl expandtab!<CR>      : setl expandtab?<CR>
@@ -214,14 +225,71 @@ nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
 nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
 nnoremap <silent> [toggle]p : set paste!<CR> 
 
+"--------------------------------------------------
+" Tab page
+"--------------------------------------------------
+
+" Anywhere SID.
+function! s:SID_PREFIX()
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" Set tabline.
+function! s:my_tabline()  "{{{
+    let s = ''
+    for i in range(1, tabpagenr('$'))
+        let bufnrs = tabpagebuflist(i)
+        let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+        let no = i  " display 0-origin tabpagenr.
+        let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+        let title = fnamemodify(bufname(bufnr), ':t')
+        let title = '[' . title . ']'
+        let s .= '%'.i.'T'
+        let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+        let s .= no . ':' . title
+        let s .= mod
+        let s .= '%#TabLineFill# '
+    endfor
+    let s .= '%#TabLineFill#%T%=%#TabLine#'
+    return s
+endfunction "}}}
+let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+set showtabline=2 " 常にタブラインを表示
+
+" The prefix key.
+nnoremap    [Tag]   <Nop>
+nmap    <Leader>t   [Tag]
+
+" Tab jump
+" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
+for n in range(1, 9)
+    execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+
+" tc 新しいタブを一番右に作る
+nnoremap <silent> [Tag]c :tabnew<CR>
+nnoremap <silent> [Tag]x :tabclose<CR>
+nnoremap <silent> [Tag]n :tabnext<CR>
+nnoremap <silent> [Tag]p :tabprevious<CR>
+"
+"
+
+"--------------------------------------------------
+" Parenthes Setting
+"--------------------------------------------------
+
+"pluginをオフ:
+let loaded_matchparen = 1
+
 "自動で括弧内に移動
 inoremap {} {}<left>
-inoremap [] []<left>
 inoremap () ()<left>
+inoremap [] []<left>
 inoremap <> <><left>
 inoremap '' ''<left>
 inoremap `` ``<left>
 inoremap "" ""<left>
+
 
 "自動で---, ===を変換"
 iab ---- --------------------------------------------------<CR>
@@ -235,6 +303,8 @@ iab //// //////////////////////////////////////////////////<CR>
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
 " QuickFixおよびHelpでは q でバッファを閉じる
 autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
+autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
+autocmd MyAutoCmd CmdwinEnter nnoremap <buffer>q  echo'aaaaaa'
 
 
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
@@ -272,7 +342,7 @@ endif
 "==================================================
 " autocmd Configuration
 "==================================================
-" autocmd MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+autocmd MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 
 "==================================================
 " NeoBundle Plugin
@@ -382,7 +452,7 @@ else
     "------------------------------------------------- 
     NeoBundle "kana/vim-textobj-user"
     NeoBundle 'kana/vim-textobj-function'                   "関数オブジェクト(C, Java, Vim)
-    
+
 
     NeoBundle "kana/vim-textobj-entire"                     "全体選択オブジェクト   #ae, ai
     NeoBundle "kana/vim-textobj-datetime"                   "日付選択オブジェクト   #ada, add, adt
@@ -574,10 +644,26 @@ else
     NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
     function! s:SwitchToActualFile()
         let fname = resolve(expand('%:p'))
-        bwipeout #
-        exec "e " . fname
+        let pos = getpos('.')
+        bwipeout! %
+        exec "e" . fname
+        call setpos('.', pos)
     endfunction
     command! FollowSymlink call s:SwitchToActualFile()
+
+    NeoBundleLazy 'TKNGUE/vim-reveal',{  
+                \ "autoload"    : {
+                \   "filetypes" : ['markdown'],  
+                \},
+                \}
+    let s:hooks = neobundle#get_hooks("vim-reveal")
+    function! s:hooks.on_source(bundle) 
+        let g:reveal_root_path = '$HOME/work/reveal.js'
+        let g:revel_default_config = {
+                    \ 'fname'  : 'reveal',
+                    \ 'key1'  : 'reveal'
+                    \ }
+    endfunction
 
     NeoBundle 'osyo-manga/vim-over'
     let s:hooks = neobundle#get_hooks("vim-over")
@@ -690,6 +776,10 @@ else
                     \}
         let g:quickrun_config.markdown  = {
                     \ 'type' : 'markdown/pandoc',
+                    \ 'outputter' : 'browser'
+                    \ }
+        let g:quickrun_config.html  = {
+                    \ 'outputter' : 'browser'
                     \ }
         let g:quickrun_config['ruby.rspec']  = {
                     \ 'command': 'rspec'
@@ -857,7 +947,7 @@ else
         let g:neocomplcache_enable_camel_case_completion = 1
         " Use underbar completion.
         let g:neocomplcache_enable_underbar_completion = 0
-    
+
         let g:neocomplcache_dictionary_filetype_lists = {
                     \ 'default' : '',
                     \ 'vimshell' : $HOME.'/.vimshell_hist',
@@ -871,20 +961,20 @@ else
         let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
         " Plugin key-mappings.
-        " inoremap <expr><C-g>     neocomplcache#undo_completion()
-        inoremap <silent><Tab> <C-R>=pumvisible() ? "\<lt>C-n>": "\<lt>Tab>"<CR>
+        inoremap <expr><C-g>     neocomplcache#undo_completion()
 
 
         " Recommended key-mappings.
         " <CR>: close popup and save indent.
         inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
         function! s:my_cr_function()
-            return neocomplcache#smart_close_popup() . "\<CR>"
+            " return neocomplcache#smart_close_popup() . "\<CR>"
             " For no inserting <CR> key.
-            "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+            return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
         endfunction
+
         " <TAB>: completion.
-        " inoremap <TAB>  <C-R>=pumvisible() ? "\<C-n>" : "\<TAB>"
+        inoremap <TAB>  <C-R>=pumvisible() ? "\<C-n>" : "\<TAB>"
         " <C-h>, <BS>: close popup and delete backword char.
         inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
         inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
@@ -942,7 +1032,6 @@ else
     " ステータスバー
 
 
-
     NeoBundle 'Shougo/neosnippet-snippets'
     NeoBundle 'honza/vim-snippets'
     NeoBundle 'Shougo/neosnippet.vim' , {
@@ -957,12 +1046,17 @@ else
         xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
 
         " SuperTab like snippets behavior.
-        imap <expr><TAB> pumvisible() ? "\<C-n>" 
-                    \: neosnippet#expandable_or_jumpable() ?
-                    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-	smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        imap <expr><TAB> neosnippet#expandable() ?  
+                    \ "\<Plug>(neosnippet_expand)" : 
+                    \  pumvisible() ?  "\<C-n>" : 
+                    \  neosnippet#jumpable() ? 
+                    \ "\<Plug>(neosnippet_jump)"  : "\<TAB>" 
+        smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
                     \ "\<Plug>(neosnippet_expand_or_jump)"
                     \: "\<TAB>"
+
+        " Enable snipMate compatibility feature.
+        let g:neosnippet#enable_snipmate_compatibility = 1
 
         let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
 
@@ -972,6 +1066,12 @@ else
         endif
 
     endfunction 
+
+    "--------------------------------------------------
+    " Other 
+    "------------------------------------------------- 
+    NeoBundle 'rbgrouleff/bclose.vim'
+
     " インストールされていないプラグインのチェックおよびダウンロード
     NeoBundleCheck 
 
