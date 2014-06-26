@@ -9,7 +9,7 @@ set nocompatible        "vi互換を消す．VIMの時代
 " 表示設定
 "--------------------------------------------------
 set encoding=utf8
-scriptencoding utf-8
+
 set helplang=ja,en
 set title               "編集中のファイル名を表示
 set ambiwidth=double
@@ -645,7 +645,7 @@ else
     function! s:SwitchToActualFile()
         let fname = resolve(expand('%:p'))
         let pos = getpos('.')
-        bwipeout! %
+        bdelete %
         exec "e" . fname
         call setpos('.', pos)
     endfunction
