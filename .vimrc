@@ -4,7 +4,6 @@ augroup END
 
 set nocompatible        "vi互換を消す．VIMの時代
 
-
 "--------------------------------------------------
 " 表示設定
 "--------------------------------------------------
@@ -26,7 +25,6 @@ set cursorline          " 編集中の行のハイライト
 au MyAutoCmd WinLeave * set nocursorline norelativenumber 
 au MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
 
-
 set smartindent         "オートインデント
 " set autoindent 
 set cindent
@@ -36,9 +34,8 @@ set softtabstop=4       "インデントをスペース4つ分に設定
 set expandtab           "タブ→スペースの変換
 set wildmenu wildmode=longest,full "コマンドラインの補間表示
 
-set list                " 不可視文字の可視化
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ " ♩
+set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
 
 " 前時代的スクリーンベルを無
 set t_vb=
@@ -645,7 +642,7 @@ else
     function! s:SwitchToActualFile()
         let fname = resolve(expand('%:p'))
         let pos = getpos('.')
-        bdelete %
+        bwipeout %
         exec "e" . fname
         call setpos('.', pos)
     endfunction
