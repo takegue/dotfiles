@@ -1,9 +1,12 @@
+"--------------------------------------------------
+" .vimrc 設定ファイルの大元
+"--------------------------------------------------
 augroup MyAutoCmd
     autocmd!
 augroup END
 
 " Load .gvimrc after .vimrc edited at GVim.
-" Set augroup.  
+" Set augroup.
 if !has('gui_running') && !(has('win32') || has('win64'))
     " .vimrcの再読込時にも色が変化するようにする
     autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
@@ -20,9 +23,24 @@ else
     nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
 endif
 
+"Plugin Files: conf.d/*.vim
+"  "conf.d/basic.vim"
+"  "conf.d/map.vim"
+"  "conf.d/misc.vim"
+"  "conf.d/neobundle.vim"
+"  "conf.d/bundle/"
+"  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
+"  | "conf.d/bundle/bundle-design.vim"       #vimの見た目を利用するプラグイン
+"  | "conf.d/bundle/bundle-editor.vim"
+"  | "conf.d/bundle/bundle-misc.vim"
+"  | "conf.d/bundle/bundle-operator.vim"
+"  | "conf.d/bundle/bundle-programming.vim"
+"  | "conf.d/bundle/bundle-textobj.vim"
+"  | "conf.d/bundle/bundle-unite.vim"
+runtime! conf.d/*.vim
 
-runtime! ~/.vim/conf.d/*.vim
-
+"壁紙設定
+colorscheme molokai
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
 filetype plugin indent on
