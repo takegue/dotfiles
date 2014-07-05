@@ -1,7 +1,4 @@
 
-setl smartindent         "オートインデント
-setl autoindent 
-setl tabstop=8
 setl shiftwidth=4        "オートインデントの幅
 setl softtabstop=4       "インデントをスペース4つ分に設定
 setl expandtab

@@ -50,26 +50,24 @@ function! s:hooks.on_source(bundle)
 endfunction
 
 NeoBundle 'aperezdc/vim-template' 
-let g:templates_plugin_loaded = 1 
-let g:templates_no_autocmd = 1 
-let g:templates_name_prefix = ".vimtemplate."
-let g:templates_global_name_prefix = "template:"
-let g:templates_debug = 1 
+" let g:templates_plugin_loaded = 1 
+" let g:templates_no_autocmd = 1 
+" let g:templates_name_prefix = ".vimtemplate."
+" let g:templates_global_name_prefix = "template:"
+" let g:templates_debug = 1 
 
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'
 "
 NeoBundle 'osyo-manga/vim-over'
-let s:hooks = neobundle#get_hooks("vim-over")
-function! s:hooks.on_source(bundle) 
-    let g:over_enable_cmd_windw = 1
-    " over.vimの起動  
-    nnoremap <silent> <Leader>ss :OverCommandLine<CR> 
-    " " カーソル下の単語をハイライト付きで置換
-    " nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
-    " " コピーした文字列をハイライト付きで置換
-    " nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
-endfunction
+let g:over_enable_cmd_windw = 1
+" over.vimの起動  
+nnoremap <silent> <Leader>m :OverCommandLine<CR> 
+" " カーソル下の単語をハイライト付きで置換
+" nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
+" " コピーした文字列をハイライト付きで置換
+" nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
+"
 
 "WORD移動用文書区切り用
 NeoBundle "deton/jasegment.vim" 

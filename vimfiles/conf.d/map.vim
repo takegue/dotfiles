@@ -7,8 +7,8 @@ let mapleader=','
 "素早くjj と押すことでESCとみなす
 " inoremap jj <Esc>
 " nnoremap ; q:a
-nnoremap ; :
-nnoremap : ;
+" nnoremap ; :
+" nnoremap : ;
 " nnoremap / q/a
 " nnoremap Q q
 " nnoremap q Q
