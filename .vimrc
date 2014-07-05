@@ -1,6 +1,22 @@
 "--------------------------------------------------
 " .vimrc 設定ファイルの大元
 "--------------------------------------------------
+"Plugin Files: conf.d/*.vim
+"  "conf.d/basic.vim"
+"  "conf.d/map.vim"
+"  "conf.d/misc.vim"
+"  "conf.d/neobundle.vim"
+"  "conf.d/bundle/"
+"  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
+"  | "conf.d/bundle/bundle-design.vim"       #vimの見た目のbundle
+"  | "conf.d/bundle/bundle-editor.vim"
+"  | "conf.d/bundle/bundle-misc.vim"
+"  | "conf.d/bundle/bundle-operator.vim"
+"  | "conf.d/bundle/bundle-programming.vim"
+"  | "conf.d/bundle/bundle-textobj.vim"
+"  | "conf.d/bundle/bundle-unite.vim"
+"  | "conf.d/bundle/bundle-util.vim"
+
 augroup MyAutoCmd
     autocmd!
 augroup END
@@ -20,23 +36,9 @@ endif
 if has('gui_running')
     nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
 else
-    nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
+    nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR> | lcd $HOME/.vim
 endif
 
-"Plugin Files: conf.d/*.vim
-"  "conf.d/basic.vim"
-"  "conf.d/map.vim"
-"  "conf.d/misc.vim"
-"  "conf.d/neobundle.vim"
-"  "conf.d/bundle/"
-"  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
-"  | "conf.d/bundle/bundle-design.vim"       #vimの見た目を利用するプラグイン
-"  | "conf.d/bundle/bundle-editor.vim"
-"  | "conf.d/bundle/bundle-misc.vim"
-"  | "conf.d/bundle/bundle-operator.vim"
-"  | "conf.d/bundle/bundle-programming.vim"
-"  | "conf.d/bundle/bundle-textobj.vim"
-"  | "conf.d/bundle/bundle-unite.vim"
 runtime! conf.d/*.vim
 
 "壁紙設定
