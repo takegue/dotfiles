@@ -130,6 +130,12 @@ case "${OSTYPE}" in darwin*)
     ;;
 esac
 
+function 256colortest(){
+for code in {0..255}; do
+    echo -e "\e[38;05;${code}m $code: Test"
+done
+}
+
 ### Aliases ###
 alias r=rails
 alias v=vim

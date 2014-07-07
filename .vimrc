@@ -20,7 +20,7 @@ endif
 if has('gui_running')
     nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
 else
-    nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR>
+    nnoremap <silent> <Space>.  :<C-u>edit $MYVIMRC<CR> | :lcd $HOME/.vim
 endif
 
 "Plugin Files: conf.d/*.vim
@@ -31,13 +31,15 @@ endif
 "  "conf.d/bundle/"
 "  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
 "  | "conf.d/bundle/bundle-design.vim"       #vimの見た目を利用するプラグイン
-"  | "conf.d/bundle/bundle-editor.vim"
+"  | "conf.d/bundle/bundle-editor.vim"       #編集用の
 "  | "conf.d/bundle/bundle-misc.vim"
 "  | "conf.d/bundle/bundle-operator.vim"
+"  | "conf.d/bundle/bundle-util.vim"
 "  | "conf.d/bundle/bundle-programming.vim"
 "  | "conf.d/bundle/bundle-textobj.vim"
 "  | "conf.d/bundle/bundle-unite.vim"
 runtime! conf.d/*.vim
+
 
 "壁紙設定
 colorscheme molokai

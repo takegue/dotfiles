@@ -46,15 +46,24 @@ function! s:hooks.on_source(bundle)
     autocmd FileType int-* call s:interactive_settings()
     function! s:interactive_settings()
     endfunction
-
 endfunction
 
-NeoBundle 'aperezdc/vim-template' 
-let g:templates_plugin_loaded = 1 
-let g:templates_no_autocmd = 1 
-let g:templates_name_prefix = ".vimtemplate."
-let g:templates_global_name_prefix = "template:"
-let g:templates_debug = 1 
+NeoBundle 'thinca/vim-template' 
+autocmd User plugin-template-loaded call s:template_keywords()
+function! s:template_keywords()
+    silent! execute "%s/<+FILE NAME+>/".expand('%:t')."/g"
+    silent! execute "%s/<+\\s*MONTH\\s*+>/".strftime('%m')."/g"
+    silent! execute "%s/<+\\s*DATE\\s*+>/".strftime('%Y.%m.%d')."/g"
+    " And more...
+endfunction
+autocmd User plugin-template-loaded
+\ if search('<+CURSOR+>')
+\ | execute 'normal! "_da>'
+\ | endif
+
+" NeoBundle 'aperezdc/vim-template' 
+" let g:templates_plugin_loaded = 1 
+" let g:templates_no_autocmd = 1 
 
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'

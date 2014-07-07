@@ -6,8 +6,6 @@ let s:hooks = neobundle#get_hooks("neocomplete.vim")
 function! s:hooks.on_source(bundle)
     " ステータスバー
     "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-    " Disable AutoComplPop.
-    let g:acp_enableAtStartup = 1
     " Use neocomplete.
     let g:neocomplete#enable_at_startup = 1
     " Use smartcase.

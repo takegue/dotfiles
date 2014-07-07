@@ -62,6 +62,7 @@ set showmatch               " 対応する括弧などをハイライト表示�
 set matchtime=3             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
+set clipboard=unnamed,autoselect
 
 
 " 対応括弧に'<'と'>'のペアを追加
@@ -80,7 +81,7 @@ let s:local_vimrc = expand('~/.vimrc.local')
 if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
 endif
-
+  
 "==================================================
 " autocmd Configuration
 "==================================================
