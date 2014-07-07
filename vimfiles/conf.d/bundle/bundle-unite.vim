@@ -6,14 +6,25 @@ let s:hooks = neobundle#get_hooks('unite.vim')
 function! s:hooks.on_source(bundle)
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
-    nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
+    nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer file file_mru<CR>
     nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
-    nnoremap <silent> [unite]m :<C-u>Unite<Space>file file_mru<CR>
     nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>   "bookmarkを追加可能に
-
+    nnoremap <silent> [unite]g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR> 
+    nnoremap <silent> [unite]cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+    nnoremap <silent> [unite]r  :<C-u>UniteResume search-buffer<CR>
     " mappingが競合するためデフォルトマッピング無効
     " let g:unite_no_default_keymappings = 1
     " nnoremap <silent> <Plug>(unite_exit)
+    "
+
+    " unite grep に ag(The Silver Searcher) を使う
+    if executable('ag')
+        let g:unite_source_grep_command = 'ag'
+        let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+        let g:unite_source_grep_recursive_opt = ''
+    endif
+
+
 endfunction
 
 NeoBundle 'Shougo/unite-outline', {
@@ -22,7 +33,6 @@ NeoBundle 'Shougo/unite-outline', {
 let s:hooks = neobundle#get_hooks("unite-outline")
 function! s:hooks.on_source(bundle) 
     nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
-
 endfunction
 
 NeoBundle 'ujihisa/unite-colorscheme'

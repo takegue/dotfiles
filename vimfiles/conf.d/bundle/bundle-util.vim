@@ -50,35 +50,30 @@ endfunction
 
 NeoBundle 'thinca/vim-template' 
 autocmd User plugin-template-loaded call s:template_keywords()
+autocmd User plugin-template-loaded 
+            \    if search('<+CURSOR+>')
+            \  |   execute 'normal! "_da>'
+            \  | endif
+
 function! s:template_keywords()
-    silent! execute "%s/<+FILE NAME+>/".expand('%:t')."/g"
-    silent! execute "%s/<+\\s*MONTH\\s*+>/".strftime('%m')."/g"
-    silent! execute "%s/<+\\s*DATE\\s*+>/".strftime('%Y.%m.%d')."/g"
+    silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+    silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+    silent! %s/<+MONTH+>/\=strftime('%m')/g
     " And more...
 endfunction
-autocmd User plugin-template-loaded
-\ if search('<+CURSOR+>')
-\ | execute 'normal! "_da>'
-\ | endif
-
-" NeoBundle 'aperezdc/vim-template' 
-" let g:templates_plugin_loaded = 1 
-" let g:templates_no_autocmd = 1 
 
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'
 "
 NeoBundle 'osyo-manga/vim-over'
-let s:hooks = neobundle#get_hooks("vim-over")
-function! s:hooks.on_source(bundle) 
-    let g:over_enable_cmd_windw = 1
-    " over.vimの起動  
-    nnoremap <silent> <Leader>ss :OverCommandLine<CR> 
-    " " カーソル下の単語をハイライト付きで置換
-    " nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
-    " " コピーした文字列をハイライト付きで置換
-    " nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
-endfunction
+let g:over_enable_cmd_windw = 1
+" over.vimの起動  
+nnoremap <silent> <Leader>m :OverCommandLine<CR> 
+" " カーソル下の単語をハイライト付きで置換
+" nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left> 
+" " コピーした文字列をハイライト付きで置換
+" nnoremap subp y:OverCommandLine<CR>%s!<C-r>=substitute(@0, '!', '\\!', 'g')<CR>!!gI<Left><Left><Left> 
+"
 
 "WORD移動用文書区切り用
 NeoBundle "deton/jasegment.vim" 
@@ -130,4 +125,7 @@ function! s:SwitchToActualFile()
     call setpos('.', pos)
 endfunction
 
-
+" NeoBundleLazy 'rking/ag.vim'          "ag(Silver Searcherのエンジン)
+" let s:hooks = neobundle#get_hooks("ag.vim")
+" function! s:hooks.on_source(bundle) 
+" endfunction 

@@ -18,8 +18,6 @@ set wrap                " 長いテキストの折り返し
 set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
 set cursorline          " 編集中の行のハイライト 
-au MyAutoCmd WinLeave * set nocursorline norelativenumber 
-au MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
 
 set smartindent         "オートインデント
 " set autoindent 
@@ -62,7 +60,7 @@ set showmatch               " 対応する括弧などをハイライト表示�
 set matchtime=3             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
-set clipboard=unnamed,autoselect
+set clipboard=unnamepedplus,autoselectplus
 
 
 " 対応括弧に'<'と'>'のペアを追加
@@ -90,6 +88,10 @@ autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
 " QuickFixおよびHelpでは q でバッファを閉じる
 autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
 autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
-autocmd MyAutoCmd CmdwinEnter nnoremap <buffer>q  echo'aaaaaa'
+autocmd MyAutoCmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
 
 autocmd MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+
+autocmd MyAutoCmd WinLeave * set nocursorline norelativenumber 
+autocmd MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
+

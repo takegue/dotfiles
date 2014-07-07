@@ -41,8 +41,8 @@ function! s:Memo()
     unlet! l:path
 endfunction
 
-" ftpluginの作成
-let g:ftpPath = $HOME . "/.vim/ftplugin/" 
+" after/ftpluginの作成 User設定のftp
+let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
 nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
 function! s:openFTPluginFile()
     let l:ftpFileName = g:ftpPath . &filetype . ".vim"
