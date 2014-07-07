@@ -49,12 +49,19 @@ function! s:hooks.on_source(bundle)
 
 endfunction
 
-NeoBundle 'aperezdc/vim-template' 
-" let g:templates_plugin_loaded = 1 
-" let g:templates_no_autocmd = 1 
-" let g:templates_name_prefix = ".vimtemplate."
-" let g:templates_global_name_prefix = "template:"
-" let g:templates_debug = 1 
+NeoBundle 'thinca/vim-template' 
+autocmd User plugin-template-loaded call s:template_keywords()
+autocmd User plugin-template-loaded 
+            \    if search('<+CURSOR+>')
+            \  |   execute 'normal! "_da>'
+            \  | endif
+
+function! s:template_keywords()
+    silent! %s/<+FILE NAME+>/\=expand('%:t')/g
+    silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+    silent! %s/<+MONTH+>/\=strftime('%m')/g
+    " And more...
+endfunction
 
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'
@@ -119,4 +126,7 @@ function! s:SwitchToActualFile()
     call setpos('.', pos)
 endfunction
 
-
+" NeoBundleLazy 'rking/ag.vim'          "ag(Silver Searcherのエンジン)
+" let s:hooks = neobundle#get_hooks("ag.vim")
+" function! s:hooks.on_source(bundle) 
+" endfunction 

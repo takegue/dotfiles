@@ -60,6 +60,7 @@ set showmatch               " 対応する括弧などをハイライト表示�
 set matchtime=3             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
+set clipboard=unnamepedplus,autoselectplus
 
 
 " 対応括弧に'<'と'>'のペアを追加

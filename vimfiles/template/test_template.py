@@ -3,8 +3,10 @@
 
 import pytest
 
+
 def TestClass():
-    pass
+    <+CURSOR+>
+
 
 if __name__ == '__main__':
     pytest.main()

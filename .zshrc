@@ -145,7 +145,6 @@ esac
 if ! [[ -d ~/.zsh ]]; then
     mkdir ~/.zsh
 fi
-
 if [[ -d ~/.zsh/zsh-completions ]]; then
     fpath=(~/.zsh/zsh-completions/src $fpath)
 else
@@ -153,6 +152,8 @@ else
     fpath=(~/.zsh/zsh-completions/src $fpath)
     rm -f ~/.zcompdump; compinit
 fi
+
+## for Python settings ##
 
 ### Aliases ###
 alias r=rails
@@ -175,6 +176,7 @@ function mail_alart(){
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
 export PATH=$PATH:"/usr/local/bin"
+# export PYTHONPATH=$PYTHONPATH
 
 #PROXY設定
 export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
