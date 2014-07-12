@@ -60,7 +60,6 @@ function! s:ChangeCurrentDir(directory, bang)
     endif
 endfunction
 
-
 " :e などでファイルを開く際にフォルダが存在しない場合は自動作成
 function! s:mkdir(dir, force)
     if !isdirectory(a:dir) && (a:force ||

@@ -6,6 +6,7 @@ set nocompatible        "vi互換を消す．VIMの時代
 set encoding=utf8
 
 set helplang=ja,en
+set spelllang+=cjk
 set title               "編集中のファイル名を表示
 set ambiwidth=double    "全角文字で幅が崩れないように調整する
 
@@ -60,7 +61,12 @@ set showmatch               " 対応する括弧などをハイライト表示�
 set matchtime=3             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
-set clipboard=unnamepedplus,autoselectplus
+
+if has('unnamedplus') && !(has("win32") || has("win64"))
+    set clipboard=unnamedplus,autoselectplus
+else
+    set clipboard=unnamed
+endif
 
 
 " 対応括弧に'<'と'>'のペアを追加

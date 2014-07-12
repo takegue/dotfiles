@@ -11,9 +11,3 @@ NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'altercation/vim-colors-solarized'
 
 
-"--------------------------------------------------
-" Syntax
-"--------------------------------------------------
-NeoBundle 'plasticboy/vim-markdown'
-NeoBundle 'kannokanno/previm'
-NeoBundle 'tejr/vim-tmux'

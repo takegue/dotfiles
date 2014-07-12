@@ -1,4 +1,9 @@
 "--------------------------------------------------
+" Syntax
+"--------------------------------------------------
+NeoBundle 'tejr/vim-tmux'
+
+"--------------------------------------------------
 " Programming
 "--------------------------------------------------
 NeoBundle 'thinca/vim-quickrun'
@@ -190,12 +195,21 @@ endfunction
 "--------------------------------------------------
 " Programming - markdown
 "--------------------------------------------------
+NeoBundle 'plasticboy/vim-markdown'
+let g:markdown_fenced_languages = ['vim', 'python', 'ruby', 'javascript']
+let g:markdown_folding = 1
+
+NeoBundle 'TKNGUE/hateblo.vim' ,{
+            \ 'depends'  : ['mattn/webapi-vim', 'Shoug/unite.vim'],
+            \}
+let g:hateblo_config_path = '$HOME/.hateblo/.hateblo.vim'
+let g:hateblo_dir = '$HOME/.hateblo/blog'
+
 NeoBundleLazy 'TKNGUE/vim-reveal',{  
             \ "autoload"    : {
             \   "filetypes" : ['markdown'],  
             \},
             \}
-
 let s:hooks = neobundle#get_hooks("vim-reveal")
 function! s:hooks.on_source(bundle) 
     let g:reveal_root_path = '$HOME/work/reveal.js'
@@ -204,3 +218,10 @@ function! s:hooks.on_source(bundle)
                 \ 'key1'  : 'reveal'
                 \ }
 endfunction
+
+NeoBundleLazy 'kannokanno/previm',{  
+            \ "autoload"    : {
+            \   "filetypes" : ['markdown'],  
+            \},
+            \}
+
