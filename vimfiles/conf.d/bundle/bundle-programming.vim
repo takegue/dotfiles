@@ -21,6 +21,9 @@ function! s:hooks.on_source(bundle)
                 \ 'command': 'testrunner',
                 \ 'cmdopt': 'phpunit'
                 \} 
+    let g:quickrun_config['python'] = {
+                \ 'command': 'python2.7',
+                \}
     " let g:quickrun_config['python.unit'] = {i
     "             \ 'command': 'nosetests',
     "             \ 'cmdopt': '-v -s'
@@ -90,19 +93,25 @@ function! s:hooks.on_source(bundle)
 endfunction 
 
 
-
 "--------------------------------------------------
 " Programming - Python
 "--------------------------------------------------
 NeoBundleLazy 'alfredodeza/pytest.vim', {
             \ 'autoload'    : {
-            \   'filetypes' : ['python', 'python3'],
+            \   'filetypes' : ['python', 'python3', 'pytest'],
             \ },
             \ 'build'       : {
             \   "cygwin"    : "pip install pytest",
             \   "mac"       : "pip install pytest",
             \   "unix"      : "pip install pytest"
             \}}
+let s:hooks = neobundle#get_hooks("pytest.vim")
+function! s:hooks.on_source(bundle)
+    nnoremap  <silent><F5>      <Esc>:Pytest file verbose<CR>
+    nnoremap  <silent><C-F5>    <Esc>:Pytest class verbose<CR>
+    nnoremap  <silent><S-F5>  <Esc>:Pytest project verbose<CR>
+    nnoremap  <silent><F6>      <Esc>:Pytest session<CR>
+endfunction
 
 NeoBundleLazy 'davidhalter/jedi-vim', {
             \ "autoload"    : {
@@ -139,8 +148,8 @@ NeoBundle 'nvie/vim-flake8', {
             \   "mac"       : "pip install flake8",
             \   "unix"      : "pip install flake8",
             \ }} 
-autocmd BufWritePost *.py call Flake8()
-let g:flake8_quickfix_location="botright"
+" autocmd BufWritePost *.py call Flake8()
+" let g:flake8_quickfix_location="botright"
 
 NeoBundleLazy 'tell-k/vim-autopep8', { 
             \ "autoload"    : {
@@ -204,3 +213,5 @@ function! s:hooks.on_source(bundle)
                 \ 'key1'  : 'reveal'
                 \ }
 endfunction
+
+NeoBundle 'clones/vim-zsh'

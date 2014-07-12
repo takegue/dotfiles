@@ -9,7 +9,7 @@ setlocal expandtab
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath # !/usr/bin/env Python<CR>
 
-"pythonのpathをすべて追加
+"python sys.pathを set pathで追加
 python << EOF
 import os
 import sys
@@ -18,6 +18,6 @@ for p in sys.path:
     # Add each directory in sys.path, if it exists.
     if os.path.isdir(p):
         # Command 'set' needs backslash before each space.
-        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+        vim.command(r"setlocal path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 
