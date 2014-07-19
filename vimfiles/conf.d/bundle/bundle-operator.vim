@@ -13,8 +13,8 @@ NeoBundle 'pekepeke/vim-operator-tabular', {
             \ 'depends' : ['pekepeke/vim-csvutil'] 
             \}
 NeoBundle 'tyru/operator-camelize.vim'                  "Camelizeまたはdecamelize(snake_case) オペレータ
-map <Leader>C <Plug>(operator-camelize)
-map <Leader>s <Plug>(operator-decamelize)
+map gC <Plug>(operator-camelize)
+map gS <Plug>(operator-decamelize)
 NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
 NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
 nnoremap - :Switch<CR>

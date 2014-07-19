@@ -102,20 +102,20 @@ let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
 set showtabline=2 " 常にタブラインを表示
 
 " The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    <Leader>t   [Tag]
+nnoremap    [Tab]   <Nop>
+nmap    <Leader>t   [Tab]
 
 " Tab jump
 " t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
 for n in range(1, 9)
-    execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+    execute 'nnoremap <silent> [Tab]'.n  ':<C-u>tabnext'.n.'<CR>'
 endfor
 
 " tc 新しいタブを一番右に作る
-nnoremap <silent> [Tag]c :tabnew<CR>
-nnoremap <silent> [Tag]x :tabclose<CR>
-nnoremap <silent> [Tag]n :tabnext<CR>
-nnoremap <silent> [Tag]p :tabprevious<CR>
+nnoremap <silent> [Tab]c :tabnew<CR>
+nnoremap <silent> [Tab]x :tabclose<CR>
+nnoremap <silent> gl :tabnext<CR>
+nnoremap <silent> gh :tabprevious<CR>
 
 "--------------------------------------------------
 " Key Mapping - abbreviattions
