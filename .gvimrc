@@ -4,8 +4,9 @@ colorscheme molokai
 
 if has('win64')
   " Windows用
-  set guifont=Ricty:h14:cDEFAULT
-  "set guifont=MS_Mincho:h12:cSHIFTJIS
+  set guifont=Ricty:h12.5:cDEFAULT
+  " set guifont=Times\ New\ Roman:h12.5
+  " set guifont=MS_Mincho:h12:cSHIFTJIS
   " 行間隔の設定
   set linespace=1
   " 一部のUCS文字の幅を自動計測して決める
@@ -13,7 +14,7 @@ if has('win64')
     set ambiwidth=auto
   endif
 elseif has('mac')
-  set guifont=Osaka－等幅:h14
+  set guifont=Osaka－等幅:h12
 elseif has('xfontset')
   " UNIX用 (xfontsetを使用)
   set guifontset=a14,r14,k14

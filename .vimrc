@@ -38,6 +38,9 @@ endif
 if has('gui_running')
     nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
 else
+    nnoremap <silent> <Space>.  :<C-u>e $MYVIMRC<CR>
+endif
+
 runtime! conf.d/*.vim
 
 

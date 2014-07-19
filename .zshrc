@@ -178,6 +178,9 @@ function mail_alart(){
     fi
 }
 
+alias -s py=python2.7
+
+
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
 export PATH=$PATH:"/usr/local/bin"

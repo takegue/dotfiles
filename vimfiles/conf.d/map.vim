@@ -8,9 +8,8 @@ let mapleader=','
 " nnoremap ; q:a
 " nnoremap ; :
 " nnoremap : ;
-" nnoremap / q/a
-" nnoremap Q q
-" nnoremap q Q
+"
+nnoremap & g&
 
 " ESCを二回押すことでハイライトを消す
 nnoremap <silent> <Esc><Esc>    :noh<CR>
@@ -68,6 +67,9 @@ nnoremap <silent> [toggle]c : setl cursorline!<CR>     : setl cursorline?<CR>
 nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
 nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
 nnoremap <silent> [toggle]p : set paste!<CR> 
+" nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
+"                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
+
 
 "--------------------------------------------------
 " Key Mapping - Tab page
