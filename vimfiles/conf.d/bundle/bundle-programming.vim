@@ -41,6 +41,8 @@ function! s:hooks.on_source(bundle)
                 \ 'outputter' : 'browser'
                 \ }
     let g:quickrun_config.html  = {
+                \ 'command' : 'cygstart',
+                \ 'cmdopt'  : '%c %o' ,
                 \ 'outputter' : 'browser'
                 \ }
     let g:quickrun_config['ruby.rspec']  = {
@@ -170,12 +172,36 @@ function! s:hooks.on_source(bundle)
 endfunction
 
 "--------------------------------------------------
+" Programming - Web(HTML, CSS, Javascript)
+"--------------------------------------------------
+NeoBundleLazy 'mattn/emment-vim', { 
+            \ "autoload"    : {
+            \   "filetypes" : ['html', 'css'],
+            \ },}
+
+NeoBundleLazy 'vim-scripts/css_color.vim', { 
+            \ "autoload"    : {
+            \   "filetypes" : ['html','css'],
+            \ },}
+
+NeoBundleLazy 'hail2u/vim-css3-syntax', { 
+            \ "autoload"    : {
+            \   "filetypes" : ['css'],
+            \ },}
+
+NeoBundleLazy 'othree/html5.vim', { 
+            \ "autoload"    : {
+            \   "filetypes" : ['html', 'svg', 'rdf'],
+            \ },}
+
+"--------------------------------------------------
 " Programming - Ruby
 "--------------------------------------------------
 NeoBundleLazy 'vim-ruby/vim-ruby', { 
             \ "autoload"    : {
             \   "filetypes" : ["ruby"],
             \ },}
+
 "--------------------------------------------------
 " Programming - LaTex
 "--------------------------------------------------
