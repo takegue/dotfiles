@@ -1,7 +1,8 @@
 "--------------------------------------------------
 " .vimrc 設定ファイルの大元
 "--------------------------------------------------
-"Plugin Files: conf.d/*.vim
+"Plugin Files: conf.d/*.vim 
+"Use 'gf' to move to each configuration
 "  "conf.d/basic.vim"
 "  "conf.d/map.vim"
 "  "conf.d/misc.vim"
