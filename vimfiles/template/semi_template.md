@@ -5,10 +5,7 @@ last update:<+DATE+>
 発表スライド
 ---------------
 <iframe style="border:0; padding:0; margin:0; background:transparent;" mozallowfullscreen="true" webkitallowfullscreen="true" frameborder="0" allowtransparency="true" 
-id="presentation_frame_<+SLIDE_ID+>" 
-src="//speakerdeck.com/embed/<+SLIDE_ID+>"
-width="429" height="357"
-></iframe>  
+id="presentation_frame_df23d4b0d9700131bc904277db5bbc05" src="http://speakerdeck.com/embed/df23d4b0d9700131bc904277db5bbc05" width="429" height="357"></iframe>  
 
 
 
@@ -21,5 +18,3 @@ width="429" height="357"
 
 
 
-伊藤 - <+TITLE+>
----------------

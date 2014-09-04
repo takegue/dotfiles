@@ -1,0 +1,79 @@
+#For pytest snippets
+
+snippet    assert
+options     head
+        assert ${1:first} == ${2:second}
+
+snippet    afalse
+abbr        assert if it's not false
+options     head
+        assert ${1:expression} is False
+
+snippet    atrue
+abbr        assert if it's not true
+options     head
+        assert ${1:expression} is True
+
+snippet    a>
+options     head
+        assert ${1:first} > ${2:second}
+
+snippet    a>= 
+options     head
+        assert ${1:first} >= ${2:second}
+
+snippet    ain
+options     head
+        assert ${1:member} in ${2:container}
+
+snippet    ais
+options     head
+        assert ${1:expr1} is ${2:expr2}
+
+snippet    aisnot
+options     head
+        assert ${1:expr1} is not ${2:expr2}
+
+snippet    a&lt;
+options     head
+        assert ${1:first} < ${2:second}
+
+snippet    a&lt;=
+options     head
+        assert ${1:first} <= ${2:second}
+
+snippet    a!=
+options     head
+        assert ${1:first} != ${2:second}
+
+snippet    a!in
+options     head
+        assert ${1:member} not in ${2:container}
+
+snippet    araises
+options     head
+        with pytest.raises(${1:Exception}):
+        ${2:code}
+
+snippet    atrue
+options     head
+        assert ${1:expression} is True
+
+snippet    fixture
+options     head
+        @pytest.fixture(scope='${1:function}')
+        def ${2:name}(request):
+        ${3:body}
+
+snippet    mark
+options     head
+        @pytest.mark
+
+snippet    parametrize
+options     head
+        @pytest.mark.parametrize('${1:name}', [${2:parameters}])
+
+snippet fixture
+options     head
+        @pytest.mark.usefixtures('${1:fixture}')
+

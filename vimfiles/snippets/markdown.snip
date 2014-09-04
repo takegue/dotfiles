@@ -1,0 +1,12 @@
+snippet     table
+abbr        table
+options     head
+ | ${1:label1}  |  ${2:label2}  | 
+ | :----------  | :-----------: | 
+ | ${2:column1} |  ${2:column2} | 
+
+snippet     column
+abbr        table column
+regexp      "^\|.+\|"
+options     head
+ | ${1:column1}| ${2:column2} |

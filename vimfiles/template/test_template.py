@@ -3,9 +3,10 @@
 
 import pytest
 
-class test_description:
-    def pytest_funcarg__<+arg name+>(request):
-        return request
-        
+
+def TestClass():
+    <+CURSOR+>
+
+
 if __name__ == '__main__':
     pytest.main()

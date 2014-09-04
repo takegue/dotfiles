@@ -72,7 +72,18 @@ export ZLS_COLORS=$LS_COLORS
 # lsコマンド時、自動で色がつく(ls -Gのようなもの？)
 export CLICOLOR=true
 # 補完候補に色を付ける
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+ zstyle ':completion:*' verbose yes
+ zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+ zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
+ zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
+ zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
+ zstyle ':completion:*:options' description 'yes'
+ zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
+
+# マッチ種別を別々に表示
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:default' list-colors  ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
 
 
 ### Prompt ###
@@ -120,6 +131,7 @@ esac
 # ------------------------------
 # Other Settings
 # ------------------------------
+
 ### RVM ###
 if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
@@ -130,9 +142,29 @@ case "${OSTYPE}" in darwin*)
     ;;
 esac
 
+function 256colortest(){
+for code in {0..255}; do
+    echo -e "\e[38;05;${code}m $code: Test"
+done
+}
+if ! [[ -d ~/.zsh ]]; then
+    mkdir ~/.zsh
+fi
+if [[ -d ~/.zsh/zsh-completions ]]; then
+    fpath=(~/.zsh/zsh-completions/src $fpath)
+else
+    git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
+    fpath=(~/.zsh/zsh-completions/src $fpath)
+    rm -f ~/.zcompdump; compinit
+fi
+
+## for Python settings ##
+
 ### Aliases ###
 alias r=rails
 alias python='python2.7'
+alias tmux='tmux -2'
+alias vi='vim -u NONE'
 alias v=vim
 alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"
@@ -149,9 +181,13 @@ function mail_alart(){
     fi
 }
 
+alias -s py=python2.7
+
+
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
 export PATH=$PATH:"/usr/local/bin"
+# export PYTHONPATH=$PYTHONPATH
 
 #PROXY設定
 export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
