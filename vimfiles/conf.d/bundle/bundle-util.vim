@@ -149,8 +149,10 @@ let g:EasyMotion_do_mapping = 0
 " =======================================
 " Jump to anywhere you want by just `4` or `3` key strokes without thinking!
 " `s{char}{char}{target}`
-map f <Plug>(easymotion-bd-fl)
-map t <Plug>(easymotion-bd-tl)
+map f <Plug>(easymotion-f)
+map F <Plug>(easymotion-F)
+map t <Plug>(easymotion-t)
+map T <Plug>(easymotion-T)
 nmap s <Plug>(easymotion-s2)
 xmap s <Plug>(easymotion-s2)
 omap z <Plug>(easymotion-s2)

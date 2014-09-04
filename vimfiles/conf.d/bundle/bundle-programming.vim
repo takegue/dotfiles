@@ -172,12 +172,16 @@ function! s:hooks.on_source(bundle)
 endfunction
 
 "--------------------------------------------------
-" Programming - Web(HTML, CSS, Javascript)
+" Programming - Web(HTML, CSS, Javascript, json)
 "--------------------------------------------------
-NeoBundleLazy 'mattn/emment-vim', { 
+NeoBundleLazy 'mattn/emmet-vim', { 
             \ "autoload"    : {
             \   "filetypes" : ['html', 'css'],
             \ },}
+let s:hooks = neobundle#get_hooks("emmet-vim")
+function! s:hooks.on_source(bundle) 
+    let g:user_emmet_leader_key = '<C-Y>'
+endfunction
 
 NeoBundleLazy 'vim-scripts/css_color.vim', { 
             \ "autoload"    : {
@@ -194,6 +198,13 @@ NeoBundleLazy 'othree/html5.vim', {
             \   "filetypes" : ['html', 'svg', 'rdf'],
             \ },}
 
+NeoBundleLazy 'elzr/vim-json', { 
+            \ "autoload"    : {
+            \   "filetypes" : ['json'],
+            \ },}
+function! s:hooks.on_source(bundle) 
+    let g:vim_json_syntax_conceal = 2
+endfunction
 "--------------------------------------------------
 " Programming - Ruby
 "--------------------------------------------------
