@@ -51,6 +51,15 @@ nnoremap <S-Right> <C-w>>
 nnoremap <S-Up>    <C-w>-
 nnoremap <S-Down>  <C-w>+
 
+nnoremap <Left>     <Nop>
+nnoremap <Right>    <Nop>
+nnoremap <Up>       <Nop>
+nnoremap <Down>     <Nop>
+
+nnoremap <C-Left>     <Nop>
+nnoremap <C-Right>    <Nop>
+nnoremap <C-Up>       <Nop>
+nnoremap <C-Down>     <Nop>
 
 "tmux向け設定"
 "--------------------------------------------------
