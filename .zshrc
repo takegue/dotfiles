@@ -162,6 +162,7 @@ fi
 
 ### Aliases ###
 alias r=rails
+alias python='python2.7'
 alias v=vim
 alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"

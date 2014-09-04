@@ -15,7 +15,7 @@ mkdir -p  ~/.vim/bundle/
 
 ln -s $dir/.tmux.conf  ~/.tmux.conf
 
-for dotfile in $dir/.*rc ; do
+for dotfile in $dir/.* ; do
 	dstpath="$HOME/${dotfile##*/}" 
 
 	if [ -e $dstpath ]; then
