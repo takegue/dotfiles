@@ -33,8 +33,12 @@ nnoremap k gk
 vnoremap v $h
 
 " TABにて対応ペアにジャンプ
-" nnoremap <Tab> %
+nnoremap <Tab> %
 vnoremap <Tab> %
+
+" matchitを有効にする.
+source $VIMRUNTIME/macros/matchit.vim
+
 
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h

@@ -10,8 +10,8 @@ NeoBundle 'tomasr/molokai'
 NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'altercation/vim-colors-solarized'
 
+set t_Co=256
 if $COLORTERM == 'gnome-terminal'
-    set t_Co=256
     let g:solarized_termcolors=256
     if has('gui_running')
         set background=light

@@ -107,9 +107,9 @@ NeoBundleLazy 'alfredodeza/pytest.vim', {
             \   'filetypes' : ['python', 'python3', 'pytest'],
             \ },
             \ 'build'       : {
-            \   "cygwin"    : "pip install pytest",
-            \   "mac"       : "pip install pytest",
-            \   "unix"      : "pip install pytest"
+            \   "cygwin"    : "pip install --user pytest",
+            \   "mac"       : "pip install --user pytest",
+            \   "unix"      : "pip install --user pytest"
             \}}
 let s:hooks = neobundle#get_hooks("pytest.vim")
 function! s:hooks.on_source(bundle)
@@ -119,40 +119,61 @@ function! s:hooks.on_source(bundle)
     nnoremap  <silent><F6>      <Esc>:Pytest session<CR>
 endfunction
 
-NeoBundleLazy 'davidhalter/jedi-vim', {
+NeoBundleLazy 'voithos/vim-python-matchit', {
             \ "autoload"    : {
-            \   "filetypes" : ["python", "python3", "djangohtml"],
-            \ },
-            \ "build"       : {
-            \   "cygwin"    : "pip install jedi",
-            \   "mac"       : "pip install jedi",
-            \   "unix"      : "pip install jedi"
+            \   "filetypes" : ["python", "python3", "djangohtml"]
             \ }}
 
-let g:jedi#auto_vim_configuration = 0
-let s:hooks = neobundle#get_hooks("jedi-vim")
+" NeoBundleLazy 'davidhalter/jedi-vim', {
+"             \ "autoload"    : {
+"             \   "filetypes" : ["python", "python3", "djangohtml"],
+"             \ },
+"             \ "build"       : {
+"             \   "cygwin"    : "pip install --user jedi",
+"             \   "mac"       : "pip install --user jedi",
+"             \   "unix"      : "pip install --user jedi"
+"             \ }}
+
+" let g:jedi#auto_vim_configuration = 0
+" let s:hooks = neobundle#get_hooks("jedi-vim")
+" function! s:hooks.on_source(bundle)
+"     " 自動設定機能をoffにし手動で設定を行う
+"     let g:jedi#auto_vim_configuration = 0
+
+"     let g:jedi#popup_on_dot = 1
+"     let g:jedi#popup_select_first = 1
+"     "quickrunと被るため大文字に変更
+"     let g:jedi#rename_command = '<Leader>R'
+"     let g:jedi#auto_close_doc = 0
+"     let g:jedi#use_tabs_not_buffers = 0
+"     let g:jedi#completions_enabled = 0
+" endfunction
+
+
+NeoBundleLazy 'klen/python-mode', {
+             \ "autoload"    : {
+             \   "filetypes" : ["python", "python3", "djangohtml"],
+             \ },
+             \ "build"       : {
+             \   "cygwin"    : "pip install --user pylint rope pyflake pep8",
+             \   "mac"       : "pip install --user pylint rope pyflake pep8",
+             \   "unix"      : "pip install --user pylint rope pyflake pep8"
+             \ }}
+
+let s:hooks = neobundle#get_hooks("klen/python-mode")
 function! s:hooks.on_source(bundle)
     " 自動設定機能をoffにし手動で設定を行う
-    let g:jedi#auto_vim_configuration = 0
-
-    let g:jedi#popup_on_dot = 1
-    let g:jedi#popup_select_first = 1
-    "quickrunと被るため大文字に変更
-    let g:jedi#rename_command = '<Leader>R'
-    let g:jedi#auto_close_doc = 0
-    let g:jedi#use_tabs_not_buffers = 0
-    let g:jedi#completions_enabled = 0
-
 endfunction
+
 
 NeoBundle 'nvie/vim-flake8', { 
             \ "autoload"    : {
             \   "filetypes" : ["python", "python3", "djangohtml"],
             \ },
             \ "build"       : {
-            \   "cygwin"    : "pip install flake8",
-            \   "mac"       : "pip install flake8",
-            \   "unix"      : "pip install flake8",
+            \   "cygwin"    : "pip install --user flake8",
+            \   "mac"       : "pip install --user flake8",
+            \   "unix"      : "pip install --user flake8",
             \ }} 
 " autocmd BufWritePost *.py call Flake8()
 " let g:flake8_quickfix_location="botright"
@@ -162,9 +183,9 @@ NeoBundleLazy 'tell-k/vim-autopep8', {
             \   "filetypes" : ["python", "python3", "djangohtml"],
             \ },
             \ "build"       : {
-            \   "cygwin"    : "pip install autopep8",
-            \   "mac"       : "pip install autopep8",
-            \   "unix"      : "sudo pip install autopep8",
+            \   "cygwin"    : "pip install --user autopep8",
+            \   "mac"       : "pip install --user autopep8",
+            \   "unix"      : "sudo pip install --user autopep8",
             \ }}
 
 let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")

@@ -14,6 +14,12 @@ python << EOF
 import os
 import sys
 import vim
+
+sys.path.append('~/.local/lib/python2.6/site-packages')
+sys.path.append('~/.local/lib/python2.7/site-packages')
+sys.path.append('~/.local/lib/python3.3/site-packages')
+sys.path.append('~/.local/lib/python3.4/site-packages')
+
 for p in sys.path:
     # Add each directory in sys.path, if it exists.
     if os.path.isdir(p):

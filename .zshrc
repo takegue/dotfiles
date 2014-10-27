@@ -55,6 +55,11 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+bindkey -M viins '^F' history-incremental-search-backward
+bindkey -M viins '^R' history-incremental-search-forward
+
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 
@@ -174,24 +179,23 @@ function mail_alart(){
     if [ -p /dev/stdin ]; then
         export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
         cat - | sed '1iCOMMAND:\n'$TMP_COMMAND'\nCONTENTS:\n' | head -n 10 | nkf -w \
-            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp
+            | mail -s 'Complete Running Command' $EMAIL
     else
         echo 'Command\n'$TMP_COMMAND\
-            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp 
+            | mail -s 'Complete Running Command' $EMAIL
     fi
 }
 
-alias -s py=python2.7
-
+alias -s py=python
 
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
 export PATH=$PATH:"/usr/local/bin"
 # export PYTHONPATH=$PYTHONPATH
 
-#PROXY設定
-export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
-export https_proxy="http://proxy.nagaokaut.ac.jp:8080"
+if [ -f "$HOME/.zshrc_local" ]; then
+    source $HOME/.zshrc_local
+fi
 
 if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"

@@ -15,7 +15,7 @@ else
     if has('vim_starting')
         execute "set runtimepath+=" . s:neobundle_root 
     endif 
-    call neobundle#rc(s:bundle_root)
+    call neobundle#begin(s:bundle_root)
 
     " NeoBundle自身をNeoBundleで管理させる
     NeoBundleFetch 'Shougo/neobundle.vim'
@@ -33,6 +33,7 @@ else
 
     runtime! conf.d/bundle/*.vim
 
+    call neobundle#end()
 
     " インストールされていないプラグインのチェックおよびダウンロード
     NeoBundleCheck 
