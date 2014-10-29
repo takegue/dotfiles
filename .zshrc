@@ -167,10 +167,11 @@ fi
 
 ### Aliases ###
 alias r=rails
-alias python='python2.7'
+# alias python='python'
 alias tmux='tmux -2'
-alias vi='vim -u NONE'
 alias v=vim
+alias vi='vim -u NONE'
+alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
 alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
@@ -207,3 +208,4 @@ fi
 function cd() {
     builtin cd $@ && ls;
 }
+

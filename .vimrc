@@ -7,7 +7,6 @@
 "  "conf.d/map.vim"
 "  "conf.d/misc.vim"
 "  "conf.d/neobundle.vim"
-"  "conf.d/bundle/"
 "  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
 "  | "conf.d/bundle/bundle-design.vim"       #vimの見た目のbundle
 "  | "conf.d/bundle/bundle-editor.vim"

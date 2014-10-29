@@ -9,6 +9,7 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer file file_mru<CR>
     nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
     nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>   "bookmarkを追加可能に
+    nnoremap <silent> [unite]gf  :<C-u>Unite grep:% -buffer-name=search-buffer<CR> 
     nnoremap <silent> [unite]gg  :<C-u>Unite grep:. -buffer-name=search-buffer<CR> 
     nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
     nnoremap <silent> [unite]r  :<C-u>UniteResume search-buffer<CR>
@@ -64,8 +65,10 @@ let s:hooks = neobundle#get_hooks("vimfiler.vim")
 function! s:hooks.on_source(bundle)
     let g:vimfiler_as_default_explorer = 1
     let g:vimfiler_enable_auto_cd = 1
+
     " 2013-08-14 追記
-    let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
+    let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.pyc\|\%^\..\+\)\%$'
+
     " vimfiler specific key mappings
     autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
     function! s:vimfiler_settings()

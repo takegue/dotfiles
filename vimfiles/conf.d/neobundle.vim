@@ -19,6 +19,8 @@ else
 
     " NeoBundle自身をNeoBundleで管理させる
     NeoBundleFetch 'Shougo/neobundle.vim'
+    " Use neobundle standard recipes.
+    NeoBundle 'Shougo/neobundle-vim-recipes'
 
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
@@ -37,4 +39,9 @@ else
 
     " インストールされていないプラグインのチェックおよびダウンロード
     NeoBundleCheck 
+
+    if !has('vim_starting')
+        " Call on_source hook when reloading .vimrc.
+        call neobundle#call_hook('on_source')
+    endif
 endif
