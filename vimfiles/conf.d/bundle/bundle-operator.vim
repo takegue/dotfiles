@@ -18,4 +18,9 @@ map gS <Plug>(operator-decamelize)
 NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
 NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
 nnoremap - :Switch<CR>
+let g:switch_custom_definitions =
+    \ [
+    \   ['<', '>', '>=', '<='] ,
+    \   ['!=', '=='] 
+    \ ]
 

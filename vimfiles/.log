@@ -174,3 +174,537 @@ times in msec
 481.141  000.004: before starting main loop
 494.189  013.048: first screen update
 494.193  000.004: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.014  000.014: --- VIM STARTING ---
+000.326  000.312: Allocated generic buffers
+000.413  000.087: locale set
+000.466  000.053: GUI prepared
+000.471  000.005: clipboard setup
+000.486  000.015: window checked
+002.419  001.933: inits 1
+002.597  000.178: parsing arguments
+002.600  000.003: expanding arguments
+002.637  000.037: shell init
+003.792  001.155: Termcap init
+003.904  000.112: inits 2
+004.173  000.269: init highlight
+009.770  000.592  000.592: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+010.093  001.093  000.501: sourcing /usr/local/share/vim/vim74/syntax/synload.vim
+038.436  028.183  028.183: sourcing /usr/local/share/vim/vim74/filetype.vim
+038.486  029.661  000.385: sourcing /usr/local/share/vim/vim74/syntax/syntax.vim
+039.066  030.726  001.065: sourcing /sougen/takeno_a6/.vim/conf.d/basic.vim
+040.235  000.701  000.701: sourcing /usr/local/share/vim/vim74/macros/matchit.vim
+040.720  001.297  000.596: sourcing /sougen/takeno_a6/.vim/conf.d/map.vim
+041.237  000.193  000.193: sourcing /sougen/takeno_a6/.vim/conf.d/misc.vim
+043.755  001.044  001.044: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/util.vim
+045.447  003.485  002.441: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle.vim
+046.049  000.169  000.169: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/init.vim
+047.521  000.601  000.601: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/config.vim
+048.067  000.474  000.474: sourcing /usr/local/share/vim/vim74/ftoff.vim
+049.010  000.256  000.256: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/autoload.vim
+049.936  000.344  000.344: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/parser.vim
+051.087  000.417  000.417: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/types/git.vim
+058.163  004.694  004.694: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-colorscheme.vim
+059.849  001.357  001.357: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-design.vim
+063.841  003.640  003.640: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-editor.vim
+065.964  001.643  001.643: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-misc.vim
+078.356  011.896  011.896: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-operator.vim
+093.315  014.752  014.752: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-programming.vim
+100.861  006.290  006.290: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-textobj.vim
+112.622  011.561  011.561: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-unite.vim
+119.624  006.661  006.661: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-util.vim
+125.458  000.203  000.203: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/os.vim
+125.704  001.381  001.178: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/path.vim
+127.442  000.556  000.556: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/commands.vim
+129.331  000.573  000.573: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/installer.vim
+135.614  004.387  004.387: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+153.326  004.381  004.381: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+160.214  118.736  039.218: sourcing /sougen/takeno_a6/.vim/conf.d/neobundle.vim
+184.980  000.561  000.561: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+187.684  000.552  000.552: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+190.070  000.554  000.554: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+191.431  008.931  007.264: sourcing /sougen/takeno_a6/.vim/bundle/molokai/colors/molokai.vim
+215.140  000.071  000.071: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/ftdetect/neosnippet.vim
+216.679  000.443  000.443: sourcing /sougen/takeno_a6/.vim/bundle/vim-tmux/ftdetect/tmux.vim
+217.897  000.245  000.245: sourcing /sougen/takeno_a6/.vim/bundle/vim-markdown/ftdetect/mkd.vim
+220.140  000.194  000.194: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/json.vim
+223.183  002.649  002.649: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/ruby.vim
+224.268  000.132  000.132: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/ftdetect/vimrecipe.vim
+224.598  031.601  027.867: sourcing /usr/local/share/vim/vim74/filetype.vim
+226.356  000.139  000.139: sourcing /usr/local/share/vim/vim74/ftplugin.vim
+228.025  000.101  000.101: sourcing /usr/local/share/vim/vim74/indent.vim
+228.147  223.256  031.532: sourcing $HOME/.vimrc
+228.165  000.736: sourcing vimrc file(s)
+230.180  000.371  000.371: sourcing /sougen/takeno_a6/.vim/bundle/vimproc.vim/plugin/vimproc.vim
+233.522  000.554  000.554: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/autoload/indent_guides.vim
+234.951  002.845  002.291: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/plugin/indent_guides.vim
+237.110  000.607  000.607: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/plugin/lightline.vim
+241.805  000.219  000.219: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+242.437  000.159  000.159: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+243.013  000.168  000.168: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+243.579  000.158  000.158: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+244.175  000.177  000.177: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+245.486  000.832  000.832: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+247.014  000.078  000.078: sourcing /sougen/takeno_a6/.vim/bundle/vim-snippets/plugin/vimsnippets.vim
+250.528  000.052  000.052: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+250.831  000.038  000.038: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+251.119  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+251.436  000.038  000.038: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+251.707  000.036  000.036: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+251.997  000.055  000.055: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+254.450  001.011  001.011: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/plugin/neosnippet.vim
+258.108  000.396  000.396: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-user/autoload/operator/user.vim
+258.430  001.870  001.474: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-replace/plugin/operator/replace.vim
+260.908  000.905  000.905: sourcing /sougen/takeno_a6/.vim/bundle/vim-commentary/plugin/commentary.vim
+263.975  001.638  001.638: sourcing /sougen/takeno_a6/.vim/bundle/vim-surround/plugin/surround.vim
+266.635  000.427  000.427: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-sort/plugin/operator/sort.vim
+271.654  003.554  003.554: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-tabular/plugin/operator_tabular.vim
+274.752  001.132  001.132: sourcing /sougen/takeno_a6/.vim/bundle/operator-camelize.vim/plugin/operator/camelize.vim
+277.194  000.416  000.416: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-suddendeath/plugin/operator/suddendeath.vim
+279.199  000.628  000.628: sourcing /sougen/takeno_a6/.vim/bundle/switch.vim/plugin/switch.vim
+281.307  000.530  000.530: sourcing /sougen/takeno_a6/.vim/bundle/vim-quickrun/plugin/quickrun.vim
+288.243  000.945  000.945: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/custom.vim
+288.636  003.456  002.511: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+289.661  000.510  000.510: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+290.309  000.202  000.202: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+290.998  000.282  000.282: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+292.273  000.839  000.839: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+294.549  000.748  000.748: sourcing /sougen/takeno_a6/.vim/bundle/hateblo.vim/plugin/hateblo.vim
+299.767  001.475  001.475: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+304.333  007.721  006.246: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-parameter/plugin/textobj/parameter.vim
+327.783  021.378  021.378: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-entire/plugin/textobj/entire.vim
+334.648  005.286  005.286: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-datetime/plugin/textobj/datetime.vim
+341.591  005.018  005.018: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-comment/plugin/textobj/comment.vim
+347.883  004.416  004.416: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-url/plugin/textobj/url.vim
+350.337  000.859  000.859: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-object/plugin/indent-object.vim
+353.495  000.052  000.052: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+353.707  000.024  000.024: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+353.924  000.027  000.027: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+354.121  000.027  000.027: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+354.391  000.054  000.054: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+357.434  000.068  000.068: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+357.820  000.086  000.086: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+358.178  000.077  000.077: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+358.499  000.065  000.065: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+358.798  000.053  000.053: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+360.726  000.503  000.503: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/plugin/neomru.vim
+370.912  000.082  000.082: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+371.301  000.058  000.058: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+371.627  000.066  000.066: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+371.962  000.065  000.065: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+372.274  000.054  000.054: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+377.336  001.648  001.648: sourcing /sougen/takeno_a6/.vim/bundle/open-browser.vim/plugin/openbrowser.vim
+381.044  000.083  000.083: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+381.409  000.058  000.058: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+381.710  000.067  000.067: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+382.020  000.064  000.064: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+382.330  000.055  000.055: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+384.440  000.635  000.635: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/plugin/template.vim
+396.189  009.577  009.577: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignMapsPlugin.vim
+396.898  000.286  000.286: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignPlugin.vim
+398.576  001.266  001.266: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/cecutil.vim
+400.867  000.774  000.774: sourcing /sougen/takeno_a6/.vim/bundle/vim-over/plugin/over.vim
+403.762  001.511  001.511: sourcing /sougen/takeno_a6/.vim/bundle/jasegment.vim/plugin/jasegment.vim
+405.791  000.157  000.157: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/plugin/xolox/misc.vim
+409.324  000.045  000.045: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc.vim
+412.933  000.176  000.176: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/cursorhold.vim
+413.450  006.215  005.994: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/plugin/session.vim
+425.795  010.931  010.931: sourcing /sougen/takeno_a6/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+434.315  004.725  004.725: sourcing /sougen/takeno_a6/.vim/bundle/vim-easymotion/plugin/EasyMotion.vim
+434.889  000.135  000.135: sourcing /usr/local/share/vim/vim74/plugin/getscriptPlugin.vim
+435.334  000.409  000.409: sourcing /usr/local/share/vim/vim74/plugin/gzip.vim
+435.392  000.022  000.022: sourcing /usr/local/share/vim/vim74/plugin/matchparen.vim
+436.324  000.899  000.899: sourcing /usr/local/share/vim/vim74/plugin/netrwPlugin.vim
+436.447  000.071  000.071: sourcing /usr/local/share/vim/vim74/plugin/rrhelper.vim
+436.560  000.066  000.066: sourcing /usr/local/share/vim/vim74/plugin/spellfile.vim
+436.897  000.291  000.291: sourcing /usr/local/share/vim/vim74/plugin/tarPlugin.vim
+437.114  000.173  000.173: sourcing /usr/local/share/vim/vim74/plugin/tohtml.vim
+437.433  000.272  000.272: sourcing /usr/local/share/vim/vim74/plugin/vimballPlugin.vim
+437.805  000.318  000.318: sourcing /usr/local/share/vim/vim74/plugin/zipPlugin.vim
+439.208  000.132  000.132: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/plugin/neobundle.vim
+439.285  100.223: loading plugins
+439.314  000.029: inits 3
+441.694  002.380: reading viminfo
+441.889  000.195: setup clipboard
+441.902  000.013: setting raw mode
+441.927  000.025: start termcap
+441.966  000.039: clearing screen
+447.250  000.675  000.675: sourcing /usr/local/share/vim/vim74/scripts.vim
+448.569  000.157  000.157: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/autoload/template.vim
+456.839  000.416  000.416: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline.vim
+458.468  000.084  000.084: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/tab.vim
+460.058  000.211  000.211: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme.vim
+462.858  003.594  003.383: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme/powerline.vim
+468.142  000.082  000.082: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/sources/buffer/variables.vim
+470.216  000.868  000.868: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/autoload/neomru.vim
+480.676  032.834: opening buffers
+481.754  001.078: BufEnter autocommands
+481.760  000.006: editing files in windows
+487.173  001.616  001.616: sourcing /usr/local/share/vim/vim74/scripts.vim
+498.522  015.146: executing command arguments
+3137.015  001.317  001.317: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/autoload/xolox/session.vim
+3137.090  2638.251: VimEnter autocommands
+3137.093  000.003: before starting main loop
+3143.911  006.818: first screen update
+3143.913  000.002: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.016  000.016: --- VIM STARTING ---
+000.352  000.336: Allocated generic buffers
+000.475  000.123: locale set
+000.539  000.064: GUI prepared
+000.567  000.028: clipboard setup
+000.586  000.019: window checked
+002.091  001.505: inits 1
+002.267  000.176: parsing arguments
+002.270  000.003: expanding arguments
+002.308  000.038: shell init
+003.501  001.193: Termcap init
+003.621  000.120: inits 2
+003.886  000.265: init highlight
+007.369  000.585  000.585: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+008.065  001.455  000.870: sourcing /usr/local/share/vim/vim74/syntax/synload.vim
+031.070  022.781  022.781: sourcing /usr/local/share/vim/vim74/filetype.vim
+031.123  024.695  000.459: sourcing /usr/local/share/vim/vim74/syntax/syntax.vim
+031.728  025.901  001.206: sourcing /sougen/takeno_a6/.vim/conf.d/basic.vim
+032.745  000.715  000.715: sourcing /usr/local/share/vim/vim74/macros/matchit.vim
+033.234  001.322  000.607: sourcing /sougen/takeno_a6/.vim/conf.d/map.vim
+033.600  000.189  000.189: sourcing /sougen/takeno_a6/.vim/conf.d/misc.vim
+035.323  000.392  000.392: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/util.vim
+036.033  001.405  001.013: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle.vim
+036.455  000.167  000.167: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/init.vim
+037.507  000.582  000.582: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/config.vim
+037.938  000.363  000.363: sourcing /usr/local/share/vim/vim74/ftoff.vim
+038.720  000.272  000.272: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/autoload.vim
+039.476  000.342  000.342: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/parser.vim
+040.337  000.418  000.418: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/types/git.vim
+056.268  013.257  013.257: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-colorscheme.vim
+060.229  003.658  003.658: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-design.vim
+070.636  010.140  010.140: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-editor.vim
+074.855  003.925  003.925: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-misc.vim
+092.954  017.810  017.810: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-operator.vim
+120.910  027.500  027.500: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-programming.vim
+129.865  008.628  008.628: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-textobj.vim
+143.216  012.975  012.975: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-unite.vim
+161.225  017.788  017.788: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-util.vim
+178.960  000.499  000.499: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/os.vim
+179.609  002.993  002.494: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/path.vim
+183.664  001.344  001.344: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/commands.vim
+187.753  001.378  001.378: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/installer.vim
+193.721  004.431  004.431: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+205.011  001.779  001.779: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+207.750  173.835  042.680: sourcing /sougen/takeno_a6/.vim/conf.d/neobundle.vim
+211.089  000.591  000.591: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+214.322  000.555  000.555: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+216.717  000.560  000.560: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+218.061  009.963  008.257: sourcing /sougen/takeno_a6/.vim/bundle/molokai/colors/molokai.vim
+242.540  000.073  000.073: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/ftdetect/neosnippet.vim
+243.128  000.047  000.047: sourcing /sougen/takeno_a6/.vim/bundle/vim-tmux/ftdetect/tmux.vim
+243.621  000.101  000.101: sourcing /sougen/takeno_a6/.vim/bundle/vim-markdown/ftdetect/mkd.vim
+244.509  000.077  000.077: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/json.vim
+245.771  001.089  001.089: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/ruby.vim
+246.202  000.045  000.045: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/ftdetect/vimrecipe.vim
+246.329  026.695  025.263: sourcing /usr/local/share/vim/vim74/filetype.vim
+247.041  000.045  000.045: sourcing /usr/local/share/vim/vim74/ftplugin.vim
+247.734  000.042  000.042: sourcing /usr/local/share/vim/vim74/indent.vim
+247.785  242.944  004.952: sourcing $HOME/.vimrc
+247.791  000.961: sourcing vimrc file(s)
+249.274  000.334  000.334: sourcing /sougen/takeno_a6/.vim/bundle/vimproc.vim/plugin/vimproc.vim
+252.044  000.555  000.555: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/autoload/indent_guides.vim
+253.391  002.515  001.960: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/plugin/indent_guides.vim
+254.791  000.303  000.303: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/plugin/lightline.vim
+258.474  000.161  000.161: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+258.926  000.124  000.124: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+259.281  000.131  000.131: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+259.624  000.128  000.128: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+259.985  000.136  000.136: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+260.872  000.675  000.675: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+262.041  000.102  000.102: sourcing /sougen/takeno_a6/.vim/bundle/vim-snippets/plugin/vimsnippets.vim
+265.540  000.039  000.039: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+265.826  000.039  000.039: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+266.108  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+266.424  000.052  000.052: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+266.759  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+267.104  000.057  000.057: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+269.159  000.949  000.949: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/plugin/neosnippet.vim
+271.953  000.418  000.418: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-user/autoload/operator/user.vim
+272.263  001.595  001.177: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-replace/plugin/operator/replace.vim
+274.774  000.915  000.915: sourcing /sougen/takeno_a6/.vim/bundle/vim-commentary/plugin/commentary.vim
+278.312  001.707  001.707: sourcing /sougen/takeno_a6/.vim/bundle/vim-surround/plugin/surround.vim
+280.300  000.359  000.359: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-sort/plugin/operator/sort.vim
+285.020  003.588  003.588: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-tabular/plugin/operator_tabular.vim
+287.783  001.100  001.100: sourcing /sougen/takeno_a6/.vim/bundle/operator-camelize.vim/plugin/operator/camelize.vim
+289.791  000.407  000.407: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-suddendeath/plugin/operator/suddendeath.vim
+291.473  000.615  000.615: sourcing /sougen/takeno_a6/.vim/bundle/switch.vim/plugin/switch.vim
+293.212  000.509  000.509: sourcing /sougen/takeno_a6/.vim/bundle/vim-quickrun/plugin/quickrun.vim
+298.829  000.948  000.948: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/custom.vim
+299.171  002.711  001.763: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+299.788  000.345  000.345: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+300.233  000.191  000.191: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+301.217  000.679  000.679: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+302.369  000.846  000.846: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+303.884  000.451  000.451: sourcing /sougen/takeno_a6/.vim/bundle/hateblo.vim/plugin/hateblo.vim
+308.271  001.433  001.433: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+312.794  007.321  005.888: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-parameter/plugin/textobj/parameter.vim
+330.172  015.815  015.815: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-entire/plugin/textobj/entire.vim
+336.622  005.301  005.301: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-datetime/plugin/textobj/datetime.vim
+339.681  001.990  001.990: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-comment/plugin/textobj/comment.vim
+345.622  004.578  004.578: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-url/plugin/textobj/url.vim
+347.576  000.796  000.796: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-object/plugin/indent-object.vim
+350.955  000.049  000.049: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+351.186  000.032  000.032: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+351.412  000.038  000.038: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+351.636  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+351.873  000.030  000.030: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+354.772  000.074  000.074: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+355.092  000.058  000.058: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+355.407  000.067  000.067: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+355.718  000.066  000.066: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+356.014  000.054  000.054: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+357.608  000.505  000.505: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/plugin/neomru.vim
+361.263  000.082  000.082: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+361.575  000.058  000.058: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+361.928  000.066  000.066: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+362.271  000.064  000.064: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+362.572  000.053  000.053: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+365.353  001.651  001.651: sourcing /sougen/takeno_a6/.vim/bundle/open-browser.vim/plugin/openbrowser.vim
+368.810  000.082  000.082: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+371.145  000.076  000.076: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+371.495  000.069  000.069: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+371.819  000.064  000.064: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+372.132  000.054  000.054: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+373.866  000.609  000.609: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/plugin/template.vim
+385.571  009.649  009.649: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignMapsPlugin.vim
+386.200  000.284  000.284: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignPlugin.vim
+387.742  001.268  001.268: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/cecutil.vim
+389.554  000.748  000.748: sourcing /sougen/takeno_a6/.vim/bundle/vim-over/plugin/over.vim
+392.203  001.535  001.535: sourcing /sougen/takeno_a6/.vim/bundle/jasegment.vim/plugin/jasegment.vim
+393.912  000.113  000.113: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/plugin/xolox/misc.vim
+396.889  000.042  000.042: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc.vim
+400.091  000.174  000.174: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/cursorhold.vim
+400.606  005.618  005.402: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/plugin/session.vim
+412.809  011.106  011.106: sourcing /sougen/takeno_a6/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+423.937  009.887  009.887: sourcing /sougen/takeno_a6/.vim/bundle/vim-easymotion/plugin/EasyMotion.vim
+424.445  000.102  000.102: sourcing /usr/local/share/vim/vim74/plugin/getscriptPlugin.vim
+425.017  000.544  000.544: sourcing /usr/local/share/vim/vim74/plugin/gzip.vim
+425.062  000.016  000.016: sourcing /usr/local/share/vim/vim74/plugin/matchparen.vim
+425.755  000.666  000.666: sourcing /usr/local/share/vim/vim74/plugin/netrwPlugin.vim
+425.850  000.054  000.054: sourcing /usr/local/share/vim/vim74/plugin/rrhelper.vim
+425.935  000.050  000.050: sourcing /usr/local/share/vim/vim74/plugin/spellfile.vim
+426.190  000.217  000.217: sourcing /usr/local/share/vim/vim74/plugin/tarPlugin.vim
+426.352  000.128  000.128: sourcing /usr/local/share/vim/vim74/plugin/tohtml.vim
+426.587  000.202  000.202: sourcing /usr/local/share/vim/vim74/plugin/vimballPlugin.vim
+426.872  000.244  000.244: sourcing /usr/local/share/vim/vim74/plugin/zipPlugin.vim
+427.906  000.094  000.094: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/plugin/neobundle.vim
+427.967  076.075: loading plugins
+427.990  000.023: inits 3
+430.010  002.020: reading viminfo
+430.192  000.182: setup clipboard
+430.205  000.013: setting raw mode
+430.219  000.014: start termcap
+430.274  000.055: clearing screen
+434.537  000.662  000.662: sourcing /usr/local/share/vim/vim74/scripts.vim
+435.682  000.160  000.160: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/autoload/template.vim
+441.557  000.390  000.390: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline.vim
+442.758  000.076  000.076: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/tab.vim
+444.267  000.558  000.558: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme.vim
+451.288  008.093  007.535: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme/powerline.vim
+456.779  000.080  000.080: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/sources/buffer/variables.vim
+458.677  000.867  000.867: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/autoload/neomru.vim
+466.999  026.397: opening buffers
+467.445  000.446: BufEnter autocommands
+467.448  000.003: editing files in windows
+469.943  000.682  000.682: sourcing /usr/local/share/vim/vim74/scripts.vim
+483.885  015.755: executing command arguments
+6298.294  001.334  001.334: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/autoload/xolox/session.vim
+6298.385  5814.166: VimEnter autocommands
+6298.387  000.002: before starting main loop
+6306.320  007.933: first screen update
+6306.324  000.004: --- VIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.015  000.015: --- VIM STARTING ---
+000.343  000.328: Allocated generic buffers
+000.451  000.108: locale set
+000.509  000.058: GUI prepared
+000.515  000.006: clipboard setup
+000.530  000.015: window checked
+002.015  001.485: inits 1
+002.224  000.209: parsing arguments
+002.227  000.003: expanding arguments
+002.265  000.038: shell init
+003.461  001.196: Termcap init
+003.578  000.117: inits 2
+003.847  000.269: init highlight
+007.253  000.610  000.610: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+007.570  001.100  000.490: sourcing /usr/local/share/vim/vim74/syntax/synload.vim
+037.240  029.532  029.532: sourcing /usr/local/share/vim/vim74/filetype.vim
+037.292  030.996  000.364: sourcing /usr/local/share/vim/vim74/syntax/syntax.vim
+037.848  032.009  001.013: sourcing /sougen/takeno_a6/.vim/conf.d/basic.vim
+038.960  000.699  000.699: sourcing /usr/local/share/vim/vim74/macros/matchit.vim
+039.455  001.306  000.607: sourcing /sougen/takeno_a6/.vim/conf.d/map.vim
+039.927  000.189  000.189: sourcing /sougen/takeno_a6/.vim/conf.d/misc.vim
+041.494  000.397  000.397: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/util.vim
+042.219  001.674  001.277: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle.vim
+042.777  000.170  000.170: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/init.vim
+043.929  000.578  000.578: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/config.vim
+044.371  000.375  000.375: sourcing /usr/local/share/vim/vim74/ftoff.vim
+045.274  000.259  000.259: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/autoload.vim
+046.227  000.380  000.380: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/parser.vim
+048.061  000.422  000.422: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/types/git.vim
+055.172  004.706  004.706: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-colorscheme.vim
+056.961  001.465  001.465: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-design.vim
+060.932  003.649  003.649: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-editor.vim
+061.898  000.609  000.609: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-misc.vim
+069.489  007.278  007.278: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-operator.vim
+084.567  014.843  014.843: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-programming.vim
+091.268  006.372  006.372: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-textobj.vim
+103.107  011.658  011.658: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-unite.vim
+110.233  006.784  006.784: sourcing /sougen/takeno_a6/.vim/conf.d/bundle/bundle-util.vim
+116.038  000.203  000.203: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/os.vim
+116.288  001.407  001.204: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/path.vim
+118.118  000.590  000.590: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/commands.vim
+120.049  000.554  000.554: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/autoload/neobundle/installer.vim
+123.122  001.783  001.783: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+131.893  001.772  001.772: sourcing /sougen/takeno_a6/.vim/bundle/NeoBundle.lock
+134.635  094.543  027.215: sourcing /sougen/takeno_a6/.vim/conf.d/neobundle.vim
+137.260  000.236  000.236: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+138.468  000.245  000.245: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+139.496  000.226  000.226: sourcing /usr/local/share/vim/vim74/syntax/syncolor.vim
+140.040  003.818  003.111: sourcing /sougen/takeno_a6/.vim/bundle/molokai/colors/molokai.vim
+162.263  000.073  000.073: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/ftdetect/neosnippet.vim
+163.171  000.055  000.055: sourcing /sougen/takeno_a6/.vim/bundle/vim-tmux/ftdetect/tmux.vim
+163.897  000.098  000.098: sourcing /sougen/takeno_a6/.vim/bundle/vim-markdown/ftdetect/mkd.vim
+165.106  000.076  000.076: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/json.vim
+166.483  001.075  001.075: sourcing /sougen/takeno_a6/.vim/bundle/.neobundle/ftdetect/ruby.vim
+167.241  000.046  000.046: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/ftdetect/vimrecipe.vim
+167.369  026.673  025.250: sourcing /usr/local/share/vim/vim74/filetype.vim
+168.086  000.045  000.045: sourcing /usr/local/share/vim/vim74/ftplugin.vim
+168.866  000.046  000.046: sourcing /usr/local/share/vim/vim74/indent.vim
+168.923  164.369  005.740: sourcing $HOME/.vimrc
+168.929  000.713: sourcing vimrc file(s)
+172.840  000.146  000.146: sourcing /sougen/takeno_a6/.vim/bundle/vimproc.vim/plugin/vimproc.vim
+175.365  000.439  000.439: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/autoload/indent_guides.vim
+176.221  001.984  001.545: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-guides/plugin/indent_guides.vim
+178.340  000.265  000.265: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/plugin/lightline.vim
+182.454  000.128  000.128: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+182.972  000.149  000.149: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+183.629  000.170  000.170: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+184.251  000.186  000.186: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+185.586  000.170  000.170: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+191.786  000.856  000.856: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+193.560  000.069  000.069: sourcing /sougen/takeno_a6/.vim/bundle/vim-snippets/plugin/vimsnippets.vim
+197.412  000.040  000.040: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/buffer.vim
+201.128  000.056  000.056: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/dictionary.vim
+201.501  000.038  000.038: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/include.vim
+201.759  000.036  000.036: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/syntax.vim
+202.017  000.036  000.036: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete/tag.vim
+202.319  000.056  000.056: sourcing /sougen/takeno_a6/.vim/bundle/neocomplete.vim/plugin/neocomplete.vim
+204.722  000.985  000.985: sourcing /sougen/takeno_a6/.vim/bundle/neosnippet.vim/plugin/neosnippet.vim
+212.173  000.422  000.422: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-user/autoload/operator/user.vim
+212.493  005.457  005.035: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-replace/plugin/operator/replace.vim
+214.755  000.868  000.868: sourcing /sougen/takeno_a6/.vim/bundle/vim-commentary/plugin/commentary.vim
+217.840  001.625  001.625: sourcing /sougen/takeno_a6/.vim/bundle/vim-surround/plugin/surround.vim
+220.269  000.372  000.372: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-sort/plugin/operator/sort.vim
+225.406  003.625  003.625: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-tabular/plugin/operator_tabular.vim
+228.438  001.049  001.049: sourcing /sougen/takeno_a6/.vim/bundle/operator-camelize.vim/plugin/operator/camelize.vim
+230.697  000.426  000.426: sourcing /sougen/takeno_a6/.vim/bundle/vim-operator-suddendeath/plugin/operator/suddendeath.vim
+232.683  000.642  000.642: sourcing /sougen/takeno_a6/.vim/bundle/switch.vim/plugin/switch.vim
+234.502  000.431  000.431: sourcing /sougen/takeno_a6/.vim/bundle/vim-quickrun/plugin/quickrun.vim
+241.038  000.937  000.937: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/custom.vim
+241.393  003.289  002.352: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+242.268  000.382  000.382: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+242.860  000.199  000.199: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+243.638  000.293  000.293: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+244.883  000.824  000.824: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+246.940  000.729  000.729: sourcing /sougen/takeno_a6/.vim/bundle/hateblo.vim/plugin/hateblo.vim
+251.906  001.425  001.425: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-user/autoload/textobj/user.vim
+256.457  007.607  006.182: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-parameter/plugin/textobj/parameter.vim
+277.960  019.506  019.506: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-entire/plugin/textobj/entire.vim
+285.033  005.440  005.440: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-datetime/plugin/textobj/datetime.vim
+288.560  002.006  002.006: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-comment/plugin/textobj/comment.vim
+292.146  001.932  001.932: sourcing /sougen/takeno_a6/.vim/bundle/vim-textobj-url/plugin/textobj/url.vim
+293.588  000.459  000.459: sourcing /sougen/takeno_a6/.vim/bundle/vim-indent-object/plugin/indent-object.vim
+296.034  000.040  000.040: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+296.238  000.032  000.032: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+296.449  000.039  000.039: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+296.656  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+296.859  000.030  000.030: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+299.375  000.039  000.039: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+299.605  000.031  000.031: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+299.834  000.037  000.037: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+300.064  000.036  000.036: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+300.286  000.030  000.030: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+301.799  000.273  000.273: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/plugin/neomru.vim
+304.616  000.069  000.069: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+304.920  000.057  000.057: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+305.277  000.066  000.066: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+305.582  000.063  000.063: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+305.867  000.052  000.052: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+308.796  001.572  001.572: sourcing /sougen/takeno_a6/.vim/bundle/open-browser.vim/plugin/openbrowser.vim
+312.115  000.070  000.070: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/bookmark.vim
+312.440  000.057  000.057: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/buffer.vim
+312.766  000.065  000.065: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/history_yank.vim
+313.076  000.063  000.063: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite/window.vim
+313.414  000.055  000.055: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/plugin/unite.vim
+315.416  000.529  000.529: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/plugin/template.vim
+327.301  009.632  009.632: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignMapsPlugin.vim
+328.006  000.295  000.295: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/AlignPlugin.vim
+329.692  001.277  001.277: sourcing /sougen/takeno_a6/.vim/bundle/Align/plugin/cecutil.vim
+331.503  000.504  000.504: sourcing /sougen/takeno_a6/.vim/bundle/vim-over/plugin/over.vim
+334.418  001.470  001.470: sourcing /sougen/takeno_a6/.vim/bundle/jasegment.vim/plugin/jasegment.vim
+336.449  000.129  000.129: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/plugin/xolox/misc.vim
+339.901  000.042  000.042: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc.vim
+343.381  000.170  000.170: sourcing /sougen/takeno_a6/.vim/bundle/vim-misc/autoload/xolox/misc/cursorhold.vim
+343.896  006.091  005.879: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/plugin/session.vim
+356.438  011.114  011.114: sourcing /sougen/takeno_a6/.vim/bundle/vim-fugitive/plugin/fugitive.vim
+369.498  011.359  011.359: sourcing /sougen/takeno_a6/.vim/bundle/vim-easymotion/plugin/EasyMotion.vim
+370.579  000.276  000.276: sourcing /usr/local/share/vim/vim74/plugin/getscriptPlugin.vim
+371.325  000.681  000.681: sourcing /usr/local/share/vim/vim74/plugin/gzip.vim
+371.429  000.038  000.038: sourcing /usr/local/share/vim/vim74/plugin/matchparen.vim
+373.027  001.536  001.536: sourcing /usr/local/share/vim/vim74/plugin/netrwPlugin.vim
+373.298  000.178  000.178: sourcing /usr/local/share/vim/vim74/plugin/rrhelper.vim
+373.461  000.075  000.075: sourcing /usr/local/share/vim/vim74/plugin/spellfile.vim
+373.700  000.203  000.203: sourcing /usr/local/share/vim/vim74/plugin/tarPlugin.vim
+373.865  000.131  000.131: sourcing /usr/local/share/vim/vim74/plugin/tohtml.vim
+374.094  000.197  000.197: sourcing /usr/local/share/vim/vim74/plugin/vimballPlugin.vim
+374.390  000.245  000.245: sourcing /usr/local/share/vim/vim74/plugin/zipPlugin.vim
+375.582  000.089  000.089: sourcing /sougen/takeno_a6/.vim/bundle/neobundle.vim/plugin/neobundle.vim
+375.641  095.319: loading plugins
+375.662  000.021: inits 3
+377.660  001.998: reading viminfo
+377.832  000.172: setup clipboard
+377.847  000.015: setting raw mode
+377.862  000.015: start termcap
+377.896  000.034: clearing screen
+383.287  000.747  000.747: sourcing /usr/local/share/vim/vim74/scripts.vim
+384.598  000.155  000.155: sourcing /sougen/takeno_a6/.vim/bundle/vim-template/autoload/template.vim
+387.230  000.391  000.391: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline.vim
+389.178  000.077  000.077: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/tab.vim
+390.603  000.204  000.204: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme.vim
+393.547  003.681  003.477: sourcing /sougen/takeno_a6/.vim/bundle/lightline.vim/autoload/lightline/colorscheme/powerline.vim
+398.637  000.087  000.087: sourcing /sougen/takeno_a6/.vim/bundle/unite.vim/autoload/unite/sources/buffer/variables.vim
+400.592  000.852  000.852: sourcing /sougen/takeno_a6/.vim/bundle/neomru.vim/autoload/neomru.vim
+435.192  051.306: opening buffers
+436.588  001.396: BufEnter autocommands
+436.594  000.006: editing files in windows
+443.381  001.698  001.698: sourcing /usr/local/share/vim/vim74/scripts.vim
+452.971  014.679: executing command arguments
+458.749  001.296  001.296: sourcing /sougen/takeno_a6/.vim/bundle/vim-session/autoload/xolox/session.vim
+458.860  004.593: VimEnter autocommands
+458.863  000.003: before starting main loop
+466.119  007.256: first screen update
+466.121  000.002: --- VIM STARTED ---

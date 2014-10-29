@@ -167,7 +167,7 @@ function! s:hooks.on_source(bundle)
     let g:pymode_quickfix_minheight = 3
     let g:pymode_quickfix_maxheight = 6
 
-    let g:pymode_indent = []
+    " let g:pymode_indent = []
 
     let g:pymode_folding = 1
 
