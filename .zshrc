@@ -167,13 +167,20 @@ function head_tail(){
 function mail_alart(){
     if [ -p /dev/stdin ]; then
         export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-        cat - | sed '1iCOMMAND:\n'\t$TMP_COMMAND'\nCONTENTS:\n' | head_tail 10 10 | nkf -w \
+        if [ $# -gt 0 ]; then
+            out=$1
+        else
+            out=/dev/tty
+        fi
+        tee -a $out | head_tail 10 10 | sed '1iCOMMAND:\n\t'${TMP_COMMAND}'\n\nCONTENTS:'  | nkf -w \
             | mail -s 'Complete Running Command' $EMAIL
     else
         echo 'Command\n'$TMP_COMMAND\
             | mail -s 'Complete Running Command' $EMAIL
     fi
 }
+
+today(){ echo `date +%Y%m%d` } 
 
 if ! [[ -d ~/.zsh ]]; then
     mkdir ~/.zsh
