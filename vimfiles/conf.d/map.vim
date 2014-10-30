@@ -33,8 +33,8 @@ nnoremap k gk
 vnoremap v $h
 
 " TABにて対応ペアにジャンプ
-nnoremap <Tab> %
-vnoremap <Tab> %
+" nnoremap <Tab> %
+" vnoremap <Tab> %
 
 " matchitを有効にする.
 source $VIMRUNTIME/macros/matchit.vim
