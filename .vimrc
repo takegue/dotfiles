@@ -24,6 +24,7 @@ augroup END
 " Load .gvimrc after .vimrc edited at GVim.
 " Set augroup.
 autocmd MyAutoCmd BufRead $MYVIMRC setlocal path+=$HOME/.vim 
+autocmd MyAutoCmd BufWritePost $HOME/.vim/conf.d/*.vim nested source $MYVIMRC
 if !has('gui_running') && !(has('win32') || has('win64'))
     " .vimrcの再読込時にも色が変化するようにする
     autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC

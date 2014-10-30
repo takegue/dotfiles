@@ -152,6 +152,29 @@ for code in {0..255}; do
     echo -e "\e[38;05;${code}m $code: Test"
 done
 }
+function body(){
+    tail -n +$1 | head -$((M-N+1)); 
+}
+function head_tail(){
+    contents=`cat -`
+    {
+        echo $contents | head -n $1
+        echo '...'
+        echo $contents | tail -n $2 
+    }
+}
+
+function mail_alart(){
+    if [ -p /dev/stdin ]; then
+        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
+        cat - | sed '1iCOMMAND:\n'\t$TMP_COMMAND'\nCONTENTS:\n' | head_tail 10 10 | nkf -w \
+            | mail -s 'Complete Running Command' $EMAIL
+    else
+        echo 'Command\n'$TMP_COMMAND\
+            | mail -s 'Complete Running Command' $EMAIL
+    fi
+}
+
 if ! [[ -d ~/.zsh ]]; then
     mkdir ~/.zsh
 fi
@@ -176,17 +199,6 @@ alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 alias NOTE=mail_alart 
-function mail_alart(){
-    if [ -p /dev/stdin ]; then
-        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-        cat - | sed '1iCOMMAND:\n'$TMP_COMMAND'\nCONTENTS:\n' | head -n 10 | nkf -w \
-            | mail -s 'Complete Running Command' $EMAIL
-    else
-        echo 'Command\n'$TMP_COMMAND\
-            | mail -s 'Complete Running Command' $EMAIL
-    fi
-}
-
 alias -s py=python
 
 #### Export Configurations #### 

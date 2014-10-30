@@ -171,7 +171,7 @@ function! s:hooks.on_source(bundle)
 
     let g:pymode_folding = 1
 
-    let g:pymode_run = 0            "融通が利かないのでオフ
+    let g:pymode_run = 1            "融通が利かないのでオフ
     let g:pymode_breakpoint = 1
     let g:pymode_breakpoint_bind = '<leader>b'
 
