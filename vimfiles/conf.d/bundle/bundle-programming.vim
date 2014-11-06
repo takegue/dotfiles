@@ -171,7 +171,7 @@ function! s:hooks.on_source(bundle)
 
     let g:pymode_folding = 1
 
-    let g:pymode_run = 1            "融通が利かないのでオフ
+    let g:pymode_run = 0            "融通が利かないのでオフ
     let g:pymode_breakpoint = 1
     let g:pymode_breakpoint_bind = '<leader>b'
 
@@ -182,8 +182,7 @@ function! s:hooks.on_source(bundle)
 
     "Find definition
     let g:pymode_rope_goto_definition_rind = 'gd'
-
-    " let g:pymode_rope_rename_bind = 'rr'
+    let g:pymode_rope_rename_bind = 'R'
     " let g:pymode_rope_rename_module_bind = '<C-c>r1r'
     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
 endfunction
