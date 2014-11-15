@@ -1,5 +1,6 @@
 
-setlocal textwidth=80
+setlocal nowrap
+setlocal textwidth=0
 setlocal expandtab
 setlocal tabstop=4
 setlocal shiftwidth=4        "オートインデントの幅
@@ -8,7 +9,9 @@ setlocal expandtab
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath # !/usr/bin/env Python<CR>
+inoremap """ """<CR>"""<Up>
 
+"TODO:ローカル(.local/path/to/python)も追加する
 "python sys.pathを set pathで追加
 python << EOF
 import os

@@ -39,7 +39,6 @@ function! s:my_cr_function()
     " return neocomplete#close_popup() . "\<CR>"
     "For no inserting <CR> key.
     return pumvisible() ? neocomplete#close_popup() : "\<CR>"
->>>>>>> 3b7255682f295b9046c6c211728f63111a708bd2
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"

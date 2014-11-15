@@ -3,8 +3,8 @@
 "-------------------------------------------------- 
 "
 NeoBundle 'nathanaelkane/vim-indent-guides' 
-autocmd MyAutoCmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
-autocmd MyAutoCmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
+" autocmd MyAutoCmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
+" autocmd MyAutoCmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
 let s:hooks = neobundle#get_hooks("vim-indent-guides")
 function! s:hooks.on_source(bundle)
     let g:indent_guides_auto_colors = 0

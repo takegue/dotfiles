@@ -185,13 +185,13 @@ alias -s py=python2.7
 
 
 #### Export Configurations #### 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib":"/usr/lib/x86_64-linux-gnu/"
 export PATH=$PATH:"/usr/local/bin"
 # export PYTHONPATH=$PYTHONPATH
 
 #PROXY設定
-export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
-export https_proxy="http://proxy.nagaokaut.ac.jp:8080"
+# export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
+# export https_proxy="http://proxy.nagaokaut.ac.jp:8080"
 
 if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"
@@ -203,3 +203,6 @@ fi
 function cd() {
     builtin cd $@ && ls;
 }
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

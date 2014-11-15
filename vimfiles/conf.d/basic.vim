@@ -63,11 +63,11 @@ set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 
 if has('unnamedplus') && !(has("win32") || has("win64"))
-    set clipboard=unnamedplus,autoselectplus
+    set clipboard=unnamedplus,autoselect
+    
 else
     set clipboard=unnamed
 endif
-
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>

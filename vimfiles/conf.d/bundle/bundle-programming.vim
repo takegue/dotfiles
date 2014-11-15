@@ -216,31 +216,56 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
 "--------------------------------------------------
 " Programming - LaTex
 "--------------------------------------------------
-NeoBundleLazy 'jcf/vim-latex', {
+NeoBundleLazy 'TKNGUE/vim-latex', {
+            \ 'name' : 'vim-latex',
             \ "autoload": {
             \   "filetypes": ["tex"],
             \ }}
 let g:tex_flavor = 'platex'
 let s:hooks = neobundle#get_hooks("vim-latex")
 function! s:hooks.on_source(bundle)
-    set shellslash
     set grepprg=grep\ -nH\ $*
+    let g:tex_flavor='latex'
     let g:Imap_UsePlaceHolders = 1
     let g:Imap_DeleteEmptyPlaceHolders = 1
     let g:Imap_StickyPlaceHolders = 0
     let g:Tex_DefaultTargetFormat = 'pdf'
+    let g:Tex_MultipleCompileFormats='pdf'
+    " let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+    " let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
     let g:Tex_FormatDependency_ps = 'dvi,ps'
-    let g:Tex_CompileRule_pdf = 'ptex2pdf -l -ot -kanji=utf8 -no-guess-input-enc -synctex=0 -interaction=nonstopmode -file-line-error-style $*' 
+    let g:Tex_CompileRule_pdf = 'ptex2pdf -u -l -ot "-synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
+    "let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+    "let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+    "let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+    "let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+    "let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
     let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-    let g:Tex_BibtexFlavor = 'pbibtex -kanji=utf-8 $*'
+    let g:Tex_BibtexFlavor = 'upbibtex'
+    let g:Tex_CompileRule_dvi = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
     let g:Tex_MakeIndexFlavor = 'mendex -U $*.idx'
+    " let g:Tex_UseEditorSettingInDVIViewer = 1
+    " let g:Tex_ViewRule_pdf = 'xdg-open'
+    " let g:Tex_ViewRule_pdf = 'evince_sync'
     let g:Tex_ViewRule_pdf = 'evince'
-
+    "let g:Tex_ViewRule_pdf = 'okular --unique'
+    "let g:Tex_ViewRule_pdf = 'zathura -s -x "vim --servername synctex -n --remote-silent +\%{line} \%{input}"'
+    "let g:Tex_ViewRule_pdf = 'qpdfview --unique'
+    "let g:Tex_ViewRule_pdf = 'texworks'
+    "let g:Tex_ViewRule_pdf = 'mupdf'
+    "let g:Tex_ViewRule_pdf = 'firefox -new-window'
+    "let g:Tex_ViewRule_pdf = 'chromium --new-window'
     "キー配置の変更
     ""<Ctrl + J>はパネルの移動と被るので番うのに変える
     imap <C-n> <Plug>IMAP_JumpForward
     nmap <C-n> <Plug>IMAP_JumpForward
     vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
+    " if !has('gui_running')
+    "     set <m-i>=i
+    "     set <m-b>=b
+    "     set <m-l>=l
+    "     set <m-c>=c
+    " endif
 endfunction
 
 
