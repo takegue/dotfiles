@@ -150,7 +150,7 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
 " endfunction
 
 
-NeoBundleLazy 'klen/python-mode', {
+NeoBundle 'klen/python-mode', {
              \ "autoload"    : {
              \   "filetypes" : ["python", "python3", "djangohtml"],
              \ },
@@ -162,57 +162,106 @@ NeoBundleLazy 'klen/python-mode', {
 
 let s:hooks = neobundle#get_hooks("python-mode")
 function! s:hooks.on_source(bundle)
+
+    let g:pymode = 1
+    let g:pymode_warnings = 1
+    let g:pymode_paths = []
+    let g:pymode_trim_whitespaces = 1
     let g:pymode_options = 1
-    " let g:pymode_python = 'python'
     let g:pymode_quickfix_minheight = 3
     let g:pymode_quickfix_maxheight = 6
-
+    let g:pymode_python = 'python'
     " let g:pymode_indent = []
-
     let g:pymode_folding = 1
+    let g:pymode_motion = 1
 
-    let g:pymode_run = 0            "融通が利かないのでオフ
+    let g:pymode_doc = 1
+    let g:pymode_doc_bind = 'K'
+
+    " let g:pymode_virtualenv = 1
+    " let g:pymode_virtualenv_path = $VIRTUAL_ENV
+
+    let g:pymode_run = 1            "融通が利かないのでオフ
+    let g:pymode_run_bind = '<leader>r'
+
     let g:pymode_breakpoint = 1
     let g:pymode_breakpoint_bind = '<leader>b'
 
-    let g:pymode_rope_completion_bind = '<C-N>'
+    let g:pymode_lint = 1
+    let g:pymode_lint_on_write = 1
+
+    "Check code on every save (every)
+    let g:pymode_lint_unmodified = 0
+    let g:pymode_lint_on_fly = 0
+    let g:pymode_lint_message = 1
+    let g:pymode_lint_ignore = "E501,W"
+    " let g:pymode_lint_select = "E501,W0011,W430"
+    let g:pymode_lint_cwindow = 1
+
+    let g:pymode_rope = 1
     let g:pymode_rope_autoimport = 1
-    " let g:pymode_rope_autoimport_modules = ['os', 'shutil', 'datetime'])
+    let g:pymode_rope_lookup_project = 1
+
+    let g:pymode_rope_completion = 1
+    let g:pymode_rope_complete_on_dot = 1
+    let g:pymode_rope_completion_bind = '<C-Space>'
+
+    let g:pymode_rope_autoimport = 1
+    let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'sys']
+    let g:pymode_rope_autoimport_import_after_complete = 0
+    let g:pymode_rope_organize_imports_bind = '<F11>'
+
+    "
     let g:pymode_rope_autoimport_import_after_complete = 0
 
-    "Find definition
-    let g:pymode_rope_goto_definition_rind = 'gd'
+    let g:pymode_rope_goto_definition_bind = 'gd'
+    " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
+
     let g:pymode_rope_rename_bind = 'R'
-    " let g:pymode_rope_rename_module_bind = '<C-c>r1r'
+    " let g:pymode_rope_rename_module_bind = '<C-S-R>'
+    
+    let g:pymode_rope_extract_method_bind = '<C-c>rm'
+    let g:pymode_rope_extract_variable_bind = '<C-c>rl'
+
+    let g:pymode_rope_use_function_bind = '<C-c>ru'
+
+    "よくわからない機能たち
+    " let g:pymode_rope_move_bind = '<C-c>rv'
+    " let g:pymode_rope_change_signature_bind = '<C-c>rs'
+
+    let g:pymode_syntax_all = 1
+    let g:pymode_syntax_print_as_function = 0
+    let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
+    let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
+
+    " Highlight 'self' keyword
+    let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+    " Highlight indent's errors
+    let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+    " Highlight space's errors
+    let g:pymode_syntax_space_errors = g:pymode_syntax_all
+    " Highlight string formatting
+    let g:pymode_syntax_string_formatting = g:pymode_syntax_all
+    let g:pymode_syntax_string_format = g:pymode_syntax_all
+    let g:pymode_syntax_string_templates = g:pymode_syntax_all
+    let g:pymode_syntax_doctests = g:pymode_syntax_all
+    " Highlight builtin objects (True, False, ...)
+    let g:pymode_syntax_builtin_objs = g:pymode_syntax_all
+    " Highlight builtin types (str, list, ...)
+    let g:pymode_syntax_builtin_types = g:pymode_syntax_all
+    " Highlight exceptions (TypeError, ValueError, ...) 
+    let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all
+    " Highlight docstrings as pythonDocstring (otherwise as pythonString)
+    let g:pymode_syntax_docstrings = g:pymode_syntax_all
+
     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
+
+    autocmd MyAutoCmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
+    autocmd MyAutoCmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
+
 endfunction
 
 
-NeoBundle 'nvie/vim-flake8', { 
-            \ "autoload"    : {
-            \   "filetypes" : ["python", "python3", "djangohtml"],
-            \ },
-            \ "build"       : {
-            \   "cygwin"    : "pip install --user flake8",
-            \   "mac"       : "pip install --user flake8",
-            \   "unix"      : "pip install --user flake8",
-            \ }} 
-" autocmd BufWritePost *.py call Flake8()
-" let g:flake8_quickfix_location="botright"
-
-" NeoBundleLazy 'tell-k/vim-autopep8', { 
-"             \ "autoload"    : {
-"             \   "filetypes" : ["python", "python3", "djangohtml"],
-"             \ },
-"             \ "build"       : {
-"             \   "cygwin"    : "pip install --user autopep8",
-"             \   "mac"       : "pip install --user autopep8",
-"             \   "unix"      : "pip install --user autopep8",
-"             \ }}
-
-let s:hooks = neobundle#get_hooks("tell-k/vim-autopep8")
-function! s:hooks.on_source(bundle) 
-endfunction
 
 "--------------------------------------------------
 " Programming - Web(HTML, CSS, Javascript, json)
@@ -320,6 +369,10 @@ NeoBundleLazy 'Rykka/riv.vim' ,{
             \   'filetypes' :
             \      ['python', 'rst']
             \}}
+let s:hooks = neobundle#get_hooks('Rykka/riv.vim')
+function! s:hooks.on_source(bundle)
+endfunction
+unlet s:hooks
 
 NeoBundle 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['vim', 'python', 'ruby', 'javascript']
