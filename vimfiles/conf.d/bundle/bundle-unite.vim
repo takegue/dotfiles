@@ -9,13 +9,14 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer file file_mru<CR>
     nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
     nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>   "bookmarkを追加可能に
-    nnoremap <silent> [unite]gf  :<C-u>Unite grep:% -buffer-name=search-buffer<CR> 
-    nnoremap <silent> [unite]gg  :<C-u>Unite grep:. -buffer-name=search-buffer<CR> 
-    nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+    nnoremap <silent> [unite]gf  :<C-u>Unite grep:% -buffer-name=search-buffer<CR>
+    nnoremap <silent> [unite]gg  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+    nnoremap <silent> [unite]gc :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>l<BS>
     nnoremap <silent> [unite]r  :<C-u>UniteResume search-buffer<CR>
     " mappingが競合するためデフォルトマッピング無効
     " let g:unite_no_default_keymappings = 1
     " nnoremap <silent> <Plug>(unite_exit)
+    "
 
     " unite grep に ag(The Silver Searcher) を使う
     if executable('ag')

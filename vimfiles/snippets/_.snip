@@ -1,0 +1,5 @@
+snippet     filepath
+abbr        Absolutlte path to this file
+alias       fpath
+options     word
+    `bufname('%') =='[Command Line]' ? expand('#:p') : expand('%:p')`${0}

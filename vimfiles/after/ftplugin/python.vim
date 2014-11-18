@@ -1,15 +1,15 @@
-
 setlocal textwidth=79
 setlocal expandtab
 setlocal tabstop=4
 setlocal shiftwidth=4        "オートインデントの幅
 setlocal softtabstop=4       "インデントをスペース4つ分に設定
 setlocal expandtab
+setlocal nowrap
+
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath # !/usr/bin/env Python<CR>
 iab <buffer> ### ###############################################################################
-
 
 "python sys.pathを set pathで追加
 python << EOF

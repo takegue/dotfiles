@@ -7,7 +7,10 @@ let mapleader=','
 " inoremap jj <Esc>
 " nnoremap ; q:a
 " nnoremap ; :
-" nnoremap : ;
+" nnoremap : q:i
+" nnoremap Q q
+" nnoremap q <Nop> 
+" nnoremap q: q: 
 "
 nnoremap & g&
 
