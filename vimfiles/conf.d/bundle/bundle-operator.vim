@@ -12,10 +12,45 @@ NeoBundle 'emonkak/vim-operator-sort', {
 NeoBundle 'pekepeke/vim-operator-tabular', {
             \ 'depends' : ['pekepeke/vim-csvutil'] 
             \}
-NeoBundle 'tyru/operator-camelize.vim'                  "Camelizeまたはdecamelize(snake_case) オペレータ
-map gC <Plug>(operator-camelize)
-map gS <Plug>(operator-decamelize)
 NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
-NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
-nnoremap - :Switch<CR>
+
+"NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
+NeoBundle 'TKNGUE/switch.vim'                      "true ⇔ falseなどの切り替え
+let s:hooks = neobundle#get_hooks('switch.vim')
+function! s:hooks.on_source(bundle)
+    nnoremap - :Switch<CR>
+    let g:switch_custom_definitions =
+        \ [
+        \   ['!=', '=='],
+        \   {
+        \     '>\(=\)\@!'  : '>=',
+        \     '>='  : '<',
+        \     '<\(=\)\@!'  : '<=',
+        \     '<='  : '>',
+        \   },
+        \   {
+        \     '\<[a-z0-9]\+_\k\+\>': { 
+        \       '_\(.\)': '\U\1',
+        \       '\<\(.\)': '\U\1'
+        \     },
+        \     '\<[A-Za-z][a-z0-9]\+[A-Z]\k\+\>': {
+        \       '\(\u\)': '_\l\1',
+        \       '\<_': ''
+        \     },
+        \   }
+        \ ]
+    autocmd FileType python let b:switch_custom_definitions =
+        \[
+        \   ['and', 'or'],
+        \   {
+        \     '\(.\+\) if \(.\+\) else \(.\+\)' : { 
+        \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' : 
+        \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \4'
+        \      }
+        \   },
+        \]
+endfunction
+unlet s:hooks
+
+
 

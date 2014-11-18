@@ -1,4 +1,4 @@
-#------------------------------
+# ------------------------------
 # General Settings
 # ------------------------------
 export EDITOR=vim        # エディタをvimに設定
@@ -54,6 +54,11 @@ zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
+
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+bindkey -M viins '^F' history-incremental-search-backward
+bindkey -M viins '^R' history-incremental-search-forward
 
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
@@ -147,6 +152,37 @@ for code in {0..255}; do
     echo -e "\e[38;05;${code}m $code: Test"
 done
 }
+function body(){
+    tail -n +$1 | head -$((M-N+1)); 
+}
+function head_tail(){
+    contents=`cat -`
+    {
+        echo $contents | head -n $1
+        echo '...'
+        echo $contents | tail -n $2 
+    }
+}
+
+function mail_alart(){
+    ##TODO: "| NOTE"の部分を消し去りたい
+    if [ -p /dev/stdin ]; then
+        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
+        if [ $# -gt 0 ]; then
+            out=$1
+        else
+            out=/dev/tty
+        fi
+        tee -a $out | head_tail 10 10 | sed '1iCOMMAND:\n\t'${TMP_COMMAND}'\n\nCONTENTS:'  | nkf -w \
+            | mail -s 'Complete Running Command' $EMAIL
+    else
+        echo 'Command\n'$TMP_COMMAND\
+            | mail -s 'Complete Running Command' $EMAIL
+    fi
+}
+
+today(){ echo `date +%Y%m%d` } 
+
 if ! [[ -d ~/.zsh ]]; then
     mkdir ~/.zsh
 fi
@@ -162,36 +198,26 @@ fi
 
 ### Aliases ###
 alias r=rails
-alias python='python2.7'
+# alias python='python'
 alias tmux='tmux -2'
-alias vi='vim -u NONE'
 alias v=vim
+alias vi='vim -u NONE'
+alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
 alias ls='ls -G --color -X'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
+alias less='less -IMx4 -X -R'
 alias NOTE=mail_alart 
-function mail_alart(){
-    if [ -p /dev/stdin ]; then
-        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-        cat - | sed '1iCOMMAND:\n'$TMP_COMMAND'\nCONTENTS:\n' | head -n 10 | nkf -w \
-            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp
-    else
-        echo 'Command\n'$TMP_COMMAND\
-            | mail -s 'Complete Running Command' s133141@stn.nagaokaut.ac.jp 
-    fi
-}
-
-alias -s py=python2.7
-
-
+alias -s py=python
+alias -g L='| less'
 #### Export Configurations #### 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib":"/usr/lib/x86_64-linux-gnu/"
 export PATH=$PATH:"/usr/local/bin"
 # export PYTHONPATH=$PYTHONPATH
 
-#PROXY設定
-# export http_proxy="http://proxy.nagaokaut.ac.jp:8080"
-# export https_proxy="http://proxy.nagaokaut.ac.jp:8080"
+if [ -f "$HOME/.zshrc_local" ]; then
+    source $HOME/.zshrc_local
+fi
 
 if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"

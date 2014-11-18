@@ -116,6 +116,7 @@ function! s:hooks.on_source(bundle)
 endfunction 
 
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
+
 command! FollowSymlink call s:SwitchToActualFile()
 function! s:SwitchToActualFile()
     let fname = resolve(expand('%:p'))
@@ -149,10 +150,10 @@ let g:EasyMotion_do_mapping = 0
 " =======================================
 " Jump to anywhere you want by just `4` or `3` key strokes without thinking!
 " `s{char}{char}{target}`
-map f <Plug>(easymotion-fl)
-map F <Plug>(easymotion-Fl)
-map t <Plug>(easymotion-tl)
-map T <Plug>(easymotion-Tl)
+map <Leader>f <Plug>(easymotion-fl)
+map <Leader>F <Plug>(easymotion-Fl)
+map <Leader>t <Plug>(easymotion-tl)
+map <Leader>T <Plug>(easymotion-Tl)
 nmap gs <Plug>(easymotion-s2)
 xmap gs <Plug>(easymotion-s2)
 omap z <Plug>(easymotion-s2)
@@ -166,8 +167,8 @@ let g:EasyMotion_smartcase = 1
 " Line Motions
 " =======================================
 " `JK` Motions: Extend line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+map gj <Plug>(easymotion-j)
+map gk <Plug>(easymotion-k)
 " keep cursor column with `JK` motions
 let g:EasyMotion_startofline = 0
 

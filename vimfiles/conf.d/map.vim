@@ -34,7 +34,11 @@ vnoremap v $h
 
 " TABにて対応ペアにジャンプ
 " nnoremap <Tab> %
-vnoremap <Tab> %
+" vnoremap <Tab> %
+
+" matchitを有効にする.
+source $VIMRUNTIME/macros/matchit.vim
+
 
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h
@@ -124,6 +128,13 @@ nnoremap <silent> [Tab]c :tabnew<CR>
 nnoremap <silent> [Tab]x :tabclose<CR>
 nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> gh :tabprevious<CR>
+
+"--------------------------------------------------
+" Key Mapping - QuickFix
+"--------------------------------------------------
+nnoremap<silent> <Space>n :<C-u>cnext<CR>
+nnoremap<silent> <Space>b :<C-u>cprevious<CR>
+nnoremap<silent> <Space>w :<C-u>cwindow<CR>
 
 "--------------------------------------------------
 " Key Mapping - abbreviattions

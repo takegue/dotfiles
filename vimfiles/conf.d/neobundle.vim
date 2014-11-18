@@ -15,10 +15,12 @@ else
     if has('vim_starting')
         execute "set runtimepath+=" . s:neobundle_root 
     endif 
-    call neobundle#rc(s:bundle_root)
+    call neobundle#begin(s:bundle_root)
 
     " NeoBundle自身をNeoBundleで管理させる
     NeoBundleFetch 'Shougo/neobundle.vim'
+    " Use neobundle standard recipes.
+    NeoBundle 'Shougo/neobundle-vim-recipes'
 
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
@@ -33,7 +35,13 @@ else
 
     runtime! conf.d/bundle/*.vim
 
+    call neobundle#end()
 
     " インストールされていないプラグインのチェックおよびダウンロード
     NeoBundleCheck 
+
+    if !has('vim_starting')
+        " Call on_source hook when reloading .vimrc.
+        call neobundle#call_hook('on_source')
+    endif
 endif

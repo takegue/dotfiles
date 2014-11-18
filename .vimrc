@@ -7,7 +7,6 @@
 "  "conf.d/map.vim"
 "  "conf.d/misc.vim"
 "  "conf.d/neobundle.vim"
-"  "conf.d/bundle/"
 "  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
 "  | "conf.d/bundle/bundle-design.vim"       #vimの見た目のbundle
 "  | "conf.d/bundle/bundle-editor.vim"
@@ -24,17 +23,18 @@ augroup END
 
 " Load .gvimrc after .vimrc edited at GVim.
 " Set augroup.
+autocmd MyAutoCmd BufRead $MYVIMRC setlocal path+=$HOME/.vim 
+autocmd MyAutoCmd BufWritePost $HOME/.vim/conf.d/*.vim nested source $MYVIMRC
 if !has('gui_running') && !(has('win32') || has('win64'))
     " .vimrcの再読込時にも色が変化するようにする
-    autocmd MyAutoCmd BufReadPost  $MYVIMRC setlocal path+=$HOME/.vim
     autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
-else
-    autocmd MyAutoCmd BufReadPost  $MYVIMRC  setlocal path+=$HOME/.vim
-    autocmd MyAutoCmd BufWritePost $MYVIMRC  nested   source $MYGVIMRC
-    autocmd MyAutoCmd BufWritePost $MYGVIMRC nested   source $MYVIMRC
+else 
+    autocmd MyAutoCmd BufWritePost $MYVIMRC  nested  source $MYGVIMRC
+    autocmd MyAutoCmd BufWritePost $MYGVIMRC nested  source $MYVIMRC
     " .vimrcの再読込時にも色が変化するようにする
     " autocmd MyAutoCmd BufWritePost $MYVIMRC 4source $MYVIMRC | if has('gui_running') | source $MYGVIMRC 
 endif
+
 
 if has('gui_running')
     nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
@@ -50,4 +50,6 @@ highlight Normal ctermbg=none
 
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
+
 filetype plugin indent on
+
