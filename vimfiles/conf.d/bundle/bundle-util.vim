@@ -38,7 +38,6 @@ function! s:hooks.on_source(bundle)
                 \| call vimshell#altercmd#define('l', 'll')
                 \| call vimshell#altercmd#define('ll', 'ls -l')
                 \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
-
     function! MyChpwd(args, context)
         call vimshell#execute('ls')
     endfunction
@@ -116,6 +115,18 @@ function! s:hooks.on_source(bundle)
 endfunction 
 
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
+if neobundle#tap('vim-fugitive')
+    autocmd MyAutoCmd BufReadPost call ConfigOnGitRepository()
+    function! ConfigOnGitRepository()
+        if !exists('b:git_dir')
+            return
+        endif
+        autocmd MyAutoCmd BufWrite :<C-u>Gwrite<CR>
+    endfunction
+    " function! neobundle#hooks.on_source(bundle)
+    " endfunction
+    call neobundle#untap()
+endif
 
 command! FollowSymlink call s:SwitchToActualFile()
 function! s:SwitchToActualFile()
