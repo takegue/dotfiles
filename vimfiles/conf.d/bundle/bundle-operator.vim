@@ -5,6 +5,7 @@ NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'tpope/vim-commentary'                        "コメント切り替えオペレータ
 NeoBundle 'tpope/vim-surround'                          "surround記号編集オペレータ
+NeoBundle 'tpope/vim-unimpaired'                        "バッファ移動用等
 "sort用オtpope/vim-operator-userペレータ
 NeoBundle 'emonkak/vim-operator-sort', {                
             \ 'depends' : ['tpope/vim-operator-user']   
