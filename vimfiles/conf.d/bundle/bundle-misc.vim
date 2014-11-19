@@ -33,6 +33,7 @@ function! s:hooks.on_source(bundle)
 
     augroup lingr-vim
         autocmd!
+        " autocmd User WinEnter
         autocmd User plugin-lingr-message
         \   let s:temp = lingr#get_last_message()
         \|  if !empty(s:temp)
