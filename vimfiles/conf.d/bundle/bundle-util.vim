@@ -116,15 +116,23 @@ endfunction
 
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
 if neobundle#tap('vim-fugitive')
-    autocmd MyAutoCmd BufReadPost call ConfigOnGitRepository()
-    function! ConfigOnGitRepository()
+    function! s:ConfigOnGitRepository()
         if !exists('b:git_dir')
             return
         endif
-        autocmd MyAutoCmd BufWrite :<C-u>Gwrite<CR>
+        nnoremap [git] <Nop>
+        nmap <Leader>g [git]
+        nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
+        nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
+        nnoremap <buffer> [git]l :<C-u>Glog<CR>
+        nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
+        nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
+        nnoremap <buffer> [git]C :<C-u>Git commit --amend<CR>
+        nnoremap <buffer> [git]b :<C-u>Gblame<CR>
     endfunction
-    " function! neobundle#hooks.on_source(bundle)
-    " endfunction
+    function! neobundle#hooks.on_source(bundle)
+        autocmd MyAutoCmd BufEnter * call s:ConfigOnGitRepository()
+    endfunction
     call neobundle#untap()
 endif
 
