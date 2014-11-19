@@ -13,21 +13,20 @@ rm ~/.vim
 ln -s $dir/vimfiles ~/.vim
 mkdir -p  ~/.vim/bundle/
 
-ln -s $dir/.tmux.conf  ~/.tmux.conf
 
-for dotfile in $dir/.* ; do
-	dstpath="$HOME/${dotfile##*/}" 
+for dotfile in $dir/.*rc $dir/.tmux.conf ; do
+    dstpath="$HOME/${dotfile##*/}" 
 
-	if [ -e $dstpath ]; then
-		rm $dstpath
-		echo "remove $dstpath"
-	fi 
-	
-	echo "$dotfile => $dstpath" 
-	ln -s $dotfile ~/ 
+    if [ -e $dstpath ]; then
+        rm $dstpath
+        echo "remove $dstpath"
+    fi 
+
+    echo "$dotfile => $dstpath" 
+    ln -s $dotfile ~/ 
 done
 
 mkdir -p ~/.vim/bundle
 if [ ! -e ./.vim/bundle/neobundle.vim ] ; then
-	git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+    git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 fi

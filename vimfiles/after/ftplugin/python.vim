@@ -1,3 +1,5 @@
+
+setlocal nowrap
 setlocal textwidth=79
 setlocal expandtab
 setlocal tabstop=4
@@ -9,8 +11,11 @@ setlocal nowrap
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath # !/usr/bin/env Python<CR>
+inoremap """ """<CR>"""<Up>
+inoremap ''' '''<CR>'''<Up>
 iab <buffer> ### ###############################################################################
 
+"TODO:ローカル(.local/path/to/python)も追加する
 "python sys.pathを set pathで追加
 python << EOF
 import os

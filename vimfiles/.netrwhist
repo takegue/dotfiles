@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/sougen/takeno_a6/dotfiles/vimfiles/conf.d/bundle'
-let g:netrw_dirhist_2='/sougen/nagata/src/ajb129/haruniwa'
-let g:netrw_dirhist_3='/sougen/takeno_a6/.local/lib/python2.6/site-packages/sklearn'

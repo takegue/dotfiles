@@ -38,7 +38,6 @@ function! s:hooks.on_source(bundle)
                 \| call vimshell#altercmd#define('l', 'll')
                 \| call vimshell#altercmd#define('ll', 'ls -l')
                 \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
-
     function! MyChpwd(args, context)
         call vimshell#execute('ls')
     endfunction
@@ -116,6 +115,19 @@ function! s:hooks.on_source(bundle)
 endfunction 
 
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
+if neobundle#tap('vim-fugitive')
+    autocmd MyAutoCmd BufReadPost call ConfigOnGitRepository()
+    function! ConfigOnGitRepository()
+        if !exists('b:git_dir')
+            return
+        endif
+        autocmd MyAutoCmd BufWrite :<C-u>Gwrite<CR>
+    endfunction
+    " function! neobundle#hooks.on_source(bundle)
+    " endfunction
+    call neobundle#untap()
+endif
+
 command! FollowSymlink call s:SwitchToActualFile()
 function! s:SwitchToActualFile()
     let fname = resolve(expand('%:p'))
@@ -149,12 +161,12 @@ let g:EasyMotion_do_mapping = 0
 " =======================================
 " Jump to anywhere you want by just `4` or `3` key strokes without thinking!
 " `s{char}{char}{target}`
-" map f <Plug>(easymotion-f)
-" map F <Plug>(easymotion-F)
-" map t <Plug>(easymotion-t)
-" map T <Plug>(easymotion-T)
-nmap s <Plug>(easymotion-s2)
-xmap s <Plug>(easymotion-s2)
+map <Leader>f <Plug>(easymotion-fl)
+map <Leader>F <Plug>(easymotion-Fl)
+map <Leader>t <Plug>(easymotion-tl)
+map <Leader>T <Plug>(easymotion-Tl)
+nmap gs <Plug>(easymotion-s2)
+xmap gs <Plug>(easymotion-s2)
 omap z <Plug>(easymotion-s2)
 " Of course, you can map to any key you want such as `<Space>`
 " map <Space>(easymotion-s2)
@@ -166,8 +178,8 @@ let g:EasyMotion_smartcase = 1
 " Line Motions
 " =======================================
 " `JK` Motions: Extend line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+map gj <Plug>(easymotion-j)
+map gk <Plug>(easymotion-k)
 " keep cursor column with `JK` motions
 let g:EasyMotion_startofline = 0
 

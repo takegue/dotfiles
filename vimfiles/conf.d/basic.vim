@@ -15,7 +15,7 @@ set showmatch           "括弧入力時の対応する括弧を表示
 set list                " 不可視文字の可視化
 set number              " 行番号の表示
 set relativenumber      " 相対行番号の表示
-set wrap                " 長いテキストの折り返し
+set nowrap                " 長いテキストの折り返し
 set textwidth=0         " 自動的に改行が入るのを無効化
 set colorcolumn=80      " その代わり80文字目にラインを入れる
 set cursorline          " 編集中の行のハイライト 
@@ -63,11 +63,11 @@ set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 
 if has('unnamedplus') && !(has("win32") || has("win64"))
-    set clipboard=unnamedplus,autoselectplus
+    set clipboard=unnamedplus,autoselect
+    
 else
     set clipboard=unnamed
 endif
-
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
