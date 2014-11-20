@@ -134,11 +134,11 @@ nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> gh :tabprevious<CR>
 
 "--------------------------------------------------
-" Key Mapping - QuickFix
+" Key Mapping - QuickFix Window
 "--------------------------------------------------
-nnoremap<silent> <Space>n :<C-u>cnext<CR>
-nnoremap<silent> <Space>b :<C-u>cprevious<CR>
-nnoremap<silent> <Space>w :<C-u>cwindow<CR>
+" nnoremap<silent> q] :<C-u>cnext<CR>
+" nnoremap<silent> <Space>b :<C-u>cprevious<CR>
+" nnoremap<silent> <Space>w :<C-u>cwindow<CR>
 
 "--------------------------------------------------
 " Key Mapping - abbreviattions

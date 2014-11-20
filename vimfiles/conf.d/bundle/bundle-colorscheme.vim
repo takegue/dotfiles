@@ -9,6 +9,7 @@ NeoBundle 'jpo/vim-railscasts-theme'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'sjl/badwolf'
 
 set t_Co=256
 if $COLORTERM == 'gnome-terminal'

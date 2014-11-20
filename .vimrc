@@ -1,7 +1,6 @@
 "--------------------------------------------------
 " .vimrc 設定ファイルの大元
 "--------------------------------------------------
-"
 "Plugin Files: conf.d/*.vim 
 "Use 'gf' to move to each configuration
 "  "conf.d/basic.vim"
@@ -11,13 +10,12 @@
 "  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
 "  | "conf.d/bundle/bundle-design.vim"       #vimの見た目のbundle
 "  | "conf.d/bundle/bundle-editor.vim"
-"  | "conf.d/bundle/bundle-misc.vim" sdf
+"  | "conf.d/bundle/bundle-misc.vim"
 "  | "conf.d/bundle/bundle-operator.vim"
 "  | "conf.d/bundle/bundle-programming.vim"
 "  | "conf.d/bundle/bundle-textobj.vim"
 "  | "conf.d/bundle/bundle-unite.vim"
 "  | "conf.d/bundle/bundle-util.vim"
-
 augroup MyAutoCmd
     autocmd!
 augroup END
