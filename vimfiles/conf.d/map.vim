@@ -86,7 +86,6 @@ nnoremap <silent> [toggle]p : set paste!<CR>
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
 
-
 "--------------------------------------------------
 " Key Mapping - Tab page
 "--------------------------------------------------
@@ -146,14 +145,21 @@ nnoremap <silent> gh :tabprevious<CR>
 let loaded_matchparen = 1 "matchparen pluginをオフ
 
 "自動で括弧内に移動
-inoremap {} {}<left>
-inoremap () ()<left>
-inoremap [] []<left>
-inoremap <> <><left>
-inoremap '' ''<left>
-inoremap `` ``<left>
-inoremap "" ""<left>
+" inoremap {} {}<left>
+" inoremap () ()<left>
+" inoremap [] []<left>
+" inoremap <> <><left>
+" inoremap '' ''<left>
+" inoremap `` ``<left>
+" inoremap "" ""<left>
 
+inoremap {} {}<`0`><ESC>F{a
+inoremap () ()<`0`><ESC>F(a
+inoremap [] []<`0`><ESC>F[a
+inoremap <> <><`0`><ESC>2F<a
+inoremap '' ''<`0`><ESC>2F'a
+inoremap `` ``<`0`><ESC>4F`a
+inoremap "" ""<`0`><ESC>2F"a
 
 "自動で---, ===を変換"
 iab ---- --------------------------------------------------<CR>
