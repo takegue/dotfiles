@@ -127,7 +127,7 @@ if neobundle#tap('vim-fugitive')
         nnoremap <buffer> [git]l :<C-u>Glog<CR>
         nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
         nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
-        nnoremap <buffer> [git]C :<C-u>Git commit --amend<CR>
+        nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
         nnoremap <buffer> [git]b :<C-u>Gblame<CR>
     endfunction
     function! neobundle#hooks.on_source(bundle)
