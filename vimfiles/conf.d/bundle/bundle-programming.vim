@@ -160,6 +160,7 @@ NeoBundle 'klen/python-mode', {
              \   "unix"      : "pip install --user pylint rope pyflake pep8"
              \ }}
 
+
 let s:hooks = neobundle#get_hooks("python-mode")
 function! s:hooks.on_source(bundle)
 
@@ -181,8 +182,8 @@ function! s:hooks.on_source(bundle)
     " let g:pymode_virtualenv = 1
     " let g:pymode_virtualenv_path = $VIRTUAL_ENV
 
-    let g:pymode_run = 1            "融通が利かないのでオフ
-    let g:pymode_run_bind = '<leader>r'
+    let g:pymode_run = 0            "かなり役立たずなのでoff
+    " let g:pymode_run_bind = '<leader>R'
 
     let g:pymode_breakpoint = 1
     let g:pymode_breakpoint_bind = '<leader>b'
@@ -194,7 +195,7 @@ function! s:hooks.on_source(bundle)
     let g:pymode_lint_unmodified = 0
     let g:pymode_lint_on_fly = 0
     let g:pymode_lint_message = 1
-    let g:pymode_lint_ignore = "E501,W"
+    " let g:pymode_lint_ignore = "E501,W"
     " let g:pymode_lint_select = "E501,W0011,W430"
     let g:pymode_lint_cwindow = 1
 
@@ -204,7 +205,7 @@ function! s:hooks.on_source(bundle)
 
     let g:pymode_rope_completion = 1
     let g:pymode_rope_complete_on_dot = 1
-    let g:pymode_rope_completion_bind = '<C-Space>'
+    let g:pymode_rope_completion_bind = '<C-N>'
 
     let g:pymode_rope_autoimport = 1
     let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'sys']
@@ -214,7 +215,7 @@ function! s:hooks.on_source(bundle)
     "
     let g:pymode_rope_autoimport_import_after_complete = 0
 
-    let g:pymode_rope_goto_definition_bind = 'gd'
+    let g:pymode_rope_goto_definition_bind = 'gf'
     " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
 
     let g:pymode_rope_rename_bind = 'R'
@@ -228,6 +229,7 @@ function! s:hooks.on_source(bundle)
     "よくわからない機能たち
     " let g:pymode_rope_move_bind = '<C-c>rv'
     " let g:pymode_rope_change_signature_bind = '<C-c>rs'
+    let g:pymode_lint_sort = ['E', 'C', 'I']  
 
     let g:pymode_syntax_all = 1
     let g:pymode_syntax_print_as_function = 0
@@ -254,7 +256,9 @@ function! s:hooks.on_source(bundle)
     " Highlight docstrings as pythonDocstring (otherwise as pythonString)
     let g:pymode_syntax_docstrings = g:pymode_syntax_all
 
+    
     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
+    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python -m pdb ". expand('%').'<CR>'
 
     autocmd MyAutoCmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
     autocmd MyAutoCmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
