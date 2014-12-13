@@ -141,13 +141,14 @@ endif
 
 command! FollowSymlink call s:SwitchToActualFile()
 function! s:SwitchToActualFile()
-    let fname = resolve(expand('%:p'))
-    let pos = getpos('.')
-    bwipeout %
+    let l:fname = resolve(expand('%:p'))
+    let l:pos = getpos('.')
+    let l:bufname = bufname('%')
+    enew
+    exec 'bw '. l:bufname
     exec "e" . fname
     call setpos('.', pos)
 endfunction
-
 " NeoBundleLazy 'rking/ag.vim'          "ag(Silver Searcherのエンジン)
 " let s:hooks = neobundle#get_hooks("ag.vim")
 " function! s:hooks.on_source(bundle) 
