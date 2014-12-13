@@ -8,14 +8,21 @@ cmap w!! w !sudo tee > /dev/null %
 command! Todo call s:Todo() " Todoコマンド
 command! Memo call s:Memo() " Memoコマンド
 " 一時ファイルコマンド
-command! -nargs=1 -complete=filetype Tmp edit ~/.vim_tmp/tmp.<args>
-command! -nargs=1 -complete=filetype Temp edit ~/.vim_tmp/tmp.<args>
 
-" vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
-autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
-autocmd MyAutoCmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
-autocmd MyAutoCmd BufNewFile,BufRead *.todo set nonumber norelativenumber filetype=markdown
-autocmd MyAutoCmd BufNewFile,BufRead *.memo set nonumber norelativenumber filetype=markdown
+" Open junk file."{{{
+command! -nargs=0 -complete=filetype Tmp call s:open_junk_file()
+command! -nargs=0 -complete=filetype Temp call s:open_junk_file()
+function! s:open_junk_file()
+  let l:junk_dir = $HOME . '/.vim_tmp'. strftime('/%Y/%m')
+  if !isdirectory(l:junk_dir)
+    call mkdir(l:junk_dir, 'p')
+  endif
+
+  let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+  if l:filename != ''
+    execute 'edit ' . l:filename
+  endif
+endfunction "}}}
 
 
 function! s:Todo()
@@ -40,13 +47,22 @@ function! s:Memo()
     unlet! l:path
 endfunction
 
-" after/ftpluginの作成 User設定のftp
+augroup edit_memo
+    autocmd!
+    autocmd BufNewFile,BufRead *.todo 
+                \ set nonumber norelativenumber filetype=markdown
+    autocmd BufNewFile,BufRead *.memo 
+                \ set nonumber norelativenumber filetype=markdown
+augroup END
+
+" after/ftpluginの作成 User設定のfiletype plugin
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/" 
 nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
 function! s:openFTPluginFile()
     let l:ftpFileName = g:ftpPath . &filetype . ".vim"
     execute 'botright vsplit ' . l:ftpFileName
 endfunction 
+
 
 function! s:ChangeCurrentDir(directory, bang)
     if a:directory == ''
@@ -66,3 +82,23 @@ function! s:mkdir(dir, force)
         call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
     endif
 endfunction
+
+" vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
+
+augroup MyAutoCmd
+    autocmd!
+    autocmd VimEnter * call s:ChangeCurrentDir('', '')
+    autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
+    " make, grep などのコマンド後に自動的にQuickFixを開く
+    autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+    " QuickFixおよびHelpでは q でバッファを閉じる
+    autocmd FileType help,qf nnoremap <buffer> q <C-w>c
+    autocmd FileType help,qf nnoremap <buffer> q <C-w>c
+    autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
+
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+
+    autocmd WinLeave * set nocursorline norelativenumber 
+    autocmd WinEnter * if &number | set cursorline relativenumber | endif
+augroup END
+

@@ -98,7 +98,10 @@ NeoBundle 'Shougo/neosnippet.vim' , {
             \}
 let s:hooks = neobundle#get_hooks("neosnippet.vim")
 function! s:hooks.on_source(bundle)
-    autocmd MyAutoCmd InsertLeave * NeoSnippetClearMarkers
+    augroup neosnippet_autocmd
+        autocmd!
+        autocmd MyAutoCmd InsertLeave * NeoSnippetClearMarkers
+    augroup END
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)

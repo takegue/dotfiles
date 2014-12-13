@@ -3,6 +3,7 @@
 "------------------------------------------------- 
 NeoBundle 'vim-jp/vimdoc-ja'        " ヘルプの日本語化
 " NeoBundle 'rbgrouleff/bclose.vim'
+NeoBundle 'Shougo/neobundle-vim-recipes'
 
 NeoBundleLazy 'tsukkee/lingr-vim', {
             \ 'autoload' : {

@@ -3,6 +3,7 @@
 "-------------------------------------------------- 
 "<Leader>を,に変更
 let mapleader=','
+let maplocalleader='\'
 
 "素早くjj と押すことでESCとみなす
 " inoremap jj <Esc>
@@ -69,6 +70,13 @@ nnoremap <C-Right>    <Nop>
 nnoremap <C-Up>       <Nop>
 nnoremap <C-Down>     <Nop>
 
+"
+if has('gui_running')
+    nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
+else
+    nnoremap <silent> <Space>.  :<C-u>e $MYVIMRC<CR>
+endif
+
 "tmux向け設定"
 "--------------------------------------------------
 " Key Mapping - Toggle
@@ -85,6 +93,7 @@ nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR
 nnoremap <silent> [toggle]p : set paste!<CR> 
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
+"
 
 "--------------------------------------------------
 " Key Mapping - Tab page
