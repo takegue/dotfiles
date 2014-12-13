@@ -85,19 +85,3 @@ let s:local_vimrc = expand('~/.vimrc.local')
 if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
 endif
-  
-"==================================================
-" autocmd Configuration
-"==================================================
-" make, grep などのコマンド後に自動的にQuickFixを開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
-" QuickFixおよびHelpでは q でバッファを閉じる
-autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
-autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
-autocmd MyAutoCmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
-
-autocmd MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-
-autocmd MyAutoCmd WinLeave * set nocursorline norelativenumber 
-autocmd MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
-

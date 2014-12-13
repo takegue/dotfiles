@@ -89,33 +89,6 @@ nnoremap <silent> [toggle]p : set paste!<CR>
 "--------------------------------------------------
 " Key Mapping - Tab page
 "--------------------------------------------------
-" function! s:my_tabline()  "{{{
-"     let s = ''
-"     for i in range(1, tabpagenr('$'))
-"         let bufnrs = tabpagebuflist(i)
-"         let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-"         let no = i  " display 0-origin tabpagenr.
-"         let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-"         let title = fnamemodify(bufname(bufnr), ':t')
-"         let title = '[' . title . ']'
-"         let s .= '%'.i.'T'
-"         let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-"         let s .= no . ':' . title
-"         let s .= mod
-"         let s .= '%#TabLineFill# '
-"     endfor
-"     let s .= '%#TabLineFill#%T%=%#TabLine#'
-"     return s
-" endfunction "}}}
-
-" " Anywhere SID.
-" function! s:SID_PREFIX()
-"     return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-" endfunction
-
-" let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-" set showtabline=2 " 常にタブラインを表示
-
 " The prefix key.
 nnoremap    [Tab]   <Nop>
 nmap    <Leader>t   [Tab]
@@ -144,22 +117,23 @@ nnoremap <silent> gh :tabprevious<CR>
 "--------------------------------------------------
 let loaded_matchparen = 1 "matchparen pluginをオフ
 
-"自動で括弧内に移動
-" inoremap {} {}<left>
-" inoremap () ()<left>
-" inoremap [] []<left>
-" inoremap <> <><left>
-" inoremap '' ''<left>
-" inoremap `` ``<left>
-" inoremap "" ""<left>
 
-inoremap {} {}<`0`><ESC>F{a
-inoremap () ()<`0`><ESC>F(a
-inoremap [] []<`0`><ESC>F[a
-inoremap <> <><`0`><ESC>2F<a
-inoremap '' ''<`0`><ESC>2F'a
-inoremap `` ``<`0`><ESC>4F`a
-inoremap "" ""<`0`><ESC>2F"a
+"自動で括弧内に移動
+inoremap {} {}<left>
+inoremap () ()<left>
+inoremap [] []<left>
+inoremap <> <><left>
+inoremap '' ''<left>
+inoremap `` ``<left>
+inoremap "" ""<left>
+
+" inoremap {} {}<`0`><ESC>F{a
+" inoremap () ()<`0`><ESC>F(a
+" inoremap [] []<`0`><ESC>F[a
+" inoremap <> <><`0`><ESC>2F<a
+" inoremap '' ''<`0`><ESC>2F'a
+" inoremap `` ``<`0`><ESC>4F`a
+" inoremap "" ""<`0`><ESC>2F"a
 
 "自動で---, ===を変換"
 iab ---- --------------------------------------------------<CR>

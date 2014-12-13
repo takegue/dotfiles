@@ -25,7 +25,6 @@ function! MkdCheckboxFoldText()
     return getline(v:foldstart) . ' (' . (v:foldend - v:foldstart) . ' lines) '
 endfunction
 
-
 if has('gui_running')
     inoremap <buffer><silent> <CR> <Space><Space><CR>
     inoremap <buffer><silent> <C-CR>  <CR><CR>
@@ -33,7 +32,6 @@ elseif &term == 'xterm-256color'
     inoremap <buffer><silent> <CR> <Space><Space><CR>
     inoremap <buffer><silent>    <CR><CR>
 endif
-
 
 " todoリストのon/offを切り替える
 nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
@@ -51,12 +49,5 @@ function! ToggleCheckbox()
         call setline('.', l:result)
     end
 endfunction
-
-syn match MkdCheckboxMark /-\s\[x\]\s.\+/ display containedin=ALL
-hi MkdCheckboxMark ctermfg=green
-syn match MkdCheckboxUnmark /-\s\[\s\]\s.\+/ display containedin=ALL
-hi MkdCheckboxUnmark ctermfg=red 
-
-
 
 

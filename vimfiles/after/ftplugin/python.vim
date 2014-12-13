@@ -10,7 +10,7 @@ setlocal nowrap
 
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
-iab <buffer> pypath # !/usr/bin/env Python<CR>
+iab <buffer> pypath #!/usr/bin/env python<CR>
 inoremap """ """<CR>"""<Up>
 inoremap ''' '''<CR>'''<Up>
 iab <buffer> ### ###############################################################################

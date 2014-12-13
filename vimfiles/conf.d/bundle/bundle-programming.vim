@@ -7,6 +7,7 @@ NeoBundle 'tejr/vim-tmux'
 "--------------------------------------------------
 NeoBundle 'thinca/vim-quickrun'
 nnoremap <silent> <Leader>r :QuickRun<CR>
+nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
 nnoremap <silent> <Leader>se :QuickRun sql<CR>
 let s:hooks = neobundle#get_hooks("vim-quickrun")
 function! s:hooks.on_source(bundle)
@@ -57,6 +58,7 @@ function! s:hooks.on_source(bundle)
         autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
         autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
     augroup END
+
     function! MakeMySQLCommandOptions()
         if !exists("g:mysql_config_usr")
             let g:mysql_config_user = input("user> ")
@@ -93,7 +95,6 @@ function! s:hooks.on_source(bundle)
         if exists("g:mysql_config_otheropts")
             call add(optlist, g:mysql_config_otheropts)
         endif
-
         return join(optlist, ' ')
     endfunction 
 endfunction 
@@ -149,6 +150,16 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
 "     let g:jedi#completions_enabled = 0
 " endfunction
 
+NeoBundle 'ivanov/vim-ipython', {
+             \ "autoload"    : {
+             \   "filetypes" : ["python", "python3"],
+             \ }}
+let s:hooks = neobundle#get_hooks('vim-ipython')
+function! s:hooks.on_source(bundle)
+
+endfunction
+unlet s:hooks
+
 
 NeoBundle 'klen/python-mode', {
              \ "autoload"    : {
@@ -164,7 +175,7 @@ NeoBundle 'klen/python-mode', {
 let s:hooks = neobundle#get_hooks("python-mode")
 function! s:hooks.on_source(bundle)
 
-    let g:pymode = 1
+    let g:pymode = 0
     let g:pymode_warnings = 1
     let g:pymode_paths = []
     let g:pymode_trim_whitespaces = 1
@@ -258,7 +269,7 @@ function! s:hooks.on_source(bundle)
 
     
     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python -m pdb ". expand('%').'<CR>'
+    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
 
     autocmd MyAutoCmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
     autocmd MyAutoCmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
