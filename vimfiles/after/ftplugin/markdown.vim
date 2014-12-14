@@ -1,7 +1,15 @@
 set nowrap
 
-" todoリストを簡単に入力する
-iab <buffer> tl - [ ]
+inoremap <CR> <Space><Space><CR>
+inoremap <buffer><silent> <CR> <Space><Space><CR>
+" todoリストのon/offを切り替える
+nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+
+augroup markdown_augrop
+    autocmd!
+    autocmd BufWritePre <buffer> %s/^\s\+$//ge
+augroup END
 
 " 入れ子のリストを折りたたむ
 setlocal foldmethod=expr foldexpr=MkdCheckboxFold(v:lnum) foldtext=MkdCheckboxFoldText()
@@ -33,9 +41,9 @@ elseif &term == 'xterm-256color'
     inoremap <buffer><silent>    <CR><CR>
 endif
 
-" todoリストのon/offを切り替える
-nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
-vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+" todoリストを簡単に入力する
+iab <buffer> tl - [ ]
+
 
 " 選択行のチェックボックスを切り替える
 function! ToggleCheckbox()

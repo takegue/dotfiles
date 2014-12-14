@@ -22,10 +22,9 @@ import os
 import sys
 import vim
 
-sys.path.append('~/.local/lib/python2.6/site-packages')
-sys.path.append('~/.local/lib/python2.7/site-packages')
-sys.path.append('~/.local/lib/python3.3/site-packages')
-sys.path.append('~/.local/lib/python3.4/site-packages')
+ver = sys.version_info
+fmt = '~/.local/lib/python{major}.{minor}/site-packages'
+sys.path.append(fmt.format(major=ver.major, minor=ver.minor))
 
 for p in sys.path:
     # Add each directory in sys.path, if it exists.
