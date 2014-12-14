@@ -9,7 +9,7 @@
 #}}}
 
 # Hidden file i.e) account infomation
-# source ~/.mutt/hidden
+source ~/.mutt/accounts/ntt
 
 ###################
 # For using mutt in multi-account{{{
@@ -26,7 +26,6 @@
 #        set smtp_pass='YOUR_PASSWORD'
 #        # vim: set ft=muttrc:
 #    }}}
-#
 #   Example2(For Gmail):{{{
 #        mailboxes imaps://imap.gmail.com/inbox
 #        set hostname="gmail.com"
@@ -43,6 +42,7 @@
 #        # vim: set filetype=muttrc:
 #   }}}
 # 
+#
 # メールヘッダを隠さない
 unignore *
 # ヘッダの並び順をリセットする
@@ -98,6 +98,7 @@ bind index,pager,attach,compose \cb previous-page
 bind index gg first-entry
 # Gで一番下にスクロール
 bind index G last-entry
+bind index R fetch-mail
 # ^nで次のエントリに行く
 bind index,browser \cn next-entry
 # ^pで前のエントリに行く
@@ -105,6 +106,7 @@ bind index,browser \cp previous-entry
 # メッセージの最初に飛ぶ
 bind pager gg top
 # メッセージの最後に飛ぶ
+#
 bind pager G bottom
 # jで一行下にスクロール
 bind pager j next-line
@@ -161,3 +163,4 @@ mono indicator bold
 mono error bold
 # }}}モノクロの時の区別
 # vim: fdm=marker:
+alias takeno_a6 Takeno Shunsuke <takeno_a6@co01.cslab.kecl.ntt.co.jp>

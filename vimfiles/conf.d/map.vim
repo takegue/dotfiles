@@ -21,6 +21,9 @@ nnoremap <silent> <Esc><Esc>    :noh<CR>
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
 
+nnoremap g; g;zz
+nnoremap g, g,zz
+
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
 nnoremap N Nzz
@@ -145,21 +148,14 @@ nnoremap <silent> gh :tabprevious<CR>
 let loaded_matchparen = 1 "matchparen pluginをオフ
 
 "自動で括弧内に移動
-" inoremap {} {}<left>
-" inoremap () ()<left>
-" inoremap [] []<left>
-" inoremap <> <><left>
-" inoremap '' ''<left>
-" inoremap `` ``<left>
-" inoremap "" ""<left>
+inoremap {} {}<left>
+inoremap () ()<left>
+inoremap [] []<left>
+inoremap <> <><left>
+inoremap '' ''<left>
+inoremap `` ``<left>
+inoremap "" ""<left>
 
-inoremap {} {}<`0`><ESC>F{a
-inoremap () ()<`0`><ESC>F(a
-inoremap [] []<`0`><ESC>F[a
-inoremap <> <><`0`><ESC>2F<a
-inoremap '' ''<`0`><ESC>2F'a
-inoremap `` ``<`0`><ESC>4F`a
-inoremap "" ""<`0`><ESC>2F"a
 
 "自動で---, ===を変換"
 iab ---- --------------------------------------------------<CR>

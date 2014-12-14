@@ -10,7 +10,7 @@ setlocal nowrap
 
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
-iab <buffer> pypath # !/usr/bin/env Python<CR>
+iab <buffer> pypath #!/usr/bin/env python<CR>
 inoremap """ """<CR>"""<Up>
 inoremap ''' '''<CR>'''<Up>
 iab <buffer> ### ###############################################################################
@@ -22,15 +22,14 @@ import os
 import sys
 import vim
 
-sys.path.append('~/.local/lib/python2.6/site-packages')
-sys.path.append('~/.local/lib/python2.7/site-packages')
-sys.path.append('~/.local/lib/python3.3/site-packages')
-sys.path.append('~/.local/lib/python3.4/site-packages')
-
+sys.path.append('~/.local/lib/python{}.{}/site-packages'.format(
+                            sys.version_info.major, 
+                            sys.version_info.minor))
+# Add each directory in sys.path, if it exists.
 for p in sys.path:
-    # Add each directory in sys.path, if it exists.
+# Add each directory in sys.path, if it exists.
     if os.path.isdir(p):
-        # Command 'set' needs backslash before each space.
+# Command 'set' needs backslash before each space.
         vim.command(r"setlocal path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 

@@ -16,6 +16,7 @@
 "  | "conf.d/bundle/bundle-textobj.vim"
 "  | "conf.d/bundle/bundle-unite.vim"
 "  | "conf.d/bundle/bundle-util.vim"
+"
 augroup MyAutoCmd
     autocmd!
 augroup END

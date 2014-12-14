@@ -41,7 +41,7 @@ function! s:my_cr_function()
     return pumvisible() ? neocomplete#close_popup() : "\<CR>"
 endfunction
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
@@ -62,12 +62,12 @@ inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
 "let g:neocomplete#enable_insert_char_pre = 1
 
 " AutoComplPop like behavior.
-" "let g:neocomplete#enable_auto_select = 1
+" let g:neocomplete#enable_auto_select = 1
 
 " Shell like behavior(not recommended).
 "set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
+" let g:neocomplete#enable_auto_select = 1
+" let g:neocomplete#disable_auto_complete = 1
 " inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
@@ -113,7 +113,6 @@ function! s:hooks.on_source(bundle)
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
                 \ "\<Plug>(neosnippet_expand_or_jump)"
                 \: "\<TAB>"
-    unlet s:hooks
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
@@ -124,4 +123,4 @@ function! s:hooks.on_source(bundle)
     endif
 
 endfunction 
-
+unlet s:hooks

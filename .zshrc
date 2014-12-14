@@ -208,11 +208,11 @@ alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 alias less='less -IMx4 -X -R'
 alias NOTE=mail_alart 
-alias -s py=python
+# alias -s py=python
 alias -g L='| less'
 #### Export Configurations #### 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib":"/usr/lib/x86_64-linux-gnu/"
-export PATH=$PATH:"/usr/local/bin"
+export PATH="/usr/local/bin":$PATH
+export LD_LIBRARY_PATH="/usr/local/lib":"/usr/lib/x86_64-linux-gnu/":$LD_LIBRARY_PATH
 # export PYTHONPATH=$PYTHONPATH
 
 if [ -f "$HOME/.zshrc_local" ]; then
@@ -230,5 +230,3 @@ function cd() {
     builtin cd $@ && ls;
 }
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"

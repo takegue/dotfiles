@@ -102,6 +102,16 @@ endfunction
 "--------------------------------------------------
 " Programming - Python
 "--------------------------------------------------
+NeoBundleLazy 'ivanov/vim-ipython', {
+            \ 'autoload'    : {
+            \   'filetypes' : ['python', 'python3'],
+            \ },
+            \ }
+let s:hooks = neobundle#get_hooks('vim-ipython')
+function! s:hooks.on_source(bundle)
+endfunction
+unlet s:hooks
+
 NeoBundleLazy 'alfredodeza/pytest.vim', {
             \ 'autoload'    : {
             \   'filetypes' : ['python', 'python3', 'pytest'],
@@ -200,15 +210,14 @@ function! s:hooks.on_source(bundle)
     let g:pymode_lint_cwindow = 1
 
     let g:pymode_rope = 1
-    let g:pymode_rope_autoimport = 1
-    let g:pymode_rope_lookup_project = 1
+    let g:pymode_rope_project_root = ""
+    let g:pymode_rope_lookup_project = 0
 
-    let g:pymode_rope_completion = 1
-    let g:pymode_rope_complete_on_dot = 1
-    let g:pymode_rope_completion_bind = '<C-N>'
+    let g:pymode_rope_completion = 0
+    let g:pymode_rope_complete_on_dot = 0
 
-    let g:pymode_rope_autoimport = 1
-    let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'sys']
+    let g:pymode_rope_autoimport = 0
+    let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'sys', 're', 'itertools', 'collections']
     let g:pymode_rope_autoimport_import_after_complete = 0
     let g:pymode_rope_organize_imports_bind = '<F11>'
 
