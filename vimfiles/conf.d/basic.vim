@@ -9,6 +9,7 @@ set helplang=ja,en
 set spelllang+=cjk
 set title               "編集中のファイル名を表示
 set ambiwidth=double    "全角文字で幅が崩れないように調整する
+set laststatus=2
 
 syntax on               "コードの色分け 
 set showmatch           "括弧入力時の対応する括弧を表示
@@ -28,6 +29,7 @@ set shiftwidth=4        "オートインデントの幅
 set softtabstop=4       "インデントをスペース4つ分に設定
 set expandtab           "タブ→スペースの変換
 set wildmenu wildmode=longest,full "コマンドラインの補間表示
+set foldmethod=marker
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
@@ -35,7 +37,6 @@ set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
 " 前時代的スクリーンベルを無
 set t_vb=
 set novisualbell
-
 
 "--------------------------------------------------
 " 検索設定
@@ -56,7 +57,7 @@ set shiftround              " '<'や'>'でインデントする際に'shiftwidth
 set infercase               " 補完時に大文字小文字を区別しない
 set virtualedit=all         " カーソルを文字が存在しない部分でも動けるようにする
 set hidden                  " バッファを閉じる代わりに隠す（Undo履歴を残すため）
-set switchbuf=useopen       " 新しく開く代わりにすでに開いてあるバッファを開く
+set switchbuf=usetab       " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch               " 対応する括弧などをハイライト表示する
 set matchtime=3             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
@@ -64,7 +65,6 @@ set history=10000           " ヒストリ機能を10000件まで有効にする
 
 if has('unnamedplus') && !(has("win32") || has("win64"))
     set clipboard=unnamedplus,autoselect
-    
 else
     set clipboard=unnamed
 endif
@@ -85,19 +85,3 @@ let s:local_vimrc = expand('~/.vimrc.local')
 if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
 endif
-  
-"==================================================
-" autocmd Configuration
-"==================================================
-" make, grep などのコマンド後に自動的にQuickFixを開く
-autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
-" QuickFixおよびHelpでは q でバッファを閉じる
-autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
-autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
-autocmd MyAutoCmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
-
-autocmd MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-
-autocmd MyAutoCmd WinLeave * set nocursorline norelativenumber 
-autocmd MyAutoCmd WinEnter * if &number | set cursorline relativenumber | endif
-

@@ -1,7 +1,15 @@
 set nowrap
 
-" todoリストを簡単に入力する
-iab <buffer> tl - [ ]
+inoremap <CR> <Space><Space><CR>
+inoremap <buffer><silent> <CR> <Space><Space><CR>
+" todoリストのon/offを切り替える
+nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+
+augroup markdown_augrop
+    autocmd!
+    autocmd BufWritePre <buffer> %s/^\s\+$//ge
+augroup END
 
 " 入れ子のリストを折りたたむ
 setlocal foldmethod=expr foldexpr=MkdCheckboxFold(v:lnum) foldtext=MkdCheckboxFoldText()
@@ -25,7 +33,6 @@ function! MkdCheckboxFoldText()
     return getline(v:foldstart) . ' (' . (v:foldend - v:foldstart) . ' lines) '
 endfunction
 
-
 if has('gui_running')
     inoremap <buffer><silent> <CR> <Space><Space><CR>
     inoremap <buffer><silent> <C-CR>  <CR><CR>
@@ -34,10 +41,9 @@ elseif &term == 'xterm-256color'
     inoremap <buffer><silent>    <CR><CR>
 endif
 
+" todoリストを簡単に入力する
+iab <buffer> tl - [ ]
 
-" todoリストのon/offを切り替える
-nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
-vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
 
 " 選択行のチェックボックスを切り替える
 function! ToggleCheckbox()
@@ -51,12 +57,5 @@ function! ToggleCheckbox()
         call setline('.', l:result)
     end
 endfunction
-
-syn match MkdCheckboxMark /-\s\[x\]\s.\+/ display containedin=ALL
-hi MkdCheckboxMark ctermfg=green
-syn match MkdCheckboxUnmark /-\s\[\s\]\s.\+/ display containedin=ALL
-hi MkdCheckboxUnmark ctermfg=red 
-
-
 
 

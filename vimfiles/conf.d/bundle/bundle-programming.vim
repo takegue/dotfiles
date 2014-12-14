@@ -7,6 +7,7 @@ NeoBundle 'tejr/vim-tmux'
 "--------------------------------------------------
 NeoBundle 'thinca/vim-quickrun'
 nnoremap <silent> <Leader>r :QuickRun<CR>
+nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
 nnoremap <silent> <Leader>se :QuickRun sql<CR>
 let s:hooks = neobundle#get_hooks("vim-quickrun")
 function! s:hooks.on_source(bundle)
@@ -57,6 +58,7 @@ function! s:hooks.on_source(bundle)
         autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
         autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
     augroup END
+
     function! MakeMySQLCommandOptions()
         if !exists("g:mysql_config_usr")
             let g:mysql_config_user = input("user> ")
@@ -93,7 +95,6 @@ function! s:hooks.on_source(bundle)
         if exists("g:mysql_config_otheropts")
             call add(optlist, g:mysql_config_otheropts)
         endif
-
         return join(optlist, ' ')
     endfunction 
 endfunction 
@@ -159,6 +160,16 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
 "     let g:jedi#completions_enabled = 0
 " endfunction
 
+NeoBundle 'ivanov/vim-ipython', {
+             \ "autoload"    : {
+             \   "filetypes" : ["python", "python3"],
+             \ }}
+let s:hooks = neobundle#get_hooks('vim-ipython')
+function! s:hooks.on_source(bundle)
+
+endfunction
+unlet s:hooks
+
 
 NeoBundle 'klen/python-mode', {
              \ "autoload"    : {
@@ -169,11 +180,7 @@ NeoBundle 'klen/python-mode', {
              \   "mac"       : "pip install --user pylint rope pyflake pep8",
              \   "unix"      : "pip install --user pylint rope pyflake pep8"
              \ }}
-
-
-let s:hooks = neobundle#get_hooks("python-mode")
-function! s:hooks.on_source(bundle)
-
+if neobundle#tap('python-mode')
     let g:pymode = 1
     let g:pymode_warnings = 1
     let g:pymode_paths = []
@@ -213,32 +220,39 @@ function! s:hooks.on_source(bundle)
     let g:pymode_rope_project_root = ""
     let g:pymode_rope_lookup_project = 0
 
-    let g:pymode_rope_completion = 0
-    let g:pymode_rope_complete_on_dot = 0
+    let g:pymode_rope_completion = 1
+    let g:pymode_rope_complete_on_dot = 1
+    let g:pymode_rope_completion_bind = '<C-N>'
 
-    let g:pymode_rope_autoimport = 0
-    let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'sys', 're', 'itertools', 'collections']
+    let g:pymode_rope_autoimport = 1
+    let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
+                \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
     let g:pymode_rope_autoimport_import_after_complete = 0
     let g:pymode_rope_organize_imports_bind = '<F11>'
-
-    "
-    let g:pymode_rope_autoimport_import_after_complete = 0
 
     let g:pymode_rope_goto_definition_bind = 'gf'
     " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
 
     let g:pymode_rope_rename_bind = 'R'
     " let g:pymode_rope_rename_module_bind = '<C-S-R>'
-    
+
     let g:pymode_rope_extract_method_bind = '<C-c>rm'
     let g:pymode_rope_extract_variable_bind = '<C-c>rl'
-
     let g:pymode_rope_use_function_bind = '<C-c>ru'
 
     "よくわからない機能たち
     " let g:pymode_rope_move_bind = '<C-c>rv'
     " let g:pymode_rope_change_signature_bind = '<C-c>rs'
     let g:pymode_lint_sort = ['E', 'C', 'I']  
+
+    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
+    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
+
+    augroup pymode_myautocmd
+        autocmd!
+        autocmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
+        autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
+    augroup END
 
     let g:pymode_syntax_all = 1
     let g:pymode_syntax_print_as_function = 0
@@ -265,15 +279,11 @@ function! s:hooks.on_source(bundle)
     " Highlight docstrings as pythonDocstring (otherwise as pythonString)
     let g:pymode_syntax_docstrings = g:pymode_syntax_all
 
-    
-    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python -m pdb ". expand('%').'<CR>'
-
-    autocmd MyAutoCmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
-    autocmd MyAutoCmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
-
-endfunction
-
+    function! neobundle#hooks.on_source(bundle)
+        
+    endfunction
+    call neobundle#untap()
+endif
 
 
 "--------------------------------------------------
