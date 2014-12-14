@@ -84,6 +84,9 @@ function! s:mkdir(dir, force)
 endfunction
 
 " vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
+"==================================================
+" autocmd Configuration
+"==================================================
 
 augroup MyAutoCmd
     autocmd!
@@ -100,5 +103,36 @@ augroup MyAutoCmd
 
     autocmd WinLeave * set nocursorline norelativenumber 
     autocmd WinEnter * if &number | set cursorline relativenumber | endif
+    autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle 
+    autocmd BufRead */conf.d/*.vim setlocal path+=$HOME/.vim/bundle 
 augroup END
 
+
+function! s:RestoreCursorPostion()
+  if line("'\"") <= line("$")
+    normal! g`"
+  endif
+endfunction
+
+" Jump to the previous position when file opend
+augroup vimrc_restore_cursor_position
+  autocmd!
+  autocmd BufWinEnter * call s:RestoreCursorPostion()
+augroup END
+
+augroup vimrc_change_cursorline_color
+    autocmd!
+    " インサートモードに入った時にカーソル行の色をブルーグリーンにする
+    " autocmd InsertEnter * highlight CursorLine ctermbg=23 guibg=yellow 
+    " autocmd InsertEnter * highlight CursorColumn ctermbg=24 guibg=#005f87
+    " " インサートモードを抜けた時にカーソル行の色を黒に近いダークグレーにする
+    " autocmd InsertLeave * highlight CursorLine ctermbg=236 guibg=#303030 
+    " autocmd InsertLeave * highlight CursorColumn ctermbg=236 guibg=#303030
+augroup END
+
+augroup edit_vimrc
+    autocmd!
+    autocmd BufRead .vimrc setlocal path+=$HOME/.vim 
+    autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+    autocmd BufWritePost */conf.d/*.vim nested source %
+augroup END

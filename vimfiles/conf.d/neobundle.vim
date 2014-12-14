@@ -35,6 +35,7 @@ else
 
     runtime! conf.d/bundle/*.vim
 
+
     call neobundle#end()
 
     " インストールされていないプラグインのチェックおよびダウンロード

@@ -29,6 +29,7 @@ set shiftwidth=4        "オートインデントの幅
 set softtabstop=4       "インデントをスペース4つ分に設定
 set expandtab           "タブ→スペースの変換
 set wildmenu wildmode=longest,full "コマンドラインの補間表示
+set foldmethod=marker
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
@@ -36,7 +37,6 @@ set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
 " 前時代的スクリーンベルを無
 set t_vb=
 set novisualbell
-
 
 "--------------------------------------------------
 " 検索設定
@@ -65,7 +65,6 @@ set history=10000           " ヒストリ機能を10000件まで有効にする
 
 if has('unnamedplus') && !(has("win32") || has("win64"))
     set clipboard=unnamedplus,autoselect
-    
 else
     set clipboard=unnamed
 endif

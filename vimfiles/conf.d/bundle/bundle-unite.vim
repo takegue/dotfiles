@@ -8,7 +8,8 @@ function! s:hooks.on_source(bundle)
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
 
-    nnoremap  [unite]f  :<C-u>Unite source<CR>
+    nnoremap  [unite]f  :<C-u>Unite buffer file file_mru<CR>
+    " nnoremap  [unite]f  :<C-u>Unite source<CR>
     nnoremap <silent> [unite]s
                 \ :<C-u>Unite -buffer-name=files -no-split
                 \ jump_point file_point buffer_tab
@@ -22,13 +23,15 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> [unite]o  :<C-u>Unite outline<CR>
     nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
     nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
-    nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
+    " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
     nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>   "bookmarkを追加可能に
 
     nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:%<CR>
     nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-buffer grep:./:-iR<CR>
     nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-buffer grep:$buffers::<C-R><C-W><CR>
     nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
+    nnoremap <silent> [unite]<C-h>  :<C-u>Unite -buffer-name=help help<CR>
+    nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
 
     " Start insert.
     "call unite#custom#profile('default', 'context', {
@@ -116,7 +119,6 @@ NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'tsukkee/unite-help'
 " nnoremap <silent> :<C-u>Unite -start-insert help<CR>
-nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
 
 NeoBundle 'Shougo/neossh.vim', {
             \ "depends": ['Shougo/unite.vim']
@@ -136,7 +138,10 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
 nnoremap <Leader>e :VimFilerExplorer<CR>
 nnoremap <Leader>E :VimFiler<CR>
 " close vimfiler automatically when there are only vimfiler open
-autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+augroup vimfile_options
+    " this one is which you're most likely to use?
+    autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+augroup end
 let s:hooks = neobundle#get_hooks("vimfiler.vim")
 function! s:hooks.on_source(bundle)
     let g:vimfiler_as_default_explorer = 1

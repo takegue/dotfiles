@@ -2,26 +2,28 @@
 " Design: mainly setting the vim design
 "-------------------------------------------------- 
 "
-NeoBundle 'nathanaelkane/vim-indent-guides' 
+" nathanaelkane/vim-indent-guides' : indent guide用のプラグイン{{{
+NeoBundle 'nathanaelkane/vim-indent-guides'  
 if neobundle#tap('vim-indent-guides')
     let g:indent_guides_enable_on_vim_startup = 1
-    let g:indent_guides_auto_colors = 0
-    let g:indent_guides_start_level = 1
+    let g:indent_guides_auto_colors = 1
+    let g:indent_guides_start_level = 2
     let g:indent_guides_guide_size = 1 
+    let g:indent_guides_default_mapping = 1
+    augroup indent_guides
+        autocmd!
+        " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
+        " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
+    augroup END
     function! neobundle#hooks.on_source(bundle)
-        augroup indent_guides
-            autocmd!
-            autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
-            autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
-        augroup END
     endfunction
     call neobundle#untap()
-endif
+endif "}}}
 
 
-"{{{ itchyny/lightline.vim : mstatusline用のプラグイン
+ "{{{ itchyny/lightline.vim : mstatusline用のプラグイン
 NeoBundle 'itchyny/lightline.vim' 
-if neobundle#tap('')
+if neobundle#tap('lightline.vim')
     function! MyModified()
         return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
     endfunction 
@@ -58,27 +60,27 @@ if neobundle#tap('')
         return winwidth(0) > 60 ? lightline#mode() : ''
     endfunction  
 
+    let g:lightline = {
+                \ 'colorscheme': 'powerline',
+                \ 'mode_map': {'c': 'NORMAL'},
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+                \ },
+                \ 'component_function': {
+                \   'modified': 'MyModified',
+                \   'readonly': 'MyReadonly',
+                \   'fugitive': 'MyFugitive',
+                \   'filename': 'MyFilename',
+                \   'fileformat': 'MyFileformat',
+                \   'filetype': 'MyFiletype',
+                \   'fileencoding': 'MyFileencoding',
+                \   'mode': 'MyMode'
+                \ },
+                \ 'component_visible_condition' :{
+                \   'modified': '&modified||!&modifiable',
+                \   'readonly': '&readonly'
+                \ }} 
     function! neobundle#hooks.on_source(bundle)
-        let g:lightline = {
-                    \ 'colorscheme': 'powerline',
-                    \ 'mode_map': {'c': 'NORMAL'},
-                    \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
-                    \ },
-                    \ 'component_function': {
-                    \   'modified': 'MyModified',
-                    \   'readonly': 'MyReadonly',
-                    \   'fugitive': 'MyFugitive',
-                    \   'filename': 'MyFilename',
-                    \   'fileformat': 'MyFileformat',
-                    \   'filetype': 'MyFiletype',
-                    \   'fileencoding': 'MyFileencoding',
-                    \   'mode': 'MyMode'
-                    \ },
-                    \ 'component_visible_condition' :{
-                    \   'modified': '&modified||!&modifiable',
-                    \   'readonly': '&readonly'
-                    \ }} 
     endfunction
     call neobundle#untap()
 endif

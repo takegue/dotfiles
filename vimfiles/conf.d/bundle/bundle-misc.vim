@@ -49,5 +49,6 @@ function! s:hooks.on_source(bundle)
         \|  endif
         \|  unlet s:temp
     augroup END
+
 endfunction
 unlet s:hooks
