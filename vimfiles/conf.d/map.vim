@@ -22,6 +22,9 @@ nnoremap <silent> <Esc><Esc>    :noh<CR>
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
 
+nnoremap g; g;zz
+nnoremap g, g,zz
+
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
 nnoremap N Nzz
@@ -93,7 +96,6 @@ nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR
 nnoremap <silent> [toggle]p : set paste!<CR> 
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
-"
 
 "--------------------------------------------------
 " Key Mapping - Tab page
@@ -114,12 +116,6 @@ nnoremap <silent> [Tab]x :tabclose<CR>
 nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> gh :tabprevious<CR>
 
-"--------------------------------------------------
-" Key Mapping - QuickFix Window
-"--------------------------------------------------
-" nnoremap<silent> q] :<C-u>cnext<CR>
-" nnoremap<silent> <Space>b :<C-u>cprevious<CR>
-" nnoremap<silent> <Space>w :<C-u>cwindow<CR>
 
 "--------------------------------------------------
 " Key Mapping - abbreviattions

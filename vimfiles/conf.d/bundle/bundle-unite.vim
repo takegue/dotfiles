@@ -7,7 +7,6 @@ let s:hooks = neobundle#get_hooks('unite.vim')
 function! s:hooks.on_source(bundle)
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
-
     nnoremap  [unite]f  :<C-u>Unite buffer file file_mru<CR>
     " nnoremap  [unite]f  :<C-u>Unite source<CR>
     nnoremap <silent> [unite]s
@@ -91,7 +90,6 @@ function! s:hooks.on_source(bundle)
         imap <silent><buffer><expr> <C-s>     unite#do_action('split')
     endfunction "}}}
 
-
     " mappingが競合するためデフォルトマッピング無効
     " let g:unite_no_default_keymappings = 1
     " nnoremap <silent> <Plug>(unite_exit)
@@ -148,7 +146,7 @@ function! s:hooks.on_source(bundle)
     let g:vimfiler_enable_auto_cd = 1
 
     " 2013-08-14 追記
-    let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.pyc\|\%^\..\+\)\%$'
+    let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
 
     " vimfiler specific key mappings
     autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()

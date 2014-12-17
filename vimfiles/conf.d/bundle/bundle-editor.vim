@@ -24,33 +24,6 @@ if neobundle#tap('neocomplete.vim')
                 \ 'scheme' : $HOME.'/.gosh_completions'
                 \ }
 
-    " Define keyword.
-    if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-    endif
-    let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-    "Or set this.
-    " let g:neocomplete#enable_cursor_hold_i = 1
-    " Or set this.
-    " let g:neocomplete#enable_insert_char_pre = 0
-
-    " AutoComplPop like behavior.
-    let g:neocomplete#enable_auto_select = 0
-    " Enable omni completion. {{{
-    augroup neocomplete_autocmd
-        autocmd!
-        autocmd CmdwinEnter * inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-    augroup END "}}}
-
-    " Enable heavy omni completion.
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-        let g:neocomplete#sources#omni#input_patterns = {}
-    endif
 
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
@@ -110,7 +83,6 @@ function! s:hooks.on_source(bundle)
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
                 \ "\<Plug>(neosnippet_expand_or_jump)"
                 \: "\<TAB>"
-    unlet s:hooks
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
@@ -120,4 +92,4 @@ function! s:hooks.on_source(bundle)
         set conceallevel=2 concealcursor=i
     endif
 endfunction 
-
+unlet s:hooks

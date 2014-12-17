@@ -27,9 +27,9 @@ fmt = '~/.local/lib/python{major}.{minor}/site-packages'
 sys.path.append(fmt.format(major=ver.major, minor=ver.minor))
 
 for p in sys.path:
-    # Add each directory in sys.path, if it exists.
+# Add each directory in sys.path, if it exists.
     if os.path.isdir(p):
-        # Command 'set' needs backslash before each space.
+# Command 'set' needs backslash before each space.
         vim.command(r"setlocal path+=%s" % (p.replace(" ", r"\ ")))
 EOF
 

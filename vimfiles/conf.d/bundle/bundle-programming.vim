@@ -103,6 +103,16 @@ endfunction
 "--------------------------------------------------
 " Programming - Python
 "--------------------------------------------------
+NeoBundleLazy 'ivanov/vim-ipython', {
+            \ 'autoload'    : {
+            \   'filetypes' : ['python', 'python3'],
+            \ },
+            \ }
+let s:hooks = neobundle#get_hooks('vim-ipython')
+function! s:hooks.on_source(bundle)
+endfunction
+unlet s:hooks
+
 NeoBundleLazy 'alfredodeza/pytest.vim', {
             \ 'autoload'    : {
             \   'filetypes' : ['python', 'python3', 'pytest'],
@@ -208,8 +218,8 @@ if neobundle#tap('python-mode')
     let g:pymode_lint_cwindow = 1
 
     let g:pymode_rope = 1
-    let g:pymode_rope_autoimport = 1
-    let g:pymode_rope_lookup_project = 1
+    let g:pymode_rope_project_root = ""
+    let g:pymode_rope_lookup_project = 0
 
     let g:pymode_rope_completion = 1
     let g:pymode_rope_complete_on_dot = 1
@@ -229,7 +239,6 @@ if neobundle#tap('python-mode')
 
     let g:pymode_rope_extract_method_bind = '<C-c>rm'
     let g:pymode_rope_extract_variable_bind = '<C-c>rl'
-
     let g:pymode_rope_use_function_bind = '<C-c>ru'
 
     "よくわからない機能たち
@@ -245,7 +254,6 @@ if neobundle#tap('python-mode')
         autocmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
         autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
     augroup END
-
 
     let g:pymode_syntax_all = 1
     let g:pymode_syntax_print_as_function = 0
@@ -272,7 +280,6 @@ if neobundle#tap('python-mode')
     " Highlight docstrings as pythonDocstring (otherwise as pythonString)
     let g:pymode_syntax_docstrings = g:pymode_syntax_all
 
- 
     function! neobundle#hooks.on_source(bundle)
         
     endfunction
