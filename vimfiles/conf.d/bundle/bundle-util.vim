@@ -151,6 +151,18 @@ function! s:SwitchToActualFile()
 endfunction
 
 NeoBundle 'tpope/vim-repeat'
+NeoBundle 'christoomey/vim-tmux-navigator'
+let s:hooks = neobundle#get_hooks('vim-tmux-navigator')
+function! s:hooks.on_source(bundle)
+    let g:tmux_navigator_save_on_switch = 1
+    " let g:tmux_navigator_no_mappings = 1
+    nnoremap <silent> {Left-mapping} :TmuxNavigateLeft<cr>
+    nnoremap <silent> {Down-Mapping} :TmuxNavigateDown<cr>
+    nnoremap <silent> {Up-Mapping} :TmuxNavigateUp<cr>
+    nnoremap <silent> {Right-Mapping} :TmuxNavigateRight<cr>
+    nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
+endfunction
+unlet s:hooks
 
 NeoBundle 'Lokaltog/vim-easymotion'   "{{{ 高速移動用マッピング
 if neobundle#tap('vim-easymotion')
@@ -220,3 +232,4 @@ if neobundle#tap('vim-easymotion')
     call neobundle#untap()
 endif
 "}}}
+"
