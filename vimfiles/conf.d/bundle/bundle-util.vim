@@ -122,18 +122,18 @@ if neobundle#tap('vim-fugitive')
         endif
         nnoremap <buffer> [git] <Nop>
         nmap <buffer> <Leader>g [git]
-        nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
-        nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
+        nnoremap <buffer> [git]c :<C-u>Gcommit -v<CR>
+        nnoremap <buffer> [git]C :<C-u>Gcommit --amend -v<CR>
         nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
         nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
         nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
         nnoremap <buffer> [git]p :<C-u>Gpush<CR>
         nnoremap <buffer> [git]P :<C-u>Gpull<CR>
     endfunction
-    function! neobundle#hooks.on_source(bundle)
+    function! neobundle#hooks.on_post_source(bundle)
         augroup FUGITIVE
             autocmd!
-            autocmd BufReadPost * call ConfigOnGitRepository()
+            autocmd BufRead * call ConfigOnGitRepository()
         augroup END
     endfunction
     call neobundle#untap()
