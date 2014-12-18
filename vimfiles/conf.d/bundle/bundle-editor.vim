@@ -25,6 +25,7 @@ if neobundle#tap('neocomplete.vim')
                 \ }
 
 
+    let g:neocomplete#sources#omni#input_patterns = {}
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
