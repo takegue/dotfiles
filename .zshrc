@@ -194,6 +194,7 @@ else
     rm -f ~/.zcompdump; compinit
 fi
 
+
 ## for Python settings ##
 
 ### Aliases ###
@@ -203,10 +204,11 @@ alias tmux='tmux -2'
 alias v=vim
 alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
+alias c='pygmentize -O style=monokai -f console256 -g'
 alias ls='ls -G --color -X'
+alias less='less -IMx4 -X -R'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
-alias less='less -IMx4 -X -R'
 alias NOTE=mail_alart 
 # alias -s py=python
 alias -g L='| less'
