@@ -1,4 +1,4 @@
-"--------------------------------------------------
+"autocmd BufRead * call ConfigOnGitRepository()--------------------------------------------------
 " Syntax
 "--------------------------------------------------
 NeoBundle 'tejr/vim-tmux'
@@ -387,15 +387,15 @@ endfunction
 "--------------------------------------------------
 " Programming - markdown
 "--------------------------------------------------
-NeoBundleLazy 'Rykka/riv.vim' ,{
-            \ 'autoload'  :{
-            \   'filetypes' :
-            \      ['python', 'rst']
-            \}}
-let s:hooks = neobundle#get_hooks('Rykka/riv.vim')
-function! s:hooks.on_source(bundle)
-endfunction
-unlet s:hooks
+" NeoBundleLazy 'Rykka/riv.vim' ,{
+"             \ 'autoload'  :{
+"             \   'filetypes' :
+"             \      ['python', 'rst']
+"             \}}
+" let s:hooks = neobundle#get_hooks('Rykka/riv.vim')
+" function! s:hooks.on_source(bundle)
+" endfunction
+" unlet s:hooks
 
 NeoBundle 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['vim', 'python', 'ruby', 'javascript']

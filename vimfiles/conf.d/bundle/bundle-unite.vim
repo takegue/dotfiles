@@ -133,33 +133,38 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
             \   "mappings": ['<Plug>(vimfiler_switch)'],
             \   "explorer": 1,
             \ }} 
-nnoremap <Leader>e :VimFilerExplorer<CR>
-nnoremap <Leader>E :VimFiler<CR>
-" close vimfiler automatically when there are only vimfiler open
-augroup vimfile_options
-    " this one is which you're most likely to use?
-    autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-augroup end
-let s:hooks = neobundle#get_hooks("vimfiler.vim")
-function! s:hooks.on_source(bundle)
-    let g:vimfiler_as_default_explorer = 1
+if neobundle#tap('vimfiler.vim')
     let g:vimfiler_enable_auto_cd = 1
+    let g:vimfiler_as_default_explorer = 1
+    let g:unite_kind_openable_lcd_command='cd'
 
-    " 2013-08-14 追記
-    let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
+    nnoremap <Leader>e :VimFilerExplorer<CR>
+    nnoremap <Leader>E :VimFiler<CR>
+    augroup vimfile_options
+        " this one is which you're most likely to use?
+        autocmd FileType vimfiler call <SID>vimfiler_settings()
+        autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+    augroup end
+        
+    function! neobundle#hooks.on_source(bundle)
+        " 2013-08-14 追記
+        let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
+        call vimfiler#custom#profile('default', 'auto-cd', 'cd')
 
-    " vimfiler specific key mappings
-    autocmd MyAutoCmd FileType vimfiler call <SID>vimfiler_settings()
-    function! s:vimfiler_settings()
-        " ^^ to go up 
-        nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-        " use R to refresh
-        nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-        " overwrite C-l
-        nmap <buffer> <C-l> <C-w>l
+        " vimfiler specific key mappings
+        function! s:vimfiler_settings()
+            " ^^ to go up 
+            nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+            " use R to refresh
+            nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+            " overwrite C-l
+            nmap <buffer> <C-l> <C-w>l
+        endfunction
     endfunction
-endfunction
-
+    call neobundle#untap()
+endif
+" close vimfiler automatically when there are only vimfiler open
+let s:hooks = neobundle#get_hooks("vimfiler.vim")
 NeoBundle 'tacroe/unite-mark', {
             \ "depends": ["Shougo/unite.vim"]
             \ } 

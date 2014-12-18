@@ -40,6 +40,12 @@ function! s:hooks.on_source(bundle)
         \     },
         \   }
         \ ]
+
+    autocmd FileType gitrebase let b:switch_custom_definitions = [
+                \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
+                \]
+
+
     autocmd FileType python let b:switch_custom_definitions =
         \[
         \   ['and', 'or'],
