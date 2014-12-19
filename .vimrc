@@ -26,3 +26,4 @@ highlight Normal ctermbg=none
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
 filetype plugin indent on
+

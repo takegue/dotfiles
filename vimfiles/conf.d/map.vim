@@ -47,12 +47,27 @@ vnoremap v $h
 " matchitを有効にする.
 source $VIMRUNTIME/macros/matchit.vim
 
-
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <C-W><C-z> :call ToggleWindowSize()<CR>
+nnoremap <C-W>z :call ToggleWindowSize()<CR>
+
+function! ToggleWindowSize()
+    if !exists('t:restcmd')
+        let t:restcmd = ''
+    endif
+    if t:restcmd  != ''
+        exe t:restcmd
+        let t:restcmd = ''
+    else
+        let t:restcmd = winrestcmd()
+        resize
+        vertical resize
+    endif
+endfunction
 
 nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
 nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
@@ -96,7 +111,6 @@ nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR
 nnoremap <silent> [toggle]p : set paste!<CR> 
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
-
 "--------------------------------------------------
 " Key Mapping - Tab page
 "--------------------------------------------------
@@ -132,13 +146,6 @@ inoremap '' ''<left>
 inoremap `` ``<left>
 inoremap "" ""<left>
 
-" inoremap {} {}<`0`><ESC>F{a
-" inoremap () ()<`0`><ESC>F(a
-" inoremap [] []<`0`><ESC>F[a
-" inoremap <> <><`0`><ESC>2F<a
-" inoremap '' ''<`0`><ESC>2F'a
-" inoremap `` ``<`0`><ESC>4F`a
-" inoremap "" ""<`0`><ESC>2F"a
 
 "自動で---, ===を変換"
 iab ---- --------------------------------------------------<CR>
