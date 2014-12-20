@@ -42,12 +42,10 @@ if neobundle#tap('lightline.vim')
 
     function! MyFugitive()
         try
-            if exists("*fugitive#head")
-                let _ = fugitive#head()
-                return strlen(_) ? '⭠ '._ : ''
-            endif
             if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#statusline')
-                return fugitive#statusline()
+                let _ = substitute(fugitive#statusline(),'\[Git:\?\(.\+\)\]', '\1', 'g')
+                let _ = substitute(_,'^(\(.\+\))$', '\1', 'g')
+                return strlen(_) ? '⭠ '._ : ''
             endif
         catch
         endtry
@@ -63,7 +61,7 @@ if neobundle#tap('lightline.vim')
         return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
     endfunction
     function! MyCount()
-        if mode() =~ '[vV]\|CTRL-V' 
+        if mode() =~ '[vV]\|CTRL-V\|'
             return sumit#count_selected_text()
         else  
             return ''
@@ -84,7 +82,7 @@ if neobundle#tap('lightline.vim')
                 \              [ 'count'] ],
                 \ },
                 \ 'component': {
-                \   'lineinfo': ' %3l:%-2v',
+                \   'lineinfo': '%3l:%-2v',
                 \ },
                 \ 'component_function': {
                 \   'modified': 'MyModified',
