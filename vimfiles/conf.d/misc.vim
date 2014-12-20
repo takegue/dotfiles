@@ -6,40 +6,32 @@ cmap w!! w !sudo tee > /dev/null %
 
 " TODOコマンド
 command! Todo call s:Todo() " Todoコマンド
-command! Memo call s:Memo() " Memoコマンド
 " 一時ファイルコマンド
 
 " Open junk file."{{{
-command! -nargs=0 -complete=filetype Tmp call s:open_junk_file()
-command! -nargs=0 -complete=filetype Temp call s:open_junk_file()
-function! s:open_junk_file()
-  let l:junk_dir = $HOME . '/.vim_tmp'. strftime('/%Y/%m')
-  if !isdirectory(l:junk_dir)
-    call mkdir(l:junk_dir, 'p')
-  endif
-
-  let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
-  if l:filename != ''
-    execute 'edit ' . l:filename
-  endif
+command! -nargs=? -complete=filetype Tmp call s:open_junk_file('<args>')
+command! -nargs=? -complete=filetype Temp call s:open_junk_file('<args>')
+command! -nargs=0 -complete=filetype Memo call s:open_junk_file('memo')
+" command! Memo call s:Memo() " Memoコマンド
+function! s:open_junk_file(type)
+    let l:junk_dir = $HOME . '/Dropbox/junks'. strftime('/%Y/%m')
+    if !isdirectory(l:junk_dir)
+        call mkdir(l:junk_dir, 'p')
+    endif
+    if a:type == ''
+        let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+    else
+        let l:filename = l:junk_dir . strftime('/%Y-%m-%d-%H%M%S.') . a:type
+    endif
+    if l:filename != ''
+        execute 'edit ' . l:filename
+    endif
 endfunction "}}}
-
 
 function! s:Todo()
     let l:path  =  '~/.todo'   
     if filereadable(expand('~/Dropbox/.todo'))
         let l:path = expand('~/Dropbox/.todo')
-    endif
-    if bufwinnr(l:path) < 0
-        execute 'silent bo 60vs +set\ nonumber ' . l:path 
-    endif
-    unlet! l:path
-endfunction
-
-function! s:Memo()
-    let l:path  =  '~/.memo'   
-    if filereadable(expand('~/Dropbox/.memo'))
-        let l:path = expand('~/Dropbox/.memo')
     endif
     if bufwinnr(l:path) < 0
         execute 'silent bo 60vs +set\ nonumber ' . l:path 
@@ -62,7 +54,6 @@ function! s:openFTPluginFile()
     let l:ftpFileName = g:ftpPath . &filetype . ".vim"
     execute 'botright vsplit ' . l:ftpFileName
 endfunction 
-
 
 function! s:ChangeCurrentDir(directory, bang)
     if a:directory == ''
@@ -98,9 +89,7 @@ augroup MyAutoCmd
     autocmd FileType help,qf nnoremap <buffer> q <C-w>c
     autocmd FileType help,qf nnoremap <buffer> q <C-w>c
     autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
-
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-
     autocmd WinLeave * set nocursorline norelativenumber 
     autocmd WinEnter * if &number | set cursorline relativenumber | endif
     autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle 
@@ -109,15 +98,15 @@ augroup END
 
 
 function! s:RestoreCursorPostion()
-  if line("'\"") <= line("$")
-    normal! g`"
-  endif
+    if line("'\"") <= line("$")
+        normal! g`"
+    endif
 endfunction
 
 " Jump to the previous position when file opend
 augroup vimrc_restore_cursor_position
-  autocmd!
-  autocmd BufWinEnter * call s:RestoreCursorPostion()
+    autocmd!
+    autocmd BufWinEnter * call s:RestoreCursorPostion()
 augroup END
 
 augroup vimrc_change_cursorline_color
