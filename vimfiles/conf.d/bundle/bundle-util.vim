@@ -153,7 +153,6 @@ endfunction
 NeoBundle 'tpope/vim-repeat'
 
 NeoBundle 'tejr/vim-tmux'
-NeoBundle 'christoomey/vim-tmux-navigator'
 
 NeoBundle 'christoomey/vim-tmux-navigator'
 let s:hooks = neobundle#get_hooks('vim-tmux-navigator')
