@@ -52,3 +52,20 @@ function! s:hooks.on_source(bundle)
 
 endfunction
 unlet s:hooks
+
+
+NeoBundle 'TKNGUE/sum-it.vim', {
+            \'type__protocol' : 'ssh'
+            \}
+
+if neobundle#tap('sum-it.vim')
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+endif
+
+
+
+
+
+
