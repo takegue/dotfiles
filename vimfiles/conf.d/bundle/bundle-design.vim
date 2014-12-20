@@ -27,9 +27,10 @@ if neobundle#tap('lightline.vim')
     function! MyModified()
         return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
     endfunction 
+
     function! MyReadonly()
-        return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? ' READONLY |' : ''
-    endfunction 
+        return &ft !~? 'help\|vimfiler\|gundo' && &readonly ?  '⭤' : ''
+    endfunction
     function! MyFilename()
         return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
                     \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
@@ -38,8 +39,13 @@ if neobundle#tap('lightline.vim')
                     \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
                     \ ('' != MyModified() ? ' ' . MyModified() : '')
     endfunction 
+
     function! MyFugitive()
         try
+            if exists("*fugitive#head")
+                let _ = fugitive#head()
+                return strlen(_) ? '⭠ '._ : ''
+            endif
             if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#statusline')
                 return fugitive#statusline()
             endif
@@ -56,20 +62,35 @@ if neobundle#tap('lightline.vim')
     function! MyFileencoding()
         return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
     endfunction
+    function! MyCount()
+        if mode() =~ '[vV]\|CTRL-V' 
+            return sumit#count_selected_text()
+        else  
+            return ''
+        endif
+    endfunction  
     function! MyMode()
         return winwidth(0) > 60 ? lightline#mode() : ''
     endfunction  
 
     let g:lightline = {
                 \ 'colorscheme': 'powerline',
-                \ 'mode_map': {'c': 'NORMAL'},
+                \ 'mode_map': {'c': 'COMMAND'},
                 \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+                \   'left':  [ [ 'mode', 'paste' ], [ 'fugitive', 'filename'] ],
+                \   'right': [ [ 'lineinfo' ],
+                \              [ 'percent' ],
+                \              [ 'fileformat', 'fileencoding', 'filetype' ],
+                \              [ 'count'] ],
+                \ },
+                \ 'component': {
+                \   'lineinfo': ' %3l:%-2v',
                 \ },
                 \ 'component_function': {
                 \   'modified': 'MyModified',
                 \   'readonly': 'MyReadonly',
                 \   'fugitive': 'MyFugitive',
+                \   'count': 'MyCount',
                 \   'filename': 'MyFilename',
                 \   'fileformat': 'MyFileformat',
                 \   'filetype': 'MyFiletype',
@@ -79,7 +100,9 @@ if neobundle#tap('lightline.vim')
                 \ 'component_visible_condition' :{
                 \   'modified': '&modified||!&modifiable',
                 \   'readonly': '&readonly'
-                \ }} 
+                \ },
+                \ 'separator': { 'left': '⮀', 'right': '⮂' },
+                \ 'subseparator': { 'left': '⮁', 'right': '⮃' }} 
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()
