@@ -1,7 +1,4 @@
-"autocmd BufRead * call ConfigOnGitRepository()--------------------------------------------------
-" Syntax
-"--------------------------------------------------
-NeoBundle 'tejr/vim-tmux'
+
 "--------------------------------------------------
 " Programming
 "--------------------------------------------------
@@ -135,42 +132,6 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
             \   "filetypes" : ["python", "python3", "djangohtml"]
             \ }}
 
-" NeoBundleLazy 'davidhalter/jedi-vim', {
-"             \ "autoload"    : {
-"             \   "filetypes" : ["python", "python3", "djangohtml"],
-"             \ },
-"             \ "build"       : {
-"             \   "cygwin"    : "pip install --user jedi",
-"             \   "mac"       : "pip install --user jedi",
-"             \   "unix"      : "pip install --user jedi"
-"             \ }}
-
-" let g:jedi#auto_vim_configuration = 0
-" let s:hooks = neobundle#get_hooks("jedi-vim")
-" function! s:hooks.on_source(bundle)
-"     " 自動設定機能をoffにし手動で設定を行う
-"     let g:jedi#auto_vim_configuration = 0
-
-"     let g:jedi#popup_on_dot = 1
-"     let g:jedi#popup_select_first = 1
-"     "quickrunと被るため大文字に変更
-"     let g:jedi#rename_command = '<Leader>R'
-"     let g:jedi#auto_close_doc = 0
-"     let g:jedi#use_tabs_not_buffers = 0
-"     let g:jedi#completions_enabled = 0
-" endfunction
-
-NeoBundle 'ivanov/vim-ipython', {
-             \ "autoload"    : {
-             \   "filetypes" : ["python", "python3"],
-             \ }}
-let s:hooks = neobundle#get_hooks('vim-ipython')
-function! s:hooks.on_source(bundle)
-
-endfunction
-unlet s:hooks
-
-
 
 NeoBundle 'klen/python-mode', {
              \ "autoload"    : {
@@ -181,6 +142,7 @@ NeoBundle 'klen/python-mode', {
              \   "mac"       : "pip install --user pylint rope pyflake pep8",
              \   "unix"      : "pip install --user pylint rope pyflake pep8"
              \ }}
+
 if neobundle#tap('python-mode')
     let g:pymode = 1
     let g:pymode_warnings = 1
@@ -321,6 +283,7 @@ NeoBundleLazy 'elzr/vim-json', {
 function! s:hooks.on_source(bundle) 
     let g:vim_json_syntax_conceal = 2
 endfunction
+
 "--------------------------------------------------
 " Programming - Ruby
 "--------------------------------------------------
@@ -398,9 +361,15 @@ endfunction
 " endfunction
 " unlet s:hooks
 
-NeoBundle 'plasticboy/vim-markdown'
-let g:markdown_fenced_languages = ['vim', 'python', 'ruby', 'javascript']
-let g:markdown_folding = 1
+NeoBundle 'rcmdnk/vim-markdown' , {  
+            \ 'depends' : ['godlygeek/tabular', 'joker1007/vim-markdown-quote-syntax']
+            \}
+if neobundle#tap('vim-markdown')
+    let g:vim_markdown_better_folding=1
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+endif
 
 NeoBundle 'TKNGUE/hateblo.vim' ,{
             \ 'depends'  : ['mattn/webapi-vim', 'Shoug/unite.vim'],

@@ -160,6 +160,7 @@ endfunction
 
 NeoBundle 'tpope/vim-repeat'
 
+NeoBundle 'tejr/vim-tmux'
 
 NeoBundle 'christoomey/vim-tmux-navigator'
 let s:hooks = neobundle#get_hooks('vim-tmux-navigator')
@@ -174,6 +175,7 @@ function! s:hooks.on_source(bundle)
 endfunction
 unlet s:hooks
 
+NeoBundle 'majutsushi/tagbar'
 
 NeoBundle 'Lokaltog/vim-easymotion'   "{{{ 高速移動用マッピング
 if neobundle#tap('vim-easymotion')

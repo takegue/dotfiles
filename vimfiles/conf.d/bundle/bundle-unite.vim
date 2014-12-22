@@ -145,7 +145,6 @@ if neobundle#tap('vimfiler.vim')
         autocmd FileType vimfiler call <SID>vimfiler_settings()
         autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
     augroup end
-        
     function! neobundle#hooks.on_source(bundle)
         " 2013-08-14 追記
         let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
