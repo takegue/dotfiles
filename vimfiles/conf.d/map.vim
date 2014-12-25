@@ -14,6 +14,7 @@ let maplocalleader='\'
 " nnoremap q <Nop> 
 " nnoremap q: q: 
 "
+nnoremap Y y$
 nnoremap & g&
 
 " ESCを二回押すことでハイライトを消す

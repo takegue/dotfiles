@@ -17,7 +17,6 @@
 "  | "conf.d/bundle/bundle-util.vim"
 "  | "conf.d/bundle/bundle-misc.vim"
 runtime! conf.d/*.vim
-
 "壁紙設定
 colorscheme molokai
 "透過を有効にするために黒背景にする
@@ -26,4 +25,5 @@ highlight Normal ctermbg=none
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
 filetype plugin indent on
+
 

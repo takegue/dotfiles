@@ -30,6 +30,8 @@ set softtabstop=4       "インデントをスペース4つ分に設定
 set expandtab           "タブ→スペースの変換
 set wildmenu wildmode=longest,full "コマンドラインの補間表示
 set foldmethod=marker
+set display=lastline
+set pumheight=15
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
@@ -59,7 +61,7 @@ set virtualedit=all         " カーソルを文字が存在しない部分で�
 set hidden                  " バッファを閉じる代わりに隠す（Undo履歴を残すため）
 set switchbuf=usetab       " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch               " 対応する括弧などをハイライト表示する
-set matchtime=3             " 対応括弧のハイライト表示を3秒にする
+set matchtime=1             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 

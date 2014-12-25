@@ -55,7 +55,6 @@ unlet s:hooks
 
 
 NeoBundle 'TKNGUE/sum-it.vim', {
-            \'type__protocol' : 'ssh'
             \}
 
 if neobundle#tap('sum-it.vim')
