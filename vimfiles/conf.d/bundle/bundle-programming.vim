@@ -334,6 +334,18 @@ function! s:hooks.on_source(bundle)
     "let g:Tex_ViewRule_pdf = 'mupdf'
     "let g:Tex_ViewRule_pdf = 'firefox -new-window'
     "let g:Tex_ViewRule_pdf = 'chromium --new-window'
+    let g:Tex_IgnoreLevel = 9 
+    let g:Tex_IgnoredWarnings = 
+        \"Underfull\n".
+        \"Overfull\n".
+        \"specifier changed to\n".
+        \"You have requested\n".
+        \"Missing number, treated as zero.\n".
+        \"There were undefined references\n".
+        \"Citation %.%# undefined\n".
+        \"LaTeX Font Warning: Font shape `%s' undefined\n".
+        \"LaTeX Font Warning: Some font shapes were not available, defaults substituted."
+
     "キー配置の変更
     ""<Ctrl + J>はパネルの移動と被るので番うのに変える
     imap <C-n> <Plug>IMAP_JumpForward

@@ -16,10 +16,28 @@ NeoBundle 'pekepeke/vim-operator-tabular', {
 NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
 
 "NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
+"
+
 NeoBundle 'TKNGUE/switch.vim'                      "true ⇔ falseなどの切り替え
 let s:hooks = neobundle#get_hooks('switch.vim')
 function! s:hooks.on_source(bundle)
     nnoremap - :Switch<CR>
+    augroup switch_autocmd
+        autocmd FileType gitrebase let b:switch_custom_definitions = [
+                    \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
+                    \]
+
+        autocmd FileType python let b:switch_custom_definitions =
+            \[
+            \   ['and', 'or'],
+            \   {
+            \     '\(.\+\) if \(.\+\) else \(.\+\)' : { 
+            \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' : 
+            \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \4'
+            \      }
+            \   },
+            \]
+    augroup end
     let g:switch_custom_definitions =
         \ [
         \   ['!=', '=='],
@@ -41,21 +59,6 @@ function! s:hooks.on_source(bundle)
         \   }
         \ ]
 
-    autocmd FileType gitrebase let b:switch_custom_definitions = [
-                \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
-                \]
-
-
-    autocmd FileType python let b:switch_custom_definitions =
-        \[
-        \   ['and', 'or'],
-        \   {
-        \     '\(.\+\) if \(.\+\) else \(.\+\)' : { 
-        \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' : 
-        \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \4'
-        \      }
-        \   },
-        \]
 endfunction
 unlet s:hooks
 
