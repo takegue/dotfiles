@@ -114,6 +114,14 @@ function! s:hooks.on_source(bundle)
     endfunction
 endfunction 
 
+NeoBundle 'majutsushi/tagbar'
+if neobundle#tap('tagbar')
+    function! neobundle#hooks.on_source(bundle)
+        nnoremap <silent> <F9> :TagbarToggle<CR>
+    endfunction
+    call neobundle#untap()
+endif
+
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
 if neobundle#tap('vim-fugitive')
     function! ConfigOnGitRepository()
@@ -133,7 +141,7 @@ if neobundle#tap('vim-fugitive')
     function! neobundle#hooks.on_post_source(bundle)
         augroup FUGITIVE
             autocmd!
-            autocmd BufRead * call ConfigOnGitRepository()
+            autocmd BufRead * silent call ConfigOnGitRepository()
         augroup END
     endfunction
     call neobundle#untap()

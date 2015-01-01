@@ -17,7 +17,6 @@
 "  | "conf.d/bundle/bundle-util.vim"
 "  | "conf.d/bundle/bundle-misc.vim"
 runtime! conf.d/*.vim
-
 "壁紙設定
 colorscheme molokai
 " set background=dark

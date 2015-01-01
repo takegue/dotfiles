@@ -1,0 +1,16 @@
+[include]
+    path = .gitconfig.local
+[core]
+    editor = vim
+    whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+    excludesfile = .gitignore
+[push]
+    default = matching
+[init]
+    templatedir = .git_hooks
+    template = /sougen/takeno_a6/.git_template
+
+[alias]
+ignore = !"f() { local s=$1; shift; \
+    while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
+    curl \"https://www.gitignore.io/api/$s\"; }; f"
