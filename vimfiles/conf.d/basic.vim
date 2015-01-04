@@ -11,7 +11,6 @@ set title               "編集中のファイル名を表示
 set ambiwidth=double    "全角文字で幅が崩れないように調整する
 set laststatus=2
 
-syntax on               "コードの色分け 
 set showmatch           "括弧入力時の対応する括弧を表示
 set list                " 不可視文字の可視化
 set number              " 行番号の表示

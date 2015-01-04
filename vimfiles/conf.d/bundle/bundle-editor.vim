@@ -1,6 +1,8 @@
 "--------------------------------------------------
 " EdittingTools:
 "-------------------------------------------------- 
+NeoBundle 'rhysd/vim-grammarous'
+NeoBundle 'ujihisa/neco-look'
 
 NeoBundle 'Shougo/neocomplete.vim'  "{{{
 if neobundle#tap('neocomplete.vim')
@@ -9,6 +11,11 @@ if neobundle#tap('neocomplete.vim')
     " Disable AutoComplPop.
     let g:acp_enableAtStartup = 0
     " Use neocomplete.
+    let g:neocomplete#text_mode_filetypes= {
+                \ 'tex' : 1,
+                \ 'markdown' : 1,
+                \ 'plaintex' : 1
+                \}
     let g:neocomplete#enable_at_startup = 1
     " Use smartcase.
     let g:neocomplete#enable_smart_case = 1
@@ -76,17 +83,23 @@ function! s:hooks.on_source(bundle)
     xmap <C-k>     <Plug>(neosnippet_expand_target)
     xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
     " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#expandable() ?  
+    imap <expr><CR>  neosnippet#expandable() ? 
                 \ "\<Plug>(neosnippet_expand)" : 
-                \  pumvisible() ?  "\<C-n>" : 
+                \ pumvisible() ?  "\<C-Y>" : "\<CR>"
+    imap <expr><TAB> pumvisible() ?  "\<C-n>" : 
                 \  neosnippet#jumpable() ? 
                 \ "\<Plug>(neosnippet_jump)"  : "\<TAB>" 
     smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<Plug>(neosnippet_expand_or_jump)"
+                \ "\<plug>(neosnippet_expand_or_jump)"
                 \: "\<TAB>"
+
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
+    let g:neosnippet#enable_preview = 0	 
+    let g:neosnippet#disable_runtime_snippets = {
+    \   'tex' : 1,
+    \ }  
 
     " For snippet_complete marker.
     if has('conceal')
