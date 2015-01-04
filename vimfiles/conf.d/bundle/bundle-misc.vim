@@ -54,8 +54,7 @@ endfunction
 unlet s:hooks
 
 
-NeoBundle 'TKNGUE/sum-it.vim', {
-            \}
+NeoBundle 'TKNGUE/sum-it.vim', {}
 
 if neobundle#tap('sum-it.vim')
     function! neobundle#hooks.on_source(bundle)

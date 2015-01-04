@@ -26,4 +26,3 @@ highlight Normal ctermbg=none
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
 filetype plugin indent on
 
-
