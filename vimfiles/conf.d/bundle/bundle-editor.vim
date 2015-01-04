@@ -96,7 +96,7 @@ function! s:hooks.on_source(bundle)
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
-    let g:neosnippet#enable_preview = 1	 
+    let g:neosnippet#enable_preview = 0	 
     let g:neosnippet#disable_runtime_snippets = {
     \   'tex' : 1,
     \ }  

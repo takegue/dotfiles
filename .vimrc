@@ -21,10 +21,10 @@ runtime! conf.d/*.vim
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
 if has('vim_starting')
-
     syntax enable
     set background=dark
     set t_Co=256
+
     if &t_Co < 256
         colorscheme default
     else
@@ -34,9 +34,7 @@ if has('vim_starting')
             colorscheme blue
         endtry
     endif
-
     highlight Normal ctermbg=none
-
     " ファイルタイププラグインおよびインデントを有効化
     " これはNeoBundleによる処理が終了したあとに呼ばなければならない
     filetype plugin indent on
