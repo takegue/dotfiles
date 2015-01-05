@@ -12,8 +12,7 @@ function! s:hooks.on_source(bundle)
                 \ "_": {
                 \   "runner"                    : "vimproc",
                 \   "runner/vimproc/updatetime" : "60",
-                \   "outputter/buffer/split"    : ":bo vsplit"
-                \,}}
+                \}}
     let g:quickrun_config.sql ={
                 \ 'command' : 'mysql',
                 \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',

@@ -14,11 +14,12 @@ NeoBundle 'pekepeke/vim-operator-tabular', {
             \ 'depends' : ['pekepeke/vim-csvutil'] 
             \}
 NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
+  
 
-"NeoBundle 'AndrewRadev/switch.vim'                      "true ⇔ falseなどの切り替え
+"NeoBundle 'AndrewRadev/switch.vim'                     "true ⇔ falseなどの切り替え
 "
 
-NeoBundle 'TKNGUE/switch.vim'                      "true ⇔ falseなどの切り替え
+NeoBundle 'TKNGUE/switch.vim'                           "true ⇔ falseなどの切り替え
 let s:hooks = neobundle#get_hooks('switch.vim')
 function! s:hooks.on_source(bundle)
     nnoremap - :Switch<CR>

@@ -106,7 +106,8 @@ nnoremap <silent> [toggle]s : setl spell!<CR>          : setl spell?<CR>
 nnoremap <silent> [toggle]l : setl list!<CR>           : setl list?<CR>
 nnoremap <silent> [toggle]t : setl expandtab!<CR>      : setl expandtab?<CR>
 nnoremap <silent> [toggle]w : setl wrap!<CR>           : setl wrap?<CR>
-nnoremap <silent> [toggle]c : setl cursorline!<CR>     : setl cursorline?<CR>
+nnoremap <silent> [toggle]cc : setl cursorline!<CR>     : setl cursorline?<CR>
+nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>     : setl cursorcolumn?<CR>
 nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
 nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
 nnoremap <silent> [toggle]p : set paste!<CR> 

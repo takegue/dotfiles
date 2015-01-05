@@ -177,6 +177,27 @@ unlet s:hooks
 
 NeoBundle 'majutsushi/tagbar'
 
+NeoBundle 'haya14busa/incsearch.vim'
+if neobundle#tap('incsearch.vim')
+    map /  <Plug>(incsearch-forward)
+    map ?  <Plug>(incsearch-backward)
+    map g/ <Plug>(incsearch-stay)
+
+    let g:incsearch#separate_highlight = 1
+    let g:incsearch#auto_nohlsearch = 1
+    map n  <Plug>(incsearch-nohl-n)zz
+    map N  <Plug>(incsearch-nohl-N)zz
+    map *  <Plug>(incsearch-nohl-*)zz
+    map #  <Plug>(incsearch-nohl-#)zz
+    map g* <Plug>(incsearch-nohl-g*)zz
+    map g# <Plug>(incsearch-nohl-g#)zz
+
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+endif
+
+
 NeoBundle 'Lokaltog/vim-easymotion'   "{{{ 高速移動用マッピング
 if neobundle#tap('vim-easymotion')
     " =======================================
