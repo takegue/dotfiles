@@ -128,6 +128,7 @@ if neobundle#tap('vim-fugitive')
         if !exists('b:git_dir')
             return
         endif
+        execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h')
         nnoremap <buffer> [git] <Nop>
         nmap <buffer> <Leader>g [git]
         nnoremap <buffer> [git]w :<C-u>Gwrite<CR>

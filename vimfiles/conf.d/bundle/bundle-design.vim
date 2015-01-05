@@ -2,21 +2,26 @@
 " Design: mainly setting the vim design
 "-------------------------------------------------- 
 "
-" nathanaelkane/vim-indent-guides' : indent guide用のプラグイン{{{
+" NeoBundle 'Yggdroot/indentLine'
+" if neobundle#tap('indentLine')
+"     let g:indentLine_char = '¦'
+"     let g:indentLine_fileTypeExclude = ['text', 'sh', 'md', 'help']
+"     call neobundle#untap()
+" endif
+
+"nathanaelkane/vim-indent-guides' : indent guide用のプラグイン{{{
 NeoBundle 'nathanaelkane/vim-indent-guides'  
 if neobundle#tap('vim-indent-guides')
     let g:indent_guides_enable_on_vim_startup = 1
-    let g:indent_guides_auto_colors = 1
+    let g:indent_guides_auto_colors = 0
     let g:indent_guides_start_level = 2
     let g:indent_guides_guide_size = 1 
     let g:indent_guides_default_mapping = 1
     augroup indent_guides
         autocmd!
-        " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=234
-        " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=238 
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=235 
     augroup END
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
     call neobundle#untap()
 endif "}}}
 
@@ -31,13 +36,14 @@ if neobundle#tap('lightline.vim')
     function! MyReadonly()
         return &ft !~? 'help\|vimfiler\|gundo' && &readonly ?  '⭤' : ''
     endfunction
+
     function! MyFilename()
         return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-                    \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-                    \  &ft == 'unite' ? unite#get_status_string() :
-                    \  &ft == 'vimshell' ? vimshell#get_status_string() :
-                    \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-                    \ ('' != MyModified() ? ' ' . MyModified() : '')
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != MyModified() ? ' ' . MyModified() : '')
     endfunction 
 
     function! MyFugitive()
@@ -72,35 +78,35 @@ if neobundle#tap('lightline.vim')
     endfunction  
 
     let g:lightline = {
-                \ 'colorscheme': 'powerline',
-                \ 'mode_map': {'c': 'COMMAND'},
-                \ 'active': {
-                \   'left':  [ [ 'mode', 'paste' ], [ 'fugitive', 'filename'] ],
-                \   'right': [ [ 'lineinfo' ],
-                \              [ 'percent' ],
-                \              [ 'fileformat', 'fileencoding', 'filetype' ],
-                \              [ 'count'] ],
-                \ },
-                \ 'component': {
-                \   'lineinfo': '%3l:%-2v',
-                \ },
-                \ 'component_function': {
-                \   'modified': 'MyModified',
-                \   'readonly': 'MyReadonly',
-                \   'fugitive': 'MyFugitive',
-                \   'count': 'MyCount',
-                \   'filename': 'MyFilename',
-                \   'fileformat': 'MyFileformat',
-                \   'filetype': 'MyFiletype',
-                \   'fileencoding': 'MyFileencoding',
-                \   'mode': 'MyMode'
-                \ },
-                \ 'component_visible_condition' :{
-                \   'modified': '&modified||!&modifiable',
-                \   'readonly': '&readonly'
-                \ },
-                \ 'separator': { 'left': '⮀', 'right': '⮂' },
-                \ 'subseparator': { 'left': '⮁', 'right': '⮃' }} 
+        \ 'colorscheme': 'powerline',
+        \ 'mode_map': {'c': 'COMMAND'},
+        \ 'active': {
+        \   'left':  [ [ 'mode', 'paste' ], [ 'fugitive', 'filename'] ],
+        \   'right': [ [ 'lineinfo' ],
+        \              [ 'percent' ],
+        \              [ 'fileformat', 'fileencoding', 'filetype' ],
+        \              [ 'count'] ],
+        \ },
+        \ 'component': {
+        \   'lineinfo': '%3l:%-2v',
+        \ },
+        \ 'component_function': {
+        \   'modified': 'MyModified',
+        \   'readonly': 'MyReadonly',
+        \   'fugitive': 'MyFugitive',
+        \   'count': 'MyCount',
+        \   'filename': 'MyFilename',
+        \   'fileformat': 'MyFileformat',
+        \   'filetype': 'MyFiletype',
+        \   'fileencoding': 'MyFileencoding',
+        \   'mode': 'MyMode'
+        \ },
+        \ 'component_visible_condition' :{
+        \   'modified': '&modified||!&modifiable',
+        \   'readonly': '&readonly'
+        \ },
+        \ 'separator': { 'left': '⮀', 'right': '⮂' },
+        \ 'subseparator': { 'left': '⮁', 'right': '⮃' }} 
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()

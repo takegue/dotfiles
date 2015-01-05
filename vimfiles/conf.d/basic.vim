@@ -34,6 +34,7 @@ set pumheight=15
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
+set fillchars=vert:\|
 
 " 前時代的スクリーンベルを無
 set t_vb=

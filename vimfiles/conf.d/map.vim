@@ -32,7 +32,7 @@ nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
 nnoremap g* g*zz
-nnoremap g# g#zz    
+nnoremap g# g#zz
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
 nnoremap j gj
