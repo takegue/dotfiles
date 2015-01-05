@@ -1,7 +1,6 @@
 "--------------------------------------------------
 " Unite-Source
 "------------------------------------------------- 
-
 " Shougo/unite.vim {{{
 NeoBundle 'Shougo/unite.vim' 
 let s:hooks = neobundle#get_hooks('unite.vim')
@@ -127,7 +126,7 @@ if neobundle#tap('vimfiler.vim')
     " Use trashbox.
     " Windows only and require latest vimproc.
     "let g:unite_kind_file_use_trashbox = 1
-    nnoremap <Leader>e :VimFilerExplorer<CR>
+    nnoremap <Leader>e :VimFilerExplorer <CR>
     nnoremap <Leader>E :VimFiler<CR>
     augroup vimfile_options
         " this one is which you're most likely to use?
@@ -146,6 +145,7 @@ if neobundle#tap('vimfiler.vim')
         let g:vimfiler_as_default_explorer = 1
         let g:unite_kind_openable_lcd_command='cd'
         let g:vimfiler_as_default_explorer = 1
+        let g:vimfiler_split_rule="botright"
 
         call vimfiler#set_execute_file('txt', 'notepad')
         call vimfiler#set_execute_file('c', ['gvim', 'notepad'])
