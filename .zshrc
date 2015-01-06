@@ -195,8 +195,6 @@ else
 fi
 
 
-## for Python settings ##
-
 ### Aliases ###
 alias r=rails
 # alias python='python'
@@ -212,6 +210,19 @@ alias uniq="LC_ALL=C uniq"
 alias NOTE=mail_alart 
 # alias -s py=python
 alias -g L='| less'
+alias -g H='| head'
+alias -g T='| tail'
+alias -g G='| grep'
+alias -g W='| wc'
+alias -g S='| sed'
+alias -g A='| awk'
+alias -g W='| wc'
+
+sshcd()
+{
+    ssh $1 -t "cd `pwd`; zsh"
+}
+
 #### Export Configurations #### 
 export PATH="/usr/local/bin":$PATH
 export LD_LIBRARY_PATH="/usr/local/lib":"/usr/lib/x86_64-linux-gnu/":$LD_LIBRARY_PATH
