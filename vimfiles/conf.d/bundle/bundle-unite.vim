@@ -126,7 +126,7 @@ if neobundle#tap('vimfiler.vim')
     " Use trashbox.
     " Windows only and require latest vimproc.
     "let g:unite_kind_file_use_trashbox = 1
-    nnoremap <Leader>e :VimFilerExplorer <CR>
+    nnoremap <Leader>e :VimFilerExplorer<CR>
     nnoremap <Leader>E :VimFiler<CR>
     augroup vimfile_options
         " this one is which you're most likely to use?
@@ -139,17 +139,17 @@ if neobundle#tap('vimfiler.vim')
         let g:vimfiler_tree_leaf_icon = ' '
         let g:vimfiler_tree_opened_icon = '▾'
         let g:vimfiler_tree_closed_icon = '▸'
-        let g:vimfiler_file_icon = '-'
+        let g:vimfiler_file_icon = ' '
         let g:vimfiler_marked_file_icon = '*'
         let g:vimfiler_enable_auto_cd = 1
         let g:vimfiler_as_default_explorer = 1
-        let g:unite_kind_openable_lcd_command='cd'
+        let g:unite_kind_openable_lcd_command='lcd'
         let g:vimfiler_as_default_explorer = 1
         let g:vimfiler_split_rule="botright"
 
         call vimfiler#set_execute_file('txt', 'notepad')
         call vimfiler#set_execute_file('c', ['gvim', 'notepad'])
-        call vimfiler#custom#profile('default', 'auto-cd', 'cd')
+        call vimfiler#custom#profile('default', 'auto-cd', 'lcd')
 
         " vimfiler specific key mappings
         function! s:vimfiler_settings()
@@ -165,14 +165,14 @@ if neobundle#tap('vimfiler.vim')
     call neobundle#untap()
 endif "}}}
 
+" Other unite sources {{{
 NeoBundle 'Shougo/unite-outline', {
             \ "depends": ["Shougo/unite.vim"],
             \ } 
-let s:hooks = neobundle#get_hooks("unite-outline")
-function! s:hooks.on_source(bundle) 
+if neobundle#tap('unite-outline')
     nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
-endfunction
-
+    call neobundle#untap()
+endif
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'tsukkee/unite-help'
@@ -188,7 +188,7 @@ NeoBundle 'mattn/unite-advent_calendar', {
 NeoBundle 'tacroe/unite-mark', {
             \ "depends": ["Shougo/unite.vim"]
             \ } 
-
+"}}}
 
 
 

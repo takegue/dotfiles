@@ -122,6 +122,8 @@ if neobundle#tap('tagbar')
     call neobundle#untap()
 endif
 
+NeoBundle 'cohama/agit.vim'
+
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
 if neobundle#tap('vim-fugitive')
     function! ConfigOnGitRepository()

@@ -22,8 +22,14 @@ runtime! conf.d/*.vim
 " :so $VIMRUNTIME/syntax/colortest.vim
 if has('vim_starting')
     syntax enable
-    set background=dark
     set t_Co=256
+    let g:solarized_termcolors=256
+
+    if has('gui_running')
+        set background=light
+    else
+        set background=dark
+    endif
 
     if &t_Co < 256
         colorscheme default

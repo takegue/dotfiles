@@ -11,12 +11,3 @@ NeoBundle 'vim-scripts/Wombat'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'sjl/badwolf'
 
-set t_Co=256
-if $COLORTERM == 'gnome-terminal'
-    let g:solarized_termcolors=256
-    if has('gui_running')
-        set background=light
-    else
-        set background=dark
-    endif
-endif

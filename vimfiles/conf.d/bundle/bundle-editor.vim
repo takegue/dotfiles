@@ -3,6 +3,10 @@
 "-------------------------------------------------- 
 NeoBundle 'rhysd/vim-grammarous'
 NeoBundle 'ujihisa/neco-look'
+NeoBundle 'koron/codic-vim'
+NeoBundle 'koron/codic-vim'
+NeoBundle 'deris/vim-visualinc'
+
 
 NeoBundle 'Shougo/neocomplete.vim'  "{{{
 if neobundle#tap('neocomplete.vim')
