@@ -149,6 +149,7 @@ if neobundle#tap('python-mode')
     let g:pymode_paths = []
     let g:pymode_trim_whitespaces = 1
     let g:pymode_options = 1
+    let g:pymode_options_colorcolumn = 1
     let g:pymode_quickfix_minheight = 3
     let g:pymode_quickfix_maxheight = 6
     let g:pymode_python = 'python'
@@ -177,7 +178,7 @@ if neobundle#tap('python-mode')
     let g:pymode_lint_message = 1
     " let g:pymode_lint_ignore = "E501,W"
     " let g:pymode_lint_select = "E501,W0011,W430"
-    let g:pymode_lint_cwindow = 1
+    let g:pymode_lint_cwindow = 0
 
     let g:pymode_rope = 1
     let g:pymode_rope_project_root = ""
