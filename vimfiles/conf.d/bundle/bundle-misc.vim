@@ -2,8 +2,9 @@
 " Other 
 "------------------------------------------------- 
 NeoBundle 'vim-jp/vimdoc-ja'        " ヘルプの日本語化
-" NeoBundle 'rbgrouleff/bclose.vim'
 NeoBundle 'Shougo/neobundle-vim-recipes'
+
+
 NeoBundle 'uguu-org/vim-matrix-screensaver'
 
 NeoBundleLazy 'tsukkee/lingr-vim', {
@@ -55,8 +56,8 @@ endfunction
 unlet s:hooks
 
 
-NeoBundle 'TKNGUE/sum-it.vim', {}
 
+NeoBundle 'TKNGUE/sum-it.vim', {}
 if neobundle#tap('sum-it.vim')
     function! neobundle#hooks.on_source(bundle)
     endfunction
