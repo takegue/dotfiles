@@ -2,12 +2,6 @@
 " Design: mainly setting the vim design
 "-------------------------------------------------- 
 "
-" NeoBundle 'Yggdroot/indentLine'
-" if neobundle#tap('indentLine')
-"     let g:indentLine_char = '¦'
-"     let g:indentLine_fileTypeExclude = ['text', 'sh', 'md', 'help']
-"     call neobundle#untap()
-" endif
 
 "nathanaelkane/vim-indent-guides' : indent guide用のプラグイン{{{
 NeoBundle 'nathanaelkane/vim-indent-guides'  

@@ -173,6 +173,15 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
 endfunction
 
+NeoBundle 'tsukkee/unite-tag'
+if neobundle#tap('unite-tag')
+    autocmd BufEnter *
+    \   if empty(&buftype)
+    \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+    \|  endif
+    call neobundle#untap()
+endif
+
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'tsukkee/unite-help'

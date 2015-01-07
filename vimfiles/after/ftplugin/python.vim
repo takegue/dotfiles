@@ -7,13 +7,12 @@ setlocal shiftwidth=4        "オートインデントの幅
 setlocal softtabstop=4       "インデントをスペース4つ分に設定
 setlocal expandtab
 setlocal nowrap
-
+setlocal tags+=$HOME/python.tags
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath #!/usr/bin/env python<CR>
 inoremap """ """<CR>"""<Up>
 inoremap ''' '''<CR>'''<Up>
-iab <buffer> ### ###############################################################################
 
 "TODO:ローカル(.local/path/to/python)も追加する
 "python sys.pathを set pathで追加

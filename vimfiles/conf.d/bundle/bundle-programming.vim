@@ -12,6 +12,7 @@ function! s:hooks.on_source(bundle)
                 \ "_": {
                 \   "runner"                    : "vimproc",
                 \   "runner/vimproc/updatetime" : "60",
+                \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "" : "vertical"}',
                 \}}
     let g:quickrun_config.sql ={
                 \ 'command' : 'mysql',

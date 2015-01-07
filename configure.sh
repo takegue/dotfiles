@@ -14,7 +14,7 @@ ln -s $dir/vimfiles ~/.vim
 ln -s $dir/.git_template ~/.git_template
 mkdir -p  ~/.vim/bundle/
 
-for dotfile in $dir/.*rc $dir/.*.conf ; do
+for dotfile in $dir/.*rc $dir/.*.conf $dir/.ctags; do
     dstpath="$HOME/${dotfile##*/}" 
     if [ -L $dstpath ]; then
         rm $dstpath

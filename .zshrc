@@ -7,7 +7,6 @@ export KCODE=UTF8           # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 
-
 bindkey -v              # キーバインドをviモードに設定
 
 setopt no_beep           # ビープ音を鳴らさないようにする
@@ -20,7 +19,7 @@ setopt notify            # バックグラウンドジョブの状態変化を�
 setopt equals            # =commandを`which command`と同じ処理にする
 
 
-### Complement ###
+# ### Complement ###
 autoload -U compinit; compinit # 補完機能を有効にする
 setopt auto_list               # 補完候補を一覧で表示する(d)
 setopt auto_menu               # 補完キー連打で補完候補を順に表示する(d)
@@ -37,12 +36,11 @@ zstyle ':completion:*' group-name ''
 setopt extended_glob # グロブ機能を拡張する
 unsetopt caseglob    # ファイルグロブで大文字小文字を区別しない
 
-
-### History ###
+# ### History ###
 HISTFILE=~/.zsh_history   # ヒストリを保存するファイル
 HISTSIZE=20000            # メモリに保存されるヒストリの件数
 SAVEHIST=20000            # 保存されるヒストリの件数
-setopt bang_hist          # !を使ったヒストリ展開を行う(d)
+setopt no_bang_hist          # !を使ったヒストリ展開を行う(d)
 setopt extended_history   # ヒストリに実行時間も保存する
 setopt hist_ignore_dups   # 直前と同じコマンドはヒストリに追加しない
 setopt share_history      # 他のシェルのヒストリをリアルタイムで共有する
@@ -77,13 +75,13 @@ export ZLS_COLORS=$LS_COLORS
 # lsコマンド時、自動で色がつく(ls -Gのようなもの？)
 export CLICOLOR=true
 # 補完候補に色を付ける
- zstyle ':completion:*' verbose yes
- zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
- zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
- zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
- zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
- zstyle ':completion:*:options' description 'yes'
- zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
+zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
+zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
 
 # マッチ種別を別々に表示
 zstyle ':completion:*' group-name ''
