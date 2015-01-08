@@ -141,6 +141,19 @@ if neobundle#tap('vim-fugitive')
         nnoremap <buffer> [git]p :<C-u>Gpush<CR>
         nnoremap <buffer> [git]P :<C-u>Gpull<CR>
     endfunction
+
+    command! Make call FugitiveMyMake()
+    function! FugitiveMyMake()
+        let l:error = system(&l:makeprg)
+        redraw!
+        echohl Special 
+        for error in split(l:error, '\n')
+            echomsg error
+        endfor
+        echohl None 
+        execute 'call fugitive#cwindow()'
+    endfunction
+
     function! neobundle#hooks.on_post_source(bundle)
         augroup FUGITIVE
             autocmd!
@@ -148,6 +161,7 @@ if neobundle#tap('vim-fugitive')
         augroup END
     endfunction
     call neobundle#untap()
+    "
 endif
 
 command! FollowSymlink call s:SwitchToActualFile()
