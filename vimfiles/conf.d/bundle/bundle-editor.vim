@@ -18,7 +18,8 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#text_mode_filetypes= {
                 \ 'tex' : 1,
                 \ 'markdown' : 1,
-                \ 'plaintex' : 1
+                \ 'plaintex' : 1,
+                \ 'gitcommit' : 1
                 \}
     let g:neocomplete#enable_at_startup = 1
     " Use smartcase.
