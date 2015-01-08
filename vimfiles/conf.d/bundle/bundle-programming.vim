@@ -178,7 +178,7 @@ if neobundle#tap('python-mode')
     " let g:pymode_lint_select = "E501,W0011,W430"
     let g:pymode_lint_cwindow = 0
 
-    let g:pymode_rope = 1
+    let g:pymode_rope = 0
     let g:pymode_rope_project_root = ""
     let g:pymode_rope_lookup_project = 0
 
