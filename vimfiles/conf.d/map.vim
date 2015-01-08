@@ -111,6 +111,8 @@ nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>     : setl cursorcolumn?<C
 nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
 nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
 nnoremap <silent> [toggle]p : set paste!<CR> 
+
+
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
 "--------------------------------------------------

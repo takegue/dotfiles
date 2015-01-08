@@ -93,13 +93,13 @@ function! s:hooks.on_source(bundle)
     imap <expr><TAB> pumvisible() ?  "\<C-n>" : 
                 \  neosnippet#jumpable() ? 
                 \ "\<Plug>(neosnippet_jump)"  : "\<TAB>" 
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-                \ "\<plug>(neosnippet_expand_or_jump)"
+    smap <expr><TAB> neosnippet#jumpable() ? 
+                \ "\<plug>(neosnippet_jump)"
                 \: "\<TAB>"
 
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#snippets_directory = [ '~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
+    let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
     let g:neosnippet#enable_preview = 0	 
     let g:neosnippet#disable_runtime_snippets = {
     \   'tex' : 1,

@@ -1,7 +1,6 @@
 set nowrap
 
-inoremap <CR> <Space><Space><CR>
-inoremap <buffer><silent> <CR> <Space><Space><CR>
+inoremap <buffer><silent> <CR>  <Space><Space><CR>
 " todoリストのon/offを切り替える
 nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
 vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>

@@ -1,10 +1,17 @@
-#For pytest snippets
+#my snipets
+snippet     list_comprehension
+alias       ls_comp
+abbr        [ x for x in X]
+options     word
+        [ ${3:process} for ${2:val} in ${1:iterable}]
+
 snippet    defcls
 options     head
     @classmethod
     def ${1:class_method} (cls, ${2:args}):
         ${3:body}
 
+#For pytest snippets
 snippet    assert
 options     head
         assert ${1:first} == ${2:second}
@@ -72,7 +79,6 @@ options     head
 snippet    parametrize
 options     head
         @pytest.mark.parametrize('${1:name}', [${2:parameters}])
-
 
 options     head
         @pytest.mark.usefixtures('${1:fixture}')

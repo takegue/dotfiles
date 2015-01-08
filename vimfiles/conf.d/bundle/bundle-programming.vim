@@ -123,7 +123,7 @@ let s:hooks = neobundle#get_hooks("pytest.vim")
 function! s:hooks.on_source(bundle)
     nnoremap  <silent><F5>      <Esc>:Pytest file verbose<CR>
     nnoremap  <silent><C-F5>    <Esc>:Pytest class verbose<CR>
-    nnoremap  <silent><S-F5>  <Esc>:Pytest project verbose<CR>
+    nnoremap  <silent><S-F5>    <Esc>:Pytest project verbose<CR>
     nnoremap  <silent><F6>      <Esc>:Pytest session<CR>
 endfunction
 
@@ -131,8 +131,6 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
             \ "autoload"    : {
             \   "filetypes" : ["python", "python3", "djangohtml"]
             \ }}
-
-
 NeoBundle 'klen/python-mode', {
              \ "autoload"    : {
              \   "filetypes" : ["python", "python3", "djangohtml"],
@@ -142,11 +140,11 @@ NeoBundle 'klen/python-mode', {
              \   "mac"       : "pip install --user pylint rope pyflake pep8",
              \   "unix"      : "pip install --user pylint rope pyflake pep8"
              \ }}
-
 if neobundle#tap('python-mode')
     let g:pymode = 1
     let g:pymode_warnings = 1
-    let g:pymode_paths = []
+    let g:pymode_paths = ['shutil', 'datetime', 'time',
+                \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
     let g:pymode_trim_whitespaces = 1
     let g:pymode_options = 1
     let g:pymode_options_colorcolumn = 1
@@ -163,7 +161,7 @@ if neobundle#tap('python-mode')
     " let g:pymode_virtualenv = 1
     " let g:pymode_virtualenv_path = $VIRTUAL_ENV
 
-    let g:pymode_run = 0            "かなり役立たずなのでoff
+    let g:pymode_run = 0            "QuickRunの方が優秀
     " let g:pymode_run_bind = '<leader>R'
 
     let g:pymode_breakpoint = 1
@@ -218,30 +216,30 @@ if neobundle#tap('python-mode')
         autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
     augroup END
 
+    let g:pymode_syntax_slow_sync = 0
     let g:pymode_syntax_all = 1
     let g:pymode_syntax_print_as_function = 0
     let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
     let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
-
     " Highlight 'self' keyword
-    let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+    let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
     " Highlight indent's errors
-    let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+    let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
     " Highlight space's errors
-    let g:pymode_syntax_space_errors = g:pymode_syntax_all
+    let g:pymode_syntax_space_errors             = g:pymode_syntax_all
     " Highlight string formatting
-    let g:pymode_syntax_string_formatting = g:pymode_syntax_all
-    let g:pymode_syntax_string_format = g:pymode_syntax_all
-    let g:pymode_syntax_string_templates = g:pymode_syntax_all
-    let g:pymode_syntax_doctests = g:pymode_syntax_all
+    let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
+    let g:pymode_syntax_string_format            = g:pymode_syntax_all
+    let g:pymode_syntax_string_templates         = g:pymode_syntax_all
+    let g:pymode_syntax_doctests                 = g:pymode_syntax_all
     " Highlight builtin objects (True, False, ...)
-    let g:pymode_syntax_builtin_objs = g:pymode_syntax_all
+    let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
     " Highlight builtin types (str, list, ...)
-    let g:pymode_syntax_builtin_types = g:pymode_syntax_all
-    " Highlight exceptions (TypeError, ValueError, ...) 
-    let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all
+    let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
+    " Highlight exceptions (TypeError, ValueError, ...)
+    let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
     " Highlight docstrings as pythonDocstring (otherwise as pythonString)
-    let g:pymode_syntax_docstrings = g:pymode_syntax_all
+    let g:pymode_syntax_docstrings               = g:pymode_syntax_all
 
     function! neobundle#hooks.on_source(bundle)
         
