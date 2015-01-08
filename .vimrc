@@ -18,6 +18,7 @@
 "  | "conf.d/bundle/bundle-misc.vim"
 runtime! conf.d/*.vim
 
+
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
 if has('vim_starting')

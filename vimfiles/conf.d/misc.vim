@@ -94,6 +94,7 @@ augroup MyAutoCmd
     autocmd WinEnter * if &number | set cursorline relativenumber | endif
     autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle 
     autocmd BufRead */conf.d/*.vim setlocal path+=$HOME/.vim/bundle 
+
 augroup END
 
 
