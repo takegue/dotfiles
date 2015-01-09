@@ -27,7 +27,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     let g:neocomplete#enable_auto_delimiter = 1
-    let g:neocomplete#enable_auto_close_preview = 0
+    let g:neocomplete#enable_auto_close_preview = 1
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default' : '',
@@ -35,8 +35,15 @@ if neobundle#tap('neocomplete.vim')
                 \ 'scheme' : $HOME.'/.gosh_completions'
                 \ }
 
-
+    " let g:neocomplcache_omni_functions = {}
+    " " make Vim call omni function when below patterns matchs
+    " let g:neocomplcache_force_omni_patterns = {}
+    " let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
+    "
     let g:neocomplete#sources#omni#input_patterns = {}
+    let g:neocomplete#sources#omni#input_patterns.python = 'jedi#completions'
+    let g:neocomplete#force_omni_input_patterns = {}
+    let g:neocomplete#force_omni_input_patterns.python = '[^. \t]\.\w*'
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
@@ -66,12 +73,16 @@ if neobundle#tap('neocomplete.vim')
         inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
         inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
         inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+        " make neocomplcache use jedi#completions omini function for python scripts
+
+
         endfunction "}}}
     call neobundle#untap()
 endif "}}}
 
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'honza/vim-snippets'
+" NeoBundle 'SirVer/ultisnips'
 NeoBundle 'Shougo/neosnippet.vim' , {
             \  'depends' : "Shougo/neocomplete.vim"
             \}
