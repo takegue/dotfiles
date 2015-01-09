@@ -1,6 +1,5 @@
 set nowrap
 
-inoremap <buffer><silent> <CR>  <Space><Space><CR>
 " todoリストのon/offを切り替える
 nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
 vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
@@ -36,8 +35,8 @@ if has('gui_running')
     inoremap <buffer><silent> <CR> <Space><Space><CR>
     inoremap <buffer><silent> <C-CR>  <CR><CR>
 elseif &term == 'xterm-256color'
-    inoremap <buffer><silent> <CR> <Space><Space><CR>
-    inoremap <buffer><silent>    <CR><CR>
+    " inoremap <buffer><silent> <CR> <Space><Space><CR>
+    " inoremap <buffer><silent>    <CR><CR>
 endif
 
 " todoリストを簡単に入力する
