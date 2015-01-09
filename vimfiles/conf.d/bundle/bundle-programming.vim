@@ -131,7 +131,21 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
             \ "autoload"    : {
             \   "filetypes" : ["python", "python3", "djangohtml"]
             \ }}
-NeoBundle 'klen/python-mode', {
+NeoBundleLazy 'davidhalter/jedi-vim', {
+             \ "autoload"    : {
+             \   "filetypes" : ["python", "python3", "djangohtml"],
+             \ },
+             \ "build"       : {
+             \   "cygwin"    : "pip install --user jedi",
+             \   "mac"       : "pip install --user jedi",
+             \   "unix"      : "pip install --user jedi"
+             \ }}
+if neobundle#tap('jedi-vim')
+    let g:jedi#completions_command = "<C-N>"
+    call neobundle#untap()
+endif
+
+NeoBundleLazy 'klen/python-mode', {
              \ "autoload"    : {
              \   "filetypes" : ["python", "python3", "djangohtml"],
              \ },
@@ -242,7 +256,6 @@ if neobundle#tap('python-mode')
     let g:pymode_syntax_docstrings               = g:pymode_syntax_all
 
     function! neobundle#hooks.on_source(bundle)
-        
     endfunction
     call neobundle#untap()
 endif
