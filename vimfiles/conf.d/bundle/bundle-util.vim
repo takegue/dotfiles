@@ -64,6 +64,9 @@ endfunction
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'
 "
+"
+NeoBundle 'rking/ag.vim'
+"
 NeoBundle 'osyo-manga/vim-over'
 let g:over_enable_cmd_windw = 1
 " over.vimの起動  
@@ -114,6 +117,8 @@ function! s:hooks.on_source(bundle)
     endfunction
 endfunction 
 
+NeoBundle 'KazuakiM/vim-regexper'
+
 NeoBundle 'majutsushi/tagbar'
 if neobundle#tap('tagbar')
     function! neobundle#hooks.on_source(bundle)
@@ -122,7 +127,11 @@ if neobundle#tap('tagbar')
     call neobundle#untap()
 endif
 
+"For git, github utilities {{{
 NeoBundle 'cohama/agit.vim'
+NeoBundle 'moznion/github-commit-comment.vim', {
+    \   'depends' : ['jceb/vim-hier', 'dannyob/quickfixstatus']
+    \}
 
 NeoBundle 'tpope/vim-fugitive'          "Git操作用 プラグイン
 if neobundle#tap('vim-fugitive')
@@ -176,25 +185,14 @@ if neobundle#tap('vim-fugitive')
     "
 endif
 
-command! FollowSymlink call s:SwitchToActualFile()
-function! s:SwitchToActualFile()
-    let l:fname = resolve(expand('%:p'))
-    let l:pos = getpos('.')
-    let l:bufname = bufname('%')
-    enew
-    exec 'bw '. l:bufname
-    exec "e" . fname
-    call setpos('.', pos)
-endfunction
 
-NeoBundle 'tpope/vim-repeat'
 
+" For comaptibility with tmux {{{
 NeoBundle 'tejr/vim-tmux'
-
 NeoBundle 'christoomey/vim-tmux-navigator'
 let s:hooks = neobundle#get_hooks('vim-tmux-navigator')
 function! s:hooks.on_source(bundle)
-    let g:tmux_navigator_save_on_switch = 1
+    let g:tmux_navigator_save_on_switch = 0
     " " let g:tmux_navigator_no_mappings = 1
     " nnoremap <silent> {Left-mapping} :TmuxNavigateLeft<cr>
     " nnoremap <silent> {Down-Mapping} :TmuxNavigateDown<cr>
@@ -203,10 +201,14 @@ function! s:hooks.on_source(bundle)
     " nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 endfunction
 unlet s:hooks
+" }}}
+
+
+NeoBundle 'tpope/vim-repeat'
 
 NeoBundle 'majutsushi/tagbar'
 
-NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch.vim' "{{{
 if neobundle#tap('incsearch.vim')
     map /  <Plug>(incsearch-forward)
     map ?  <Plug>(incsearch-backward)
@@ -224,7 +226,7 @@ if neobundle#tap('incsearch.vim')
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()
-endif
+endif "}}}
 
 
 NeoBundle 'Lokaltog/vim-easymotion'   "{{{ 高速移動用マッピング

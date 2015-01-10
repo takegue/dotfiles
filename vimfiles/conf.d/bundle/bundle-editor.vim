@@ -28,7 +28,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     let g:neocomplete#enable_auto_delimiter = 1
-    let g:neocomplete#enable_auto_close_preview = 1
+    let g:neocomplete#enable_auto_close_preview = 0
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default' : '',
@@ -36,19 +36,19 @@ if neobundle#tap('neocomplete.vim')
                 \ 'scheme' : $HOME.'/.gosh_completions'
                 \ }
 
-    " let g:neocomplcache_omni_functions = {}
     " " make Vim call omni function when below patterns matchs
-    " let g:neocomplcache_force_omni_patterns = {}
-    " let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
-    "
-    let g:neocomplete#sources#omni#input_patterns = {}
-    let g:neocomplete#sources#omni#input_patterns.python = 'jedi#completions'
+    let g:neocomplete#sources#omni#functions = {}
+
     let g:neocomplete#force_omni_input_patterns = {}
-    let g:neocomplete#force_omni_input_patterns.python = '[^. \t]\.\w*'
+    let g:neocomplete#force_omni_input_patterns.python = 
+        \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+    let g:neocomplete#sources#omni#input_patterns = {}
     let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
 
     function! neobundle#hooks.on_source(bundle) "{{{
         " Plugin key-mappings.
@@ -76,8 +76,7 @@ if neobundle#tap('neocomplete.vim')
         inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
         " make neocomplcache use jedi#completions omini function for python scripts
 
-
-        endfunction "}}}
+    endfunction "}}}
     call neobundle#untap()
 endif "}}}
 
@@ -106,16 +105,17 @@ function! s:hooks.on_source(bundle)
                 \  neosnippet#jumpable() ? 
                 \ "\<Plug>(neosnippet_jump)"  : "\<TAB>" 
     smap <expr><TAB> neosnippet#jumpable() ? 
-                \ "\<plug>(neosnippet_jump)"
-                \: "\<TAB>"
+                \ "\<plug>(neosnippet_jump)" : 
+                \ "\<TAB>"
+
 
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
     let g:neosnippet#enable_preview = 0	 
     let g:neosnippet#disable_runtime_snippets = {
-    \   'tex' : 1,
-    \ }  
+                \   'tex' : 1,
+                \ }
 
     " For snippet_complete marker.
     if has('conceal')

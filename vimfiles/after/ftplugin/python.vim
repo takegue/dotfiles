@@ -14,7 +14,6 @@ iab <buffer> pypath #!/usr/bin/env python<CR>
 inoremap """ """<CR>"""<Up>
 inoremap ''' '''<CR>'''<Up>
 
-"TODO:ローカル(.local/path/to/python)も追加する
 "python sys.pathを set pathで追加
 python << EOF
 import os
@@ -22,7 +21,8 @@ import sys
 import vim
 
 ver = sys.version_info
-fmt = '~/.local/lib/python{major}.{minor}/site-packages'
+fmt =  '~/.local/lib/python{major}.{minor}/site-packages' 
+
 sys.path.append(fmt.format(major=ver.major, minor=ver.minor))
 
 for p in sys.path:

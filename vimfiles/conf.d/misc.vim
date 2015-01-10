@@ -78,15 +78,13 @@ endfunction
 "==================================================
 " autocmd Configuration
 "==================================================
-
 augroup MyAutoCmd
     autocmd!
     autocmd VimEnter * call s:ChangeCurrentDir('', '')
     autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
     " make, grep などのコマンド後に自動的にQuickFixを開く
-    autocmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+    autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
     " QuickFixおよびHelpでは q でバッファを閉じる
-    autocmd FileType help,qf nnoremap <buffer> q <C-w>c
     autocmd FileType help,qf nnoremap <buffer> q <C-w>c
     autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
@@ -94,14 +92,29 @@ augroup MyAutoCmd
     autocmd WinEnter * if &number | set cursorline relativenumber | endif
     autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle 
     autocmd BufRead */conf.d/*.vim setlocal path+=$HOME/.vim/bundle 
-
+    " autocmd BufReadPost * call s:SwitchToActualFile()
 augroup END
+
+command! FollowSymlink call s:SwitchToActualFile()
+function! s:SwitchToActualFile()
+    let l:fname = resolve(expand('%:p'))
+    let l:pos = getpos('.')
+    let l:bufname = bufname('%')
+    enew
+    exec 'bw '. l:bufname
+    exec "e" . fname
+    call setpos('.', pos)
+endfunction "}}}
 
 
 function! s:RestoreCursorPostion()
     if line("'\"") <= line("$")
         normal! g`"
     endif
+    try
+        normal! zO
+    catch /E490/
+    endtry
 endfunction
 
 " Jump to the previous position when file opend
@@ -122,7 +135,7 @@ augroup END
 
 augroup edit_vimrc
     autocmd!
-    autocmd BufRead .vimrc setlocal path+=$HOME/.vim 
+    autocmd BufReadPost .vimrc setlocal path+=$HOME/.vim 
     autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
     autocmd BufWritePost */conf.d/*.vim nested source %
 augroup END

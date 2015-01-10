@@ -100,16 +100,15 @@ endfunction
 "--------------------------------------------------
 " Programming - Python
 "--------------------------------------------------
-NeoBundleLazy 'ivanov/vim-ipython', {
-            \ 'autoload'    : {
-            \   'filetypes' : ['python', 'python3'],
-            \ },
-            \ }
-let s:hooks = neobundle#get_hooks('vim-ipython')
-function! s:hooks.on_source(bundle)
-endfunction
-unlet s:hooks
-
+" NeoBundleLazy 'ivanov/vim-ipython', {
+"             \ 'autoload'    : {
+"             \   'filetypes' : ['python', 'python3'],
+"             \ },
+"             \ }
+" let s:hooks = neobundle#get_hooks('vim-ipython')
+" function! s:hooks.on_source(bundle)
+" endfunction
+" unlet s:hooks
 
 NeoBundleLazy 'alfredodeza/pytest.vim', {
             \ 'autoload'    : {
@@ -241,7 +240,6 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
 "     call neobundle#untap()
 " endif
 
-let g:jedi#popup_select_first = 0
 NeoBundleLazy 'davidhalter/jedi-vim', {
              \ "autoload"    : {
              \   "filetypes" : ["python", "python3", "djangohtml"],
@@ -252,21 +250,40 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
              \   "unix"      : "pip install --user jedi"
              \ }}
 if neobundle#tap('jedi-vim')
-    let g:jedi#completions_command = "<C-N>"
+    " let g:jedi#completions_command = "<C-N>"
     " 自動設定機能をoffにし手動で設定を行う
     let g:jedi#auto_initialization  = 0
     let g:jedi#auto_vim_configuration = 0
     let g:jedi#popup_on_dot = 0
+    let g:jedi#auto_close_doc = 0
+    " let g:jedi#show_call_signatures = 1
+
     "quickrunと被るため大文字に変更
-    let g:jedi#rename_command = 'R'
-    let g:jedi#goto_assignments_command = 'gf'
-    let g:jedi#goto_definitions_command = 'gd'
-    let g:jedi#auto_close_doc = 1
-    let g:jedi#use_tabs_not_buffers = 1
-    let g:jedi#completions_enabled = 1
-    let g:jedi#show_call_signatures = 1
+    " let g:jedi#rename_command = 'R'
+    " let g:jedi#goto_assignments_command = 'gf'
+    " let g:jedi#goto_definitions_command = 'gd'
+    " let g:jedi#use_tabs_not_buffers = 1
+    " let g:jedi#completions_enabled = 1
+    "
+    " Configuration necocomplete, because of conflicts to one {{{
+    if !exists('g:neocomplete#sources#omni#functions')
+        let g:neocomplete#sources#omni#functions = {}
+    endif
+    let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
+
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#sources#omni#input_patterns.python = ''
+    endif
+    let g:neocomplete#force_omni_input_patterns.python = 
+        \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+    "}}}
+
     function! neobundle#hooks.on_source(bundle)
-        
+        " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
+        autocmd FileType python setlocal omnifunc=jedi#completions
+        " autocmd FileType python setlocal omnifunc=jedi#completions
+        call jedi#configure_call_signatures()
     endfunction
     call neobundle#untap()
 

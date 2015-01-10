@@ -156,3 +156,5 @@ inoremap `` ``<left>
 inoremap "" ""<left>
 
 
+"For Folding 
+inoremap {{{ {{{<CR>}}}
