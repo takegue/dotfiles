@@ -39,6 +39,12 @@ function! s:Todo()
     unlet! l:path
 endfunction
 
+command! -bang -nargs=* PluginTest call PluginTest()
+function! PluginTest()
+  execute '!vim -u NONE -i NONE -N --cmd "set rtp+=' . getcwd() . '"'
+endfunction
+"}}}
+
 augroup edit_memo
     autocmd!
     autocmd BufNewFile,BufRead *.todo 
