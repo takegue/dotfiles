@@ -58,6 +58,7 @@ function! s:template_keywords()
     silent! %s/<+FILE NAME+>/\=expand('%:t')/g
     silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
     silent! %s/<+MONTH+>/\=strftime('%m')/g
+    silent! %s/<+PLUGIN_NAME NAME+>/\=input('%:t')/g
     " And more...
 endfunction
 

@@ -56,6 +56,16 @@ endfunction
 unlet s:hooks
 
 
+NeoBundle 'TKNGUE/atcoder_helper', {'type__protocol' : 'ssh' }
+if neobundle#tap('atcoder_helper')
+    let g:online_jadge_path = '/home/takeno/.local/src/OnlineJudgeHelper/oj.py'
+    let g:atcoder_config = '/home/takeno/.local/src/OnlineJudgeHelper/setting.json'
+    let g:atcoder_dir = '$HOME/Documents/codes/atcoder'
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+endif
+
 
 NeoBundle 'TKNGUE/sum-it.vim', {}
 if neobundle#tap('sum-it.vim')
