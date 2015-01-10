@@ -39,12 +39,15 @@ function! s:Todo()
     unlet! l:path
 endfunction
 
-command! -bang -nargs=* PluginTest call PluginTest()
-function! PluginTest()
-  execute '!vim -u NONE -i NONE -N --cmd "set rtp+=' . getcwd() . '"'
+
+command! -bang -nargs=* PluginTest call PluginTest(<bang>0, <q-args>)
+function! PluginTest(is_gui, extraCommand)
+  let cmd = a:is_gui ? 'gvim' : 'vim'
+  let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
+  execute '!' . cmd . ' -u ~/.vim/.min.vimrc -i NONE -N --cmd "set rtp+=' . getcwd() . '"' . extraCommand
 endfunction
 "}}}
-
+"
 augroup edit_memo
     autocmd!
     autocmd BufNewFile,BufRead *.todo 

@@ -1,0 +1,31 @@
+filetype off
+filetype plugin indent off
+
+syntax on
+
+source ~/.vim/conf.d/basic.vim
+source ~/.vim/conf.d/map.vim
+
+" =====
+" NeoBundle
+" =====
+if has('vim_starting')
+    set runtimepath+=~/.vim/bundle/neobundle.vim
+    call neobundle#rc(expand('~/.vim/bundle'))
+endif
+
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" =====
+" NeoBundle User Settings
+" =====
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'tomasr/molokai'
+
+" =====
+" colorscheme
+" =====
+let g:htbrid_use_iTerm_colors = 1
+colorscheme molokai
+
+filetype plugin indent on
