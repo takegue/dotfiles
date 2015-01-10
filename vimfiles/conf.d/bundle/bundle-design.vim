@@ -34,15 +34,17 @@ if neobundle#tap('lightline.vim')
     function! MyFilename()
         return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
         \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft == 'unite' ? unite#get_status_string() :
+        \  &ft == 'unite'    ? unite#get_status_string()    :
         \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \  &bt == 'quickfix' ? '[Quick Fix]'                :
+        \  &bt == 'nofile' && &bh =='hide'  ? '*Scratch*'   :
         \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != MyModified() ? ' ' . MyModified() : '')
     endfunction 
 
     function! MyFugitive()
         try
-            if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#statusline')
+            if &ft !~? 'help\|vimfiler\|gundo' && exists('*fugitive#statusline')
                 let _ = substitute(fugitive#statusline(),'\[Git:\?\(.\+\)\]', '\1', 'g')
                 let _ = substitute(_,'^(\(.\+\))$', '\1', 'g')
                 return strlen(_) ? '⭠ '._ : ''
