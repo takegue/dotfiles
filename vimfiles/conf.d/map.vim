@@ -102,16 +102,21 @@ endif
 "--------------------------------------------------
 nnoremap [toggle] <Nop>
 nmap <Leader>c [toggle]
-nnoremap <silent> [toggle]s : setl spell!<CR>          : setl spell?<CR>
-nnoremap <silent> [toggle]l : setl list!<CR>           : setl list?<CR>
-nnoremap <silent> [toggle]t : setl expandtab!<CR>      : setl expandtab?<CR>
-nnoremap <silent> [toggle]w : setl wrap!<CR>           : setl wrap?<CR>
+nnoremap <silent> [toggle]s  : setl spell!<CR>          : setl spell?<CR>
+nnoremap <silent> [toggle]l  : setl list!<CR>           : setl list?<CR>
+nnoremap <silent> [toggle]t  : setl expandtab!<CR>      : setl expandtab?<CR>
+nnoremap <silent> [toggle]w  : setl wrap!<CR>           : setl wrap?<CR>
 nnoremap <silent> [toggle]cc : setl cursorline!<CR>     : setl cursorline?<CR>
-nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>     : setl cursorcolumn?<CR>
-nnoremap <silent> [toggle]n : setl number!<CR>         : setl number?<CR>
-nnoremap <silent> [toggle]r : setl relativenumber!<CR> : setl relativenumber?<CR>
-nnoremap <silent> [toggle]p : set paste!<CR> 
-
+nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>   : setl cursorcolumn?<CR>
+nnoremap <silent> [toggle]n  : setl number!<CR>         : setl number?<CR>
+nnoremap <silent> [toggle]r  : setl relativenumber!<CR> : setl relativenumber?<CR>
+nnoremap <silent> [toggle]p  : set paste!<CR>
+nnoremap <silent> [toggle]v  :<c-u>
+            \:if &completeopt =~ 'preview'<CR>
+            \:  set completeopt-=preview <CR> :pclose<CR>
+            \:else<CR>
+            \:  set completeopt+=preview <CR>
+            \:endif<CR> :setl completeopt?<CR>
 
 " nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR> 
 "                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
