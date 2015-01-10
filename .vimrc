@@ -17,12 +17,11 @@
 "  | "conf.d/bundle/bundle-util.vim"
 "  | "conf.d/bundle/bundle-misc.vim"
 runtime! conf.d/*.vim
-
+syntax enable
 
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
 if has('vim_starting')
-    syntax enable
     set t_Co=256
     let g:solarized_termcolors=256
 

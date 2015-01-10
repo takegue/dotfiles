@@ -11,6 +11,7 @@
 	template = /sougen/takeno_a6/.git_template
     ; template = /sougen/takeno_a6/.git_template
 [diff]
+    tool = vimdiff
 
 [alias]
 ignore = !"f() { local s=$1; shift; \

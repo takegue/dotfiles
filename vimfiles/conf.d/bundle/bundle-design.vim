@@ -1,8 +1,6 @@
 "---------------------------------------------------
 " Design: mainly setting the vim design
 "-------------------------------------------------- 
-"
-
 "nathanaelkane/vim-indent-guides' : indent guide用のプラグイン{{{
 NeoBundle 'nathanaelkane/vim-indent-guides'  
 if neobundle#tap('vim-indent-guides')
