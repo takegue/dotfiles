@@ -95,11 +95,26 @@ augroup MyAutoCmd
     " autocmd BufReadPost * call s:SwitchToActualFile()
 augroup END
 
+command! FollowSymlink call s:SwitchToActualFile()
+function! s:SwitchToActualFile()
+    let l:fname = resolve(expand('%:p'))
+    let l:pos = getpos('.')
+    let l:bufname = bufname('%')
+    enew
+    exec 'bw '. l:bufname
+    exec "e" . fname
+    call setpos('.', pos)
+endfunction "}}}
+
 
 function! s:RestoreCursorPostion()
     if line("'\"") <= line("$")
         normal! g`"
     endif
+    try
+        normal! zO
+    catch /E490/
+    endtry
 endfunction
 
 " Jump to the previous position when file opend
