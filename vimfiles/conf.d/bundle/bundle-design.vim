@@ -24,7 +24,7 @@ endif "}}}
 NeoBundle 'itchyny/lightline.vim' 
 if neobundle#tap('lightline.vim')
     function! MyModified()
-        return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+        return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' ? '' : &modified ? '+' : &modifiable ? '' : '-'
     endfunction 
 
     function! MyReadonly()
@@ -36,8 +36,9 @@ if neobundle#tap('lightline.vim')
         \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
         \  &ft == 'unite'    ? unite#get_status_string()    :
         \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \  &previewwindow    ? '[Preview]':
         \  &bt == 'quickfix' ? '[Quick Fix]'                :
-        \  &bt == 'nofile' && &bh =='hide'  ? '*Scratch*'   :
+        \  &bt == 'nofile' && &bh =='hide'  ? '[Scratch]'   :
         \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' != MyModified() ? ' ' . MyModified() : '')
     endfunction 
