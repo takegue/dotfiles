@@ -9,9 +9,11 @@ if [ -e /usr/bin/zsh ]; then
 fi 
 
 echo "$dir/vimfiles => ~/.vim"
-rm ~/.vim
+rm ~/.vim ~/.vimrc.min ~/.git_template
 ln -s $dir/vimfiles ~/.vim
 ln -s $dir/.git_template ~/.git_template
+ln -s $dir/.vimrc.min ~/.vimrc.min
+
 mkdir -p  ~/.vim/bundle/
 
 for dotfile in $dir/.*rc $dir/.*.conf $dir/.ctags; do

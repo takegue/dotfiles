@@ -119,6 +119,21 @@ function! s:hooks.on_source(bundle)
 endfunction 
 
 NeoBundle 'KazuakiM/vim-regexper'
+NeoBundleLazy 'itchyny/calendar.vim', {
+            \   'autoload' : {
+            \       'commands' : 'Calendar'
+            \}}
+if neobundle#tap('calendar.vim')
+    let g:calendar_google_calendar = 1
+    let g:calendar_google_task = 1
+    function! neobundle#hooks.on_source(bundle)
+        augroup MyCalandarVim
+            autocmd!
+            autocmd FileType calendar :IndentGuidesDisable 
+        augroup END
+    endfunction
+    call neobundle#untap()
+endif
 
 NeoBundle 'majutsushi/tagbar'
 if neobundle#tap('tagbar')

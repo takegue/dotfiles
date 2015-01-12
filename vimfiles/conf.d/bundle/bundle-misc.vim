@@ -2,7 +2,10 @@
 " Other 
 "------------------------------------------------- 
 NeoBundle 'vim-jp/vimdoc-ja'        " ヘルプの日本語化
+NeoBundle 'mattn/learn-vimscript'   " help for vim script
 NeoBundle 'Shougo/neobundle-vim-recipes'
+NeoBundle 'vim-jp/vital.vim'
+'
 
 
 NeoBundle 'uguu-org/vim-matrix-screensaver'
