@@ -132,113 +132,113 @@ NeoBundleLazy 'voithos/vim-python-matchit', {
             \   "filetypes" : ["python", "python3", "djangohtml"]
             \ }}
 
-" NeoBundleLazy 'klen/python-mode', {
-"              \ "autoload"    : {
-"              \   "filetypes" : ["python", "python3", "djangohtml"],
-"              \ },
-"              \ "build"       : {
-"              \   "cygwin"    : "pip install --user pylint rope pyflake pep8",
-"              \   "mac"       : "pip install --user pylint rope pyflake pep8",
-"              \   "unix"      : "pip install --user pylint rope pyflake pep8"
-"              \ }}
-" if neobundle#tap('python-mode')
-"     let g:pymode = 1
-"     let g:pymode_warnings = 1
-"     let g:pymode_paths = ['shutil', 'datetime', 'time',
-"                 \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-"     let g:pymode_trim_whitespaces = 1
-"     let g:pymode_options = 1
-"     let g:pymode_options_colorcolumn = 1
-"     let g:pymode_quickfix_minheight = 3
-"     let g:pymode_quickfix_maxheight = 6
-"     let g:pymode_python = 'python'
-"     " let g:pymode_indent = []
-"     let g:pymode_folding = 1
-"     let g:pymode_motion = 1
+NeoBundleLazy 'klen/python-mode', {
+             \ "autoload"    : {
+             \   "filetypes" : ["python", "python3", "djangohtml"],
+             \ },
+             \ "build"       : {
+             \   "cygwin"    : "pip install --user pylint rope pyflake pep8",
+             \   "mac"       : "pip install --user pylint rope pyflake pep8",
+             \   "unix"      : "pip install --user pylint rope pyflake pep8"
+             \ }}
+if neobundle#tap('python-mode')
+    let g:pymode = 1
+    let g:pymode_warnings = 1
+    let g:pymode_paths = ['shutil', 'datetime', 'time',
+                \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
+    let g:pymode_trim_whitespaces = 1
+    let g:pymode_options = 1
+    let g:pymode_options_colorcolumn = 1
+    let g:pymode_quickfix_minheight = 3
+    let g:pymode_quickfix_maxheight = 6
+    let g:pymode_python = 'python'
+    " let g:pymode_indent = []
+    let g:pymode_folding = 1
+    let g:pymode_motion = 1
 
-"     let g:pymode_doc = 1
-"     let g:pymode_doc_bind = 'K'
+    let g:pymode_doc = 1
+    let g:pymode_doc_bind = 'K'
 
-"     " let g:pymode_virtualenv = 1
-"     " let g:pymode_virtualenv_path = $VIRTUAL_ENV
+    " let g:pymode_virtualenv = 1
+    " let g:pymode_virtualenv_path = $VIRTUAL_ENV
 
-"     let g:pymode_run = 0            "QuickRunの方が優秀
-"     " let g:pymode_run_bind = '<leader>R'
+    let g:pymode_run = 0            "QuickRunの方が優秀
+    " let g:pymode_run_bind = '<leader>R'
 
-"     let g:pymode_breakpoint = 1
-"     let g:pymode_breakpoint_bind = '<leader>b'
+    let g:pymode_breakpoint = 1
+    let g:pymode_breakpoint_bind = '<leader>b'
 
-"     let g:pymode_lint = 1
-"     let g:pymode_lint_on_write = 1
+    let g:pymode_lint = 1
+    let g:pymode_lint_on_write = 1
 
-"     "Check code on every save (every)
-"     let g:pymode_lint_unmodified = 0
-"     let g:pymode_lint_on_fly = 0
-"     let g:pymode_lint_message = 1
-"     " let g:pymode_lint_ignore = "E501,W"
-"     " let g:pymode_lint_select = "E501,W0011,W430"
-"     let g:pymode_lint_cwindow = 0
+    "Check code on every save (every)
+    let g:pymode_lint_unmodified = 0
+    let g:pymode_lint_on_fly = 0
+    let g:pymode_lint_message = 1
+    " let g:pymode_lint_ignore = "E501,W"
+    " let g:pymode_lint_select = "E501,W0011,W430"
+    let g:pymode_lint_cwindow = 0
 
-"     let g:pymode_rope = 0
-"     let g:pymode_rope_autoimport = 1
-"     let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
-"                 \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-"     let g:pymode_rope_autoimport_import_after_complete = 0
-"     let g:pymode_rope_organize_imports_bind = '<F11>'
+    let g:pymode_rope = 0
+    let g:pymode_rope_autoimport = 1
+    " let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
+    "             \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
+    " let g:pymode_rope_autoimport_import_after_complete = 0
+    " let g:pymode_rope_organize_imports_bind = '<F11>'
 
-"     let g:pymode_rope_goto_definition_bind = 'gf'
-"     " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
+    " let g:pymode_rope_goto_definition_bind = 'gf'
+    " " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
 
-"     let g:pymode_rope_rename_bind = 'R'
-"     " let g:pymode_rope_rename_module_bind = '<C-S-R>'
+    " let g:pymode_rope_rename_bind = 'R'
+    " " let g:pymode_rope_rename_module_bind = '<C-S-R>'
 
-"     let g:pymode_rope_extract_method_bind = '<C-c>rm'
-"     let g:pymode_rope_extract_variable_bind = '<C-c>rl'
-"     let g:pymode_rope_use_function_bind = '<C-c>ru'
+    " let g:pymode_rope_extract_method_bind = '<C-c>rm'
+    " let g:pymode_rope_extract_variable_bind = '<C-c>rl'
+    " let g:pymode_rope_use_function_bind = '<C-c>ru'
 
-"     "よくわからない機能たち
-"     " let g:pymode_rope_move_bind = '<C-c>rv'
-"     " let g:pymode_rope_change_signature_bind = '<C-c>rs'
-"     let g:pymode_lint_sort = ['E', 'C', 'I']  
+    " "よくわからない機能たち
+    " " let g:pymode_rope_move_bind = '<C-c>rv'
+    " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
+    " let g:pymode_lint_sort = ['E', 'C', 'I']  
 
-"     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-"     nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
+    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
+    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
 
-"     augroup pymode_myautocmd
-"         autocmd!
-"         autocmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
-"         autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
-"     augroup END
+    augroup pymode_myautocmd
+        autocmd!
+        autocmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
+        autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
+    augroup END
 
-"     let g:pymode_syntax_slow_sync = 0
-"     let g:pymode_syntax_all = 1
-"     let g:pymode_syntax_print_as_function = 0
-"     let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
-"     let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
-"     " Highlight 'self' keyword
-"     let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
-"     " Highlight indent's errors
-"     let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
-"     " Highlight space's errors
-"     let g:pymode_syntax_space_errors             = g:pymode_syntax_all
-"     " Highlight string formatting
-"     let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
-"     let g:pymode_syntax_string_format            = g:pymode_syntax_all
-"     let g:pymode_syntax_string_templates         = g:pymode_syntax_all
-"     let g:pymode_syntax_doctests                 = g:pymode_syntax_all
-"     " Highlight builtin objects (True, False, ...)
-"     let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
-"     " Highlight builtin types (str, list, ...)
-"     let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
-"     " Highlight exceptions (TypeError, ValueError, ...)
-"     let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
-"     " Highlight docstrings as pythonDocstring (otherwise as pythonString)
-"     let g:pymode_syntax_docstrings               = g:pymode_syntax_all
+    let g:pymode_syntax_slow_sync = 0
+    let g:pymode_syntax_all = 1
+    let g:pymode_syntax_print_as_function = 0
+    let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
+    let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
+    " Highlight 'self' keyword
+    let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
+    " Highlight indent's errors
+    let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
+    " Highlight space's errors
+    let g:pymode_syntax_space_errors             = g:pymode_syntax_all
+    " Highlight string formatting
+    let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
+    let g:pymode_syntax_string_format            = g:pymode_syntax_all
+    let g:pymode_syntax_string_templates         = g:pymode_syntax_all
+    let g:pymode_syntax_doctests                 = g:pymode_syntax_all
+    " Highlight builtin objects (True, False, ...)
+    let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
+    " Highlight builtin types (str, list, ...)
+    let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
+    " Highlight exceptions (TypeError, ValueError, ...)
+    let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
+    " Highlight docstrings as pythonDocstring (otherwise as pythonString)
+    let g:pymode_syntax_docstrings               = g:pymode_syntax_all
 
-"     function! neobundle#hooks.on_source(bundle)
-"     endfunction
-"     call neobundle#untap()
-" endif
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+endif
 
 NeoBundleLazy 'davidhalter/jedi-vim', {
              \ "autoload"    : {
@@ -278,15 +278,12 @@ if neobundle#tap('jedi-vim')
         \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
     "}}}
-
     function! neobundle#hooks.on_source(bundle)
         " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
-        autocmd FileType python setlocal omnifunc=jedi#completions
-        " autocmd FileType python setlocal omnifunc=jedi#completions
         call jedi#configure_call_signatures()
+        autocmd FileType python setlocal omnifunc=jedi#completions
     endfunction
     call neobundle#untap()
-
 endif
  
 

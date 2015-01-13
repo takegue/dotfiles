@@ -100,7 +100,7 @@ function! s:hooks.on_source(bundle)
     " SuperTab like snippets behavior.
     imap <expr><CR>  neosnippet#expandable() ? 
                 \ "\<Plug>(neosnippet_expand)" : 
-                \ pumvisible() ?  "\<C-Y>" : "\<CR>"
+                \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup()  : "\<CR>"
     imap <expr><TAB> pumvisible() ?  "\<C-n>" : 
                 \  neosnippet#jumpable() ? 
                 \ "\<Plug>(neosnippet_jump)"  : "\<TAB>" 

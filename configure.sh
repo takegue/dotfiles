@@ -16,7 +16,7 @@ ln -s $dir/.vimrc.min ~/.vimrc.min
 
 mkdir -p  ~/.vim/bundle/
 
-for dotfile in $dir/.*rc $dir/.*.conf $dir/.ctags; do
+for dotfile in $dir/.*rc $dir/.*.conf $dir/.ctags $dir/.pythonstartup; do
     dstpath="$HOME/${dotfile##*/}" 
     if [ -L $dstpath ]; then
         rm $dstpath

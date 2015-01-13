@@ -19,6 +19,7 @@
 runtime! conf.d/*.vim
 syntax enable
 
+
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
 if has('vim_starting')

@@ -22,7 +22,7 @@ endif "}}}
 NeoBundle 'itchyny/lightline.vim' 
 if neobundle#tap('lightline.vim')
     function! MyModified()
-        return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' ?
+        return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
                     \ '' : &modified ? '+' : &modifiable ? '' : '-'
     endfunction 
 

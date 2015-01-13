@@ -224,7 +224,7 @@ sshcd()
 #### Export Configurations #### 
 export PATH="/usr/local/bin":$PATH
 export LD_LIBRARY_PATH="/usr/local/lib":"/usr/lib/x86_64-linux-gnu/":$LD_LIBRARY_PATH
-# export PYTHONPATH=$PYTHONPATH
+export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -f "$HOME/.zshrc_local" ]; then
     source $HOME/.zshrc_local
