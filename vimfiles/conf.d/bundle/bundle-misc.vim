@@ -59,7 +59,7 @@ endfunction
 unlet s:hooks
 
 
-NeoBundle 'TKNGUE/atcoder_helper', {}
+NeoBundle 'TKNGUE/atcoder_helper'
 if neobundle#tap('atcoder_helper')
     let g:online_jadge_path = '/home/takeno/.local/src/OnlineJudgeHelper/oj.py'
     let g:atcoder_config = '/home/takeno/.local/src/OnlineJudgeHelper/setting.json'

@@ -6,6 +6,7 @@ NeoBundle 'kana/vim-operator-replace'
 
 NeoBundle 'tpope/vim-commentary'                        "コメント切り替えオペレータ
 NeoBundle 'tpope/vim-surround'                          "surround記号編集オペレータ
+NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-unimpaired'                        "バッファ移動用等
 "sort用オtpope/vim-operator-userペレータ
 NeoBundle 'emonkak/vim-operator-sort', {                
@@ -14,8 +15,7 @@ NeoBundle 'emonkak/vim-operator-sort', {
 NeoBundle 'pekepeke/vim-operator-tabular', {
             \ 'depends' : ['pekepeke/vim-csvutil'] 
             \}
-NeoBundle 'yomi322/vim-operator-suddendeath'            "突然の死ジェネレータ
-" NeoBundle 'wellle/targets.vim'
+NeoBundle 'wellle/targets.vim'
 
 " NeoBundle 'AndrewRadev/switch.vim'                     "true ⇔ falseなどの切り替え
 NeoBundle 'TKNGUE/switch.vim'                           "true ⇔ falseなどの切り替え

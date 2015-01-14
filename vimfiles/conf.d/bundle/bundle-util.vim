@@ -220,7 +220,6 @@ unlet s:hooks
 " }}}
 
 
-NeoBundle 'tpope/vim-repeat'
 
 NeoBundle 'majutsushi/tagbar'
 
