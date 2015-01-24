@@ -8,15 +8,14 @@
     default = matching
 [init]
     templatedir = .git_template
-	template = /sougen/takeno_a6/.git_template
-    ; template = /sougen/takeno_a6/.git_template
+    template = /sougen/takeno_a6/.git_template
 [diff]
     tool = vimdiff
 
 [alias]
-ignore = !"f() { local s=$1; shift; \
-    while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
-    curl \"https://www.gitignore.io/api/$s\"; }; f"
+    ignore = !"f() { local s=$1; shift; \
+        while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
+        curl \"https://www.gitignore.io/api/$s\"; }; f"
 [user]
-	name = TKNGUE
-	email = takeno@jnlp.org
+    name = TKNGUE
+    email = takeno@jnlp.org
