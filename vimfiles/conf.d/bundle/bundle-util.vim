@@ -205,6 +205,7 @@ endif
 
 " For comaptibility with tmux {{{
 NeoBundle 'tejr/vim-tmux'
+NeoBundle 'benmills/vimux'
 NeoBundle 'christoomey/vim-tmux-navigator'
 let s:hooks = neobundle#get_hooks('vim-tmux-navigator')
 function! s:hooks.on_source(bundle)

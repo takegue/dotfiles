@@ -17,6 +17,7 @@ NeoBundle 'pekepeke/vim-operator-tabular', {
             \}
 NeoBundle 'wellle/targets.vim'
 
+
 " NeoBundle 'AndrewRadev/switch.vim'                     "true ⇔ falseなどの切り替え
 NeoBundle 'TKNGUE/switch.vim'                           "true ⇔ falseなどの切り替え
 let s:hooks = neobundle#get_hooks('switch.vim')

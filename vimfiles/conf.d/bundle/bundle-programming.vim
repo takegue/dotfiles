@@ -282,6 +282,11 @@ if neobundle#tap('jedi-vim')
         " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
         call jedi#configure_call_signatures()
         autocmd FileType python setlocal omnifunc=jedi#completions
+        autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
+        autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
+        autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
+        autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto_definitions()<cr>
+        autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
     endfunction
     call neobundle#untap()
 endif
