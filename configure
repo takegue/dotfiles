@@ -33,3 +33,6 @@ for dotfile in $DIR/.* ; do
     echo "$dotfile => $dstpath" 
     ln -s $dotfile ~/ 
 done
+
+git submodule init
+git submodule update

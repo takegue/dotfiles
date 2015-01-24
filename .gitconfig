@@ -7,8 +7,7 @@
 [push]
     default = matching
 [init]
-    templatedir = .git_template
-    template = /sougen/takeno_a6/.git_template
+    templatedir = $HOME/.git_template
 [diff]
     tool = vimdiff
 
