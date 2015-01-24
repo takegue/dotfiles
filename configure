@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+#新しい環境に取り込んだ時のインストール
+
+path=`dirname $0`
+dir=`readlink -f $path` 
+
+if [ -e /usr/bin/zsh ]; then
+	chsh /usr/bin/zsh
+fi 
+
+echo "$dir/vimfiles => ~/.vim"
+ln -s $dir/vimfiles ~/.vim
+
+for dotfile in $dir/.* ; do
+    if [ $dotfile = ${dir}/.git ]; then
+        continue
+    fi
+
+    dstpath="$HOME/${dotfile##*/}" 
+    if [ -L $dstpath ]; then
+        rm $dstpath
+        echo "remove $dstpath"
+    fi 
+    echo "$dotfile => $dstpath" 
+    ln -s $dotfile ~/ 
+done
