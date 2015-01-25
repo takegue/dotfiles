@@ -171,24 +171,24 @@ if neobundle#tap('vim-fugitive')
     function! FugitiveMyMake()
         let l:error = system(&l:makeprg)
         redraw!
-        echohl Special 
+        " echohl Special 
         for error in split(l:error, '\n')
             echomsg error
         endfor
-        echohl None 
+        " echohl None 
         execute 'call fugitive#cwindow()'
     endfunction
 
     function! MyGitPull()
         execute 'Gpull'
         let qflist = getqflist()
-        echohl Special 
+        " echohl Special 
         for d in qflist
             if d.valid == 0
                 echomsg d.text
             endif
         endfor
-        echohl None 
+        " echohl None 
     endfunction
 
     function! neobundle#hooks.on_post_source(bundle)
