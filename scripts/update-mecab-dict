@@ -1,0 +1,24 @@
+#!/bin/zsh
+# -*- coding:utf-8 -*-
+
+mecab_dir=`which mecab`
+mecab_lib=${mecab_dir/bin/lib}
+mecab_share=${mecab_dir/bin/share}
+
+BIN=${0%%/*}/
+echo $BIN
+
+wiki_url=http://d.hatena.ne.jp/images/keyword/keywordlist_furigana.csv
+hatena_url=http://dumps.wikimedia.org/jawiki/latest/jawiki-latest-all-titles-in-ns0.gz
+
+curl -L $wiki_url | nkf -w > keywordlist_furigana.csv
+curl -L $hatena_url | gunzip > jawiki-latest-all-titles-in-ns0
+
+ruby $BIN/conver2mecabformat
+
+$mecab_lib/mecab-dict-index \
+    -d $mecab_share/dic/ipadic \
+    -u custom.dic  \
+    -f utf-8 -t utf-8 \
+    custom.csv
+
