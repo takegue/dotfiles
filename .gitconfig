@@ -7,7 +7,7 @@
 [push]
     default = matching
 [init]
-    templatedir = $HOME/.git_template
+    templatedir = ~/.git_template
 [diff]
     tool = vimdiff
 

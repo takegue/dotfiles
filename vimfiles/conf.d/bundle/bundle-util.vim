@@ -118,6 +118,13 @@ function! s:hooks.on_source(bundle)
     endfunction
 endfunction 
 
+NeoBundleLazy 'lambdalisue/vim-gista', {
+    \ 'autoload': {
+    \    'commands': ['Gista'],
+    \    'mappings': '<Plug>(gista-',
+    \    'unite_sources': 'gista',
+    \}}
+
 NeoBundle 'KazuakiM/vim-regexper'
 NeoBundleLazy 'itchyny/calendar.vim', {
             \   'autoload' : {
