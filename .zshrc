@@ -93,7 +93,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31
 # プロンプトに色を付ける
 autoload -U colors; colors
 # 一般ユーザ時
-tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
+tmp_prompt="%{${fg[cyan]}%}tkngue%# %{${reset_color}%}"
 tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
 tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
 tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
@@ -221,14 +221,15 @@ sshcd()
     ssh $1 -t "cd `pwd`; zsh"
 }
 
-#### Export Configurations #### 
-export PATH="/usr/local/bin":$PATH
-export LD_LIBRARY_PATH="/usr/local/lib":"/usr/lib/x86_64-linux-gnu/":$LD_LIBRARY_PATH
-export PYTHONSTARTUP=~/.pythonstartup
+# cdコマンド実行後、lsを実行する
+function cd() {
+    builtin cd $@ && ls;
+}
 
-if [ -f "$HOME/.zshrc_local" ]; then
-    source $HOME/.zshrc_local
-fi
+#### Export Configurations #### e
+export PATH=/usr/local/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"
@@ -236,8 +237,21 @@ else
     alias todo="$EDITOR ~\/.todo"
 fi  
 
-# cdコマンド実行後、lsを実行する
-function cd() {
-    builtin cd $@ && ls;
-}
+
+if [ -f "$HOME/.zshrc_local" ]; then
+    source $HOME/.zshrc_local
+else
+    cat <<EOS > ~/.zshrc_local
+export PATH=\$HOME/.local/bin:\$PATH
+export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
+EOS
+fi
+
+# pyenv configuration----------------------------------------
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
 

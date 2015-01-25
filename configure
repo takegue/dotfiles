@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+#新しい環境に取り込んだ時のインストール
+
+path=`dirname $0`
+DIR=`readlink -f $path` 
+
+# if [ -e /usr/bin/zsh ]; then
+# 	chsh /usr/bin/zsh
+# fi 
+
+if [ -e `which git` ]; then
+    echo 'not found git'
+fi 
+
+if [ -e `which vim` ]; then
+    echo 'not found git'
+    $DIR/scripts/vim-install.sh
+fi 
+
+echo "$DIR/vimfiles => ~/.vim"
+ln -s $DIR/vimfiles ~/.vim
+
+for dotfile in $DIR/.* ; do
+    if [ $dotfile = ${DIR}/.git ]; then
+        continue
+    fi
+
+    dstpath="$HOME/${dotfile##*/}" 
+    if [ -L $dstpath ]; then
+        rm $dstpath
+        echo "remove $dstpath"
+    fi 
+    echo "$dotfile => $dstpath" 
+    ln -s $dotfile ~/ 
+done
+
+git submodule init
+git submodule update

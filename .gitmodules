@@ -1,0 +1,6 @@
+[submodule "pyenv"]
+	path = .pyenv
+	url = https://github.com/yyuu/pyenv.git
+[submodule "neobundle"]
+	path = vimfiles/bundle/neobundle.vim
+	url = https://github.com/Shougo/neobundle.vim.git
