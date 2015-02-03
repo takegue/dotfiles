@@ -22,6 +22,5 @@ cd /tmp/vim
     --enable-rubyinterp=yes \
     --enable-pythoninterp=yes \
 
-make
-make install
+make && make install
 

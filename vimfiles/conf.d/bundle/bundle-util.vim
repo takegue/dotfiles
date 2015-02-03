@@ -171,7 +171,7 @@ if neobundle#tap('vim-fugitive')
         nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
         nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
         nnoremap <buffer> [git]p :<C-u>Gpush<CR>
-        nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
+        " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
     endfunction
 
     command! Make call FugitiveMyMake()
@@ -186,17 +186,17 @@ if neobundle#tap('vim-fugitive')
         execute 'call fugitive#cwindow()'
     endfunction
 
-    function! MyGitPull()
-        execute 'Gpull'
-        let qflist = getqflist()
-        " echohl Special 
-        for d in qflist
-            if d.valid == 0
-                echomsg d.text
-            endif
-        endfor
-        " echohl None 
-    endfunction
+    " function! MyGitPull()
+    "     execute 'Gpull'
+    "     let qflist = getqflist()
+    "     " echohl Special 
+    "     for d in qflist
+    "         if d.valid == 0
+    "             echomsg d.text
+    "         endif
+    "     endfor
+    "     " echohl None 
+    " endfunction
 
     function! neobundle#hooks.on_post_source(bundle)
         augroup FUGITIVE

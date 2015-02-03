@@ -23,8 +23,8 @@ nnoremap <silent> <Esc><Esc>    :noh<CR>
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
 
-nnoremap g; g;zz
-nnoremap g, g,zz
+nnoremap g; g;zOzz
+nnoremap g, g,zOzz
 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
