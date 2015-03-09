@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 GREP_RESULT=`git diff --cached | grep -e '[a-z0-9A-Z]\{40,120\}'`
-if [ -n "${GREP_RESULT}" ] then
+if [ -n "${GREP_RESULT}" ]; then
     echo 'Access key might be in this index. Please check with git diff --cached'
     echo ${GREP_RESULT}
     exit 1

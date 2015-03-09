@@ -46,17 +46,17 @@ setopt hist_ignore_dups   # 直前と同じコマンドはヒストリに追加�
 setopt share_history      # 他のシェルのヒストリをリアルタイムで共有する
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
-# マッチしたコマンドのヒストリを表示できるようにする
-autoload history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey "^P" history-beginning-search-backward-end
-bindkey "^N" history-beginning-search-forward-end
+# # マッチしたコマンドのヒストリを表示できるようにする
+# autoload history-search-end
+# zle -N history-beginning-search-backward-end history-search-end
+# zle -N history-beginning-search-forward-end history-search-end
+# bindkey "^P" history-beginning-search-backward-end
+# bindkey "^N" history-beginning-search-forward-end
 
-bindkey -M vicmd '?' history-incremental-search-backward
-bindkey -M vicmd '/' history-incremental-search-forward
-bindkey -M viins '^F' history-incremental-search-backward
-bindkey -M viins '^R' history-incremental-search-forward
+# bindkey -M vicmd '?' history-incremental-search-backward
+# bindkey -M vicmd '/' history-incremental-search-forward
+# bindkey -M viins '^F' history-incremental-search-backward
+# bindkey -M viins '^R' history-incremental-search-forward
 
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
@@ -93,7 +93,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31
 # プロンプトに色を付ける
 autoload -U colors; colors
 # 一般ユーザ時
-tmp_prompt="%{${fg[cyan]}%}tkngue%# %{${reset_color}%}"
+tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
 tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
 tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
 tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
@@ -216,9 +216,15 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-sshcd()
+function sshcd()
 {
     ssh $1 -t "cd `pwd`; zsh"
+}
+
+function ssh() {
+    local window_name=$(tmux display -p '#{window_name}')
+    command ssh $@
+    tmux rename-window $window_name
 }
 
 # cdコマンド実行後、lsを実行する
