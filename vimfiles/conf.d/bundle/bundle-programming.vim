@@ -159,8 +159,8 @@ if neobundle#tap('python-mode')
     let g:pymode_doc = 1
     let g:pymode_doc_bind = 'K'
 
-    " let g:pymode_virtualenv = 1
-    " let g:pymode_virtualenv_path = $VIRTUAL_ENV
+    let g:pymode_virtualenv = 1
+    let g:pymode_virtualenv_path = $VIRTUAL_ENV
 
     let g:pymode_run = 0            "QuickRunの方が優秀
     " let g:pymode_run_bind = '<leader>R'

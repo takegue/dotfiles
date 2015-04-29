@@ -233,8 +233,6 @@ function cd() {
 }
 
 #### Export Configurations #### e
-export PATH=/usr/local/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -e "$HOME/Dropbox" ]; then
@@ -254,10 +252,9 @@ EOS
 fi
 
 # pyenv configuration----------------------------------------
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
+# export PYENV_ROOT=$HOME/.pyenv
+# export PATH=$PYENV_ROOT/bin:$PATH
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 

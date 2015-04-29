@@ -41,9 +41,14 @@ endfunction
 
 command! -bang -nargs=* PluginTest call PluginTest(<bang>0, <q-args>)
 function! PluginTest(is_gui, extraCommand)
-  let cmd = a:is_gui ? 'gvim' : 'vim'
-  let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
-  execute '!' . cmd . ' -u ~/.vimrc.min -i NONE -N --cmd "set rtp+=' . getcwd() . '"' . extraCommand
+    let cmd = a:is_gui ? 'gvim' : 'vim'
+    let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
+    if !exists('b:git_dir')
+        additional_path = fnamemodify(b:git_dir, ':p:h:h') 
+    else
+        additional_path = getcwd()
+    endif
+    execute '!' . cmd . ' -u ~/.vimrc.min -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
 endfunction
 "}}}
 "
