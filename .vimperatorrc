@@ -1,19 +1,17 @@
-" .vimperatorrc
-
 " options {{{1
 " safe mode
-"set noloadplugins
+set noloadplugins
 
 " title bar
 set titlestring="Firefox with Vimperator"
 
 " default search/suggest engine: google
-set defsearch=google
-set suggestengines=google
+set defsearch=g
+set suggestengines=g
 
 " completion priority in :[tab]open
 " bookmarks, suggestions, awesome bar
-set complete=bSl
+set complete=blS
 
 " a max number of listing items
 set maxitems=10
@@ -22,7 +20,7 @@ set maxitems=10
 set activate=
 
 " scroll height of <C-d> / <C-u>
-set scroll=5
+set scroll=15
 
 set hintmatching=contains
 
@@ -36,8 +34,8 @@ set newtab=all
 " don't focus any "input" elements automatically when open pages.
 set focuscontent
 
-" show tabbar only
-set gui=none,tabs,addons
+" " show tabbar only
+" set gui=none,tabs,addons
 
 
 " preferences ( Firefox about:config ) {{{1
@@ -81,7 +79,17 @@ set! browser.download.manager.showWhenStarting=false
 " this must be set before map operation, otherwise use default value.
 let mapleader=','
 
+
 " plugins {{{2
+
+"============================
+" plugin
+"============================
+
+" plugin_loader
+let g:plugin_loader_roots = "~\vimperator\vimperator-plugins\ ~/.vimperator/vimperator-plugins/"
+let g:plugin_loader_plugins = "pluginManager,_libly,direct_bookmark,sbmcommentsviewer,caret-hint,appendAnchor,stella,feedSomeKeys_3,commandBookmarklet,copy"
+
 " direct_bookmark.js
 " use service: はてなブックマーク
 let direct_sbm_use_services_by_post='h'
@@ -134,6 +142,7 @@ noremap <Leader>S :noscript toggleperm<CR>
 noremap A :mr<Space>alc<Space>
 noremap E :mr<Space>oxford<Space>
 noremap C :mr<Space>cambridge<Space>
+" noremap i <Insert>
 
 " page specific {{{2
 " nico {{{3
@@ -141,7 +150,6 @@ noremap C :mr<Space>cambridge<Space>
 nnoremap -urls='^http://www\.nicovideo\.jp/watch/' p :stplay<CR>
 nnoremap -urls='^http://www\.nicovideo\.jp/watch/' > :stseek! 30<CR>
 nnoremap -urls='^http://www\.nicovideo\.jp/watch/' < :stseek! -30<CR>
-
 
 
 " styles {{{1
@@ -167,18 +175,14 @@ source ~/.vimperator/mappings.js
 autocmd!
 
 " fmaps {{{2
-autocmd VimperatorEnter .* :source ~/.vimperator/fmaps.vimp
+" autocmd VimperatorEnter .* :source ~/.vimperator/fmaps.vimp
 
 
 " finish {{{1
 echo "GET READY!!"
 
 " }}}1
-" vim: ft=vimperator ts=4 sw=4 sts=0 et fdm=marker fdc=3
 
 "----------------------------------------
-"読み込み完了メッセージ
-echo "vimperatorrc loaded."
 " [EOF]
 
-"vim:ft=vim
