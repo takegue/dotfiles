@@ -4,8 +4,8 @@
 NeoBundle 'rhysd/vim-grammarous'
 NeoBundle 'ujihisa/neco-look'
 NeoBundle 'koron/codic-vim'
-NeoBundle 'koron/codic-vim'
 NeoBundle 'deris/vim-visualinc'
+NeoBundle 'mattn/ginger-vim'
 
 
 NeoBundle 'Shougo/neocomplete.vim'  "{{{

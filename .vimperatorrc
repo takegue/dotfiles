@@ -90,6 +90,31 @@ let mapleader=','
 let g:plugin_loader_roots = "~\vimperator\vimperator-plugins\ ~/.vimperator/vimperator-plugins/"
 let g:plugin_loader_plugins = "pluginManager,_libly,direct_bookmark,sbmcommentsviewer,caret-hint,appendAnchor,stella,feedSomeKeys_3,commandBookmarklet,copy"
 
+ " タブの開く位置を現在タブのすぐ右にする。（liberator.openの改造）
+js <<EOM
+liberator.open = liberator.eval(
+                   '(' +
+                   liberator.open.toSource().replace(/loadOneTab\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]+)\);/, 'loadOneTab($1, {referrerURI: $2, charset: $3, postData: $4, inBackground: $5, insertRelatedAfterCurrent: true})') +
+                   ')',
+                   liberator.open);
+
+EOM
+
+javascript <<EOM
+liberator.modules.commands.addUserCommand(["togglepin"], "add pin to current tab",
+function(){
+    var currentTab = gBrowser.mCurrentTab
+    if(currentTab.pinned){
+        gBrowser.unpinTab(currentTab)
+    }
+    else{
+        gBrowser.pinTab(currentTab)
+    }
+});
+EOM
+nnoremap @ :togglepin <CR>
+
+
 " direct_bookmark.js
 " use service: はてなブックマーク
 let direct_sbm_use_services_by_post='h'

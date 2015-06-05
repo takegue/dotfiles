@@ -47,16 +47,16 @@ setopt share_history      # 他のシェルのヒストリをリアルタイム�
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
 # # マッチしたコマンドのヒストリを表示できるようにする
-# autoload history-search-end
-# zle -N history-beginning-search-backward-end history-search-end
-# zle -N history-beginning-search-forward-end history-search-end
-# bindkey "^P" history-beginning-search-backward-end
-# bindkey "^N" history-beginning-search-forward-end
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^P" history-beginning-search-backward-end
+bindkey "^N" history-beginning-search-forward-end
 
-# bindkey -M vicmd '?' history-incremental-search-backward
-# bindkey -M vicmd '/' history-incremental-search-forward
-# bindkey -M viins '^F' history-incremental-search-backward
-# bindkey -M viins '^R' history-incremental-search-forward
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+bindkey -M viins '^F' history-incremental-search-backward
+bindkey -M viins '^R' history-incremental-search-forward
 
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
@@ -115,7 +115,6 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
     PROMPT="%{${fg[yellow]}%}${HOST%%.*} ${PROMPT}"
 ;
-
 
 ### Title (user@hostname) ###
 case "${TERM}" in
