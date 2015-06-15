@@ -82,7 +82,6 @@ nnoremap <S-Down>  <C-w>+
 nnoremap <Left>     <Nop>
 nnoremap <Right>    <Nop>
 nnoremap <Up>       <Nop>
-nnoremap <Down>     <Nop>
 
 nnoremap <C-Left>     <Nop>
 nnoremap <C-Right>    <Nop>

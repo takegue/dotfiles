@@ -7,7 +7,6 @@ NeoBundle 'koron/codic-vim'
 NeoBundle 'deris/vim-visualinc'
 NeoBundle 'mattn/ginger-vim'
 
-
 NeoBundle 'Shougo/neocomplete.vim'  "{{{
 if neobundle#tap('neocomplete.vim')
     " ステータスバー
@@ -29,6 +28,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     let g:neocomplete#enable_auto_delimiter = 1
     let g:neocomplete#enable_auto_close_preview = 0
+    let g:neocomplete#auto_completion_start_length  = 3
     " Define dictionary.
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default' : '',
@@ -107,7 +107,6 @@ function! s:hooks.on_source(bundle)
     smap <expr><TAB> neosnippet#jumpable() ? 
                 \ "\<plug>(neosnippet_jump)" : 
                 \ "\<TAB>"
-
 
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1

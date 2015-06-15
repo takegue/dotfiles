@@ -145,7 +145,7 @@ endif
 NeoBundle 'majutsushi/tagbar'
 if neobundle#tap('tagbar')
     function! neobundle#hooks.on_source(bundle)
-        nnoremap <silent> <F9> :TagbarToggle<CR>
+        nnoremap <silent> ,q :TagbarToggle<CR>
     endfunction
     call neobundle#untap()
 endif

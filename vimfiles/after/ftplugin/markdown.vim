@@ -1,4 +1,6 @@
 
+iab <buffer> tl - [ ]
+
 augroup markdown_augrop
     autocmd!
     autocmd BufWritePre <buffer> %s/^\s\+$//ge
@@ -12,8 +14,4 @@ elseif &term == 'xterm-256color'
     " inoremap <buffer><silent> <CR> <Space><Space><CR>
     " inoremap <buffer><silent>    <CR><CR>
 endif
-
-
-
-
 

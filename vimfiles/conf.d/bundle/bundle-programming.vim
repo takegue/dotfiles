@@ -328,6 +328,14 @@ function! s:hooks.on_source(bundle)
 endfunction
 
 "--------------------------------------------------
+" Programming - vimperator
+"--------------------------------------------------
+NeoBundle 'vimperator/vimperator-labs', {
+\   'name': 'vimperator-syntax',
+\   'rtp':  'vimperator/contrib/vim/'
+\ }
+
+"--------------------------------------------------
 " Programming - Ruby
 "--------------------------------------------------
 NeoBundleLazy 'vim-ruby/vim-ruby', { 
@@ -438,8 +446,8 @@ NeoBundleLazy 'TKNGUE/vim-reveal',{
             \},
             \}
 let s:hooks = neobundle#get_hooks("vim-reveal")
+let g:reveal_root_path = '$HOME/.projects/reveal.js'
 function! s:hooks.on_source(bundle) 
-    let g:reveal_root_path = '$HOME/work/reveal.js'
     let g:revel_default_config = {
                 \ 'fname'  : 'reveal',
                 \ 'key1'  : 'reveal'

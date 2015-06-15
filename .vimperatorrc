@@ -1,6 +1,9 @@
+" " show tabbar only
+"set gui=none,tabs,addons
+
 " options {{{1
 " safe mode
-set noloadplugins
+"set noloadplugins
 
 " title bar
 set titlestring="Firefox with Vimperator"
@@ -33,9 +36,6 @@ set newtab=all
 
 " don't focus any "input" elements automatically when open pages.
 set focuscontent
-
-" " show tabbar only
-" set gui=none,tabs,addons
 
 
 " preferences ( Firefox about:config ) {{{1
@@ -87,7 +87,7 @@ let mapleader=','
 "============================
 
 " plugin_loader
-let g:plugin_loader_roots = "~\vimperator\vimperator-plugins\ ~/.vimperator/vimperator-plugins/"
+let g:plugin_loader_roots = "~/.vimperator/vimperator-plugins/"
 let g:plugin_loader_plugins = "pluginManager,_libly,direct_bookmark,sbmcommentsviewer,caret-hint,appendAnchor,stella,feedSomeKeys_3,commandBookmarklet,copy"
 
  " タブの開く位置を現在タブのすぐ右にする。（liberator.openの改造）
@@ -124,12 +124,22 @@ let direct_sbm_use_services_by_tag='h'
 let image_extender_skip_prompt='false'
 
 
+
 " mappings {{{1
 " clear all key mappings
 " to avoid troubles from loading rc file several times
 mapclear
 cmapclear
 imapclear
+
+
+" 移動幅
+noremap j 5j
+noremap k 5k
+
+" undo一覧から開く
+nnoremap U :undo<Space>
+let g:hint_tombloo_key = 'r'
 
 " tab operation {{{2
 noremap <C-h> gT
@@ -163,6 +173,10 @@ noremap <Leader>h :nohlsearch<CR>
 noremap <Leader>s :noscript toggletemp<CR>
 noremap <Leader>S :noscript toggleperm<CR>
 
+ " plugin_loader
+let g:plugin_loader_roots = "~\vimperator\plugins\ ~/.vimperator/plugin/"
+let g:plugin_loader_plugins = "_libly,direct_bookmark,sbmcommentsviewer,caret-hint,appendAnchor,stella,feedSomeKeys_3,commandBookmarklet,copy"
+
 " multi_requester.js
 noremap A :mr<Space>alc<Space>
 noremap E :mr<Space>oxford<Space>
@@ -186,8 +200,11 @@ style -name inactivate-ime-commandline chrome://* #liberator-commandline-command
 
 
 " colorscheme {{{1
-colorscheme janus
-
+"============================
+" デフォルトのヒント派手すぎ＞＜
+hi Hint font-family: Arial; font-size: 21px; font-weight: bold; text-shadow: -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black, 1px 1px 2px black; color: #33cccc;
+hi HintElem color: gray; background-color: #a1e4e6;
+hi HintActive color: black; background-color: #ff8700;
 
 " source extra resources {{{1
 " javascript
@@ -199,14 +216,24 @@ source ~/.vimperator/mappings.js
 " clear all autocmds to avoid troubles from loading rc fle several times
 autocmd!
 
+" ignore sites{{{
+    autocmd LocationChange .*                             js modes.passAllKeys = false 
+    autocmd LocationChange mail\\.google\\.com            js modes.passAllKeys = true -except=d
+    autocmd LocationChange www\\.google\\.com/calendar    js modes.passAllKeys = true -except=d
+    autocmd LocationChange tweetdeck.twitter.com          js modes.passAllKeys = true -except=d
+"}}}
+
+
+
 " fmaps {{{2
 " autocmd VimperatorEnter .* :source ~/.vimperator/fmaps.vimp
 
 
 " finish {{{1
 echo "GET READY!!"
-
 " }}}1
+
+source! ~/.vimperatorrc.local
 
 "----------------------------------------
 " [EOF]

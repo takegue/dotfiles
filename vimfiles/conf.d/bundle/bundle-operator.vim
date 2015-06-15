@@ -17,6 +17,8 @@ NeoBundle 'pekepeke/vim-operator-tabular', {
             \}
 NeoBundle 'wellle/targets.vim'
 
+" map   <Plug>(operator-sort)
+
 
 " NeoBundle 'AndrewRadev/switch.vim'                     "true ⇔ falseなどの切り替え
 NeoBundle 'TKNGUE/switch.vim'                           "true ⇔ falseなどの切り替え

@@ -7,7 +7,7 @@ let s:hooks = neobundle#get_hooks('unite.vim')
 function! s:hooks.on_source(bundle)
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
-    nnoremap  [unite]f  :<C-u>Unite buffer file file_mru<CR>
+    nnoremap  [unite]f  :<C-u>Unite bookmark buffer file file_mru<CR>
     " nnoremap  [unite]f  :<C-u>Unite source<CR>
     nnoremap <silent> [unite]s
                 \ :<C-u>Unite -buffer-name=files -no-split
@@ -23,7 +23,7 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
     nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
     " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
-    nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>   "bookmarkを追加可能に
+    nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
     nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:%<CR>
     nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-buffer grep:./:-iR<CR>
@@ -159,6 +159,7 @@ if neobundle#tap('vimfiler.vim')
             nmap <buffer> R <Plug>(vimfiler_redraw_screen)
             " overwrite C-l
             nmap <buffer> <C-l> <C-w>l
+            nmap <buffer> <C-j> <C-w>j
         endfunction
     endfunction
 
