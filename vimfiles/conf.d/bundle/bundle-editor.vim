@@ -25,6 +25,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#enable_smart_case = 1
     " Set minimum syntax keyword length.
     let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#max_keyword_width = 40
     let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     let g:neocomplete#enable_auto_delimiter = 1
     let g:neocomplete#enable_auto_close_preview = 0
@@ -35,6 +36,9 @@ if neobundle#tap('neocomplete.vim')
                 \ 'vimshell' : $HOME.'/.vimshell_hist',
                 \ 'scheme' : $HOME.'/.gosh_completions'
                 \ }
+
+    let g:neocomplete#enable_multibyte_completion = 1
+
 
     " " make Vim call omni function when below patterns matchs
     let g:neocomplete#sources#omni#functions = {}
@@ -49,6 +53,10 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+    endif
+    let g:neocomplete#keyword_patterns._ = '\h\w*'
 
     function! neobundle#hooks.on_source(bundle) "{{{
         " Plugin key-mappings.

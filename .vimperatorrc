@@ -90,28 +90,28 @@ let mapleader=','
 let g:plugin_loader_roots = "~/.vimperator/vimperator-plugins/"
 let g:plugin_loader_plugins = "pluginManager,_libly,direct_bookmark,sbmcommentsviewer,caret-hint,appendAnchor,stella,feedSomeKeys_3,commandBookmarklet,copy"
 
- " タブの開く位置を現在タブのすぐ右にする。（liberator.openの改造）
-js <<EOM
-liberator.open = liberator.eval(
-                   '(' +
-                   liberator.open.toSource().replace(/loadOneTab\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]+)\);/, 'loadOneTab($1, {referrerURI: $2, charset: $3, postData: $4, inBackground: $5, insertRelatedAfterCurrent: true})') +
-                   ')',
-                   liberator.open);
-
-EOM
-
-javascript <<EOM
-liberator.modules.commands.addUserCommand(["togglepin"], "add pin to current tab",
-function(){
-    var currentTab = gBrowser.mCurrentTab
-    if(currentTab.pinned){
-        gBrowser.unpinTab(currentTab)
-    }
-    else{
-        gBrowser.pinTab(currentTab)
-    }
-});
-EOM
+" " タブの開く位置を現在タブのすぐ右にする。（liberator.openの改造）
+"js <<EOM
+"liberator.open = liberator.eval(
+"                   '(' +
+"                   liberator.open.toSource().replace(/loadOneTab\(([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*([^)]+)\);/, 'loadOneTab($1, {referrerURI: $2, charset: $3, postData: $4, inBackground: $5, insertRelatedAfterCurrent: true})') +
+"                   ')',
+"                   liberator.open);
+"
+"EOM
+"
+"javascript <<EOM
+"liberator.modules.commands.addUserCommand(["togglepin"], "add pin to current tab",
+"function(){
+"    var currentTab = gBrowser.mCurrentTab
+"    if(currentTab.pinned){
+"        gBrowser.unpinTab(currentTab)
+"    }
+"    else{
+"        gBrowser.pinTab(currentTab)
+"    }
+"});
+"EOM
 nnoremap @ :togglepin <CR>
 
 
@@ -142,8 +142,8 @@ nnoremap U :undo<Space>
 let g:hint_tombloo_key = 'r'
 
 " tab operation {{{2
-noremap <C-h> gT
-noremap <C-l> gt
+noremap <C-h> <C-p>
+noremap <C-l> <C-n>
 noremap <C-p> :tabmove! -1<CR>
 noremap <C-n> :tabmove! +1<CR>
 
@@ -217,10 +217,10 @@ source ~/.vimperator/mappings.js
 autocmd!
 
 " ignore sites{{{
-    autocmd LocationChange .*                             js modes.passAllKeys = false 
-    autocmd LocationChange mail\\.google\\.com            js modes.passAllKeys = true -except=d
-    autocmd LocationChange www\\.google\\.com/calendar    js modes.passAllKeys = true -except=d
-    autocmd LocationChange tweetdeck.twitter.com          js modes.passAllKeys = true -except=d
+    ignorekeys clear
+    ignorekeys add  mail\\.google\\.com           -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
+    ignorekeys add  www\\.google\\.com/calendar   -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
+    ignorekeys add  tweetdeck.twitter.com         -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
 "}}}
 
 

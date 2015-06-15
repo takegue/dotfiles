@@ -64,9 +64,7 @@ endfunction
 
 NeoBundle 'vim-scripts/Align'
 "NeoBundle 'vim-scripts/YankRing.vim'
-"
-"
-NeoBundle 'rking/ag.vim'
+NeoBundle 'kana/vim-tabpagecd'
 "
 NeoBundle 'osyo-manga/vim-over'
 let g:over_enable_cmd_windw = 1
@@ -197,12 +195,13 @@ if neobundle#tap('vim-fugitive')
     "     endfor
     "     " echohl None 
     " endfunction
-
+    "
     function! neobundle#hooks.on_post_source(bundle)
         augroup FUGITIVE
             autocmd!
             autocmd BufRead * silent call ConfigOnGitRepository()
         augroup END
+        silent call ConfigOnGitRepository()
     endfunction
     call neobundle#untap()
     "

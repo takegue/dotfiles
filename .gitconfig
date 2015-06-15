@@ -12,7 +12,14 @@
 [diff]
     tool = vimdiff
 
+[difftool.latex]
+    cmd = latexdiff-git "$LOCAL" "$REMOTE" 
+
+[difftool]
+    prompt = false
+
 [alias]
     ignore = !"f() { local s=$1; shift; \
         while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
         curl \"https://www.gitignore.io/api/$s\"; }; f"
+    ldiff = difftool -t latex
