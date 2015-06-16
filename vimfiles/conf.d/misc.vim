@@ -150,6 +150,14 @@ augroup MyAutoCmd
     " autocmd BufReadPost * call s:SwitchToActualFile()
 augroup END
 
+augroup office_format
+    autocmd!
+    autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set modifiable
+    autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %d
+    autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %read !tika --text %:p 
+    autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set readonly
+augroup END
+
 command! FollowSymlink call s:SwitchToActualFile()
 function! s:SwitchToActualFile()
     let l:fname = resolve(expand('%:p'))

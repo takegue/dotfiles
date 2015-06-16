@@ -185,6 +185,10 @@ endif
 
 NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'Shougo/neomru.vim'
+if neobundle#tap('neomru.vim')
+    let g:neomru#do_validate = 1
+    call neobundle#untap()
+endif
 NeoBundle 'tsukkee/unite-help'
 NeoBundle 'Shougo/neossh.vim', {
             \ "depends": ['Shougo/unite.vim']
