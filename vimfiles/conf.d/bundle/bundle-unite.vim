@@ -32,10 +32,11 @@ function! s:hooks.on_source(bundle)
     nnoremap <silent> [unite]<C-h>  :<C-u>Unite -buffer-name=help help<CR>
     nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
 
+
     " Start insert.
-    "call unite#custom#profile('default', 'context', {
-    "\   'start_insert': 1
-    "\ })
+    call unite#custom#profile('default', 'context', {
+    \   'start_insert': 1
+    \ })
 
     " Like ctrlp.vim settings.
     "call unite#custom#profile('default', 'context', {
@@ -51,6 +52,7 @@ function! s:hooks.on_source(bundle)
 
     autocmd FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
+
         " Overwrite settings.
         imap <buffer> jj      <Plug>(unite_insert_leave)
         "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
@@ -187,6 +189,14 @@ NeoBundle 'ujihisa/unite-colorscheme'
 NeoBundle 'Shougo/neomru.vim'
 if neobundle#tap('neomru.vim')
     let g:neomru#do_validate = 1
+
+    let g:neomru#file_mru_ignore_pattern = 
+        \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'.
+        \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
+        \'\|^\%(\\\\\|/mnt/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'.
+        \'\|\%(^\%(fugitive\)://\)'
+
+
     call neobundle#untap()
 endif
 NeoBundle 'tsukkee/unite-help'

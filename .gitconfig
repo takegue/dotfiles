@@ -4,13 +4,21 @@
     editor = vim
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = .gitignore
+    quotepath  = false
+
 [push]
     default = matching
+
 [init]
     templatedir = ~/.git_template
 
 [diff]
     tool = vimdiff
+
+[diff "office"]
+    binary = true
+    textconv = "tika --text "
+
 
 [difftool.latex]
     cmd = latexdiff-git "$LOCAL" "$REMOTE" 
@@ -23,3 +31,4 @@
         while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
         curl \"https://www.gitignore.io/api/$s\"; }; f"
     ldiff = difftool -t latex
+
