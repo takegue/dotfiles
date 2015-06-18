@@ -17,7 +17,7 @@
 
 [diff "office"]
     binary = true
-    textconv = "tika --text "
+    textconv = "tika --text"
 
 
 [difftool.latex]
