@@ -67,6 +67,7 @@ function! s:loads_bundles() abort
     NeoBundle 'alfredodeza/pytest.vim'
     NeoBundle 'altercation/vim-colors-solarized'
     NeoBundle 'benmills/vimux'
+    NeoBundle 'welle/targets.vim'
     NeoBundle 'bps/vim-textobj-python'
     NeoBundle 'christoomey/vim-tmux-navigator'
     NeoBundle 'clones/vim-zsh'
@@ -88,6 +89,7 @@ function! s:loads_bundles() abort
     NeoBundle 'kana/vim-textobj-datetime'                   "日付選択オブジェクト   #ada, add, adt
     NeoBundle 'kana/vim-textobj-entire'                     "全体選択オブジェクト   #ae, ai
     NeoBundle 'kana/vim-textobj-function'
+    NeoBundle 'kana/vim-textobj-fold'                       " az, iz
     NeoBundle 'kana/vim-textobj-user'
     NeoBundle 'kannokanno/previm'
     NeoBundle 'KazuakiM/vim-regexper'
@@ -678,6 +680,8 @@ augroup END
 
 " }}}
 
+"}}}
+"
 " Plugin Settings ============== {{{
 " Shougo/neobundle-vim-recipes'      {{{
 if neobundle#tap('neobundle-vim-recipes')
@@ -1117,6 +1121,8 @@ endif
 " }}}
 
 " Vim Operator Settings {{{
+
+
 " kana/vim-operator-user {{{
 if neobundle#tap('vim-operator-user')
     " Config {{{
@@ -1305,6 +1311,18 @@ endif
 " }}}
 
 " Text Object Settings {{{
+" kana/vim-operator-fold {{{
+if neobundle#tap('vim-textobj-fold')
+    " Config {{{
+    call neobundle#config({})
+    "}}}
+
+    " Setting {{{
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}} "
 " kana/vim-textobj-user {{{
 if neobundle#tap('vim-textobj-user')
     " Config {{{
@@ -1913,7 +1931,6 @@ if neobundle#tap('vim-json')
 endif
 " }}} "
 
-" }}} "
 
 " vim-ruby/vim-ruby {{{
 if neobundle#tap('vim-ruby')
