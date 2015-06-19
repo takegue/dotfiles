@@ -3,8 +3,497 @@ filetype plugin indent off
 
 syntax on
 
-source ~/.vim/conf.d/basic.vim
-source ~/.vim/conf.d/map.vim
+" Basic Settings {{{
+
+" Encodings {{{
+set encoding=utf8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,cp932,euc-jp "A list of character encodings
+set fileformats=unix,dos,mac "This gives the end-of-line (<EOL>) formats
+" }}}
+
+" Display {{{
+
+if exists('&ambiwidth')
+  " For Ubuntu: gnome-terminal, terminator, guake
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 terminator -m"
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 gnome-terminal --disable-factory"
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 guake"
+  "   https://gist.github.com/sgk/5991138
+  set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
+endif
+
+set helplang=ja,en
+set spelllang+=cjk
+set title               "編集中のファイル名を表示
+set ambiwidth=double    "全角文字で幅が崩れないように調整する
+set laststatus=2
+
+set showmatch           "括弧入力時の対応する括弧を表示
+set list                " 不可視文字の可視化
+set number              " 行番号の表示
+set relativenumber      " 相対行番号の表示
+set nowrap                " 長いテキストの折り返し
+set textwidth=0         " 自動的に改行が入るのを無効化
+set colorcolumn=80      " その代わり80文字目にラインを入れる
+set cursorline          " 編集中の行のハイライト
+
+set smartindent         "オートインデント
+" set autoindent
+set cindent
+set tabstop=8
+set shiftwidth=4        "オートインデントの幅
+set softtabstop=4       "インデントをスペース4つ分に設定
+set expandtab           "タブ→スペースの変換
+set wildmenu wildmode=longest,full "コマンドラインの補間表示
+set foldmethod=marker
+set display=lastline
+set pumheight=15
+
+" デフォルト不可視文字は美しくないのでUnicodeで綺麗に
+set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
+set fillchars=vert:\|
+
+" 前時代的スクリーンベルを無
+set t_vb=
+set novisualbell
+" }}}
+
+" Search {{{
+set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
+set wrapscan            "検索時に最後まで行ったら最初に戻る
+set incsearch           " インクリメンタルサーチ
+set hlsearch            " 検索マッチテキストをハイライト (2013-07-03 14:30 修正）
+
+"バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+" }}}
+
+" Editing {{{
+
+set shiftround              " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set infercase               " 補完時に大文字小文字を区別しない
+set virtualedit=all         " カーソルを文字が存在しない部分でも動けるようにする
+set hidden                  " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+set switchbuf=usetab       " 新しく開く代わりにすでに開いてあるバッファを開く
+set showmatch               " 対応する括弧などをハイライト表示する
+set matchtime=1             " 対応括弧のハイライト表示を3秒にする
+set nrformats=hex
+set history=10000           " ヒストリ機能を10000件まで有効にする
+
+if has('unnamedplus') && !(has("win32") || has("win64"))
+  set clipboard=unnamedplus,autoselect
+else
+  set clipboard=unnamed
+endif
+
+" 対応括弧に'<'と'>'のペアを追加
+set matchpairs& matchpairs+=<:>
+" バックスペースでなんでも消せるようにする
+set backspace=indent,eol,start
+
+" Swapファイル？Backupファイル？前時代的すぎ
+" なので全て無効化する
+set nowritebackup
+set nobackup
+set noswapfile
+
+" }}}
+
+"}}}
+
+" Mappings {{{
+
+let mapleader=','                                "map learder
+let maplocalleader='\'                           "local map leader
+
+" inoremap jj <Esc>
+" nnoremap ; q:a
+" nnoremap ; :
+" nnoremap : q:i
+" nnoremap Q q
+" nnoremap q <Nop>
+" nnoremap q: q:
+"
+nnoremap Y y$
+nnoremap & g&
+
+" ESCを二回押すことでハイライトを消す
+nnoremap <silent> <Esc><Esc>    :noh<CR>
+
+" カーソル下の単語を * で検索
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
+
+nnoremap g; g;zOzz
+nnoremap g, g,zOzz
+
+" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+" j, k による移動を折り返されたテキストでも自然に振る舞うように変更
+nnoremap j gj
+nnoremap k gk
+
+" vを二回で行末まで選択
+vnoremap v $h
+
+" TABにて対応ペアにジャンプ
+" nnoremap <Tab> %
+" vnoremap <Tab> %
+
+" matchitを有効にする.
+source $VIMRUNTIME/macros/matchit.vim
+
+" Ctrl + hjkl でウィンドウ間を移動
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <C-W><C-z> :call ToggleWindowSize()<CR>
+nnoremap <C-W>z :call ToggleWindowSize()<CR>
+
+function! ToggleWindowSize()
+  if !exists('t:restcmd')
+    let t:restcmd = ''
+  endif
+  if t:restcmd  != ''
+    exe t:restcmd
+    let t:restcmd = ''
+  else
+    let t:restcmd = winrestcmd()
+    resize
+    vertical resize
+  endif
+endfunction
+
+nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
+nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
+
+" Shift + 矢印でウィンドウサイズを変更
+nnoremap <S-Left>  <C-w><
+nnoremap <S-Right> <C-w>>
+nnoremap <S-Up>    <C-w>-
+nnoremap <S-Down>  <C-w>+
+
+nnoremap <Left>     <Nop>
+nnoremap <Right>    <Nop>
+nnoremap <Up>       <Nop>
+
+nnoremap <C-Left>     <Nop>
+nnoremap <C-Right>    <Nop>
+nnoremap <C-Up>       <Nop>
+nnoremap <C-Down>     <Nop>
+"
+if has('gui_running')
+  nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
+else
+  nnoremap <silent> <Space>.  :<C-u>e $MYVIMRC<CR>
+endif
+
+"tmux向け設定"
+
+" Toggle {{{
+nnoremap [toggle] <Nop>
+nmap <Leader>c [toggle]
+nnoremap <silent> [toggle]s  : setl spell!<CR>          : setl spell?<CR>
+nnoremap <silent> [toggle]l  : setl list!<CR>           : setl list?<CR>
+nnoremap <silent> [toggle]t  : setl expandtab!<CR>      : setl expandtab?<CR>
+nnoremap <silent> [toggle]w  : setl wrap!<CR>           : setl wrap?<CR>
+nnoremap <silent> [toggle]cc : setl cursorline!<CR>     : setl cursorline?<CR>
+nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>   : setl cursorcolumn?<CR>
+nnoremap <silent> [toggle]n  : setl number!<CR>         : setl number?<CR>
+nnoremap <silent> [toggle]r  : setl relativenumber!<CR> : setl relativenumber?<CR>
+nnoremap <silent> [toggle]p  : set paste!<CR>
+nnoremap <silent> [toggle]v  :<c-u>
+      \:if &completeopt =~ 'preview'<CR>
+      \:  set completeopt-=preview <CR> :pclose<CR>
+      \:else<CR>
+      \:  set completeopt+=preview <CR>
+      \:endif<CR> :setl completeopt?<CR>
+
+" nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> \: setl colorcolumn=0<CR>
+"                            \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
+" }}}
+
+" Tab {{{
+
+" The prefix key.
+nnoremap    [Tab]   <Nop>
+nmap    <Leader>t   [Tab]
+
+" Tab jump
+" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
+for n in range(1, 9)
+  execute 'nnoremap <silent> [Tab]'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+
+" tc 新しいタブを一番右に作る
+nnoremap <silent> [Tab]c :tabnew<CR>
+nnoremap <silent> [Tab]x :tabclose<CR>
+nnoremap <silent> gl :tabnext<CR>
+nnoremap <silent> gh :tabprevious<CR>
+
+" }}}
+
+" Abbeviattions {{{
+"自動で括弧内に移動
+inoremap {} {}<left>
+inoremap () ()<left>
+inoremap [] []<left>
+inoremap <> <><left>
+inoremap '' ''<left>
+inoremap `` ``<left>
+inoremap "" ""<left>
+
+"For Folding 
+inoremap {{{ {{{<CR>}}}<Esc>?{{{<CR>:noh<CR>i
+" }}}
+
+"}}}
+
+" Colorscheme {{{
+" Check color
+" :so $VIMRUNTIME/syntax/colortest.vim
+if has('vim_starting')
+  syntax enable
+  set t_Co=256
+  let g:solarized_termcolors=256
+
+  if has('gui_running')
+    set background=light
+  else
+    set background=dark
+  endif
+
+  if &t_Co < 256
+    colorscheme default
+  else
+    try
+      colorscheme molokai
+    catch
+      colorscheme blue
+    endtry
+  endif
+  " highlight Normal ctermbg=none
+  " ファイルタイププラグインおよびインデントを有効化
+  " これはNeoBundleによる処理が終了したあとに呼ばなければならない
+  filetype plugin indent on
+endif
+"}}}
+
+" Misc {{{
+" w!! でスーパーユーザーとして保存（sudoが使える環境限定）
+cmap w!! w !sudo tee > /dev/null %
+
+" 一時ファイルコマンド
+
+" Open junk file."{{{
+command! -nargs=? -complete=filetype Tmp call s:open_junk_file('<args>')
+command! -nargs=? -complete=filetype Temp call s:open_junk_file('<args>')
+command! -nargs=0 -complete=filetype Memo call s:open_junk_file('memo')
+" command! Memo call s:Memo() " Memoコマンド
+function! s:open_junk_file(type)
+  let l:junk_dir = $HOME . '/Dropbox/junks'. strftime('/%Y/%m')
+  if !isdirectory(l:junk_dir)
+    call mkdir(l:junk_dir, 'p')
+  endif
+  if a:type == ''
+    let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+  else
+    let l:filename = l:junk_dir . strftime('/%Y-%m-%d-%H%M%S.') . a:type
+  endif
+  if l:filename != ''
+    execute 'edit ' . l:filename
+  endif
+endfunction "}}}
+
+" TODOコマンド
+command! Todo call s:Todo() " Todoコマンド
+function! s:Todo() "{{{
+  let l:path  =  '~/.todo'
+  if filereadable(expand('~/Dropbox/.todo'))
+    let l:path = expand('~/Dropbox/.todo')
+  endif
+  if bufwinnr(l:path) < 0
+    execute 'silent bo 60vs +set\ nonumber ' . l:path
+  endif
+  unlet! l:path
+
+  " todoリストのon/offを切り替える
+  set nowrap
+  nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+  vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+  " todoリストを簡単に入力する
+
+  " 入れ子のリストを折りたたむ
+  setlocal foldmethod=expr foldexpr=MkdCheckboxFold(v:lnum) foldtext=MkdCheckboxFoldText()
+  function! MkdCheckboxFold(lnum)
+    let line = getline(a:lnum)
+    let next = getline(a:lnum + 1)
+    if MkdIsNoIndentCheckboxLine(line) && MkdHasIndentLine(next)
+      return 1
+    elseif (MkdIsNoIndentCheckboxLine(next) || next =~ '^$') && !MkdHasIndentLine(next)
+      return '<1'
+    endif
+    return '='
+  endfunction
+  function! MkdIsNoIndentCheckboxLine(line)
+    return a:line =~ '^- \[[ x]\] '
+  endfunction
+  function! MkdHasIndentLine(line)
+    return a:line =~ '^[[:blank:]]\+'
+  endfunction
+  function! MkdCheckboxFoldText()
+    return getline(v:foldstart) . ' (' . (v:foldend - v:foldstart) . ' lines) '
+  endfunction
+
+  " 選択行のチェックボックスを切り替える
+  function! ToggleCheckbox()
+    let l:line = getline('.')
+    if l:line =~ '\-\s\[\s\]'
+      " 完了時刻を挿入する
+      let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '') . ' [' . strftime("%Y/%m/%d (%a) %H:%M") . ']'
+      call setline('.', l:result)
+    elseif l:line =~ '\-\s\[x\]'
+      let l:result = substitute(substitute(l:line, '-\s\[x\]', '- [ ]', ''), '\s\[\d\{4}.\+]$', '', '')
+      call setline('.', l:result)
+    end
+  endfunction
+
+endfunction "}}}
+
+command! -bang -nargs=* PluginTest call PluginTest(<bang>0, <q-args>)
+function! PluginTest(is_gui, extraCommand)
+  let cmd = a:is_gui ? 'gvim' : 'vim'
+  let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
+  if !exists('b:git_dir')
+    additional_path = fnamemodify(b:git_dir, ':p:h:h')
+  else
+    additional_path = getcwd()
+  endif
+  execute '!' . cmd . ' -u ~/.vimrc.min -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
+endfunction
+"
+augroup edit_memo
+  autocmd!
+  autocmd BufNewFile,BufRead *.todo
+        \ set nonumber norelativenumber filetype=markdown
+  autocmd BufNewFile,BufRead *.memo
+        \ set nonumber norelativenumber filetype=markdown
+augroup END
+
+" after/ftpluginの作成 User設定のfiletype plugin
+let g:ftpPath = $HOME . "/.vim/after/ftplugin/"
+nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
+function! s:openFTPluginFile()
+  let l:ftpFileName = g:ftpPath . &filetype . ".vim"
+  execute 'botright vsplit ' . l:ftpFileName
+endfunction
+
+function! s:ChangeCurrentDir(directory, bang)
+  if a:directory == ''
+    lcd %:p:h
+  else
+    execute 'lcd' . a:directory
+  endif
+  if a:bang == ''
+    pwd
+  endif
+endfunction
+
+" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
+function! s:mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
+endfunction
+
+" vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
+
+augroup MyAutoCmd
+  autocmd!
+  autocmd VimEnter * call s:ChangeCurrentDir('', '')
+  autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
+  " make, grep などのコマンド後に自動的にQuickFixを開く
+  autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
+  " QuickFixおよびHelpでは q でバッファを閉じる
+  autocmd FileType help,qf nnoremap <buffer> q <C-w>c
+  autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd WinLeave * set nocursorline norelativenumber
+  autocmd WinEnter * if &number | set cursorline relativenumber | endif
+  autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle
+  autocmd BufRead */conf.d/*.vim setlocal path+=$HOME/.vim/bundle
+  " autocmd BufReadPost * call s:SwitchToActualFile()
+augroup END
+
+augroup office_format
+  autocmd!
+  autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set modifiable
+  autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %d
+  autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %read !tika --text %:p
+  autocmd BufEnter *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set readonly
+augroup END
+
+command! FollowSymlink call s:SwitchToActualFile()
+function! s:SwitchToActualFile()
+  let l:fname = resolve(expand('%:p'))
+  let l:pos = getpos('.')
+  let l:bufname = bufname('%')
+  enew
+  exec 'bw '. l:bufname
+  exec "e" . fname
+  call setpos('.', pos)
+endfunction
+
+
+function! s:RestoreCursorPostion()
+  if line("'\"") <= line("$")
+    normal! g`"
+  endif
+  try
+    normal! zO
+  catch /E490/
+  endtry
+endfunction
+
+" Jump to the previous position when file opend
+augroup vimrc_restore_cursor_position
+  autocmd!
+  autocmd BufWinEnter * call s:RestoreCursorPostion()
+augroup END
+
+augroup vimrc_change_cursorline_color
+  autocmd!
+  " インサートモードに入った時にカーソル行の色をブルーグリーンにする
+  " autocmd InsertEnter * highlight CursorLine ctermbg=23 guibg=yellow
+  " autocmd InsertEnter * highlight CursorColumn ctermbg=24 guibg=#005f87
+  " " インサートモードを抜けた時にカーソル行の色を黒に近いダークグレーにする
+  " autocmd InsertLeave * highlight CursorLine ctermbg=236 guibg=#303030
+  " autocmd InsertLeave * highlight CursorColumn ctermbg=236 guibg=#303030
+augroup END
+
+augroup edit_vimrc
+  autocmd!
+  autocmd BufReadPost .vimrc setlocal path+=$HOME/.vim
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost */conf.d/*.vim nested source %
+augroup END
+
+" }}}
+
+"}}} ==============================
+
+" }}}
 
 " =====
 " NeoBundle
