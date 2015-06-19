@@ -7,6 +7,10 @@ options     head
 
 snippet     column
 abbr        table column
-regexp      "^\|.+\|"
-options     head
+regexp      "^\|\w+\|"
  | ${1:column1}| ${2:column2} |
+
+snippet     @twitter
+abbr        twitter account
+options     word
+ [@${1:#:}](https://twitter.com/$1)$0

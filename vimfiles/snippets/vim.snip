@@ -1,14 +1,24 @@
 snippet     bundle_tap
 abbr        for configration ob bundle
 options     head
-   if neobundle#tap('${0}')
-       ${1}
-       function! neobundle#hooks.on_source(bundle)
-       ${2}
-       endfunction
-       call neobundle#untap()
-   endif
+ " author/${1:} {{{
+ if neobundle#tap('$1')
+   " Config {{{
+   call neobundle#config({
+         \   'autoload' : {
+         \     'unite_sources' : [
+         \       'help',
+         \     ],
+         \   }
+         \ })
+   " }}}
 
+   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+   endfunction "}}}
 
+   " Setting {{{
+   "}}}
 
-
+   call neobundle#untap()
+ endif
+ " }}}

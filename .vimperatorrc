@@ -220,7 +220,8 @@ autocmd!
     ignorekeys clear
     ignorekeys add  mail\\.google\\.com           -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
     ignorekeys add  www\\.google\\.com/calendar   -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
-    ignorekeys add  tweetdeck.twitter.com         -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
+    ignorekeys add  tweetdeck\\.twitter\\.com         -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b 
+    ignorekeys add  *\\.twitter\\.com             -except d,:,<C-p>,<C-n>,<C-h>,<C-l>,t,b, h, j, k, l
 "}}}
 
 
