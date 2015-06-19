@@ -1,5 +1,3 @@
-
-
 augroup markdown_augrop
     autocmd!
     autocmd BufWritePre <buffer> %s/^\s\+$//ge
