@@ -2243,12 +2243,9 @@ if neobundle#tap('unite.vim')
       imap <buffer><expr> x
             \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
       nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
-      nmap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
       imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-      imap <buffer> <C-y>     <Plug>(unite_narrowing_path)
       nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
       " nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-      nmap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
       imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
       nnoremap <silent><buffer><expr> l
             \ unite#smart_map('l', unite#do_action('default'))
@@ -2372,7 +2369,7 @@ if neobundle#tap('unite.vim')
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
       autocmd BufEnter *
             \   if empty(&buftype)
-            \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+            " \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
             \|  endif
       call neobundle#untap()
     endfunction "}}}
@@ -2788,46 +2785,6 @@ if neobundle#tap('unite.vim')
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
     endfunction "}}}
 
-    function! neobundle#hooks.on_post_source(bundle)
-      augroup FUGITIVE
-        autocmd!
-        autocmd BufRead * silent call ConfigOnGitRepository()
-      augroup END
-      silent call ConfigOnGitRepository()
-    endfunction
-
-    " Setting {{{
-
-    function! ConfigOnGitRepository()
-      if !exists('b:git_dir')
-        return
-      endif
-      execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h')
-      nnoremap <buffer> [git] <Nop>
-      nmap <buffer> <Leader>g [git]
-      nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
-      nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
-      nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
-      nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
-      nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
-      nnoremap <buffer> [git]p :<C-u>Gpush<CR>
-      " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-    endfunction
-
-    command! Make call FugitiveMyMake()
-    function! FugitiveMyMake()
-      let l:error = system(&l:makeprg)
-      redraw!
-      " echohl Special 
-      for error in split(l:error, '\n')
-        echomsg error
-      endfor
-      " echohl None 
-      execute 'call fugitive#cwindow()'
-    endfunction
-
-    "}}}
-    "
 
     call neobundle#untap()
   endif
@@ -2890,6 +2847,10 @@ if neobundle#tap('unite.vim')
 
     function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
       silent call ConfigOnGitRepository()
+      augroup FUGITIVE
+        autocmd!
+        autocmd BufReadPost * silent call ConfigOnGitRepository()
+      augroup END
     endfunction "}}}
 
     function! FugitiveMyMake() "{{{
@@ -2907,16 +2868,12 @@ if neobundle#tap('unite.vim')
     " Setting {{{
     command! Make call FugitiveMyMake()
 
-    augroup FUGITIVE
-      autocmd!
-      autocmd BufRead * silent call ConfigOnGitRepository()
-    augroup END
 
     function! ConfigOnGitRepository() "{{{
       if !exists('b:git_dir')
         return
       endif
-      execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h')
+      " execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h')
       nnoremap <buffer> [git] <Nop>
       nmap <buffer> <Leader>g [git]
       nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
@@ -3230,7 +3187,7 @@ if neobundle#tap('unite.vim')
   "}}}
 
   " Local settings ================ {{{
-  let s:local_vimrc = expand('~/.vimrc.local')
+  let s:local_vimrc = expand('~/.local.vimrc')
   if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
   endif

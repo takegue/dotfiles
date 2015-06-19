@@ -1,3 +1,6 @@
 rm .git/tags
-/bin/env ctags --tag-relative --recurse --sort=yes --append=no --python-kinds=f -f .git/tags 
-/bin/env ctags --tag-relative --recurse --sort=yes --append=yes --python-kinds=f -f .git/tags $VIRTUAL_ENV/lib/python2.7/site-packages
+
+CTAGS=`which ctags`
+
+$CTAGS ctags --tag-relative --recurse --sort=yes --append=no  -f .git/tags 
+$CTAGS ctags --tag-relative --recurse --sort=yes --append=yes -f .git/tags $VIRTUAL_ENV/lib/python2.7/site-packages
