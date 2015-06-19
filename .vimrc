@@ -1,3 +1,11 @@
+
+" Author: TKNGUE
+" URL: https://github.com/TKNGUE/dotfiles
+" Description: 
+"   This is TKNGUE's vimrc
+
+
+
 "--------------------------------------------------
 " .vimrc 設定ファイルの大元
 "--------------------------------------------------
@@ -18,6 +26,7 @@
 "  | "conf.d/bundle/bundle-misc.vim"
 runtime! conf.d/*.vim
 syntax enable
+
 
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
@@ -44,4 +53,5 @@ if has('vim_starting')
     " ファイルタイププラグインおよびインデントを有効化
     " これはNeoBundleによる処理が終了したあとに呼ばなければならない
     filetype plugin indent on
+
 endif
