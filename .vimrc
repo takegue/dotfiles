@@ -64,7 +64,6 @@ call neobundle#begin(g:bundle_root)
 function! s:loads_bundles() abort
   NeoBundleFetch 'Shougo/neobundle.vim'        "Manage neobundle.vim itself
 
-
   NeoBundle 'alfredodeza/pytest.vim'
   NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'benmills/vimux'
@@ -172,6 +171,8 @@ function! s:loads_bundles() abort
   NeoBundleLazy 'tmhedberg/SimpylFold'
   NeoBundleLazy 'vim-scripts/CSS-one-line--multi-line-folding'
 
+  NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
+
   "BUNDLE_ENDPOINT
 
 endfunction
@@ -217,7 +218,6 @@ set title               "編集中のファイル名を表示
 set ambiwidth=double    "全角文字で幅が崩れないように調整する
 set laststatus=2
 
-set showmatch           "括弧入力時の対応する括弧を表示
 set list                " 不可視文字の可視化
 set number              " 行番号の表示
 set relativenumber      " 相対行番号の表示
@@ -704,9 +704,9 @@ augroup END
 
 "}}}
 
-"}}} ==============================
-
 " Plugin Settings ============== {{{
+
+" Bundles Settings{{{
 " Shougo/neobundle-vim-recipes'      {{{
 if neobundle#tap('neobundle-vim-recipes')
   " Config {{{
@@ -722,6 +722,7 @@ if neobundle#tap('neobundle-vim-recipes')
   call neobundle#untap()
 endif
 " }}}
+
 " Shougo/vimproc.vim {{{
 if neobundle#tap('vimproc.vim')
   " Config {{{
@@ -742,8 +743,9 @@ if neobundle#tap('vimproc.vim')
 
   call neobundle#untap()
 endif
-" }}} "
-"
+" }}}
+" }}}
+
 " Design Setting {{{
 " nathanaelkane/vim-indent-guides {{{
 if neobundle#tap('vim-indent-guides')
@@ -970,6 +972,7 @@ if neobundle#tap('neocomplete.vim')
         \ })
   " }}}
 
+
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     " echo "neocomplete called "
     " sleep 2
@@ -1073,7 +1076,7 @@ if neobundle#tap('neosnippet.vim')
                 \       'snippet', 'neosnippet/user', 'neosnippet/runtime'
                 \       ],
                 \   }
-                \ })
+                \ }) "}}}
 
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
         " echo "neosnippet called "
@@ -1118,10 +1121,11 @@ if neobundle#tap('neosnippet.vim')
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
     let g:neosnippet#enable_preview = 0	 
-
+    "}}}
     call neobundle#untap()
 endif
-" }}} "
+
+" }}}
 " Shougo/neosnippet-snippets {{{
 if neobundle#tap('neosnippet-snippets')
     " Config {{{
@@ -1162,7 +1166,6 @@ endif
 " }}}
 
 " Vim Operator Settings {{{
-
 
 " kana/vim-operator-user {{{
 if neobundle#tap('vim-operator-user')
@@ -1463,7 +1466,9 @@ endif
 " rbonvall/vim-textobj-latex"                   {{{
 if neobundle#tap('vim-textobj-latex"                  ')
     " Config {{{
-    call neobundle#config({})
+    call neobundle#config({
+        'autoload' : {'filetypes' : ['tex']}
+    })
     "}}}
 
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
@@ -1995,7 +2000,7 @@ endif
 " TKNGUE/vim-latex {{{
 if neobundle#tap('vim-latex')
     " Config {{{
-    call neobundle#config( {
+    call neobundle#config({
                 \ "lazy": 1,
                 \ 'name' : 'vim-latex',
                 \ "autoload": {
@@ -2061,7 +2066,6 @@ if neobundle#tap('vim-latex')
                 \"Citation %.%# undefined\n".
                 \"LaTeX Font Warning: Font shape `%s' undefined\n".
                 \"LaTeX Font Warning: Some font shapes were not available, defaults substituted."
-
     "}}}
 
     call neobundle#untap()
@@ -2112,7 +2116,7 @@ if neobundle#tap('vim-reveal')
     call neobundle#config({
                 \ "lazy": 1,
                 \ "autoload"    : {
-                \   "filetypes" : ['markdown'],
+                \   "filetypes" : ['markdown', 'md'],
                 \},
                 \})
     "}}}
@@ -2121,7 +2125,6 @@ if neobundle#tap('vim-reveal')
     endfunction "}}}
 
     " Setting {{{
-    let s:hooks = neobundle#get_hooks("vim-reveal")
     let g:reveal_root_path = '$HOME/.projects/reveal.js'
     let g:revel_default_config = {
                 \ 'fname'  : 'reveal',
@@ -2482,6 +2485,7 @@ if neobundle#tap('unite-advent_calendar')
     endfunction "}}}
 
     " Setting {{{
+    let g:calendar_frame = 'default'
     "}}}
 
     call neobundle#untap()
@@ -3179,7 +3183,7 @@ if neobundle#tap('atcoder_helper')
 
     call neobundle#untap()
 endif
-" }}} "
+" }}} 
 
 " TKNGUE/sum-it.vim {{{
 if neobundle#tap('sum-it.vim')
@@ -3191,7 +3195,6 @@ if neobundle#tap('sum-it.vim')
     endfunction "}}}
     " Setting {{{
     "}}}
-
     call neobundle#untap()
 endif
 "}}} 
@@ -3199,8 +3202,23 @@ endif
 "}}}
 "}}}
 
+" matchit.zip {{{
+if neobundle#tap('matchit.zip')
+    " Config {{{
+    call neobundle#config( {})
+    "}}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
+    " Setting {{{
+    "}}}
+    call neobundle#untap()
+endif
+"}}} 
+
+
 " PLUGIN_SETTING_ENDPOINT
-"}}}
+" }}}
 
 " Local settings ================ {{{
 let s:local_vimrc = expand('~/.local.vimrc')

@@ -110,14 +110,6 @@ set noswapfile
 let mapleader=','                                "map learder
 let maplocalleader='\'                           "local map leader
 
-" inoremap jj <Esc>
-" nnoremap ; q:a
-" nnoremap ; :
-" nnoremap : q:i
-" nnoremap Q q
-" nnoremap q <Nop>
-" nnoremap q: q:
-"
 nnoremap Y y$
 nnoremap & g&
 
@@ -519,3 +511,5 @@ let g:htbrid_use_iTerm_colors = 1
 colorscheme molokai
 
 filetype plugin indent on
+
+" vim: ft=vim expandtab softtabstop=2 shiftwidth=2 foldmethod=marker
