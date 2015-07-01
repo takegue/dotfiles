@@ -1,5 +1,14 @@
 
 set visualbell
+set t_vb=
+
+" ツールバーを削除
+set guioptions-=T
+
+"メニューを削除
+set guioptions-=m
+
+
 if has('win64')
     " Windows用
     set guifont=Ricty:h12.5:cDEFAULT
@@ -29,7 +38,7 @@ if has('multi_byte_ime') || has('xim')
         set imactivatekey=Zenkaku_Hankaku
     endif
     " 挿入モードでのIME状態を記憶させない
-    " inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+    inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 endif
 augroup InsModeAu
     autocmd!

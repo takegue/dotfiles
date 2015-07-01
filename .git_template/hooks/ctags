@@ -2,5 +2,5 @@ rm .git/tags
 
 CTAGS=`which ctags`
 
-$CTAGS ctags --tag-relative --recurse --sort=yes --append=no  -f .git/tags 
-$CTAGS ctags --tag-relative --recurse --sort=yes --append=yes -f .git/tags $VIRTUAL_ENV/lib/python2.7/site-packages
+$CTAGS --tag-relative --recurse --sort=yes --append=no  -f .git/tags 
+$CTAGS --tag-relative --recurse --sort=yes --append=yes -f .git/tags $VIRTUAL_ENV/lib/python2.7/site-packages

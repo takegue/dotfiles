@@ -3,22 +3,7 @@
 " URL: https://github.com/TKNGUE/dotfiles
 " Description:
 "   This is TKNGUE's vimrc
-
-"Plugin Files: conf.d/*.vim
-"Use 'gf' to move to each configuration file
-"  "conf.d/basic.vim"
-"  "conf.d/map.vim"
-"  "conf.d/misc.vim"
-"  "conf.d/neobundle.vim"
-"  | "conf.d/bundle/bundle-colorscheme.vim"  #colorschemeのbunlde
-"  | "conf.d/bundle/bundle-design.vim"       #vimの見た目のbundle
-"  | "conf.d/bundle/bundle-editor.vim"
-"  | "conf.d/bundle/bundle-operator.vim"
-"  | "conf.d/bundle/bundle-programming.vim"
-"  | "conf.d/bundle/bundle-textobj.vim"
-"  | "conf.d/bundle/bundle-unite.vim"
-"  | "conf.d/bundle/bundle-util.vim"
-"  | "conf.d/bundle/bundle-misc.vim"
+"   For quickly access, you should use 
 
 " Startup {{{ =======================
 " NOTE: Skip initialization for tiny or small.
@@ -54,7 +39,6 @@ if !isdirectory(g:neobundle_root)
     finish
   endif
 endif
-
 if has('vim_starting')
   execute "set runtimepath+=" . g:neobundle_root
 endif
@@ -172,6 +156,9 @@ function! s:loads_bundles() abort
   NeoBundleLazy 'vim-scripts/CSS-one-line--multi-line-folding'
 
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
+  NeoBundle 'matchit.zip'
+
+  NeoBundle 'fuenor/im_control.vim' " im / ime control plugin for vim
 
   "BUNDLE_ENDPOINT
 
@@ -336,9 +323,6 @@ vnoremap v $h
 " nnoremap <Tab> %
 " vnoremap <Tab> %
 
-" matchitを有効にする.
-" source $VIMRUNTIME/macros/matchit.vim
-
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -495,11 +479,13 @@ if has('vim_starting')
     endtry
   endif
   highlight Normal ctermbg=none
+  highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
   " ファイルタイププラグインおよびインデントを有効化
   " これはNeoBundleによる処理が終了したあとに呼ばなければならない
   filetype plugin indent on
 endif
 "}}}
+"
 
 " Misc {{{
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
@@ -1063,7 +1049,6 @@ if neobundle#tap('neocomplete.vim')
 endif
 " }}} "
 
-
 " Shougo/neosnippet.vim {{{
 if neobundle#tap('neosnippet.vim')
     " Config {{{
@@ -1126,6 +1111,7 @@ if neobundle#tap('neosnippet.vim')
 endif
 
 " }}}
+"
 " Shougo/neosnippet-snippets {{{
 if neobundle#tap('neosnippet-snippets')
     " Config {{{
@@ -1467,6 +1453,7 @@ endif
 if neobundle#tap('vim-textobj-latex"                  ')
     " Config {{{
     call neobundle#config({
+        'lazy' :  1,
         'autoload' : {'filetypes' : ['tex']}
     })
     "}}}
@@ -2122,10 +2109,14 @@ if neobundle#tap('vim-reveal')
     "}}}
 
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
+        command! -buffer -nargs=0 RevealIt   call reveal#Md2Reveal() 
+        command! -buffer -nargs=0 RevealOpen call reveal#open(reveal#preview_file_path())
+        command! -buffer -nargs=0 RevealEdit execute 'edit '.reveal#preview_file_path()
     endfunction "}}}
 
     " Setting {{{
-    let g:reveal_root_path = '$HOME/.projects/reveal.js'
+    let g:reveal_root_path = '~/.projects/reveal.js'
+    let g:reveal_root_path = '~/.projects/reveal.js'
     let g:revel_default_config = {
                 \ 'fname'  : 'reveal',
                 \ 'key1'  : 'reveal'
@@ -3200,12 +3191,44 @@ endif
 "}}} 
 "}}}
 "}}}
+
+" fuenor/im_control.vim {{{
+if neobundle#tap('im_control.vim')
+    " Config {{{
+    call neobundle#config({})
+    "}}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+        " 「日本語入力固定モード」切替キー
+        " inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+        " PythonによるIBus制御指定
+        "バッファ毎に日本語入力固定モードの状態を制御。
+        " let g:IM_CtrlBufLocalMode = 1
+    endfunction "}}}
+
+    " Setting {{{
+    function! IMCtrl(cmd)
+        let cmd = a:cmd
+        if cmd == 'On'
+            let res = system('ibus engine "mozc-jp"')
+        elseif cmd == 'Off'
+            let res = system('ibus engine "xkb:en::en"')
+        endif
+        return ''
+    endfunction
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}} "
 "}}}
+
+
 
 " matchit.zip {{{
 if neobundle#tap('matchit.zip')
     " Config {{{
-    call neobundle#config( {})
+    call neobundle#config({})
     "}}}
 
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
