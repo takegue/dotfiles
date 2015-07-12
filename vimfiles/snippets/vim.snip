@@ -1,10 +1,11 @@
 snippet     bundle_tap
 abbr        for configration ob bundle
 options     head
- " author/${1:} {{{
- if neobundle#tap('$1')
+ " author/${2:} {{{
+ if neobundle#tap('$2')
    " Config {{{
    call neobundle#config({
+         \   'lazy' : 1,
          \   'autoload' : {
          \     'unite_sources' : [
          \       'help',

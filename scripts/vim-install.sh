@@ -1,6 +1,4 @@
 #!/bin/env sh
-
-
 if [ -e `which hg` ]; then
     echo 'not found mercurial'
     exit 1;
