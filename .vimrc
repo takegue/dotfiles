@@ -3391,15 +3391,14 @@ if neobundle#tap('vim-ref')
             setlocal nonumber
             " ... and more settings ...
         endfunction
-        " nnoremap w:<C-R><C-W><CR>
         function! g:ref_source_webdict_sites.alc.filter(output)
             let l:output = substitute(a:output, "^.\\+_\\+", "", "")
             return "ALC dictoinary\n------------\n". join(split(l:output,'\n')[10:], "\n")
         endfunction
         function! g:ref_source_webdict_sites.weblio.filter(output)
-            let l:output = substitute(a:output, "\n\n", "\n", "g")
-            return "Weblio dictoinary\n------------\n".join(split(l:output,'\n')[36:], "\n")
-            return a:output
+            let l:output = substitute(a:output, '.\{-}\n\ze\S\+\n', '', "")
+            let l:output = substitute(l:output, '\n\n\', '\n', "g")
+            return "Weblio dictoinary\n------------\n".join(split(l:output,'\n'), "\n")
         endfunction
     endfunction "}}}
 
@@ -3472,6 +3471,7 @@ endif
 " Installation check.
 if !has('vim_starting')
     call neobundle#call_hook('on_source')
+    call neobundle#call_hook('on_post_source')
 endif
 set secure
 "}}}
