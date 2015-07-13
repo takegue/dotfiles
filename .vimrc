@@ -454,7 +454,6 @@ noremap [fold]j zj
 noremap [fold]k zk
 noremap [fold]n ]z
 noremap [fold]p [z
-noremap <silent>[fold]h :<C-u>call <SID>smart_foldcloser()<CR>
 noremap [fold]l zo
 noremap [fold]L zO
 noremap [fold]a za
@@ -489,12 +488,12 @@ augroup my_higlight
     autocmd User VimrcReloaded call s:additional_highlight()
 augroup END
 
-function! s:additional_highlight()
+function! s:additional_highlight() "{{{
   if !has('gui_running')
     highlight Normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
-endfunction
+endfunction "}}}
 "}}}
 
 " Colorscheme: {{{
@@ -526,7 +525,6 @@ if has('vim_starting')
     filetype plugin indent on
 endif
 "}}}
-
 
 
 " Misc: {{{
@@ -621,9 +619,9 @@ function! PluginTest(is_gui, extraCommand)
     let cmd = a:is_gui ? 'gvim' : 'vim'
     let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
     if !exists('b:git_dir')
-        additional_path = fnamemodify(b:git_dir, ':p:h:h')
+        let l:additional_path = fnamemodify(b:git_dir, ':p:h:h')
     else
-        additional_path = getcwd()
+        let l:additional_path = getcwd()
     endif
     execute '!' . cmd . ' -u ~/.vimrc.min -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
 endfunction

@@ -493,21 +493,19 @@ augroup END
 if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim
     call neobundle#begin(expand('~/.vim/bundle'))
-    call neobundle#end(expand('~/.vim/bundle'))
+    NeoBundleFetch 'Shougo/neobundle.vim'
+    " =====
+    " NeoBundle User Settings
+    " =====
+    NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'tomasr/molokai'
+    call neobundle#end()
 endif
 
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" =====
-" NeoBundle User Settings
-" =====
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'tomasr/molokai'
 
 " =====
 " colorscheme
 " =====
-let g:htbrid_use_iTerm_colors = 1
 colorscheme molokai
 
 filetype plugin indent on
