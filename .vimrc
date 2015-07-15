@@ -46,7 +46,7 @@ endif
 
 call neobundle#begin(g:bundle_root)
 function! s:loads_bundles() abort
-    NeoBundleFetch 'Shougo/neobundle.vim'               "Manage neobundle.vim itself
+    NeoBundleFetch 'Shougo/neobundle.vim'                    " Manage neobundle.vim itself
 
     " NeoBundle 'welle/targets.vim'
     NeoBundle 'xolox/vim-session'
@@ -58,31 +58,31 @@ function! s:loads_bundles() abort
     NeoBundle 'vim-scripts/Align'
     NeoBundle 'vim-ruby/vim-ruby'
     NeoBundle 'vim-jp/vital.vim'
-    NeoBundle 'vim-jp/vimdoc-ja'                           " ヘルプの日本語化
+    NeoBundle 'vim-jp/vimdoc-ja'                             " Add Help in Japanese
     NeoBundle 'ujihisa/unite-colorscheme'
     NeoBundle 'ujihisa/neco-look'
     NeoBundle 'uguu-org/vim-matrix-screensaver'
     NeoBundle 'tsukkee/unite-tag'
     NeoBundle 'tsukkee/unite-help'
     NeoBundle 'tsukkee/lingr-vim'
-    NeoBundle 'tpope/vim-unimpaired'                        "バッファ移動用等
-    NeoBundle 'tpope/vim-surround'                          "surround記号編集オペレータ
+    NeoBundle 'tpope/vim-unimpaired'                         " バッファ移動用等
+    NeoBundle 'tpope/vim-surround'                           " surround記号編集オペレータ
     NeoBundle 'tpope/vim-repeat'
     NeoBundle 'tpope/vim-fugitive'
-    NeoBundle 'tpope/vim-commentary'                        "コメント切り替えオペレータ
+    NeoBundle 'tpope/vim-commentary'                         " コメント切り替えオペレータ
     NeoBundle 'tomasr/molokai'
     NeoBundle 'tmhedberg/SimpylFold'
-    NeoBundle 'thinca/vim-textobj-comment'                  "コメントオブジェクト   #ac, ic×
+    NeoBundle 'thinca/vim-textobj-comment'                   " コメントオブジェクト   #ac, ic×
     NeoBundle 'thinca/vim-template'
-    NeoBundle 'thinca/vim-ref'              " referecen viwer for vim 
+    NeoBundle 'thinca/vim-ref'                               " referecen viwer for vim
     NeoBundle 'thinca/vim-quickrun'
     NeoBundle 'tejr/vim-tmux'
     NeoBundle 'tacroe/unite-mark'
     NeoBundle 'sjl/badwolf'
-    NeoBundle 'sgur/vim-textobj-parameter'                  "引数オブジェクト #a, i,
+    NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
     NeoBundle 'rhysd/vim-grammarous'
-    NeoBundle 'rcmdnk/vim-markdown' 
-    NeoBundle 'rbonvall/vim-textobj-latex'                  "LaTeXオブジェクト      #\, $ q, Q, e
+    NeoBundle 'rcmdnk/vim-markdown'
+    NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
     NeoBundle 'othree/html5.vim'
     NeoBundle 'osyo-manga/vim-over'
     NeoBundle 'osyo-manga/unite-fold'
@@ -90,22 +90,22 @@ function! s:loads_bundles() abort
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'mrkn/mrkn256.vim'
     NeoBundle 'moznion/github-commit-comment.vim'
-    NeoBundle 'mattn/vim-textobj-url'                       "URLオブジェクト        #au, iu
+    NeoBundle 'mattn/vim-textobj-url'                        " URLオブジェクト        #au, iu
     NeoBundle 'mattn/unite-advent_calendar'
-    NeoBundle 'mattn/learn-vimscript'   " help for vim script
+    NeoBundle 'mattn/learn-vimscript'                        " help for vim script
     NeoBundle 'mattn/ginger-vim'
     NeoBundle 'mattn/emmet-vim'
     NeoBundle 'matchit.zip'
     NeoBundle 'majutsushi/tagbar'
     NeoBundle 'lambdalisue/vim-gista'
     NeoBundle 'koron/codic-vim'
-    NeoBundle 'klena/python-mode'           " python plugin for vim
+    NeoBundleLazy 'klena/python-mode'                            " python plugin for vim
     NeoBundle 'kannokanno/previm'
     NeoBundle 'kana/vim-textobj-user'
     NeoBundle 'kana/vim-textobj-function'
-    NeoBundle 'kana/vim-textobj-fold'                       " az, iz
-    NeoBundle 'kana/vim-textobj-entire'                     "全体選択オブジェクト   #ae, ai
-    NeoBundle 'kana/vim-textobj-datetime'                   "日付選択オブジェクト   #ada, add, adt
+    NeoBundle 'kana/vim-textobj-fold'                        " az, iz
+    NeoBundle 'kana/vim-textobj-entire'                      " 全体選択オブジェクト   #ae, ai
+    NeoBundle 'kana/vim-textobj-datetime'                    " 日付選択オブジェクト   #ada, add, adt
     NeoBundle 'kana/vim-smartchr'
     NeoBundle 'kana/vim-operator-user'
     NeoBundle 'kana/vim-operator-replace'
@@ -114,15 +114,15 @@ function! s:loads_bundles() abort
     NeoBundle 'itchyny/lightline.vim'
     NeoBundle 'itchyny/calendar.vim'
     NeoBundle 'honza/vim-snippets'
-    NeoBundle 'haya14busa/vim-migemo'       " Vim Plugin for C/Migemo
+    NeoBundle 'haya14busa/vim-migemo'                        " Vim Plugin for C/Migemo
     NeoBundle 'haya14busa/incsearch.vim'
     NeoBundle 'hail2u/vim-css3-syntax'
-    NeoBundle 'fuenor/im_control.vim'       " im / ime control plugin for vim
+    NeoBundle 'fuenor/im_control.vim'                        " im / ime control plugin for vim
     NeoBundle 'emonkak/vim-operator-sort'
     NeoBundle 'elzr/vim-json'
     NeoBundle 'deton/jasegment.vim'
     NeoBundle 'deris/vim-visualinc'
-    NeoBundle 'davidhalter/jedi-vim'        " python plugin for vim
+    NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
     NeoBundle 'cohama/agit.vim'
     NeoBundle 'clones/vim-zsh'
     NeoBundle 'christoomey/vim-tmux-navigator'
@@ -133,10 +133,10 @@ function! s:loads_bundles() abort
     NeoBundle 'TKNGUE/vim-reveal'
     NeoBundle 'TKNGUE/vim-latex'
     NeoBundle 'TKNGUE/sum-it.vim'
-    NeoBundle 'TKNGUE/hateblo.vim' 
+    NeoBundle 'TKNGUE/hateblo.vim'
     NeoBundle 'TKNGUE/atcoder_helper'
     NeoBundle 'Shougo/vimshell'
-    NeoBundle 'Shougo/vimproc.vim'               "Enable asynchronous processing in vim
+    NeoBundle 'Shougo/vimproc.vim'                           " Enable asynchronous processing in vim
     NeoBundle 'Shougo/vimfiler.vim'
     NeoBundle 'Shougo/unite.vim'
     NeoBundle 'Shougo/unite-outline'
@@ -145,9 +145,8 @@ function! s:loads_bundles() abort
     NeoBundle 'Shougo/neosnippet-snippets'
     NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'Shougo/neocomplete.vim'
-    NeoBundle 'Shougo/neobundle-vim-recipes'     "Use neobundle standard rescipes
-    NeoBundle 'Shougo/neobundle-vim-recipes'
-    NeoBundle 'NLKNguyen/papercolor-theme'  " colorscheme paperolor
+    NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
+    NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
     NeoBundle 'Lokaltog/vim-easymotion'
     NeoBundle 'KazuakiM/vim-regexper'
     NeoBundle 'osyo-manga/vim-watchdogs'
@@ -275,7 +274,7 @@ set backspace=indent,eol,start
 
 set nowritebackup
 set nobackup
-set noswapfile
+set swapfile
 
 " }}}
 "}}}
@@ -377,12 +376,12 @@ else
     nnoremap <silent> <Space>.  :<C-u>e $MYVIMRC<CR>
 endif
 
- "バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+"バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
- 
+
 
 " Toggle: {{{
 nnoremap [toggle] <Nop>
@@ -410,19 +409,19 @@ nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR>
 " }}}
 
 function! s:toggle_line_number()
-  if exists('+relativenumber')
-    if (v:version >= 704)
-      " Toggle between relative with absolute on cursor line and no numbers.
-      let [&l:relativenumber, &l:number] =
-            \ (&l:relativenumber || &l:number) ? [0, 0] : [1, 1]
+    if exists('+relativenumber')
+        if (v:version >= 704)
+            " Toggle between relative with absolute on cursor line and no numbers.
+            let [&l:relativenumber, &l:number] =
+                        \ (&l:relativenumber || &l:number) ? [0, 0] : [1, 1]
+        else
+            " Rotate absolute => relative => no numbers.
+            execute 'setlocal' (&l:number == &l:relativenumber) ?
+                        \ 'number! number?' : 'relativenumber! relativenumber?'
+        endif
     else
-      " Rotate absolute => relative => no numbers.
-      execute 'setlocal' (&l:number == &l:relativenumber) ?
-            \ 'number! number?' : 'relativenumber! relativenumber?'
+        setlocal number! number?
     endif
-  else
-    setlocal number! number?
-  endif
 endfunction
 
 " Tab: {{{
@@ -489,10 +488,10 @@ augroup my_higlight
 augroup END
 
 function! s:additional_highlight() "{{{
-  if !has('gui_running')
-    highlight Normal ctermbg=none
-  endif
-  highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
+    if !has('gui_running')
+        highlight Normal ctermbg=none
+    endif
+    highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
 endfunction "}}}
 "}}}
 
@@ -532,9 +531,9 @@ endif
 cmap w!! w !sudo tee > /dev/null %
 
 augroup my_diff_autocmd
-  autocmd!
-  autocmd  InsertLeave *
-      \ if &diff | diffupdate | echo 'diffupdated' | endif
+    autocmd!
+    autocmd  InsertLeave *
+                \ if &diff | diffupdate | echo 'diffupdated' | endif
 augroup END
 
 " 一時ファイルコマンド
@@ -1589,11 +1588,11 @@ endif
 " Programming Tools Settings: {{{
 
 " Programming Utilities: {{{
+"
 " thinca/vim-quickrun {{{
 if neobundle#tap('vim-quickrun')
     " Config {{{
     call neobundle#config({
-                \'lazy': 1,
                 \'autoload' : {
                 \     'commands' : [
                 \       'QuickRun',
@@ -1604,57 +1603,60 @@ if neobundle#tap('vim-quickrun')
     "}}}
 
     function! neobundle#tapped.hooks.on_source(bundle) "{{{
-        let g:quickrun_config = {
-                    \ "_": {
-                    \   "hook/shabadoubi_touch_henshin/enable" : 1,
-                    \   "hook/shabadoubi_touch_henshin/wait" : 60,
-                    \   "runner"                    : "vimproc",
-                    \   "runner/vimproc/sleep"      : 50,
-                    \   "runner/vimproc/updatetime" : 60,
-                    \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "" : "vertical"}',
-                    \}}
-        let g:quickrun_config.sql ={
-                    \ 'command' : 'mysql',
-                    \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
-                    \ 'exec'    : ['%c %o < %s' ] ,
-                    \}
-        let g:quickrun_config['php.unit'] = {
-                    \ 'command': 'testrunner',
-                    \ 'cmdopt': 'phpunit'
-                    \} 
-        let g:quickrun_config['python'] = {
-                    \ 'command': 'python',
-                    \  "runner" : "vimproc",
-                    \}
-        " let g:quickrun_config['python.unit'] = {i
-        "             \ 'command': 'nosetests',
-        "             \ 'cmdopt': '-v -s'
-        "             \}
-        let g:quickrun_config['python.pytest'] = {
-                    \ 'command': 'py.test',
-                    \ 'cmdopt': '-v'
-                    \}
-        let g:quickrun_config.markdown  = {
-                    \ 'type' : 'markdown/pandoc',
-                    \ 'outputter' : 'browser'
-                    \ }
-        let g:quickrun_config.html  = {
-                    \ 'command' : 'cygstart',
-                    \ 'cmdopt'  : '%c %o' ,
-                    \ 'outputter' : 'browser'
-                    \ }
-        let g:quickrun_config['ruby.rspec']  = {
-                    \ 'command': 'rspec'
-                    \ , 'cmdopt': '-f d'
-                    \ }
-
+        nnoremap <silent> <Leader>r :QuickRun<CR>
+        nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
+        nnoremap <silent> <Leader>se :QuickRun sql<CR>
 
     endfunction "}}}
 
     " Setting {{{
-    nnoremap <silent> <Leader>r :QuickRun<CR>
-    nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
-    nnoremap <silent> <Leader>se :QuickRun sql<CR>
+    let g:quickrun_config = {
+                \ "_": {
+                \   "hook/shabadoubi_touch_henshin/enable" : 1,
+                \   "hook/shabadoubi_touch_henshin/wait" : 60,
+                \   "runner"                    : "vimproc",
+                \   "runner/vimproc/sleep"      : 50,
+                \   "runner/vimproc/updatetime" : 60,
+                \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
+                \},
+                \   "watchdogs_checker/_" : {
+                \      "hook/close_quickfix/enable_exit" : 1,
+                \      "runner/vimproc/updatetime" : 40,
+                \}}
+    let g:quickrun_config.sql ={
+                \ 'command' : 'mysql',
+                \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
+                \ 'exec'    : ['%c %o < %s' ] ,
+                \}
+    let g:quickrun_config['php.unit'] = {
+                \ 'command': 'testrunner',
+                \ 'cmdopt': 'phpunit'
+                \} 
+    let g:quickrun_config['python'] = {
+                \ 'command': 'python',
+                \  "runner" : "vimproc",
+                \}
+    " let g:quickrun_config['python.unit'] = {i
+    "             \ 'command': 'nosetests',
+    "             \ 'cmdopt': '-v -s'
+    "             \}
+    let g:quickrun_config['python.pytest'] = {
+                \ 'command': 'py.test',
+                \ 'cmdopt': '-v'
+                \}
+    let g:quickrun_config.markdown  = {
+                \ 'type' : 'markdown/pandoc',
+                \ 'outputter' : 'browser'
+                \ }
+    let g:quickrun_config.html  = {
+                \ 'command' : 'cygstart',
+                \ 'cmdopt'  : '%c %o' ,
+                \ 'outputter' : 'browser'
+                \ }
+    let g:quickrun_config['ruby.rspec']  = {
+                \ 'command': 'rspec'
+                \ , 'cmdopt': '-f d'
+                \ }
 
 
     function! MakeMySQLCommandOptions()
@@ -1709,7 +1711,7 @@ if neobundle#tap('vim-quickrun')
 
     call neobundle#untap()
 endif
-" }}} "
+" }}}
 
 " osyo-manga/vim-watchdogs {{{
 if neobundle#tap('vim-watchdogs')
@@ -1721,21 +1723,37 @@ if neobundle#tap('vim-watchdogs')
                 \       'help',
                 \     ],
                 \     'commands' : [
-                \       'watchdogsRun',
+                \       {
+                \         'name' : 'WatchdogsRun',
+                \         'complete' : 'customlist,quickrun#complete'
+                \       },
                 \     ],
                 \   },
-                \   'depends' : ['thinca/vim-quickrun ', 'Shougo/vimproc.vim', 'osyo-manga/shabadou.vim',
+                \   'depends' : ['thinca/vim-quickrun', 'Shougo/vimproc.vim', 'osyo-manga/shabadou.vim',
                 \       'jceb/vim-hier', 'dannyob/quickfixstatus',
                 \    ]
                 \ })
     " }}}
 
-    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     endfunction "}}}
 
     " Setting {{{
-    "}}}
+    let g:watchdogs_check_BufWritePost_enables = {
+                \   "cpp"     : 1,
+                \   "python"  : 1,
+                \   "ruby"    : 1,
+                \   "haskell" : 1,
+                \}
 
+    let g:watchdogs_check_CursorHold_enables = {
+                \   "cpp"     : 1,
+                \   "python"  : 1,
+                \   "ruby"    : 1,
+                \   "haskell" : 1,
+                \}
+    let g:watchdogs_check_BufWritePost_enable_on_wq = 0
+    "}}}
     call neobundle#untap()
 endif
 " }}}
@@ -1793,12 +1811,13 @@ if neobundle#tap('vim-python-matchit')
 endif
 " }}} "
 
+
 " klen/python-mode {{{
 if neobundle#tap('python-mode')
     " Config {{{
     call neobundle#config( {
-                \ "lazy"    : 1,
-                \ 'external-commands' : ['pylint', 'pyflakes'],
+                \ 'lazy' : 1,
+                \ 'external_commands' : ['pyflakes', 'pylint'],
                 \ "autoload"    : {
                 \   "filetypes" : ["python", "python3", "djangohtml"],
                 \ },
