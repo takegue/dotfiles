@@ -1,4 +1,3 @@
-
 setlocal nowrap
 setlocal textwidth=79
 setlocal expandtab

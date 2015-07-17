@@ -1,1 +1,2 @@
 set nolist
+set spell
