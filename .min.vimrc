@@ -371,7 +371,7 @@ function! PluginTest(is_gui, extraCommand)
   else
     additional_path = getcwd()
   endif
-  execute '!' . cmd . ' -u ~/.vimrc.min -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
+  execute '!' . cmd . ' -u ~/.min.vimrc -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
 endfunction
 "
 augroup edit_memo
@@ -498,6 +498,7 @@ if has('vim_starting')
     " NeoBundle User Settings
     " =====
     NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'tomasr/molokai'
     call neobundle#end()
 endif
