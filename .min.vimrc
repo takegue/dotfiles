@@ -8,9 +8,8 @@ syntax on
 " Encodings {{{
 set encoding=utf8
 set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=utf-8,cp932,euc-jp "A list of character encodings
-set fileformats=unix,dos,mac "This gives the end-of-line (<EOL>) formats
+set fileencodings=utf-8,cp932,euc-jp  " A list of character encodings
+set fileformats=unix,dos,mac          " This gives the end-of-line (<EOL>) formats
 " }}}
 
 " Display {{{
@@ -500,6 +499,7 @@ if has('vim_starting')
     NeoBundle 'Shougo/unite.vim'
     NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'tomasr/molokai'
+    NeoBundle 'tpope/sensible.vim'
     call neobundle#end()
 endif
 

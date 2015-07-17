@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 if [[ ! -e `which hg` ]]; then
     echo 'not found mercurial'
