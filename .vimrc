@@ -46,7 +46,7 @@ if has('vim_starting')
 endif
 
 call neobundle#begin(g:bundle_root)
-function! s:loads_bundles() abort
+function! s:loads_bundles() abort "{{{
   NeoBundleFetch 'Shougo/neobundle.vim'                    " Manage neobundle.vim itself
 
   " NeoBundle 'welle/targets.vim'
@@ -100,7 +100,7 @@ function! s:loads_bundles() abort
   NeoBundle 'majutsushi/tagbar'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'koron/codic-vim'
-  NeoBundleLazy 'klena/python-mode'                            " python plugin for vim
+  NeoBundle 'klena/python-mode'                            " python plugin for vim
   NeoBundle 'kannokanno/previm'
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-function'
@@ -153,6 +153,7 @@ function! s:loads_bundles() abort
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'mattn/webapi-vim'
+  NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -167,7 +168,7 @@ function! s:loads_bundles() abort
         \ }
 
 
-endfunction
+endfunction "}}}
 
 if !g:noplugin && neobundle#load_cache()
   call s:loads_bundles()
@@ -176,7 +177,6 @@ endif
 call neobundle#end()
 
 NeoBundleCheck
-
 " END NeoBundle}}}
 
 " ====================== }}}
@@ -203,14 +203,13 @@ if exists('&ambiwidth')
   set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
 endif
 
-set lazyredraw
+set nolazyredraw
 set helplang=ja,en
 set spelllang+=cjk
 set title                          " 編集中のファイル名を表示
 set ambiwidth=double               " 全角文字で幅が崩れないように調整する
 set laststatus=2
 
-set list                           " 不可視文字の可視化
 set number                         " 行番号の表示
 set relativenumber                 " 相対行番号の表示
 set nowrap                         " 長いテキストの折り返し
@@ -240,7 +239,7 @@ if v:version > 704 || v:version == 704 && has("patch786")
 endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
+set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
 set fillchars=vert:\|
 
 set t_vb=
@@ -339,15 +338,15 @@ nnoremap g* g*Nzz
 nnoremap g# g#zz
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
-nnoremap j gj
-vnoremap j gj
-nnoremap gj j
-vnoremap gj j
+" nnoremap j gj
+" vnoremap j gj
+" nnoremap gj j
+" vnoremap gj j
 
-nnoremap k gk
-vnoremap k gk
-nnoremap gk k
-vnoremap gk k
+" nnoremap k gk
+" vnoremap k gk
+" nnoremap gk k
+" vnoremap gk k
 
 
 " vを二回で行末まで選択
@@ -409,6 +408,7 @@ cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
+cnoremap <C-a>  <Home>
 
 
 " Toggle: {{{
@@ -418,6 +418,7 @@ nnoremap <silent> [toggle]s  :<C-u> setl spell!<CR>          : setl spell?<CR>
 nnoremap <silent> [toggle]l  :<C-u> setl list!<CR>           : setl list?<CR>
 nnoremap <silent> [toggle]t  :<C-u> setl expandtab!<CR>      : setl expandtab?<CR>
 nnoremap <silent> [toggle]w  :<C-u> setl wrap!<CR>           : setl wrap?<CR>
+nnoremap <silent> [toggle]z  :<C-u> setl lazyredraw!<CR>     : setl lazyredraw?<CR>
 nnoremap <silent> [toggle]cc : setl cursorline!<CR>     : setl cursorline?<CR>
 nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>   : setl cursorcolumn?<CR>
 nnoremap <silent> [toggle]n  :<C-u> call <SID>toggle_line_number()<CR>
@@ -528,8 +529,9 @@ endfunction "}}}
 " :so $VIMRUNTIME/syntax/colortest.vim
 " Check syntax
 " :so $VIMRUNTIME/syntax/hitest.vim
+
 if has('vim_starting')
-  syntax enable
+  syntax on
   set t_Co=256
   let g:solarized_termcolors=256
 
@@ -549,7 +551,6 @@ if has('vim_starting')
   endif
   " ファイルタイププラグインおよびインデントを有効化
   " これはNeoBundleによる処理が終了したあとに呼ばなければならない
-  filetype plugin indent on
 endif
 "}}}
 
@@ -689,6 +690,7 @@ function! s:mkdir(dir, force)
 endfunction
 
 " vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
+"
 
 augroup MyAutoCmd " {{{
   autocmd!
@@ -704,6 +706,7 @@ augroup MyAutoCmd " {{{
   autocmd WinEnter * if &number | set cursorline relativenumber | endif
   autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle
   " autocmd BufReadPost * call s:SwitchToActualFile()
+  autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')
 augroup END " }}}
 
 augroup office_format "{{{
@@ -946,7 +949,6 @@ endif
 " }}}
 
 " Input Auxiliary Settings:{{{
-
 " rhysd/vim-grammarous {{{
 if neobundle#tap('vim-grammarous')
   " Config {{{
@@ -3023,7 +3025,7 @@ if neobundle#tap('vim-tmux-navigator')
 
   " Setting {{{
   let g:tmux_navigator_save_on_switch = 0
-  let g:tmux_navigator_no_mappings = 1
+  let g:tmux_navigator_no_mappings = 0
   "}}}
 
   call neobundle#untap()
@@ -3436,22 +3438,22 @@ if neobundle#tap('vim-ref')
       autocmd FileType ref-webdict call s:initialize_ref_viewer()
       autocmd FileType ref-man call s:initialize_ref_viewer()
     augroup END
-    function! s:initialize_ref_viewer()
+    function! s:initialize_ref_viewer() "{{{
       nmap <buffer> b <Plug>(ref-back)
       nmap <buffer> f <Plug>(ref-forward)
       nnoremap <buffer> q <C-w>c
       setlocal nonumber
       " ... and more settings ...
-    endfunction
-    function! g:ref_source_webdict_sites.alc.filter(output)
+    endfunction "}}}
+    function! g:ref_source_webdict_sites.alc.filter(output) "{{{
       let l:output = substitute(a:output, "^.\\+_\\+", "", "")
       return "ALC dictoinary\n------------\n". join(split(l:output,'\n')[10:], "\n")
-    endfunction
-    function! g:ref_source_webdict_sites.weblio.filter(output)
+    endfunction "}}}
+    function! g:ref_source_webdict_sites.weblio.filter(output) "{{{
       let l:output = substitute(a:output, '.\{-}\n\ze\S\+\n', '', "")
       let l:output = substitute(l:output, '\n\n\', '\n', "g")
       return "Weblio dictoinary\n------------\n".join(split(l:output,'\n'), "\n")
-    endfunction
+    endfunction "}}}
   endfunction "}}}
 
   " Setting {{{
@@ -3475,6 +3477,7 @@ if neobundle#tap('vim-ref')
         \ 'perl': 'perldoc',
         \ 'php': 'phpmanual',
         \ 'ruby': 'refe',
+        \ 'vim': 'help',
         \ 'cpp': 'man',
         \ 'tex': 'webdict',
         \ 'erlang': 'erlang',
@@ -3510,7 +3513,55 @@ endif
 " }}}
 "}}}
 
+" tyru/open-browser.vim {{{
+if neobundle#tap('open-browser.vim')
+    " Config {{{
+    call neobundle#config({
+                \   'lazy' : 1,
+                \   'autoload' : {
+                \     'commands': ['OpenURL'],
+                \     'unite_sources' : [
+                \       'help',
+                \     ],
+                \   }
+                \ })
+    " }}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
+
+    " Setting {{{
+    let g:openbrowser_search_engines = {
+    \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
+    \       'askubuntu': 'http://askubuntu.com/search?q={query}',
+    \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
+    \       'blekko': 'http://blekko.com/ws/+{query}',
+    \       'cpan': 'http://search.cpan.org/search?query={query}',
+    \       'devdocs': 'http://devdocs.io/#q={query}',
+    \       'duckduckgo': 'http://duckduckgo.com/?q={query}',
+    \       'github': 'http://github.com/search?q={query}',
+    \       'google': 'http://google.com/search?q={query}',
+    \       'google-code': 'http://code.google.com/intl/en/query/#q={query}',
+    \       'php': 'http://php.net/{query}',
+    \       'python': 'http://docs.python.org/dev/search.html?q={query}&check_keywords=yes&area=default',
+    \       'twitter-search': 'http://twitter.com/search/{query}',
+    \       'twitter-user': 'http://twitter.com/{query}',
+    \       'verycd': 'http://www.verycd.com/search/entries/{query}',
+    \       'vim': 'http://www.google.com/cse?cx=partner-pub-3005259998294962%3Abvyni59kjr1&ie=ISO-8859-1&q={query}&sa=Search&siteurl=www.vim.org%2F#gsc.tab=0&gsc.q={query}&gsc.page=1',
+    \       'wikipedia': 'http://en.wikipedia.org/wiki/{query}',
+    \       'wikipedia-ja': 'http://ja.wikipedia.org/wiki/{query}',
+    \       'yahoo': 'http://search.yahoo.com/search?p={query}',
+    \}
+    nmap gb <Plug>(openbrowser-smart-search)
+    vmap gb <Plug>(openbrowser-smart-search)
+    nmap gw :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}}
 " PLUGIN_SETTING_ENDPOINT
+filetype plugin indent on
 " }}}
 
 " Local settings ================ {{{
@@ -3524,7 +3575,6 @@ endif
 " Installation check.
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
-  call neobundle#call_hook('on_post_source')
 endif
 set secure
 "}}}
