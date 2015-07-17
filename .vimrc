@@ -133,6 +133,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'alfredodeza/pytest.vim'
   NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'TKNGUE/vim-latex'
+  NeoBundle 'TKNGUE/switch.vim'
   NeoBundle 'TKNGUE/sum-it.vim'
   NeoBundle 'TKNGUE/hateblo.vim'
   NeoBundle 'TKNGUE/atcoder_helper'
@@ -154,6 +155,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
+
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -1381,7 +1383,6 @@ if neobundle#tap('switch.vim')
       autocmd FileType gitrebase let b:switch_custom_definitions = [
             \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
             \]
-
       autocmd FileType python let b:switch_custom_definitions =
             \[
             \   ['and', 'or'],
@@ -1396,7 +1397,7 @@ if neobundle#tap('switch.vim')
 
     let g:switch_custom_definitions = [
           \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
-          \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable']]
+          \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
           \   ['!=', '=='],
           \   {
           \     '>\(=\)\@!'  : '>=',
@@ -1420,6 +1421,7 @@ if neobundle#tap('switch.vim')
   endfunction "}}}
 
   " Setting {{{
+  nnoremap - :Switch<CR>
   "}}}
 
   call neobundle#untap()
