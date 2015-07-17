@@ -205,26 +205,26 @@ endif
 set lazyredraw
 set helplang=ja,en
 set spelllang+=cjk
-set title               "編集中のファイル名を表示
-set ambiwidth=double    "全角文字で幅が崩れないように調整する
+set title                          " 編集中のファイル名を表示
+set ambiwidth=double               " 全角文字で幅が崩れないように調整する
 set laststatus=2
 
-set list                " 不可視文字の可視化
-set number              " 行番号の表示
-set relativenumber      " 相対行番号の表示
-set nowrap                " 長いテキストの折り返し
-set textwidth=0         " 自動的に改行が入るのを無効化
-set colorcolumn=80      " その代わり80文字目にラインを入れる
-set cursorline          " 編集中の行のハイライト
+set list                           " 不可視文字の可視化
+set number                         " 行番号の表示
+set relativenumber                 " 相対行番号の表示
+set nowrap                         " 長いテキストの折り返し
+set textwidth=0                    " 自動的に改行が入るのを無効化
+set colorcolumn=80                 " その代わり80文字目にラインを入れる
+set cursorline                     " 編集中の行のハイライト
 
-set smartindent         "オートインデント
+set smartindent                    " オートインデント
 " set autoindent
 set cindent
 set tabstop=8
-set shiftwidth=4        "オートインデントの幅
-set softtabstop=4       "インデントをスペース4つ分に設定
-set expandtab           "タブ→スペースの変換
-set wildmenu wildmode=longest,full "コマンドラインの補間表示
+set shiftwidth=4                   " オートインデントの幅
+set softtabstop=4                  " インデントをスペース4つ分に設定
+set expandtab                      " タブ→スペースの変換
+set wildmenu wildmode=longest,full " コマンドラインの補間表示
 set foldmethod=marker
 set display=lastline
 set pumheight=15
@@ -233,7 +233,6 @@ set pumheight=15
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
 set fillchars=vert:\|
 
-" 前時代的スクリーンベルを無
 set t_vb=
 set novisualbell
 
@@ -467,7 +466,7 @@ nnoremap <expr>l  foldclosed('.') != -1 ? 'zo' : 'l'
 nnoremap  [fold][     :<C-u>call <SID>put_foldmarker(0)<CR>
 "}}}
 
-" Abbeviattions: {{{
+" Abbreviations: {{{
 "自動で括弧内に移動
 inoremap {} {}<left>
 inoremap () ()<left>
@@ -476,8 +475,8 @@ inoremap <> <><left>
 inoremap '' ''<left>
 inoremap `` ``<left>
 inoremap "" ""<left>
-"}}}
 
+"}}}
 "}}}
 
 "Highlight: {{{
@@ -524,7 +523,6 @@ if has('vim_starting')
     filetype plugin indent on
 endif
 "}}}
-
 
 " Misc: {{{
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
