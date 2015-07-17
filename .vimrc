@@ -40,6 +40,7 @@ if !isdirectory(g:neobundle_root)
         finish
     endif
 endif
+
 if has('vim_starting')
     execute "set runtimepath+=" . g:neobundle_root
 endif
@@ -227,7 +228,16 @@ set expandtab                      " タブ→スペースの変換
 set wildmenu wildmode=longest,full " コマンドラインの補間表示
 set foldmethod=marker
 set display=lastline
+set cmdheight=2                    " To suppress '<Press Enter>'
 set pumheight=15
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j             " Delete comment character when joining commented lines
+endif
+
+if v:version > 704 || v:version == 704 && has("patch786")
+  set nofixeol                    "
+endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
@@ -3434,6 +3444,7 @@ if neobundle#tap('vim-ref')
     let g:ref_source_webdict_sites['default'] = "weblio"
     let g:ref_detect_filetype=  {
                 \ '_': ['man','webdict'],
+                \ 'gitcommit': 'webdict',
                 \ 'c': 'man',
                 \ 'clojure': 'clojure',
                 \ 'perl': 'perldoc',
