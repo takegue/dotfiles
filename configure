@@ -8,11 +8,11 @@ DIR=`readlink -f $path`
 # 	chsh /usr/bin/zsh
 # fi 
 
-if [ -e `which git` ]; then
+if [ ! -e `which git` ]; then
     echo 'not found git'
 fi 
 
-if [ -e `which vim` ]; then
+if [ ! -e `which vim` ]; then
     echo 'not found git'
     $DIR/scripts/vim-install.sh
 fi 
