@@ -133,7 +133,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'alfredodeza/pytest.vim'
   NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'TKNGUE/vim-latex'
-  NeoBundle 'TKNGUE/switch.vim'
+  NeoBundle 'AndrewRadev/switch.vim'
   NeoBundle 'TKNGUE/sum-it.vim'
   NeoBundle 'TKNGUE/hateblo.vim'
   NeoBundle 'TKNGUE/atcoder_helper'
@@ -1372,7 +1372,7 @@ if neobundle#tap('targets.vim')
 endif
 " }}} "
 
-" TKNGUE/switch.vim'                            {{{
+" AndrewRadev/switch.vim                            {{{
 if neobundle#tap('switch.vim')
   " Config {{{
   call neobundle#config({})
@@ -1398,7 +1398,7 @@ if neobundle#tap('switch.vim')
     let g:switch_custom_definitions = [
           \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
           \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
-          \   ['!=', '=='],
+          \   ['!=', '==']
           \   {
           \     '>\(=\)\@!'  : '>=',
           \     '>='  : '<',
