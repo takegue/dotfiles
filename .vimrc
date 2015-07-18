@@ -340,15 +340,15 @@ nnoremap g* g*Nzz
 nnoremap g# g#zz
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
-" nnoremap j gj
-" vnoremap j gj
-" nnoremap gj j
-" vnoremap gj j
+nnoremap j gj
+vnoremap j gj
+nnoremap gj j
+vnoremap gj j
 
-" nnoremap k gk
-" vnoremap k gk
-" nnoremap gk k
-" vnoremap gk k
+nnoremap k gk
+vnoremap k gk
+nnoremap gk k
+vnoremap gk k
 
 
 " vを二回で行末まで選択
@@ -1398,7 +1398,7 @@ if neobundle#tap('switch.vim')
     let g:switch_custom_definitions = [
           \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
           \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
-          \   ['!=', '==']
+          \   ['!=', '=='],
           \   {
           \     '>\(=\)\@!'  : '>=',
           \     '>='  : '<',
@@ -2444,16 +2444,18 @@ if neobundle#tap('unite.vim')
     endif
 
     nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-    nnoremap <buffer><expr> S      unite#mappings#set_current_filters(
-          \ empty(unite#mappings#get_current_filters()) ?
+    nnoremap <buffer><expr>S      unite#mappings#set_current_sorters(
+          \ empty(unite#mappings#get_current_sorters()) ?
           \ ['sorter_reverse'] : [])
     nnoremap <buffer><expr>M    unite#mappings#set_current_matchers(
           \ empty(unite#mappings#get_current_matchers()) ?
           \ ['matcher_migemo'] : [])
+    nnoremap <buffer><expr>R    unite#mappings#set_current_matchers(
+          \ empty(unite#mappings#get_current_matchers()) ?
+          \ ['matcher_regexp'] : [])
 
     " Runs "split" action by <C-s>.
     imap <silent><buffer><expr> <C-s>     unite#do_action('split')
-
   endfunction "}}}
 
   " mappingが競合するためデフォルトマッピング無効
@@ -3460,6 +3462,7 @@ if neobundle#tap('vim-ref')
 
   " Setting {{{
   "Ref webdictでalcを使う設定
+  let g:ref_no_default_key_mappings = 0
   " let g:ref_source_webdict_cmd = 'lynx -dump -nonumbers %s'
   let g:ref_source_webdict_use_cache = 1
   let g:ref_source_webdict_sites = {
@@ -3479,7 +3482,7 @@ if neobundle#tap('vim-ref')
         \ 'perl': 'perldoc',
         \ 'php': 'phpmanual',
         \ 'ruby': 'refe',
-        \ 'vim': 'help',
+        \ 'vim': '',
         \ 'cpp': 'man',
         \ 'tex': 'webdict',
         \ 'erlang': 'erlang',

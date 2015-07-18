@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if [[ ! -e `which hg` ]]; then
     echo 'not found mercurial'
@@ -8,7 +8,6 @@ fi
 DIST_VIM=/tmp/vim
 
 if [[ ! -d $DIST_VIM ]]; then
-    #statements
     hg clone https://vim.googlecode.com/hg $DIST_VIM
 else [[ -d $DIST_VIM ]];
     hg pull -u -R $DIST_VIM 
