@@ -85,7 +85,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rcmdnk/vim-markdown'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
   NeoBundle 'othree/html5.vim'
-  NeoBundle 'osyo-manga/vim-over'
+  " NeoBundle 'osyo-manga/vim-over'
   NeoBundle 'osyo-manga/unite-fold'
   NeoBundle 'nathanaelkane/vim-indent-guides'
   NeoBundle 'nanotech/jellybeans.vim'
@@ -100,7 +100,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'majutsushi/tagbar'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'koron/codic-vim'
-  NeoBundle 'klena/python-mode'                            " python plugin for vim
+  NeoBundle 'klen/python-mode'                            " python plugin for vim
   NeoBundle 'kannokanno/previm'
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-function'
@@ -155,7 +155,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
-
+  NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -1420,8 +1420,7 @@ if neobundle#tap('switch.vim')
     let g:switch_decrement_definitions = []
   endfunction "}}}
 
-  " Setting {{{
-  nnoremap - :Switch<CR>
+  let g:switch_mapping = "-"
   "}}}
 
   call neobundle#untap()
@@ -1475,10 +1474,10 @@ endif
 " }}} "引数オブジェクト #a, i,
 
 " kana/vim-textobj-entire"                      {{{
-if neobundle#tap('vim-textobj-entire"                     ')
+if neobundle#tap('vim-textobj-entire')
   " Config {{{
   call neobundle#config({})
-  l  "}}}
+  "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
   endfunction "}}}
@@ -1491,7 +1490,7 @@ endif
 " }}} "全体選択オブジェクト   #ae, ai
 
 " kana/vim-textobj-datetime"                    {{{
-if neobundle#tap('vim-textobj-datetime"                   ')
+if neobundle#tap('vim-textobj-datetime')
   " Config {{{
   call neobundle#config({})
   "}}}
@@ -1507,7 +1506,7 @@ endif
 " }}} "日付選択オブジェクト   #ada, add, adt
 
 " thinca/vim-textobj-comment"                   {{{
-if neobundle#tap('vim-textobj-comment"                  ')
+if neobundle#tap('vim-textobj-comment')
   " Config {{{
   call neobundle#config({})
   "}}}
@@ -1523,7 +1522,7 @@ endif
 " }}} "コメントオブジェクト   #ac, ic×
 
 " mattn/vim-textobj-url"                        {{{
-if neobundle#tap('vim-textobj-url"                       ')
+if neobundle#tap('vim-textobj-url')
   " Config {{{
   call neobundle#config({})
   "}}}
@@ -1538,13 +1537,13 @@ if neobundle#tap('vim-textobj-url"                       ')
 endif
 " }}} "URLオブジェクト        #au, iu
 
-" rbonvall/vim-textobj-latex"                   {{{
-if neobundle#tap('vim-textobj-latex"                  ')
+" rbonvall/vim-textobj-latex                   {{{
+if neobundle#tap('vim-textobj-latex')
   " Config {{{
   call neobundle#config({
-  'lazy' :  1,
-  'autoload' : {'filetypes' : ['tex']}
-  })
+        \ 'lazy' : 1,
+        \ 'autoload' : {'filetypes' : ['tex']},
+        \})
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
@@ -1643,16 +1642,16 @@ if neobundle#tap('vim-quickrun')
   " Setting {{{
   let g:quickrun_config = {
         \ "_": {
-        \   "hook/shabadoubi_touch_henshin/enable" : 1,
-        \   "hook/shabadoubi_touch_henshin/wait" : 60,
-        \   "runner"                    : "vimproc",
-        \   "runner/vimproc/sleep"      : 50,
-        \   "runner/vimproc/updatetime" : 60,
+        \   "hook/shabadoubi_inu/enable" : 1,
+        \   "hook/shabadoubi_inu/wait" : 60,
+        \   "runner"                    : 'vimproc',
+        \   "runner/vimproc/sleep"      : 500,
+        \   "runner/vimproc/updatetime" : 500,
         \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
         \},
         \   "watchdogs_checker/_" : {
         \      "hook/close_quickfix/enable_exit" : 1,
-        \      "runner/vimproc/updatetime" : 40,
+        \      "runner/vimproc/updatetime" : 1000,
         \}}
   let g:quickrun_config.sql ={
         \ 'command' : 'mysql',
@@ -1665,11 +1664,9 @@ if neobundle#tap('vim-quickrun')
         \} 
   let g:quickrun_config['python'] = {
         \ 'command': 'python',
-        \  "runner" : "vimproc",
         \}
-  " let g:quickrun_config['python.unit'] = {i
-  "             \ 'command': 'nosetests',
-  "             \ 'cmdopt': '-v -s'
+  " let g:quickrun_config['vim/watchdogs_checker'] = {
+  "             \ 'outputter': '-v -s'
   "             \}
   let g:quickrun_config['python.pytest'] = {
         \ 'command': 'py.test',
@@ -2022,7 +2019,35 @@ endif
 " }}} "
 "}}}
 "}}}
-"
+
+" Vim: {{{
+" syngan/vim-vimlint {{{
+if neobundle#tap('vim-vimlint')
+  " Config {{{
+  call neobundle#config({
+        \ 'lazy' : 1,
+        \ 'depends' : 'ynkdir/vim-vimlparser',
+        \ 'autoload' : {
+        \   'filetypes' : 'vim',
+        \   'functions' : 'vimlint#vimlint',
+        \   'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
+
+"}}}
 " WEB Programming: {{{
 " mattn/emmet-vim {{{
 if neobundle#tap('emmet-vim')
@@ -2363,7 +2388,7 @@ if neobundle#tap('unite.vim')
     nmap    <Leader>f  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer file file_mru 
+          \ bookmark buffer file_rec/git file file_mru 
           \ file/new directory/new <CR>
     nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files 
           \ buffer bookmark file
@@ -2373,7 +2398,7 @@ if neobundle#tap('unite.vim')
           \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
     nnoremap <silent> [unite]r  :<C-u>Unite
           \ -buffer-name=register register<CR>
-    nnoremap <silent> [unite]o  :<C-u>Unite outline
+    nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
     nnoremap <silent> [unite]n  :<C-u>Unite 
           \ -buffer-name=bundles
@@ -2395,13 +2420,16 @@ if neobundle#tap('unite.vim')
 
   endfunction "}}}
 
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    call unite#custom#profile('default', 'context', {
+          \   'start_insert': 1,
+          \   'prompt': '» ',
+          \ })
+  endfunction "}}}
+
   " Setting {{{
 
   " Start insert.
-  call unite#custom#profile('default', 'context', {
-        \   'start_insert': 1,
-        \   'prompt': '» ',
-        \ })
   let g:unite_source_history_yank_save_clipboard = 0
   let g:unite_redraw_hold_candidates = 50000
   let g:unite_source_file_rec_max_cache_files = 50000
@@ -2676,7 +2704,18 @@ if neobundle#tap('vimshell')
         \ }})
   "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
+    call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
+
+    autocmd FileType int-* call s:interactive_settings()
+
+    autocmd FileType vimshell
+            \ call vimshell#altercmd#define('g', 'git')
+            \| call vimshell#altercmd#define('i', 'iexe')
+            \| call vimshell#altercmd#define('l', 'll')
+            \| call vimshell#altercmd#define('ll', 'ls -l')
+            \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
   endfunction "}}}
 
   " Setting {{{
@@ -2705,17 +2744,6 @@ if neobundle#tap('vimshell')
   let g:vimshell_execute_file_list['rb'] = 'ruby'
   let g:vimshell_execute_file_list['pl'] = 'perl'
   let g:vimshell_execute_file_list['py'] = 'python'
-  call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
-  call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
-
-  autocmd FileType int-* call s:interactive_settings()
-
-  autocmd FileType vimshell
-        \ call vimshell#altercmd#define('g', 'git')
-        \| call vimshell#altercmd#define('i', 'iexe')
-        \| call vimshell#altercmd#define('l', 'll')
-        \| call vimshell#altercmd#define('ll', 'ls -l')
-        \| call vimshell#hook#add('chpwd', 'my_chpwd', 'MyChpwd')
   function! MyChpwd(args, context)
     call vimshell#execute('ls')
   endfunction
@@ -2835,7 +2863,7 @@ if neobundle#tap('vim-session')
         \ })
   "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
   endfunction "}}}
 
   " Setting {{{
@@ -3079,7 +3107,9 @@ if neobundle#tap('vim-fugitive')
     nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
     nnoremap <buffer> [git]p :<C-u>Gpush<CR>
     " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-    let &path = &path.','.fnamemodify(b:git_dir, ':p:h:h')
+    if &l:path !~# fnamemodify(b:git_dir, ':p:h:h')
+      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h')  
+    endif
   endfunction "}}}
   "}}}
 
@@ -3520,49 +3550,49 @@ endif
 
 " tyru/open-browser.vim {{{
 if neobundle#tap('open-browser.vim')
-    " Config {{{
-    call neobundle#config({
-                \   'lazy' : 1,
-                \   'autoload' : {
-                \     'commands': ['OpenURL'],
-                \     'unite_sources' : [
-                \       'help',
-                \     ],
-                \   }
-                \ })
-    " }}}
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \     'commands': ['OpenURL'],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
 
-    function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    endfunction "}}}
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
 
-    " Setting {{{
-    let g:openbrowser_search_engines = {
-    \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
-    \       'askubuntu': 'http://askubuntu.com/search?q={query}',
-    \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
-    \       'blekko': 'http://blekko.com/ws/+{query}',
-    \       'cpan': 'http://search.cpan.org/search?query={query}',
-    \       'devdocs': 'http://devdocs.io/#q={query}',
-    \       'duckduckgo': 'http://duckduckgo.com/?q={query}',
-    \       'github': 'http://github.com/search?q={query}',
-    \       'google': 'http://google.com/search?q={query}',
-    \       'google-code': 'http://code.google.com/intl/en/query/#q={query}',
-    \       'php': 'http://php.net/{query}',
-    \       'python': 'http://docs.python.org/dev/search.html?q={query}&check_keywords=yes&area=default',
-    \       'twitter-search': 'http://twitter.com/search/{query}',
-    \       'twitter-user': 'http://twitter.com/{query}',
-    \       'verycd': 'http://www.verycd.com/search/entries/{query}',
-    \       'vim': 'http://www.google.com/cse?cx=partner-pub-3005259998294962%3Abvyni59kjr1&ie=ISO-8859-1&q={query}&sa=Search&siteurl=www.vim.org%2F#gsc.tab=0&gsc.q={query}&gsc.page=1',
-    \       'wikipedia': 'http://en.wikipedia.org/wiki/{query}',
-    \       'wikipedia-ja': 'http://ja.wikipedia.org/wiki/{query}',
-    \       'yahoo': 'http://search.yahoo.com/search?p={query}',
-    \}
-    nmap gb <Plug>(openbrowser-smart-search)
-    vmap gb <Plug>(openbrowser-smart-search)
-    nmap gw :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
-    "}}}
+  " Setting {{{
+  let g:openbrowser_search_engines = {
+        \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
+        \       'askubuntu': 'http://askubuntu.com/search?q={query}',
+        \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
+        \       'blekko': 'http://blekko.com/ws/+{query}',
+        \       'cpan': 'http://search.cpan.org/search?query={query}',
+        \       'devdocs': 'http://devdocs.io/#q={query}',
+        \       'duckduckgo': 'http://duckduckgo.com/?q={query}',
+        \       'github': 'http://github.com/search?q={query}',
+        \       'google': 'http://google.com/search?q={query}',
+        \       'google-code': 'http://code.google.com/intl/en/query/#q={query}',
+        \       'php': 'http://php.net/{query}',
+        \       'python': 'http://docs.python.org/dev/search.html?q={query}&check_keywords=yes&area=default',
+        \       'twitter-search': 'http://twitter.com/search/{query}',
+        \       'twitter-user': 'http://twitter.com/{query}',
+        \       'verycd': 'http://www.verycd.com/search/entries/{query}',
+        \       'vim': 'http://www.google.com/cse?cx=partner-pub-3005259998294962%3Abvyni59kjr1&ie=ISO-8859-1&q={query}&sa=Search&siteurl=www.vim.org%2F#gsc.tab=0&gsc.q={query}&gsc.page=1',
+        \       'wikipedia': 'http://en.wikipedia.org/wiki/{query}',
+        \       'wikipedia-ja': 'http://ja.wikipedia.org/wiki/{query}',
+        \       'yahoo': 'http://search.yahoo.com/search?p={query}',
+        \}
+  nmap gb <Plug>(openbrowser-smart-search)
+  vmap gb <Plug>(openbrowser-smart-search)
+  nmap gw :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
+  "}}}
 
-    call neobundle#untap()
+  call neobundle#untap()
 endif
 " }}}
 " PLUGIN_SETTING_ENDPOINT
