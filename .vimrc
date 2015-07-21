@@ -156,6 +156,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
+  NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -205,7 +206,7 @@ if exists('&ambiwidth')
   set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
 endif
 
-set nolazyredraw
+set lazyredraw
 set helplang=ja,en
 set spelllang+=cjk
 set title                          " 編集中のファイル名を表示
@@ -875,6 +876,8 @@ if neobundle#tap('lightline.vim')
           \  &ft == 'vimshell' ? vimshell#get_status_string() :
           \  &previewwindow    ? '[Preview]':
           \  &bt == 'quickfix' ? '[Quick Fix]'                :
+          \  &bt == 'help'     ? '[Help]'                     :
+          \  MyModified() =~ '^[' ? ' '. MyModified()         :
           \  &bt == 'nofile' && &bh =='hide'  ? '[Scratch]'   :
           \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' != MyModified() ? ' ' . MyModified() : '')
@@ -911,9 +914,8 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) > 60 ? lightline#mode() : ''
   endfunction  
   "}}}
-
   let g:lightline = {
-        \ 'colorscheme': 'powerline',
+        \ 'colorscheme': 'solarized',
         \ 'mode_map': {'c': 'COMMAND'},
         \ 'active': {
         \   'left':  [ [ 'mode', 'paste' ], [ 'fugitive', 'filename'] ],
@@ -1263,6 +1265,7 @@ if neobundle#tap('vim-operator-replace')
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+      map _ <Plug>(operator-replace)
   endfunction "}}}
 
   " Setting {{{
@@ -3595,6 +3598,32 @@ if neobundle#tap('open-browser.vim')
   call neobundle#untap()
 endif
 " }}}
+
+" lilydjwg/colorizer {{{
+if neobundle#tap('colorizer')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \     'commands' : ['Colorizer'],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  let g:colorizer_nomap = 1
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
+
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
 " }}}
