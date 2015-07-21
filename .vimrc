@@ -2336,6 +2336,7 @@ if neobundle#tap('previm')
         \ "lazy": 1,
         \ "autoload"    : {
         \   "filetypes" : ['markdown'],
+        \   "depends" : ['open-browser.vim'],
         \ },
         \ "build"       : {
         \   "cygwin"    : "pip install --user docutils",
