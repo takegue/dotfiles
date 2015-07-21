@@ -157,6 +157,9 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
+  if has('clientserver')
+    NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
+  endif
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -270,6 +273,7 @@ set matchtime=1             " 対応括弧のハイライト表示を3秒にす�
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 set autoread                " Automatically reload change files on disk
+set updatetime=2000         " Automatically reload change files on disk
  
 set ttimeout
 set ttimeoutlen=100
@@ -1647,7 +1651,8 @@ if neobundle#tap('vim-quickrun')
         \ "_": {
         \   "hook/shabadoubi_inu/enable" : 1,
         \   "hook/shabadoubi_inu/wait" : 60,
-        \   "runner"                    : 'vimproc',
+        \   "runner"                   : 'remote/vimproc',
+        \   "runner/remote/vimproc"     : 1,
         \   "runner/vimproc/sleep"      : 500,
         \   "runner/vimproc/updatetime" : 500,
         \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
@@ -3624,6 +3629,17 @@ if neobundle#tap('colorizer')
 endif
 " }}}
 
+" thinca/vim-singleton {{{
+if neobundle#tap('vim-singleton')
+    " Setting {{{
+    if has('vim_starting')
+      call singleton#enable()
+    endif
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}}
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
 " }}}
