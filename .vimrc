@@ -153,12 +153,13 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'KazuakiM/vim-regexper'
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'osyo-manga/shabadou.vim'
+  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
   if has('clientserver')
-    NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
+    NeoBundle 'thinca/vim-singleton'                       " Uses Vim with singleton.
   endif
   "BUNDLE_ENDPOINT
 
@@ -3640,7 +3641,35 @@ if neobundle#tap('vim-singleton')
 
     call neobundle#untap()
 endif
+
 " }}}
+
+" osyo-mang/vim-precious {{{
+if neobundle#tap('vim-precious')
+    " Config {{{
+    call neobundle#config({
+                \   'lazy' : 1,
+                \   'depends' : ['context_filetype.vim'],
+                \   'autoload' : {
+                \     'filetypes' : ['markdown'],
+                \     'unite_sources' : [
+                \       'help',
+                \     ],
+                \   }
+                \ })
+    " }}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
+
+    " Setting {{{
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}}
+
+
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
 " }}}
