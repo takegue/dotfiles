@@ -10,10 +10,11 @@ DIR=`readlink -f $path`
 
 if [ ! -e `which git` ]; then
     echo 'not found git'
+    
 fi 
 
 if [ ! -e `which vim` ]; then
-    echo 'not found git'
+    echo 'not found vim'
     $DIR/scripts/vim-install.sh
 fi 
 
