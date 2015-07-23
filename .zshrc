@@ -145,6 +145,14 @@ case "${OSTYPE}" in darwin*)
     ;;
 esac
 
+if [[$PATH == */usr/local/bin* ]]
+    export PATH=/usr/local/bin:$PATH
+fi
+
+if [[ -z $LD_LIBRARY_PATH ]]; then
+    export LD_LIBRARY_PATH=${PATH:s/lib/bin}
+else
+
 function 256colortest(){
 for code in {0..255}; do
     echo -e "\e[38;05;${code}m $code: Test"
@@ -197,7 +205,7 @@ fi
 alias r=rails
 # alias python='python'
 alias tmux='tmux -2'
-alias v=vim
+alias v='vim -r'
 alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
 alias c='pygmentize -O style=monokai -f console256 -g'
@@ -251,10 +259,5 @@ export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOS
 fi
 
-# pyenv configuration----------------------------------------
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
