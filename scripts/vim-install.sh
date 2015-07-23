@@ -15,14 +15,8 @@ fi
 
 cd $DIST_VIM
 
-echo 'exit code is' $?
-if [[ $? -eq 0 ]]; then
-    echo 'No update'
-    exit 0;
-
-fi
-
 ./configure \
+    --prefix=$HOME/.local
     --enable-multibyte \
     --enable-xim \
     --enable-fontset \
@@ -33,5 +27,5 @@ fi
     --enable-rubyinterp=yes \
     --enable-pythoninterp=yes \
 
-make && sudo make install
+make && make install
 

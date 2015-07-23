@@ -100,7 +100,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'majutsushi/tagbar'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'koron/codic-vim'
-  NeoBundle 'klen/python-mode'                            " python plugin for vim
+  " NeoBundle 'klen/python-mode'                            " python plugin for vim
   NeoBundle 'kannokanno/previm'
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-function'
@@ -123,7 +123,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'elzr/vim-json'
   NeoBundle 'deton/jasegment.vim'
   NeoBundle 'deris/vim-visualinc'
-  NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
+  " NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'cohama/agit.vim'
   NeoBundle 'clones/vim-zsh'
   NeoBundle 'christoomey/vim-tmux-navigator'
@@ -2310,7 +2310,6 @@ if neobundle#tap('vim-reveal')
   "}}}
   "
 
-
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     command! -buffer -nargs=0 RevealIt   call reveal#Md2Reveal() 
     command! -buffer -nargs=0 RevealOpen call reveal#open(reveal#preview_file_path())
@@ -2318,7 +2317,6 @@ if neobundle#tap('vim-reveal')
   endfunction "}}}
 
   " Setting {{{
-  let g:reveal_root_path = '~/.projects/reveal.js'
   let g:reveal_root_path = '~/.projects/reveal.js'
   let g:revel_default_config = {
         \ 'fname'  : 'reveal',
@@ -2410,9 +2408,12 @@ if neobundle#tap('unite.vim')
           \ -buffer-name=register register<CR>
     nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
-    nnoremap <silent> [unite]n  :<C-u>Unite 
+    nnoremap <silent> [unite]nb  :<C-u>Unite 
           \ -buffer-name=bundles
           \ neobundle/search <CR>
+    nnoremap <silent> [unite]ns  :<C-u>Unite 
+          \ -buffer-name=snippets
+          \ neosnippet <CR>
     nnoremap <silent> [unite]ma :<C-u>Unite mapping
           \ -buffer-name=mapping <CR>
     nnoremap <silent> [unite]me :<C-u>Unite output:message
@@ -3562,7 +3563,6 @@ endif
 if neobundle#tap('open-browser.vim')
   " Config {{{
   call neobundle#config({
-        \   'lazy' : 1,
         \   'autoload' : {
         \     'commands': ['OpenURL'],
         \     'unite_sources' : [
@@ -3649,7 +3649,7 @@ if neobundle#tap('vim-precious')
     " Config {{{
     call neobundle#config({
                 \   'lazy' : 1,
-                \   'depends' : ['context_filetype.vim'],
+                \   'depends' : ['Shougo/context_filetype.vim'],
                 \   'autoload' : {
                 \     'filetypes' : ['markdown'],
                 \     'unite_sources' : [

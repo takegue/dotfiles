@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 mecab_dir=`which mecab`
-mecab_lib=${mecab_dir/bin/lib}
+# mecab_lib=${mecab_dir/bin/lib}
+mecab_lib=/usr/local/libexec/mecab
 mecab_share=${mecab_dir/bin/share}
 
 BIN=${0%%/*}/
