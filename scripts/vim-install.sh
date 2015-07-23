@@ -15,13 +15,6 @@ fi
 
 cd $DIST_VIM
 
-echo 'exit code is' $?
-if [[ $? -eq 0 ]]; then
-    echo 'No update'
-    exit 0;
-
-fi
-
 ./configure \
     --enable-multibyte \
     --enable-xim \
@@ -32,6 +25,7 @@ fi
     --enable-luainterp=yes \
     --enable-rubyinterp=yes \
     --enable-pythoninterp=yes \
+    --enable-python3interp=yes \
 
 make && sudo make install
 

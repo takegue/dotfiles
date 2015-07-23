@@ -100,7 +100,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'majutsushi/tagbar'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'koron/codic-vim'
-  NeoBundle 'klen/python-mode'                            " python plugin for vim
+  " NeoBundle 'klen/python-mode'                            " python plugin for vim
   NeoBundle 'kannokanno/previm'
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-function'
@@ -111,7 +111,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'kana/vim-operator-user'
   NeoBundle 'kana/vim-operator-replace'
   NeoBundle 'jpo/vim-railscasts-theme'
-  NeoBundle 'ivanov/vim-ipython'
+  " NeoBundle 'ivanov/vim-ipython'
   NeoBundle 'itchyny/lightline.vim'
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'honza/vim-snippets'
@@ -146,7 +146,6 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'Shougo/neosnippet.vim'
   NeoBundle 'Shougo/neosnippet-snippets'
   NeoBundle 'Shougo/neomru.vim'
-  NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'Lokaltog/vim-easymotion'
@@ -161,6 +160,9 @@ function! s:loads_bundles() abort "{{{
   if has('clientserver')
     NeoBundle 'thinca/vim-singleton'                       " Uses Vim with singleton.
   endif
+  NeoBundle 'mattn/benchvimrc-vim'                         " make benchmark result of your vimrc
+  NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
+
   "BUNDLE_ENDPOINT
 
   if has('lua') && v:version >= 703
@@ -1121,7 +1123,6 @@ if neobundle#tap('neocomplete.vim')
 
   let g:neocomplete#enable_multibyte_completion = 1
 
-
   " " make Vim call omni function when below patterns matchs
   let g:neocomplete#sources#omni#functions = {}
 
@@ -1848,7 +1849,6 @@ if neobundle#tap('vim-python-matchit')
 endif
 " }}} "
 
-
 " klen/python-mode {{{
 if neobundle#tap('python-mode')
   " Config {{{
@@ -1975,22 +1975,21 @@ if neobundle#tap('jedi-vim')
         \ "autoload"    : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \ },
-        \ "build"       : {
-        \   "cygwin"    : "pip install --user jedi",
-        \   "mac"       : "pip install --user jedi",
-        \   "unix"      : "pip install --user jedi"
-        \ }})
+        \ })
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
     call jedi#configure_call_signatures()
-    autocmd FileType python setlocal omnifunc=jedi#completions
-    autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
-    autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
-    autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
-    autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto_definitions()<cr>
-    autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
+    augroup myjedivim
+      autocmd!
+      autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto_definitions()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
+      autocmd FileType python setlocal omnifunc=jedi#completions
+    augroup END
   endfunction "}}}
 
   " Setting {{{
@@ -2020,13 +2019,36 @@ if neobundle#tap('jedi-vim')
   endif
   let g:neocomplete#force_omni_input_patterns.python = 
         \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
   "}}}
 
   call neobundle#untap()
 endif
 " }}} "
 "}}}
+"
+" lambdalisue/vim-pyenv {{{
+if neobundle#tap('vim-pyenv')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \   "filetypes" : ["python", "python3", "djangohtml"],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
 "}}}
 
 " Vim: {{{
