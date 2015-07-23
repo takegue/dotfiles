@@ -28,6 +28,9 @@
 [diff]
     tool = vimdiff
 
+[credential] 
+    helper = "cache --timeout 1800"
+
 [diff "office"]
     binary = true
     textconv = "tika --text"
