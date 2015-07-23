@@ -3656,11 +3656,10 @@ if neobundle#tap('vim-singleton')
                 \   'disable' : !has('clientserver'),
                 \ })
     " }}}
-    " Setting {{{
-    if has('vim_starting')
-        call singleton#enable()
-    endif
-    "}}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+      call singleton#enable()
+    endfunction "}}}
 
     call neobundle#untap()
 endif
