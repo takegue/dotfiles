@@ -2310,7 +2310,6 @@ if neobundle#tap('vim-reveal')
   "}}}
   "
 
-
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     command! -buffer -nargs=0 RevealIt   call reveal#Md2Reveal() 
     command! -buffer -nargs=0 RevealOpen call reveal#open(reveal#preview_file_path())
@@ -2318,7 +2317,6 @@ if neobundle#tap('vim-reveal')
   endfunction "}}}
 
   " Setting {{{
-  let g:reveal_root_path = '~/.projects/reveal.js'
   let g:reveal_root_path = '~/.projects/reveal.js'
   let g:revel_default_config = {
         \ 'fname'  : 'reveal',
@@ -3562,7 +3560,6 @@ endif
 if neobundle#tap('open-browser.vim')
   " Config {{{
   call neobundle#config({
-        \   'lazy' : 1,
         \   'autoload' : {
         \     'commands': ['OpenURL'],
         \     'unite_sources' : [
@@ -3649,7 +3646,7 @@ if neobundle#tap('vim-precious')
     " Config {{{
     call neobundle#config({
                 \   'lazy' : 1,
-                \   'depends' : ['context_filetype.vim'],
+                \   'depends' : ['Shougo/context_filetype.vim'],
                 \   'autoload' : {
                 \     'filetypes' : ['markdown'],
                 \     'unite_sources' : [
