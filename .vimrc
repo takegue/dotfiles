@@ -2408,9 +2408,12 @@ if neobundle#tap('unite.vim')
           \ -buffer-name=register register<CR>
     nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
-    nnoremap <silent> [unite]n  :<C-u>Unite 
+    nnoremap <silent> [unite]nb  :<C-u>Unite 
           \ -buffer-name=bundles
           \ neobundle/search <CR>
+    nnoremap <silent> [unite]ns  :<C-u>Unite 
+          \ -buffer-name=snippets
+          \ neosnippet <CR>
     nnoremap <silent> [unite]ma :<C-u>Unite mapping
           \ -buffer-name=mapping <CR>
     nnoremap <silent> [unite]me :<C-u>Unite output:message

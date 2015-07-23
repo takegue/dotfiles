@@ -19,6 +19,16 @@ setopt notify            # バックグラウンドジョブの状態変化を�
 setopt equals            # =commandを`which command`と同じ処理にする
 
 
+DIRSTACKSIZE=9
+DIRSTACKFILE=~/.zdirs
+if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
+  dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
+  [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
+fi
+chpwd() {
+  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+  ls_abbrev
+}
 
 # ### Complement ###
 autoload -U compinit; compinit # 補完機能を有効にする
@@ -28,6 +38,7 @@ setopt list_packed             # 補完候補をできるだけ詰めて表示�
 setopt list_types              # 補完候補にファイルの種類も表示する
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
+zstyle ':completion:*' menu select
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' format '%B%d%b'
 zstyle ':completion:*:warnings' format 'No matches for: %d'
@@ -44,6 +55,7 @@ SAVEHIST=20000            # 保存されるヒストリの件数
 setopt no_bang_hist          # !を使ったヒストリ展開を行う(d)
 setopt extended_history   # ヒストリに実行時間も保存する
 setopt hist_ignore_dups   # 直前と同じコマンドはヒストリに追加しない
+setopt hist_ignore_space  # spaceから始まるコマンドは記録しない
 setopt share_history      # 他のシェルのヒストリをリアルタイムで共有する
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
@@ -145,13 +157,13 @@ case "${OSTYPE}" in darwin*)
     ;;
 esac
 
-if [[$PATH == */usr/local/bin* ]]
+if [[ $PATH == */usr/local/bin* ]]; then
     export PATH=/usr/local/bin:$PATH
 fi
 
 if [[ -z $LD_LIBRARY_PATH ]]; then
     export LD_LIBRARY_PATH=${PATH:s/lib/bin}
-else
+fi
 
 function 256colortest(){
 for code in {0..255}; do
@@ -202,6 +214,7 @@ fi
 
 
 ### Aliases ###
+alias cd=' cd'
 alias r=rails
 # alias python='python'
 alias tmux='tmux -2'
@@ -209,7 +222,7 @@ alias v='vim -r'
 alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
 alias c='pygmentize -O style=monokai -f console256 -g'
-alias ls='ls -G --color -X'
+alias ls=' ls -G --color -X'
 alias less='less -IMx4 -X -R'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
@@ -235,9 +248,51 @@ function ssh() {
     tmux rename-window $window_name
 }
 
-# cdコマンド実行後、lsを実行する
-function cd() {
-    builtin cd $@ && ls;
+function foreground-vi() {
+  fg %vim
+}
+zle -N foreground-vi
+bindkey '^Z' foreground-vi
+
+zman() {
+  PAGER="less -g -s '+/^       "$1"'" man zshall
+}
+
+
+ls_abbrev() {
+    if [[ ! -r $PWD ]]; then
+        return
+    fi
+    # -a : Do not ignore entries starting with ..
+    # -C : Force multi-column output.
+    # -F : Append indicator (one of */=>@|) to entries.
+    local cmd_ls='ls'
+    local -a opt_ls
+    opt_ls=('-aCF' '--color=always')
+    case "${OSTYPE}" in
+        freebsd*|darwin*)
+            if type gls > /dev/null 2>&1; then
+                cmd_ls='gls'
+            else
+                # -G : Enable colorized output.
+                opt_ls=('-aCFG')
+            fi
+            ;;
+    esac
+
+    local ls_result
+    ls_result=$(CLICOLOR_FORCE=1 COLUMNS=$COLUMNS command $cmd_ls ${opt_ls[@]} | sed $'/^\e\[[0-9;]*m$/d')
+
+    local ls_lines=$(echo "$ls_result" | wc -l | tr -d ' ')
+
+    if [ $ls_lines -gt 10 ]; then
+        echo "$ls_result" | head -n 5
+        echo '...'
+        echo "$ls_result" | tail -n 5
+        echo "$(command ls -1 -A | wc -l | tr -d ' ') files exist"
+    else
+        echo "$ls_result"
+    fi
 }
 
 #### Export Configurations #### e
@@ -247,7 +302,7 @@ if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"
 else
     alias todo="$EDITOR ~\/.todo"
-fi  
+fi
 
 
 if [ -f "$HOME/.zshrc_local" ]; then
@@ -258,6 +313,4 @@ export PATH=\$HOME/.local/bin:\$PATH
 export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOS
 fi
-
-
 
