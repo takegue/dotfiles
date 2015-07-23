@@ -100,7 +100,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'majutsushi/tagbar'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'koron/codic-vim'
-  " NeoBundle 'klen/python-mode'                            " python plugin for vim
+  NeoBundle 'klen/python-mode'                            " python plugin for vim
   NeoBundle 'kannokanno/previm'
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-function'
@@ -111,7 +111,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'kana/vim-operator-user'
   NeoBundle 'kana/vim-operator-replace'
   NeoBundle 'jpo/vim-railscasts-theme'
-  " NeoBundle 'ivanov/vim-ipython'
+  NeoBundle 'ivanov/vim-ipython'
   NeoBundle 'itchyny/lightline.vim'
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'honza/vim-snippets'
@@ -157,19 +157,12 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
-  if has('clientserver')
-    NeoBundle 'thinca/vim-singleton'                       " Uses Vim with singleton.
-  endif
+
+  NeoBundle 'thinca/vim-singleton'                       " Uses Vim with singleton.
   NeoBundle 'mattn/benchvimrc-vim'                         " make benchmark result of your vimrc
-  NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
+  NeoBundle 'Shougo/neocomplete.vim'
+  " NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
 
-  "BUNDLE_ENDPOINT
-
-  if has('lua') && v:version >= 703
-    NeoBundle 'Shougo/neocomplete.vim'
-  else
-    NeoBundle 'Shougo/neocomplcache.vim'
-  endif
 
   NeoBundle 'vimperator/vimperator-labs', {
         \   'name': 'vimperator-syntax',
@@ -1056,6 +1049,8 @@ if neobundle#tap('neocomplete.vim')
   " Config {{{
   call neobundle#config({
         \ 'lazy' : 1,
+        \ 'disabled' : !has('lua'),
+        \ 'vim_version' : '7.3.885',
         \ 'autoload' : { 'insert' : 1},
         \ })
   " }}}
@@ -1855,6 +1850,7 @@ if neobundle#tap('python-mode')
   call neobundle#config( {
         \ 'lazy' : 1,
         \ 'external_commands' : ['pyflakes', 'pylint'],
+        \ "disable"    : !has('python'),
         \ "autoload"    : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \ },
@@ -1877,7 +1873,7 @@ if neobundle#tap('python-mode')
   endfunction "}}}
 
   " Setting {{{
-  let g:pymode = 1
+  let g:pymode = 0
   let g:pymode_warnings = 1
   let g:pymode_paths = ['shutil', 'datetime', 'time',
         \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
@@ -1894,8 +1890,7 @@ if neobundle#tap('python-mode')
   let g:pymode_doc = 1
   let g:pymode_doc_bind = 'K'
 
-  let g:pymode_virtualenv = 1
-  let g:pymode_virtualenv_path = $VIRTUAL_ENV
+  let g:pymode_virtualenv = 0
 
   let g:pymode_run = 0            "QuickRunの方が優秀
   " let g:pymode_run_bind = '<leader>R'
@@ -1915,7 +1910,7 @@ if neobundle#tap('python-mode')
   let g:pymode_lint_cwindow = 0
 
   let g:pymode_rope = 0
-  let g:pymode_rope_autoimport = 1
+  let g:pymode_rope_autoimport = 0
   " let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
   "             \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
   " let g:pymode_rope_autoimport_import_after_complete = 0
@@ -1935,7 +1930,6 @@ if neobundle#tap('python-mode')
   " " let g:pymode_rope_move_bind = '<C-c>rv'
   " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
   " let g:pymode_lint_sort = ['E', 'C', 'I']  
-
 
   let g:pymode_syntax_slow_sync = 0
   let g:pymode_syntax_all = 1
@@ -1972,6 +1966,7 @@ if neobundle#tap('jedi-vim')
   " Config {{{
   call neobundle#config( {
         \ "lazy"    : 1,
+        \ "disabled"    : !has('python'),
         \ "autoload"    : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \ },
@@ -2025,7 +2020,7 @@ if neobundle#tap('jedi-vim')
 endif
 " }}} "
 "}}}
-"
+
 " lambdalisue/vim-pyenv {{{
 if neobundle#tap('vim-pyenv')
   " Config {{{
@@ -3655,9 +3650,15 @@ endif
 
 " thinca/vim-singleton {{{
 if neobundle#tap('vim-singleton')
+
+    " Config {{{
+    call neobundle#config({
+                \   'disable' : !has('clientserver'),
+                \ })
+    " }}}
     " Setting {{{
     if has('vim_starting')
-      call singleton#enable()
+        call singleton#enable()
     endif
     "}}}
 
@@ -3699,14 +3700,14 @@ filetype plugin indent on
 " Local settings ================ {{{
 let s:local_vimrc = expand('~/.local.vimrc')
 if filereadable(s:local_vimrc)
-  execute 'source ' . s:local_vimrc
+    execute 'source ' . s:local_vimrc
 endif
 " }}}
 
 " Finally ======================={{{
 " Installation check.
 if !has('vim_starting')
-  call neobundle#call_hook('on_source')
+    call neobundle#call_hook('on_source')
 endif
 set secure
 "}}}
