@@ -26,6 +26,7 @@ cd $DIST_VIM
     --enable-luainterp=yes \
     --enable-rubyinterp=yes \
     --enable-pythoninterp=yes \
+    --enable-python3interp=yes \
 
 make && make install
 
