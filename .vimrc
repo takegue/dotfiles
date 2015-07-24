@@ -52,6 +52,7 @@ function! s:loads_bundles() abort "{{{
   " NeoBundle 'welle/targets.vim'
   NeoBundle 'xolox/vim-session'
   NeoBundle 'vim-scripts/css_color.vim'
+  NeoBundle 'basyura/unite-rails'                          " a unite.vim plugin for rails
   NeoBundle 'vim-scripts/Zenburn'
   NeoBundle 'vim-scripts/Wombat'
   NeoBundle 'vim-scripts/Lucius'
@@ -154,16 +155,16 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'mattn/webapi-vim'
+  NeoBundle 'thisivan/vim-ruby-matchit'                    " Map '%' to jump from one keyword to its corresponding 'end' in Ruby files. Inspired by 'matchit.vim' that comes with Vim.
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
-
-  NeoBundle 'thinca/vim-singleton'                       " Uses Vim with singleton.
+  NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
   NeoBundle 'mattn/benchvimrc-vim'                         " make benchmark result of your vimrc
+  NeoBundle 'tpope/vim-endwise'                            " endwise.vim: wisely add 'end' in ruby, endfunction/endif/more in vim script, etc
+  NeoBundle 'tpope/vim-rails'                              " rails.vim: Ruby on Rails power tools
   NeoBundle 'Shougo/neocomplete.vim'
-  " NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
-
-
+  NeoBundle 'lambdalisue/vim-pyenv'                      " Activate the versions and the virtualenvs of pyenv within a live VIM session
   NeoBundle 'vimperator/vimperator-labs', {
         \   'name': 'vimperator-syntax',
         \   'rtp':  'vimperator/contrib/vim/'
@@ -309,6 +310,7 @@ nnoremap Q <nop>
 nnoremap c  "_c
 nnoremap C  "_C
 nnoremap G  Gzv
+
 
 "For Breaking off undo sequence.
 inoremap <CR> <C-g>u<CR>
@@ -1792,7 +1794,55 @@ endif
 " }}}
 
 "}}}
-"
+
+" Ruby: {{{
+" tpope/vim-rails {{{  
+if neobundle#tap('vim-rails')
+    " Config {{{
+    call neobundle#config({
+                \   'autoload' : {
+                \     'unite_sources' : [
+                \       'help',
+                \     ],
+                \   }
+                \ })
+    " }}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
+
+    " Setting {{{
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}}
+
+" thisivan/vim-ruby-matchit {{{
+if neobundle#tap('vim-ruby-matchit')
+    " Config {{{
+    call neobundle#config({
+                \   'lazy' : 1,
+                \   'autoload' : {
+                \     'unite_sources' : [
+                \       'help',
+                \     ],
+                \   }
+                \ })
+    " }}}
+
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
+
+    " Setting {{{
+    "}}}
+
+    call neobundle#untap()
+endif
+" }}}
+
+"}}}
+
 " Python: {{{
 " alfredodeza/pytest.vim {{{
 if neobundle#tap('pytest.vim')
@@ -2425,10 +2475,10 @@ if neobundle#tap('unite.vim')
           \ -buffer-name=register register<CR>
     nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
-    nnoremap <silent> [unite]nb  :<C-u>Unite 
+    nnoremap <silent> [unite]n  :<C-u>Unite 
           \ -buffer-name=bundles
           \ neobundle/search <CR>
-    nnoremap <silent> [unite]ns  :<C-u>Unite 
+    nnoremap <silent> [unite]s  :<C-u>Unite 
           \ -buffer-name=snippets
           \ neosnippet <CR>
     nnoremap <silent> [unite]ma :<C-u>Unite mapping
@@ -3076,10 +3126,10 @@ if neobundle#tap('vim-tmux-navigator')
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    nnoremap <silent> {Left-mapping} :TmuxNavigateLeft<cr>
-    nnoremap <silent> {Down-Mapping} :TmuxNavigateDown<cr>
-    nnoremap <silent> {Up-Mapping} :TmuxNavigateUp<cr>
-    nnoremap <silent> {Right-Mapping} :TmuxNavigateRight<cr>
+    nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+    nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+    nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+    nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
     nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
   endfunction "}}}
 
@@ -3690,7 +3740,6 @@ if neobundle#tap('vim-precious')
     call neobundle#untap()
 endif
 " }}}
-
 
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
