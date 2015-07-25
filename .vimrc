@@ -1648,12 +1648,12 @@ if neobundle#tap('vim-quickrun')
   " Setting {{{
   let g:quickrun_config = {
         \ "_": {
-        \   "hook/shabadoubi_inu/enable" : 1,
-        \   "hook/shabadoubi_inu/wait" : 60,
-        \   "runner"                   : 'remote/vimproc',
-        \   "runner/remote/vimproc"     : 1,
-        \   "runner/vimproc/sleep"      : 500,
-        \   "runner/vimproc/updatetime" : 500,
+        \   "hook/my_anime/enable" : 1,
+        \   "hook/my_anime/wait" : 2,
+        \   "runner"                   : 'vimproc',
+        \   "runner/vimproc/read_timeout" : 100,
+        \   "runner/vimproc/sleep"      : 100,
+        \   "runner/vimproc/updatetime" : 100,
         \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
         \},
         \   "watchdogs_checker/_" : {
