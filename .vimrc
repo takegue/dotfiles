@@ -165,11 +165,13 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'tpope/vim-rails'                              " rails.vim: Ruby on Rails power tools
   NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'lambdalisue/vim-pyenv'                      " Activate the versions and the virtualenvs of pyenv within a live VIM session
+  NeoBundle 'KazuakiM/vim-qfstatusline'
   NeoBundle 'vimperator/vimperator-labs', {
         \   'name': 'vimperator-syntax',
         \   'rtp':  'vimperator/contrib/vim/'
         \ }
 
+  "BUNDLE_ENDPINT
 
 endfunction "}}}
 
@@ -859,6 +861,13 @@ endif
 
 " itchyny/lightline.vim {{{
 if neobundle#tap('lightline.vim')
+
+  " Config {{{
+  call neobundle#config({
+        \ 'depends': ['tpope/fugitive', 'KazuakiM/vim-qfstatusline']
+        \})
+  "}}}
+
   " Setting {{{
 
   " Functions {{{
@@ -885,12 +894,17 @@ if neobundle#tap('lightline.vim')
           \ ('' != MyModified() ? ' ' . MyModified() : '')
   endfunction 
 
+  function! MyPyenv()
+    return ( &ft =~ 'python' ? pyenv#info#format('%av') : '')
+  endfunction 
+
   function! MyFugitive()
     try
       if &ft !~? 'help\|vimfiler\|gundo' && exists('*fugitive#statusline')
         let _ = substitute(fugitive#statusline(),'\[Git:\?\(.\+\)\]', '\1', 'g')
         let _ = substitute(_,'^(\(.\+\))$', '\1', 'g')
         return strlen(_) ? '⭠ '._ : ''
+      return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : strlen(_) ? '⭠ '._ : ''
       endif
     catch
     endtry
@@ -913,27 +927,36 @@ if neobundle#tap('lightline.vim')
     endif
   endfunction  
   function! MyMode()
-    return winwidth(0) > 60 ? lightline#mode() : ''
+    return winwidth(0) > 60 ? lightline#mode() :lightline#mode()[00] 
   endfunction  
   "}}}
+
   let g:lightline = {
         \ 'colorscheme': 'solarized',
         \ 'mode_map': {'c': 'COMMAND'},
         \ 'active': {
-        \   'left':  [ [ 'mode', 'paste' ], [ 'fugitive', 'filename'] ],
+        \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'pyenv', 'rubyenv'], ['filename'] ],
         \   'right': [ [ 'lineinfo' ],
         \              [ 'percent' ],
         \              [ 'fileformat', 'fileencoding', 'filetype' ],
-        \              [ 'count'] ],
+        \              [ 'count'], ],
         \ },
         \ 'component': {
         \   'lineinfo': '%3l:%-2v',
         \ },
+        \ 'component_expand': {
+        \   'syntaxcheck': 'qfstatusline#Update',
+        \ },
+        \ 'component_type': {
+        \   'syntaxcheck': 'error',
+        \ },
         \ 'component_function': {
+        \   'syntaxcheck': 'qfstatusline#Update',
         \   'modified': 'MyModified',
         \   'readonly': 'MyReadonly',
         \   'fugitive': 'MyFugitive',
         \   'count': 'MyCount',
+        \   'pyenv': 'MyPyenv',
         \   'filename': 'MyFilename',
         \   'fileformat': 'MyFileformat',
         \   'filetype': 'MyFiletype',
@@ -946,6 +969,10 @@ if neobundle#tap('lightline.vim')
         \ },
         \ 'separator': { 'left': '⮀', 'right': '⮂' },
         \ 'subseparator': { 'left': '⮁', 'right': '⮃' }} 
+
+  " :WatchdogsRun後にlightline.vimを更新
+  let g:Qfstatusline#UpdateCmd = function('lightline#update')
+  let g:Qfstatusline#Text      = 0
   "}}}
 
   call neobundle#untap()
@@ -1650,8 +1677,12 @@ if neobundle#tap('vim-quickrun')
         \ "_": {
         \   "hook/my_anime/enable" : 1,
         \   "hook/my_anime/wait" : 2,
+        \   "hook/qfsigns_update/enable_exit":   1,
+        \   "hook/qfsigns_update/priority_exit": 3,
+        \   "hook/qfstatusline_update/enable_exit" : 1,
+        \   "hook/qfstatusline_update/priority_exit" : 4,
         \   "runner"                   : 'vimproc',
-        \   "runner/vimproc/read_timeout" : 100,
+        \   "runner/vimproc/read_timeout" : 10,
         \   "runner/vimproc/sleep"      : 100,
         \   "runner/vimproc/updatetime" : 100,
         \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
@@ -1672,9 +1703,9 @@ if neobundle#tap('vim-quickrun')
   let g:quickrun_config['python'] = {
         \ 'command': 'python',
         \}
-  " let g:quickrun_config['vim/watchdogs_checker'] = {
-  "             \ 'outputter': '-v -s'
-  "             \}
+  let g:quickrun_config['python/watchdogs_checker'] = {
+        \  "type" : "watchdogs_checker/flake8",
+        \}
   let g:quickrun_config['python.pytest'] = {
         \ 'command': 'py.test',
         \ 'cmdopt': '-v'
@@ -1765,7 +1796,7 @@ if neobundle#tap('vim-watchdogs')
         \     ],
         \   },
         \   'depends' : ['thinca/vim-quickrun', 'Shougo/vimproc.vim', 'osyo-manga/shabadou.vim',
-        \       'jceb/vim-hier', 'dannyob/quickfixstatus',
+        \       'jceb/vim-hier', 'dannyob/quickfixstatus', 'KazuakiM/vim-qfsigns',
         \    ]
         \ })
   " }}}
@@ -3679,7 +3710,7 @@ if neobundle#tap('colorizer')
   call neobundle#config({
         \   'lazy' : 1,
         \   'autoload' : {
-        \     'commands' : ['Colorizer'],
+        \     'commands' : ['ColorHighlight'],
         \     'unite_sources' : [
         \       'help',
         \     ],
