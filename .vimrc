@@ -287,9 +287,9 @@ endif
 
 
 if has("persistent_undo")
-    set undodir='~/.vim/.undodir'
-    set undofile
-    set undolevels=1000
+  set undodir='~/.vim/.undodir'
+  set undofile
+  set undolevels=1000
 endif
 
 
@@ -2658,8 +2658,22 @@ if neobundle#tap('vimfiler.vim')
   call neobundle#config({
         \ "lazy": 1,
         \ "autoload": {
-        \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-        \   "mappings": ['<Plug>(vimfiler_switch)'],
+        \   "commands": [
+        \       { 'name' : 'VimFiler',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       { 'name' : 'VimFilerTab',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       { 'name' : 'VimFilerBufferDir',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       { 'name' : 'VimFilerExplorer',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       { 'name' : 'Edit',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       { 'name' : 'Write',
+        \         'complete' : 'customlist,vimfiler#complete' },
+        \       'Read', 'Source'
+        \       ],
+        \   "mappings" : '<Plug>(vimfiler_' ,
         \   "explorer": 1,
         \ }})
   "}}}
@@ -2681,8 +2695,12 @@ if neobundle#tap('vimfiler.vim')
     nmap <buffer> <C-j> <C-w>j
   endfunction " }}}
 
+  function! VimFilerExplorerWithLCD() abort
+    execute "VimFilerExplorer ". expand('%:p:h')
+  endfunction
+
   " Setting {{{
-  nnoremap <Leader>e :VimFilerExplorer<CR>
+  nnoremap <Leader>e :call VimFilerExplorerWithLCD()<CR>
   nnoremap <Leader>E :VimFiler<CR>
 
   augroup vimfile_options
@@ -2691,6 +2709,7 @@ if neobundle#tap('vimfiler.vim')
     autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
   augroup END
 
+  let g:loaded_netrwPlugin = 1
   let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
   let g:vimfiler_tree_leaf_icon = ' '
   let g:vimfiler_tree_opened_icon = '▾'
