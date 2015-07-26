@@ -110,11 +110,11 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/unite-fold'
-  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
+  " NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
-  NeoBundle 'rcmdnk/vim-markdown'
+  NeoBundle 'rcmdnk/vim-markdown'                          " Markdown Vim Mode
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
@@ -141,7 +141,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'TKNGUE/atcoder_helper'
   NeoBundle 'TKNGUE/hateblo.vim'
   NeoBundle 'TKNGUE/sum-it.vim'
-  NeoBundle 'TKNGUE/vim-latex'
+  NeoBundle 'vim-latex/vim-latex'
+  NeoBundle 'lervag/vimtex'
   NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'tmhedberg/SimpylFold'
   NeoBundle 'tomasr/molokai'
@@ -166,6 +167,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   NeoBundle 'vim-scripts/css_color.vim'
   NeoBundle 'xolox/vim-session'
+
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
   NeoBundle 'vimperator/vimperator-labs', {
@@ -1224,7 +1226,7 @@ if neobundle#tap('neosnippet.vim')
         \   }
         \ }) "}}}
 
-  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
     augroup neosnippet_autocmd
       autocmd!
       autocmd InsertLeave * NeoSnippetClearMarkers
@@ -2320,7 +2322,7 @@ if neobundle#tap('vim-ruby')
 endif
 " }}} "
 
-" TKNGUE/vim-latex {{{
+" vim-latex/vim-latex {{{
 if neobundle#tap('vim-latex')
   " Config {{{
   call neobundle#config({
@@ -2397,11 +2399,98 @@ if neobundle#tap('vim-latex')
 endif
 " }}} "
 
+" lervag/vimtex {{{
+if neobundle#tap('vimtex')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \     'filetypes': ['tex'],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+     nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
+     vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
+     nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
+  endfunction "}}}
+
+  " Setting {{{
+  " fold
+  let g:latex_fold_parts = [
+        \ "appendix",
+        \ "frontmatter",
+        \ "mainmatter",
+        \ "backmatter",
+        \ ]
+  let g:latex_fold_sections = [
+        \ "part",
+        \ "chapter",
+        \ "section",
+        \ "subsection",
+        \ "subsubsection",
+        \ ]
+  let g:latex_fold_enabled = 1
+  let g:latex_fold_automatic = 1
+  let g:latex_fold_envs = 1
+
+  " 自動コンパイル
+  let g:latex_latexmk_continuous = 1
+  let g:latex_latexmk_background = 1
+  " コンパイル終了後のエラー通知オフ
+  let g:latex_latexmk_callback = 0
+
+  let g:latex_toc_split_pos = "topleft"
+  let g:latex_toc_width = 10
+
+  " SyncTex
+  function! s:syncTexForward() "{{{
+    call system('/Applications/Skim.app/Contents/SharedSupport/displayline -g '
+          \ . line(".") . " "
+          \ . g:latex#data[b:latex.id].out() . " "
+          \ . expand('%:p'))
+  endfunction"}}}
+
+  " Preview
+  function! s:previewTex() range "{{{
+    let l:tmp = @@
+    silent normal gvy
+    let l:selected = split(@@, "\n")
+    let @@ = l:tmp
+
+    let l:template1 = ["\\documentclass[a4paper]{jsarticle}",
+          \"\\usepackage[dvipdfmx]{graphicx}",
+          \"\\usepackage{amsmath,amssymb,bm}",
+          \"\\pagestyle{empty}",
+          \"\\begin{document}"]
+    let l:template2 = ["\\end{document}"]
+
+    let l:output_file = "preview.tex"
+    call writefile(extend(extend(l:template1, l:selected), template2), l:output_file)
+    silent call system("latexmk -pdfdvi preview &")
+  endfunction"}}}
+
+  " for neocomplete
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+  let g:neocomplete#sources#omni#input_patterns.tex = '\\ref{\s*[0-9A-Za-z_:]*'
+  "\citeも自動補完するなら
+  "let g:neocomplete#sources#omni#input_patterns.tex = '\\cite{\s*[0-9A-Za-z_:]*\|\\ref{\s*[0-9A-Za-z_:]*'
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
+
 " rcmdnk/vim-markdown {{{
 if neobundle#tap('vim-markdown')
   " Config {{{
   call neobundle#config( {
-        \ "lazy": 1,
         \ 'depends' : ['godlygeek/tabular', 'joker1007/vim-markdown-quote-syntax']
         \})
   "}}}
@@ -2410,8 +2499,15 @@ if neobundle#tap('vim-markdown')
   endfunction "}}}
 
   " Setting {{{
+  let g:vim_markdown_math=1
+  let g:vim_markdown_frontmatter = 0
+  let g:vim_markdown_no_default_key_mappings = 0
   let g:vim_markdown_better_folding=1
+
+  let g:vim_markdown_initial_foldlevel=1
+  let g:vim_markdown_folding_disabled=0
   "}}}
+
 
   call neobundle#untap()
 endif
@@ -2421,6 +2517,10 @@ endif
 if neobundle#tap('hateblo.vim')
   " Config {{{
   call neobundle#config({
+        \ 'lazy'  : 1,
+        \ 'autoload'  : {
+        \   'commands' : ['HatebloCreate', 'HatebloList', 'HatebloCreateDraft'],
+        \ },
         \ 'depends'  : ['mattn/webapi-vim', 'Shoug/unite.vim'],
         \})
   "}}}
