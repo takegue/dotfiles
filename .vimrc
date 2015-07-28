@@ -1262,7 +1262,7 @@ if neobundle#tap('neosnippet.vim')
         \   }
         \ }) "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     augroup neosnippet_autocmd
       autocmd!
       autocmd InsertLeave * NeoSnippetClearMarkers
@@ -1280,11 +1280,18 @@ if neobundle#tap('neosnippet.vim')
   let g:neosnippet#enable_snipmate_compatibility = 1
   let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
   let g:neosnippet#enable_preview = 0	 
-  "}}}
-  call neobundle#untap()
-endif
 
-" }}}
+  inoremap <expr>{} "{}\<\`0\`><C-O>F}"
+  inoremap <expr>() "()\<\`0\`><C-O>F)"
+  inoremap <expr>[] "[]\<\`0\`><C-O>F]"
+  inoremap <expr><> "<>\<\`0\`><C-O>F>"
+  inoremap <expr>'' "''\<\`0\`><C-O>F'"
+  inoremap <expr>`` "``\<\`0\`><C-O>F`"
+  inoremap <expr>"" '""\<\`0\`><C-O>F"'
+
+  " }}}
+  call neobundle#untap()
+endif" }}}
 "
 " Shougo/neosnippet-snippets {{{
 if neobundle#tap('neosnippet-snippets')
