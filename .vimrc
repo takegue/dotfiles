@@ -427,8 +427,9 @@ else
 endif
 
 "バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
-cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> / getcmdtype() =~ '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+cnoremap <expr> ; getcmdtype() == '?' ? '\?' : '?'
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
 cnoremap <C-a>  <Home>
@@ -1159,13 +1160,40 @@ if neobundle#tap('neocomplete.vim')
     " endfunction "}}}   
 
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-    " For cursor moving in insert mode(Not recommended)
-    inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-    inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-    inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-    inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-    " make neocomplcache use jedi#completions omini function for python scripts
+    if neobundle#is_installed('neosnippet.vim') "{{{
+      inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+      " For cursor moving in insert mode(Not recommended)
+      inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+      inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+      inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+      inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+      " make neocomplcache use jedi#completions omini function for python scripts
+
+      " Plugin key-mappings.
+      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      xmap <C-k>     <Plug>(neosnippet_expand_target)
+      xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
+      " SuperTab like snippets behavior.
+      imap <expr><CR>  neosnippet#expandable() ? 
+            \ "\<Plug>(neosnippet_expand)" : 
+            \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
+
+
+      " <TAB>: completion.
+      " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+      " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+      " Plugin key-mappings.
+      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+
+      " SuperTab like snippets behavior.
+      imap <expr><TAB> neosnippet#jumpable() ? pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    endif
+"}}}
   endfunction "}}}
 
   " Setting {{{
@@ -1228,7 +1256,6 @@ if neobundle#tap('neosnippet.vim')
         \   'lazy'  : 1 , 
         \   'autoload' : {
         \     'insert' : 1,
-        \     'filetypes' : 'neosnippet',
         \     'unite_sources' : [
         \       'snippet', 'neosnippet/user', 'neosnippet/runtime'
         \       ],
@@ -1240,29 +1267,6 @@ if neobundle#tap('neosnippet.vim')
       autocmd!
       autocmd InsertLeave * NeoSnippetClearMarkers
     augroup END
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-    xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
-    " SuperTab like snippets behavior.
-    imap <expr><CR>  neosnippet#expandable() ? 
-          \ "\<Plug>(neosnippet_expand)" : 
-          \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
-
-
-    " <TAB>: completion.
-    " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-    " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    "
 
     " For snippet_complete marker.
     if has('conceal')
@@ -1944,6 +1948,25 @@ if neobundle#tap('vim-ruby-matchit')
 endif
 " }}}
 
+" vim-ruby/vim-ruby {{{
+if neobundle#tap('vim-ruby')
+  " Config {{{
+  call neobundle#config( {
+        \ "lazy": 1,
+        \ "autoload"    : {
+        \   "filetypes" : ["ruby"],
+        \ },})
+  "}}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}} "
 "}}}
 
 " Python: {{{
@@ -2227,6 +2250,7 @@ endif
 " }}}
 
 "}}}
+
 " WEB Programming: {{{
 " mattn/emmet-vim {{{
 if neobundle#tap('emmet-vim')
@@ -2332,25 +2356,8 @@ endif
 
 "}}}
 
-" vim-ruby/vim-ruby {{{
-if neobundle#tap('vim-ruby')
-  " Config {{{
-  call neobundle#config( {
-        \ "lazy": 1,
-        \ "autoload"    : {
-        \   "filetypes" : ["ruby"],
-        \ },})
-  "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
+"Writing: {{{
 
 " vim-latex/vim-latex {{{
 if neobundle#tap('vim-latex')
@@ -2427,7 +2434,7 @@ if neobundle#tap('vim-latex')
 
   call neobundle#untap()
 endif
-" }}} "
+" }}} 
 
 " lervag/vimtex {{{
 if neobundle#tap('vimtex')
@@ -2621,6 +2628,8 @@ if neobundle#tap('previm')
   call neobundle#untap()
 endif
 " }}} "
+"}}}
+
 
 " clones/vim-zsh {{{
 if neobundle#tap('vim-zsh')
@@ -2664,11 +2673,10 @@ if neobundle#tap('unite.vim')
     nmap    <Leader>f  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer file_rec/git file file_mru 
+          \ bookmark buffer  file file_mru 
           \ file/new directory/new <CR>
     nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files 
-          \ buffer bookmark file
-          \ file_rec/async:! file
+          \ buffer bookmark file file_rec/git file
           \ file/new directory/new <CR>
     nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
           \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
