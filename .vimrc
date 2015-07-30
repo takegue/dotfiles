@@ -87,7 +87,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'kannokanno/previm'
   NeoBundle 'KazuakiM/vim-qfstatusline'
   NeoBundle 'KazuakiM/vim-regexper'
-  NeoBundle 'klen/python-mode'                            " python plugin for vim
+  " NeoBundle 'klen/python-mode'                            " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
@@ -117,6 +117,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rcmdnk/vim-markdown'                          " Markdown Vim Mode
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
+  NeoBundle 'suan/vim-instant-markdown'                    " Instant Markdown previews from VIm!
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
   NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neomru.vim'
@@ -429,7 +430,7 @@ endif
 "バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
 cnoremap <expr> / getcmdtype() =~ '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
-cnoremap <expr> ; getcmdtype() == '?' ? '\?' : '?'
+cnoremap <expr> ; getcmdtype() == '/' ? '/;/' : ';'
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
 cnoremap <C-a>  <Home>
@@ -1263,14 +1264,15 @@ if neobundle#tap('neosnippet.vim')
         \ }) "}}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
-    augroup neosnippet_autocmd
+
+    augroup neosnippet_setting
       autocmd!
       autocmd InsertLeave * NeoSnippetClearMarkers
     augroup END
 
     " For snippet_complete marker.
     if has('conceal')
-      set conceallevel=2 concealcursor=i
+      set conceallevel=3 concealcursor=i
     endif
   endfunction "}}}
 
@@ -1286,8 +1288,8 @@ if neobundle#tap('neosnippet.vim')
   inoremap <expr>[] "[]\<\`0\`><C-O>F]"
   inoremap <expr><> "<>\<\`0\`><C-O>F>"
   inoremap <expr>'' "''\<\`0\`><C-O>F'"
-  inoremap <expr>`` "``\<\`0\`><C-O>F`"
-  inoremap <expr>"" '""\<\`0\`><C-O>F"'
+  inoremap <expr>`` "``\<\`0\`><C-O>F3`"
+  inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
 
   " }}}
   call neobundle#untap()
@@ -2610,6 +2612,32 @@ if neobundle#tap('vim-reveal')
 endif
 " }}} "
 
+
+" suan/vim-instant-markdown {{{
+if neobundle#tap('vim-instant-markdown')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   },
+        \ "build"       : {
+        \   "unix"      : "sudo npm -g install instant-markdown-d",
+        \}})
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
 " kannokanno/previm {{{
 if neobundle#tap('previm')
   " Config {{{
@@ -4029,6 +4057,7 @@ endif
 " Installation check.
 if !has('vim_starting')
   call neobundle#call_hook('on_source')
+  call neobundle#call_hook('on_post_source')
 endif
 set secure
 "}}}
