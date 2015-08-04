@@ -325,7 +325,7 @@ let maplocalleader='\'                           "local map leader
 " nnoremap q <Nop>
 nnoremap Q <nop>
 " nnoremap q: q:
-nnoremap c  "_c
+" nnoremap c  "_c
 nnoremap C  "_C
 nnoremap G  Gzv
 
@@ -410,6 +410,14 @@ nnoremap <S-Left>  <C-w><
 nnoremap <S-Right> <C-w>>
 nnoremap <S-Up>    <C-w>-
 nnoremap <S-Down>  <C-w>+
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
 
 nnoremap <Left>     <Nop>
 nnoremap <Right>    <Nop>
@@ -1272,7 +1280,7 @@ if neobundle#tap('neosnippet.vim')
 
     " For snippet_complete marker.
     if has('conceal')
-      set conceallevel=3 concealcursor=i
+      set conceallevel=0 concealcursor=nvc
     endif
   endfunction "}}}
 
@@ -1288,13 +1296,14 @@ if neobundle#tap('neosnippet.vim')
   inoremap <expr>[] "[]\<\`0\`><C-O>F]"
   inoremap <expr><> "<>\<\`0\`><C-O>F>"
   inoremap <expr>'' "''\<\`0\`><C-O>F'"
-  inoremap <expr>`` "``\<\`0\`><C-O>F3`"
+  inoremap <expr>`` "``\<\`0\`><C-O>3F`"
   inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
 
   " }}}
   call neobundle#untap()
 endif" }}}
-"
+
+
 " Shougo/neosnippet-snippets {{{
 if neobundle#tap('neosnippet-snippets')
   " Config {{{
@@ -2612,13 +2621,13 @@ if neobundle#tap('vim-reveal')
 endif
 " }}} "
 
-
 " suan/vim-instant-markdown {{{
 if neobundle#tap('vim-instant-markdown')
   " Config {{{
   call neobundle#config({
         \   'lazy' : 1,
         \   'autoload' : {
+        \     'filetypes' : 'markdown',
         \     'unite_sources' : [
         \       'help',
         \     ],
@@ -2633,11 +2642,17 @@ if neobundle#tap('vim-instant-markdown')
 
   " Setting {{{
   
+  " vim-instant-markdown will update the display in realtime
+  let g:instant_markdown_slow = 1
+
+  " you want to manually control this behavior
+  let g:instant_markdown_autostart = 0
   "}}}
 
   call neobundle#untap()
 endif
 " }}}
+
 " kannokanno/previm {{{
 if neobundle#tap('previm')
   " Config {{{
@@ -3482,6 +3497,8 @@ if neobundle#tap('incsearch.vim')
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}}})
+    " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
   endfunction "}}}
 
   " Setting {{{
