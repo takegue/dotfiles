@@ -143,7 +143,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'TKNGUE/hateblo.vim'
   NeoBundle 'TKNGUE/sum-it.vim'
   NeoBundle 'vim-latex/vim-latex'
-  NeoBundle 'lervag/vimtex'
+  " NeoBundle 'lervag/vimtex'
   NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'tmhedberg/SimpylFold'
   NeoBundle 'tomasr/molokai'
@@ -3497,13 +3497,13 @@ if neobundle#tap('incsearch.vim')
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}}})
-    " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
   endfunction "}}}
 
   " Setting {{{
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
+  noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}}})
+  noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
+  " map /  <Plug>(incsearch-forward)
+  " map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
 
   let g:incsearch#separate_highlight = 1
