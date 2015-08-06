@@ -142,8 +142,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'TKNGUE/atcoder_helper'
   NeoBundle 'TKNGUE/hateblo.vim'
   NeoBundle 'TKNGUE/sum-it.vim'
-  NeoBundle 'vim-latex/vim-latex'
-  " NeoBundle 'lervag/vimtex'
+  " NeoBundle 'vim-latex/vim-latex'
+  NeoBundle 'lervag/vimtex'
   NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'tmhedberg/SimpylFold'
   NeoBundle 'tomasr/molokai'
@@ -171,7 +171,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
   NeoBundle 'stephpy/vim-yaml'                             " Override vim syntax for yaml files
-
+  NeoBundle 'hsanson/vim-android'                          " Android development plugin for vim
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
   NeoBundle 'vimperator/vimperator-labs', {
@@ -280,9 +280,8 @@ set matchtime=1             " 対応括弧のハイライト表示を3秒にす�
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 set autoread                " Automatically reload change files on disk
-set updatetime=2000         " Automatically reload change files on disk
+set updatetime=1000         " Automatically reload change files on disk
 
-set timeoutlen=500
 set ttimeout
 set ttimeoutlen=1000
 
@@ -554,7 +553,7 @@ augroup my_higlight
 augroup END
 
 function! s:additional_highlight() "{{{
-  if !has('gui_running')
+  if !has('gui_running') && &bg == 'dark'
     highlight Normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
@@ -576,7 +575,7 @@ if has('vim_starting')
   if has('gui_running')
     colorscheme PaperColor
   else
-    set background=dark
+    set background=light
     if &t_Co < 256
       colorscheme default
     else
@@ -2184,11 +2183,13 @@ if neobundle#tap('jedi-vim')
   " Setting {{{
   " let g:jedi#completions_command = "<C-N>"
   " 自動設定機能をoffにし手動で設定を行う
+  set noshowmode
   let g:jedi#auto_initialization  = 0
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#popup_on_dot = 0
   let g:jedi#auto_close_doc = 0
-  " let g:jedi#show_call_signatures = 1
+  let g:jedi#show_call_signatures = 2
+  "
 
   "quickrunと被るため大文字に変更
   " let g:jedi#rename_command = 'R'
@@ -2233,6 +2234,8 @@ if neobundle#tap('vim-pyenv')
   endfunction "}}}
 
   " Setting {{{
+  let g:pyenv#auto_create_ctags = 0
+  let g:pyenv#auto_assign_ctags  = 1
   "}}}
 
   call neobundle#untap()
@@ -2374,6 +2377,36 @@ endif
 
 "}}}
 
+" Java:
+
+" Android: {{{
+" hsanson/vim-android {{{
+if neobundle#tap('vim-android')
+  " Config {{{
+  call neobundle#config({
+        \   'autoload' : {
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+    let g:android_sdk_path = $ANDROID_SDK
+    " let g:gradle_path = /path/to/gradle
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
+"}}}
 
 "Writing: {{{
 
@@ -2493,6 +2526,8 @@ if neobundle#tap('vimtex')
   let g:latex_fold_automatic = 1
   let g:latex_fold_envs = 1
 
+  let g:vimtex_latexmk_options = '--pdfdvi'
+
   " 自動コンパイル
   let g:latex_latexmk_continuous = 1
   let g:latex_latexmk_background = 1
@@ -2535,7 +2570,7 @@ if neobundle#tap('vimtex')
   endif
   let g:neocomplete#sources#omni#input_patterns.tex = '\\ref{\s*[0-9A-Za-z_:]*'
   "\citeも自動補完するなら
-  "let g:neocomplete#sources#omni#input_patterns.tex = '\\cite{\s*[0-9A-Za-z_:]*\|\\ref{\s*[0-9A-Za-z_:]*'
+  let g:neocomplete#sources#omni#input_patterns.tex = '\\cite{\s*[0-9A-Za-z_:]*\|\\ref{\s*[0-9A-Za-z_:]*'
   "}}}
 
   call neobundle#untap()
@@ -3625,7 +3660,6 @@ if neobundle#tap('learn-vimscript')
   call neobundle#untap()
 endif
 " }}} " help for vim script
-
 
 " vim-jp/vital.vim {{{
 if neobundle#tap('vital.vim')
