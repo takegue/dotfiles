@@ -1,7 +1,7 @@
 snippet     bundle_tap
-abbr        for configration ob bundle
+abbr        for configration of bundle
 options     head
- " author/${2:} {{{
+ " ${1:#AUTHOR}/${2:#PLUGIN NAME} {{{
  if neobundle#tap('$2')
    " Config {{{
    call neobundle#config({
@@ -17,9 +17,77 @@ options     head
    function! neobundle#tapped.hooks.on_source(bundle) "{{{
    endfunction "}}}
 
+   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+   endfunction "}}}
+
    " Setting {{{
+   ${0}
    "}}}
 
    call neobundle#untap()
  endif
  " }}}
+
+snippet     bundle_tap_*
+abbr        for configration of bundle
+options     head
+ " `@*` {{{
+ if neobundle#tap('`matchstr(@*, '\h\S\+/\zs\(\h\S\+\)\ze')`')
+   " Config {{{
+   call neobundle#config({
+         \   'lazy' : 1,
+         \   'autoload' : {
+         \     'unite_sources' : [
+         \       'help',
+         \     ],
+         \   }
+         \ })
+   " }}}
+
+   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+   endfunction "}}}
+
+   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+   endfunction "}}}
+
+   " Setting {{{
+   ${0}
+   "}}}
+
+   call neobundle#untap()
+ endif
+ " }}}
+
+ 
+
+snippet     bundle_tap_+
+abbr        for configration of bundle
+options     head
+ " `@+` {{{
+ if neobundle#tap('`matchstr(@+, '\h\S\+/\zs\(\h\S\+\)\ze')`')
+   " Config {{{
+   call neobundle#config({
+         \   'lazy' : 1,
+         \   'autoload' : {
+         \     'unite_sources' : [
+         \       'help',
+         \     ],
+         \   }
+         \ })
+   " }}}
+
+   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+   endfunction "}}}
+
+   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+   endfunction "}}}
+
+   " Setting {{{
+   ${0}
+   "}}}
+
+   call neobundle#untap()
+ endif
+ " }}}
+
+
