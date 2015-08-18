@@ -307,10 +307,10 @@ else
 fi
 
 
-if [ -f "$HOME/.zshrc_local" ]; then
-    source $HOME/.zshrc_local
+if [ -f "$HOME/.local.zshrc" ]; then
+    source $HOME/.local.zshrc
 else
-    cat <<EOS > ~/.zshrc_local
+    cat <<EOS > $HOME/.local.zshrc
 export PATH=\$HOME/.local/bin:\$PATH
 export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOS
