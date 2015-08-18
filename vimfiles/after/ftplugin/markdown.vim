@@ -1,7 +1,6 @@
-augroup markdown_augrop
+augroup markdown_augrope
     autocmd!
     autocmd BufWritePre <buffer> %s/^\s\+$//ge
-
 augroup END
 
 nnoremap <buffer><silent><Leader>= :<C-u>call append('.', repeat('=', max([40, strdisplaywidth(getline('.'))])))<CR>

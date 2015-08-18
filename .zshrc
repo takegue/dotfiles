@@ -71,6 +71,9 @@ bindkey -M vicmd '/' history-incremental-search-forward
 bindkey -M viins '^F' history-incremental-search-backward
 bindkey -M viins '^R' history-incremental-search-forward
 
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 

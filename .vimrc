@@ -110,7 +110,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/unite-fold'
-  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
+  " NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
@@ -2608,8 +2608,8 @@ if neobundle#tap('vim-markdown')
   let g:vim_markdown_no_default_key_mappings = 0
   let g:vim_markdown_better_folding=1
 
-  let g:vim_markdown_initial_foldlevel=1
-  let g:vim_markdown_folding_disabled=0
+  let g:vim_markdown_initial_foldlevel=2
+  let g:vim_markdown_folding_disabled=1
   "}}}
 
 
