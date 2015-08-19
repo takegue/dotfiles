@@ -61,7 +61,6 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'christoomey/vim-tmux-navigator'
   NeoBundle 'clones/vim-zsh'
   NeoBundle 'cohama/agit.vim'
-  NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'deris/vim-visualinc'
   NeoBundle 'deton/jasegment.vim'
   NeoBundle 'elzr/vim-json'
@@ -87,7 +86,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'kannokanno/previm'
   NeoBundle 'KazuakiM/vim-qfstatusline'
   NeoBundle 'KazuakiM/vim-regexper'
-  " NeoBundle 'klen/python-mode'                            " python plugin for vim
+  NeoBundle 'klen/python-mode'                             " python plugin for vim
+  NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
   NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
@@ -420,11 +420,11 @@ nnoremap <S-Up>    <C-w>-
 nnoremap <S-Down>  <C-w>+
 
 if &term =~ '^screen'
-    " tmux will send xterm-style keys when its xterm-keys option is on
-    execute "set <xUp>=\e[1;*A"
-    execute "set <xDown>=\e[1;*B"
-    execute "set <xRight>=\e[1;*C"
-    execute "set <xLeft>=\e[1;*D"
+  " tmux will send xterm-style keys when its xterm-keys option is on
+  execute "set <xUp>=\e[1;*A"
+  execute "set <xDown>=\e[1;*B"
+  execute "set <xRight>=\e[1;*C"
+  execute "set <xLeft>=\e[1;*D"
 endif
 
 nnoremap <Left>     <Nop>
@@ -1215,7 +1215,7 @@ if neobundle#tap('neocomplete.vim')
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
     endif
-"}}}
+    "}}}
   endfunction "}}}
 
   " Setting {{{
@@ -2080,10 +2080,10 @@ if neobundle#tap('python-mode')
   endfunction "}}}
 
   " Setting {{{
-  let g:pymode = 0
+  let g:pymode = 1
   let g:pymode_warnings = 1
-  let g:pymode_paths = ['shutil', 'datetime', 'time',
-        \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
+  " let g:pymode_paths = ['shutil', 'datetime', 'time',
+  "       \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
   let g:pymode_trim_whitespaces = 1
   let g:pymode_options = 1
   let g:pymode_options_colorcolumn = 1
@@ -2098,6 +2098,7 @@ if neobundle#tap('python-mode')
   let g:pymode_doc_bind = 'K'
 
   let g:pymode_virtualenv = 0
+  " let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
 
   let g:pymode_run = 0            "QuickRunの方が優秀
   " let g:pymode_run_bind = '<leader>R'
@@ -2413,8 +2414,8 @@ if neobundle#tap('vim-android')
   endfunction "}}}
 
   " Setting {{{
-    let g:android_sdk_path = $ANDROID_SDK
-    " let g:gradle_path = /path/to/gradle
+  let g:android_sdk_path = $ANDROID_SDK
+  " let g:gradle_path = /path/to/gradle
   "}}}
 
   call neobundle#untap()
@@ -2516,9 +2517,9 @@ if neobundle#tap('vimtex')
   " }}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
-     nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
-     vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
-     nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
+    nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
+    vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
+    nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
   endfunction "}}}
 
   " Setting {{{
@@ -2690,7 +2691,7 @@ if neobundle#tap('vim-instant-markdown')
   endfunction "}}}
 
   " Setting {{{
-  
+
   " vim-instant-markdown will update the display in realtime
   let g:instant_markdown_slow = 1
 
@@ -2870,6 +2871,9 @@ if neobundle#tap('unite.vim')
 
     " Runs "split" action by <C-s>.
     imap <silent><buffer><expr> <C-s>     unite#do_action('split')
+
+
+    setl nofoldenable
   endfunction "}}}
 
   " mappingが競合するためデフォルトマッピング無効
@@ -3302,57 +3306,57 @@ if neobundle#tap('vim-session')
 endif
 " }}} "
 
-    " lambdalisue/vim-gista {{{
-    if neobundle#tap('vim-gista')
-      " Config {{{
-      call neobundle#config({
-            \ "lazy": 1,
-            \ 'depends': [
-            \	'Shougo/unite.vim',
-            \	'tyru/open-browser.vim',
-            \],
-            \ 'autoload': {
-            \    'commands': ['Gista'],
-            \    'mappings': '<Plug>(gista-',
-            \    'unite_sources': 'gista',
-            \}})
-    "}}}
+" lambdalisue/vim-gista {{{
+if neobundle#tap('vim-gista')
+  " Config {{{
+  call neobundle#config({
+        \ "lazy": 1,
+        \ 'depends': [
+        \	'Shougo/unite.vim',
+        \	'tyru/open-browser.vim',
+        \],
+        \ 'autoload': {
+        \    'commands': ['Gista'],
+        \    'mappings': '<Plug>(gista-',
+        \    'unite_sources': 'gista',
+        \}})
+  "}}}
 
-    function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    endfunction "}}}
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
 
-    " Setting {{{
-    " let g:gista#directory =
-    " let g:gista#token_directory =
-    " let g:gista#gist_entries_cache_directory =
-    " let g:gista#gist_default_filename =
-    " let g:gista#list_opener =
-    " let g:gista#gist_openers =
-    " let g:gista#gist_openers_in_action =
-    " let g:gista#close_list_after_open =
-    " let g:gista#auto_connect_after_post =
-    " let g:gista#update_on_write =
-    " let g:gista#enable_default_keymaps =
-    " let g:gista#post_private =
-    " let g:gista#interactive_description =
-    " let g:gista#interactive_visibility =
-    " let g:gista#include_invisible_buffer_in_multiple =
-    " let g:gista#unite_smart_open_threshold =
-    " let g:gista#gistid_yank_format =
-    " let g:gista#gistid_yank_format_with_file =
-    " let g:gista#gistid_yank_format_in_post =
-    " let g:gista#gistid_yank_format_in_save =
-    " let g:gista#default_yank_method =
-    " let g:gista#auto_yank_after_post =
-    " let g:gista#auto_yank_after_save =
-    " let g:gista#disable_python_client =
-    " let g:gista#suppress_acwrite_info_message =
-    " let g:gista#suppress_not_owner_acwrite_info_message =
-    " let g:gista#warn_in_partial_save =
-    " let g:gista#get_with_authentication
-    "}}}
+  " Setting {{{
+  " let g:gista#directory =
+  " let g:gista#token_directory =
+  " let g:gista#gist_entries_cache_directory =
+  " let g:gista#gist_default_filename =
+  " let g:gista#list_opener =
+  " let g:gista#gist_openers =
+  " let g:gista#gist_openers_in_action =
+  " let g:gista#close_list_after_open =
+  " let g:gista#auto_connect_after_post =
+  " let g:gista#update_on_write =
+  " let g:gista#enable_default_keymaps =
+  " let g:gista#post_private =
+  " let g:gista#interactive_description =
+  " let g:gista#interactive_visibility =
+  " let g:gista#include_invisible_buffer_in_multiple =
+  " let g:gista#unite_smart_open_threshold =
+  " let g:gista#gistid_yank_format =
+  " let g:gista#gistid_yank_format_with_file =
+  " let g:gista#gistid_yank_format_in_post =
+  " let g:gista#gistid_yank_format_in_save =
+  " let g:gista#default_yank_method =
+  " let g:gista#auto_yank_after_post =
+  " let g:gista#auto_yank_after_save =
+  " let g:gista#disable_python_client =
+  " let g:gista#suppress_acwrite_info_message =
+  " let g:gista#suppress_not_owner_acwrite_info_message =
+  " let g:gista#warn_in_partial_save =
+  " let g:gista#get_with_authentication
+  "}}}
 
-call neobundle#untap()
+  call neobundle#untap()
 endif
 " }}} "
 
@@ -3581,8 +3585,8 @@ if neobundle#tap('incsearch.vim')
   endfunction "}}}
 
   " Setting {{{
-  noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}}})
-  noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
+  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}}})
+  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
   " map /  <Plug>(incsearch-forward)
   " map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
