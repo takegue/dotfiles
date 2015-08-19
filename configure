@@ -14,7 +14,8 @@ if [ ! -e `which git` ]; then
 fi 
 
 if [ ! -e `which vim` ]; then
-    echo 'not found vim'
+    echo 'not found vim.'
+    echo 'Start installing ...'
     $DIR/scripts/vim-install.sh
 fi 
 
@@ -23,6 +24,12 @@ ln -s $DIR/vimfiles ~/.vim
 
 for dotfile in $DIR/.* ; do
     if [ $dotfile = ${DIR}/.git ]; then
+        continue
+    fi
+    if [ $dotfile = '.' ]; then
+        continue
+    fi
+    if [ $dotfile = '..' ]; then
         continue
     fi
 

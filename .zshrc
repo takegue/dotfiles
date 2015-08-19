@@ -71,6 +71,9 @@ bindkey -M vicmd '/' history-incremental-search-forward
 bindkey -M viins '^F' history-incremental-search-backward
 bindkey -M viins '^R' history-incremental-search-forward
 
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 
@@ -309,10 +312,10 @@ else
 fi
 
 
-if [ -f "$HOME/.zshrc_local" ]; then
-    source $HOME/.zshrc_local
+if [ -f "$HOME/.local.zshrc" ]; then
+    source $HOME/.local.zshrc
 else
-    cat <<EOS > ~/.zshrc_local
+    cat <<EOS > $HOME/.local.zshrc
 export PATH=\$HOME/.local/bin:\$PATH
 export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOS

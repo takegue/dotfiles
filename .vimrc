@@ -187,7 +187,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/unite-fold'
-  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
+  " NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
@@ -477,6 +477,15 @@ function! ToggleWindowSize()
     vertical resize
   endif
 endfunction
+
+function! OpenFolderOfCurrentFile() abort
+  if has('unix') && s:executable('xdg-open')
+    call system('xdg-open '. expand('%:p:h'))
+  endif
+endfunction
+
+nnoremap <Space>o :call OpenFolderOfCurrentFile()<CR>
+
 
 nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
 nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
@@ -1239,10 +1248,10 @@ if neobundle#tap('neocomplete.vim')
     "       \ <SID>check_back_space() ? "\<TAB>" :
     "       \ neocomplete#start_manual_complete()
 
-    " function! s:check_back_space() "{{{
-    "   let col = col('.') - 1
-    "   return !col || getline('.')[col - 1]  =~ '\s'
-    " endfunction "}}}   
+    function! s:check_back_space() "{{{
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction "}}}   
 
     " <C-h>, <BS>: close popup and delete backword char.
     if neobundle#is_installed('neosnippet.vim') "{{{
@@ -1253,6 +1262,11 @@ if neobundle#tap('neocomplete.vim')
       inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
       inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
       " make neocomplcache use jedi#completions omini function for python scripts
+
+      augroup tex_complete
+        autocmd!
+        autocmd FileType *.tex inoremap <expr>$$ $$<left>
+      augroup END
 
       " Plugin key-mappings.
       imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -2671,8 +2685,8 @@ if neobundle#tap('vim-markdown')
   let g:vim_markdown_no_default_key_mappings = 0
   let g:vim_markdown_better_folding=1
 
-  let g:vim_markdown_initial_foldlevel=1
-  let g:vim_markdown_folding_disabled=0
+  let g:vim_markdown_initial_foldlevel=2
+  let g:vim_markdown_folding_disabled=1
   "}}}
 
 
@@ -3365,25 +3379,57 @@ if neobundle#tap('vim-session')
 endif
 " }}} "
 
-" lambdalisue/vim-gista {{{
-if neobundle#tap('vim-gista')
-  " Config {{{
-  call neobundle#config( {
-        \ "lazy": 1,
-        \ 'autoload': {
-        \    'commands': ['Gista'],
-        \    'mappings': '<Plug>(gista-',
-        \    'unite_sources': 'gista',
-        \}})
-  "}}}
+    " lambdalisue/vim-gista {{{
+    if neobundle#tap('vim-gista')
+      " Config {{{
+      call neobundle#config({
+            \ "lazy": 1,
+            \ 'depends': [
+            \	'Shougo/unite.vim',
+            \	'tyru/open-browser.vim',
+            \],
+            \ 'autoload': {
+            \    'commands': ['Gista'],
+            \    'mappings': '<Plug>(gista-',
+            \    'unite_sources': 'gista',
+            \}})
+    "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
+    function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    endfunction "}}}
 
-  " Setting {{{
-  "}}}
+    " Setting {{{
+    " let g:gista#directory =
+    " let g:gista#token_directory =
+    " let g:gista#gist_entries_cache_directory =
+    " let g:gista#gist_default_filename =
+    " let g:gista#list_opener =
+    " let g:gista#gist_openers =
+    " let g:gista#gist_openers_in_action =
+    " let g:gista#close_list_after_open =
+    " let g:gista#auto_connect_after_post =
+    " let g:gista#update_on_write =
+    " let g:gista#enable_default_keymaps =
+    " let g:gista#post_private =
+    " let g:gista#interactive_description =
+    " let g:gista#interactive_visibility =
+    " let g:gista#include_invisible_buffer_in_multiple =
+    " let g:gista#unite_smart_open_threshold =
+    " let g:gista#gistid_yank_format =
+    " let g:gista#gistid_yank_format_with_file =
+    " let g:gista#gistid_yank_format_in_post =
+    " let g:gista#gistid_yank_format_in_save =
+    " let g:gista#default_yank_method =
+    " let g:gista#auto_yank_after_post =
+    " let g:gista#auto_yank_after_save =
+    " let g:gista#disable_python_client =
+    " let g:gista#suppress_acwrite_info_message =
+    " let g:gista#suppress_not_owner_acwrite_info_message =
+    " let g:gista#warn_in_partial_save =
+    " let g:gista#get_with_authentication
+    "}}}
 
-  call neobundle#untap()
+call neobundle#untap()
 endif
 " }}} "
 
@@ -4092,17 +4138,17 @@ if neobundle#tap('vim-precious')
   endfunction "}}}
 
   " Setting {{{
-    let g:precious_enable_switchers = {
-    \	"*" : {
-    \		"setfiletype" : 0
-    \	},
-    \	"vim" : {
-    \		"setfiletype" : 1
-    \	},
-    \	"markdown" : {
-    \		"setfiletype" : 1
-    \	},
-    \}
+  let g:precious_enable_switchers = {
+        \	"*" : {
+        \		"setfiletype" : 0
+        \	},
+        \	"vim" : {
+        \		"setfiletype" : 1
+        \	},
+        \	"markdown" : {
+        \		"setfiletype" : 1
+        \	},
+        \}
 
   "}}}
   call neobundle#untap()
