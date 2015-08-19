@@ -110,7 +110,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/unite-fold'
-  " NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
+  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
@@ -410,8 +410,8 @@ endfunction
 nnoremap <Space>o :call OpenFolderOfCurrentFile()<CR>
 
 
-nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
-nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
+" nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
+" nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
 
 " Shift + 矢印でウィンドウサイズを変更
 nnoremap <S-Left>  <C-w><
@@ -962,22 +962,59 @@ if neobundle#tap('lightline.vim')
           \ ('' != MyModified() ? ' ' . MyModified() : '')
   endfunction "}}}
 
-  function! MyPyenv()
-    return ( &ft =~ 'python' ? pyenv#info#format('%av') : '')
-  endfunction 
 
-  function! MyFugitive() "{{{
-    try
-      if &ft !~? 'help\|vimfiler\|gundo' && exists('*fugitive#statusline')
-        let _ = substitute(fugitive#statusline(),'\[Git:\?\(.\+\)\]', '\1', 'g')
-        let _ = substitute(_,'^(\(.\+\))$', '\1', 'g')
-        return strlen(_) ? '⭠ '._ : ''
-        return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : strlen(_) ? '⭠ '._ : ''
+  let s:_lightline = {}
+  function! s:lightline_cache(name, key, val) abort "{{{
+    if !has_key(s:_lightline, a:name)
+      let s:_lightline[a:name] = {a:key : a:val}
+    else
+      if !has_key(s:_lightline[a:name], a:key)
+        let s:_lightline[a:name][a:key] = a:val
       endif
-    catch
-    endtry
-    return ''
+    endif
+  endfunction"}}}
+  function! s:lightline_hit(name, key) abort "{{{
+    if !has_key(s:_lightline, a:name)
+      let s:_lightline[a:name] = {}
+      return ''
+    else
+      if !has_key(s:_lightline[a:name], a:key)
+        return ''
+      else
+        return s:_lightline[a:name][a:key]
+      endif
+    endif
   endfunction "}}}
+
+  function! MyPyenv() "{{{
+    " if !exists('*pyenv#info#format')
+    "   return ''
+    " endif
+    if &ft =~ 'python'
+      let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
+      let val = s:lightline_hit('pyenv', key)
+      if val == ''
+        let val = pyenv#info#format('%av')
+        call s:lightline_cache('pyenv', key, val)
+      endif
+      return val
+    else
+      return ''
+    endif
+  endfunction "}}}
+  function! MyFugitive() "{{{
+    if &ft !~? 'help\|vimfiler\|gundo' && exists('b:git_dir')
+      let _ = fugitive#head(7)
+      if _ != ''
+        return '⭠ '. _ 
+      else
+        return ''
+      endif
+    else 
+      return ''
+    endif 
+  endfunction "}}}
+
   function! MyFileformat()
     return winwidth(0) > 70 ? &fileformat : ''
   endfunction
@@ -1211,8 +1248,8 @@ if neobundle#tap('neocomplete.vim')
       smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
       " SuperTab like snippets behavior.
-      imap <expr><TAB> neosnippet#jumpable() ? pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+      imap <expr><TAB> neosnippet#jumpable() ? pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
 
     endif
     "}}}
@@ -1293,7 +1330,7 @@ if neobundle#tap('neosnippet.vim')
 
     " For snippet_complete marker.
     if has('conceal')
-      set conceallevel=0 concealcursor=nvc
+      set conceallevel=0 concealcursor=nivc
     endif
   endfunction "}}}
 
@@ -2176,7 +2213,7 @@ if neobundle#tap('jedi-vim')
         \ "lazy"    : 1,
         \ "disabled"    : !has('python'),
         \ "autoload"    : {
-        \   "filetypes" : ["python", "python3", "djangohtml"],
+        \   "on_source" : ['python-mode'],
         \ },
         \ })
   "}}}
@@ -2236,6 +2273,7 @@ if neobundle#tap('vim-pyenv')
   " Config {{{
   call neobundle#config({
         \   'lazy' : 1,
+        \   'disabled'    : !has('python'),
         \   'autoload' : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \     'unite_sources' : [
@@ -3585,8 +3623,8 @@ if neobundle#tap('incsearch.vim')
   endfunction "}}}
 
   " Setting {{{
-  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}}})
-  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
+  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
+  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}} })
   " map /  <Plug>(incsearch-forward)
   " map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
@@ -3601,8 +3639,7 @@ if neobundle#tap('incsearch.vim')
   map g# <Plug>(incsearch-nohl-g#)zz
 
   call neobundle#untap()
-endif
-" }}} "
+endif " }}} "
 "}}}
 
 " Lokaltog/vim-easymotion {{{
