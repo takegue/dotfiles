@@ -187,7 +187,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/unite-fold'
-  " NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
+  NeoBundle 'osyo-manga/vim-precious'                      " Vim constext filetype
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
@@ -487,8 +487,8 @@ endfunction
 nnoremap <Space>o :call OpenFolderOfCurrentFile()<CR>
 
 
-nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
-nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
+" nnoremap <silent><C-F> :<C-U>setl lazyredraw<CR><C-D><C-D>:setl nolazyredraw<CR>
+" nnoremap <silent><C-B> :<C-U>setl lazyredraw<CR><C-U><C-U>:setl nolazyredraw<CR>
 
 " Shift + 矢印でウィンドウサイズを変更
 nnoremap <S-Left>  <C-w><
@@ -620,13 +620,13 @@ nnoremap  [fold][     :<C-u>call <SID>put_foldmarker(0)<CR>
 
 " Abbreviations: {{{
 "自動で括弧内に移動
-inoremap {} {}<left>
-inoremap () ()<left>
-inoremap [] []<left>
-inoremap <> <><left>
-inoremap '' ''<left>
-inoremap `` ``<left>
-inoremap "" ""<left>
+" inoremap {} {}<left>
+" inoremap () ()<left>
+" inoremap [] []<left>
+" inoremap <> <><left>
+" inoremap '' ''<left>
+" inoremap `` ``<left>
+" inoremap "" ""<left>
 
 "}}}
 "}}}
@@ -1039,22 +1039,73 @@ if neobundle#tap('lightline.vim')
           \ ('' != MyModified() ? ' ' . MyModified() : '')
   endfunction "}}}
 
-  function! MyPyenv()
-    return ( &ft =~ 'python' ? pyenv#info#format('%av') : '')
-  endfunction 
 
-  function! MyFugitive() "{{{
-    try
-      if &ft !~? 'help\|vimfiler\|gundo' && exists('*fugitive#statusline')
-        let _ = substitute(fugitive#statusline(),'\[Git:\?\(.\+\)\]', '\1', 'g')
-        let _ = substitute(_,'^(\(.\+\))$', '\1', 'g')
-        return strlen(_) ? '⭠ '._ : ''
-        return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : strlen(_) ? '⭠ '._ : ''
+  let s:_lightline = {}
+  let s:_lightline_counter = 0
+  let g:lightline_update = 5
+  function! s:lightline_cache(name, key, val) abort "{{{
+    if !has_key(s:_lightline, a:name)
+      let s:_lightline[a:name] = {a:key : a:val}
+    else
+      if !has_key(s:_lightline[a:name], a:key)
+        let s:_lightline[a:name][a:key] = a:val
       endif
-    catch
-    endtry
-    return ''
+    endif
+  endfunction"}}}
+  function! s:lightline_hit(name, key) abort "{{{
+    if !has_key(s:_lightline, a:name)
+      let s:_lightline[a:name] = {}
+      return ''
+    else
+      if !has_key(s:_lightline[a:name], a:key)
+        return ''
+      else
+        return s:_lightline[a:name][a:key]
+      endif
+    endif
   endfunction "}}}
+
+  function! MyPyenv() "{{{
+    " if !exists('*pyenv#info#format')
+    "   return ''
+    " endif
+    if &ft =~ 'python'
+      let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
+      let val = s:lightline_hit('pyenv', key)
+      if val == ''
+        let val = pyenv#info#format('%av')
+        call s:lightline_cache('pyenv', key, val)
+      endif
+      return val
+    else
+      return ''
+    endif
+  endfunction "}}}
+  function! MyFugitive() "{{{
+    if &ft !~? 'help\|vimfiler\|gundo' && exists('b:git_dir')
+      let s:_lightline_counter += 1
+      let statusline = ''
+      if s:_lightline_counter % g:lightline_update == 0
+        let s:_lightline_counter = 0
+        let statusline = fugitive#head(7)
+        call s:lightline_cache('fugitive', 'previous', statusline)
+      else
+        let statusline = s:lightline_hit('fugitive', 'previous') 
+        if statusline == ''
+          let statusline = fugitive#head(7)
+          call s:lightline_cache('fugitive', 'previous', statusline)
+        endif
+      endif
+      if statusline != ''
+        return '⭠ '. statusline 
+      else
+        return ''
+      endif
+    else 
+      return ''
+    endif 
+  endfunction "}}}
+
   function! MyFileformat()
     return winwidth(0) > 70 ? &fileformat : ''
   endfunction
@@ -1288,8 +1339,8 @@ if neobundle#tap('neocomplete.vim')
       smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
       " SuperTab like snippets behavior.
-      imap <expr><TAB> neosnippet#jumpable() ? pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+      imap <expr><TAB> neosnippet#jumpable() ? pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
 
     endif
     "}}}
@@ -1370,7 +1421,7 @@ if neobundle#tap('neosnippet.vim')
 
     " For snippet_complete marker.
     if has('conceal')
-      set conceallevel=0 concealcursor=nvc
+      set conceallevel=0 concealcursor=nivc
     endif
   endfunction "}}}
 
@@ -1381,17 +1432,17 @@ if neobundle#tap('neosnippet.vim')
   let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
   let g:neosnippet#enable_preview = 0	 
 
-  inoremap <expr>{} "{}\<\`0\`><C-O>F}"
-  inoremap <expr>() "()\<\`0\`><C-O>F)"
-  inoremap <expr>[] "[]\<\`0\`><C-O>F]"
-  inoremap <expr><> "<>\<\`0\`><C-O>F>"
-  inoremap <expr>'' "''\<\`0\`><C-O>F'"
-  inoremap <expr>`` "``\<\`0\`><C-O>3F`"
-  inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
+  " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
+  " inoremap <expr>() "()\<\`0\`><C-O>F)"
+  " inoremap <expr>[] "[]\<\`0\`><C-O>F]"
+  " inoremap <expr><> "<>\<\`0\`><C-O>F>"
+  " inoremap <expr>'' "''\<\`0\`><C-O>F'"
+  " inoremap <expr>`` "``\<\`0\`><C-O>3F`"
+  " inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
 
   " }}}
   call neobundle#untap()
-endif" }}}
+endif "}}}
 
 
 " Shougo/neosnippet-snippets {{{
@@ -1850,9 +1901,8 @@ if neobundle#tap('vim-quickrun')
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     nnoremap <silent> <Leader>r :QuickRun<CR>
-    nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
+    nnoremap <silent><expr> <Leader>d eval('":QuickRun <". b:input_file . "<CR>"')
     nnoremap <silent> <Leader>se :QuickRun sql<CR>
-
   endfunction "}}}
 
   " Setting {{{
@@ -1991,14 +2041,14 @@ if neobundle#tap('vim-watchdogs')
   " Setting {{{
   let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
-        \   "python"  : 1,
+        \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
         \}
 
   let g:watchdogs_check_CursorHold_enables = {
         \   "cpp"     : 1,
-        \   "python"  : 1,
+        \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
         \}
@@ -2253,7 +2303,7 @@ if neobundle#tap('jedi-vim')
         \ "lazy"    : 1,
         \ "disabled"    : !has('python'),
         \ "autoload"    : {
-        \   "filetypes" : ["python", "python3", "djangohtml"],
+        \   "on_source" : ['python-mode'],
         \ },
         \ })
   "}}}
@@ -2313,6 +2363,7 @@ if neobundle#tap('vim-pyenv')
   " Config {{{
   call neobundle#config({
         \   'lazy' : 1,
+        \   'disabled'    : !has('python'),
         \   'autoload' : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \     'unite_sources' : [
@@ -2618,7 +2669,7 @@ if neobundle#tap('vimtex')
   let g:latex_fold_automatic = 1
   let g:latex_fold_envs = 1
 
-  let g:vimtex_latexmk_options = '--pdfdvi'
+  let g:vimtex_latexmk_options = '--pdfps'
 
   " 自動コンパイル
   let g:latex_latexmk_continuous = 1
@@ -3662,8 +3713,8 @@ if neobundle#tap('incsearch.vim')
   endfunction "}}}
 
   " Setting {{{
-  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}}})
-  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}}})
+  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
+  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}} })
   " map /  <Plug>(incsearch-forward)
   " map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
@@ -3678,8 +3729,7 @@ if neobundle#tap('incsearch.vim')
   map g# <Plug>(incsearch-nohl-g#)zz
 
   call neobundle#untap()
-endif
-" }}} "
+endif " }}} "
 "}}}
 
 " Lokaltog/vim-easymotion {{{

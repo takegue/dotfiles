@@ -82,4 +82,11 @@ options     head
 
 options     head
         @pytest.mark.usefixtures('${1:fixture}')
- 
+
+# if __name__ == '__main__':
+snippet main
+        def ${1:main}():
+           ${0:pass}
+
+        if __name__ == '__main__':
+           $1()
