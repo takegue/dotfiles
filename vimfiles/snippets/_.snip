@@ -3,3 +3,36 @@ abbr        Absolutlte path to this file
 alias       fpath
 options     word
     `bufname('%') =='[Command Line]' ? expand('#:p') : expand('%:p')`${0}
+
+
+snippet     ()
+options     word
+        (${1})${0}
+
+snippet     {}
+options     word
+        {${1}}${0}
+
+snippet     []
+options     word
+        [${1}]${0}
+
+snippet     <>
+options     word
+        <${1}>${0}
+
+snippet     ''
+options     word
+        '${1}'${0}
+
+snippet     ""
+options     word
+        "${1}"${0}
+
+snippet     $$
+options     word
+        $${1}$${0}
+
+snippet     ``
+options     word
+        `${1}`${0}

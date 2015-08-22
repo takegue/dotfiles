@@ -543,13 +543,13 @@ nnoremap  [fold][     :<C-u>call <SID>put_foldmarker(0)<CR>
 
 " Abbreviations: {{{
 "自動で括弧内に移動
-inoremap {} {}<left>
-inoremap () ()<left>
-inoremap [] []<left>
-inoremap <> <><left>
-inoremap '' ''<left>
-inoremap `` ``<left>
-inoremap "" ""<left>
+" inoremap {} {}<left>
+" inoremap () ()<left>
+" inoremap [] []<left>
+" inoremap <> <><left>
+" inoremap '' ''<left>
+" inoremap `` ``<left>
+" inoremap "" ""<left>
 
 "}}}
 "}}}
@@ -964,6 +964,8 @@ if neobundle#tap('lightline.vim')
 
 
   let s:_lightline = {}
+  let s:_lightline_counter = 0
+  let g:lightline_update = 5
   function! s:lightline_cache(name, key, val) abort "{{{
     if !has_key(s:_lightline, a:name)
       let s:_lightline[a:name] = {a:key : a:val}
@@ -1004,9 +1006,21 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
   function! MyFugitive() "{{{
     if &ft !~? 'help\|vimfiler\|gundo' && exists('b:git_dir')
-      let _ = fugitive#head(7)
-      if _ != ''
-        return '⭠ '. _ 
+      let s:_lightline_counter += 1
+      let statusline = ''
+      if s:_lightline_counter % g:lightline_update == 0
+        let s:_lightline_counter = 0
+        let statusline = fugitive#head(7)
+        call s:lightline_cache('fugitive', 'previous', statusline)
+      else
+        let statusline = s:lightline_hit('fugitive', 'previous') 
+        if statusline == ''
+          let statusline = fugitive#head(7)
+          call s:lightline_cache('fugitive', 'previous', statusline)
+        endif
+      endif
+      if statusline != ''
+        return '⭠ '. statusline 
       else
         return ''
       endif
@@ -1341,17 +1355,17 @@ if neobundle#tap('neosnippet.vim')
   let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
   let g:neosnippet#enable_preview = 0	 
 
-  inoremap <expr>{} "{}\<\`0\`><C-O>F}"
-  inoremap <expr>() "()\<\`0\`><C-O>F)"
-  inoremap <expr>[] "[]\<\`0\`><C-O>F]"
-  inoremap <expr><> "<>\<\`0\`><C-O>F>"
-  inoremap <expr>'' "''\<\`0\`><C-O>F'"
-  inoremap <expr>`` "``\<\`0\`><C-O>3F`"
-  inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
+  " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
+  " inoremap <expr>() "()\<\`0\`><C-O>F)"
+  " inoremap <expr>[] "[]\<\`0\`><C-O>F]"
+  " inoremap <expr><> "<>\<\`0\`><C-O>F>"
+  " inoremap <expr>'' "''\<\`0\`><C-O>F'"
+  " inoremap <expr>`` "``\<\`0\`><C-O>3F`"
+  " inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
 
   " }}}
   call neobundle#untap()
-endif" }}}
+endif "}}}
 
 
 " Shougo/neosnippet-snippets {{{
@@ -1810,9 +1824,8 @@ if neobundle#tap('vim-quickrun')
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     nnoremap <silent> <Leader>r :QuickRun<CR>
-    nnoremap <silent><expr> <Leader>d ':QuickRun <input'. "<CR>"
+    nnoremap <silent><expr> <Leader>d eval('":QuickRun <". b:input_file . "<CR>"')
     nnoremap <silent> <Leader>se :QuickRun sql<CR>
-
   endfunction "}}}
 
   " Setting {{{
@@ -1951,14 +1964,14 @@ if neobundle#tap('vim-watchdogs')
   " Setting {{{
   let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
-        \   "python"  : 1,
+        \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
         \}
 
   let g:watchdogs_check_CursorHold_enables = {
         \   "cpp"     : 1,
-        \   "python"  : 1,
+        \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
         \}
@@ -2579,7 +2592,7 @@ if neobundle#tap('vimtex')
   let g:latex_fold_automatic = 1
   let g:latex_fold_envs = 1
 
-  let g:vimtex_latexmk_options = '--pdfdvi'
+  let g:vimtex_latexmk_options = '--pdfps'
 
   " 自動コンパイル
   let g:latex_latexmk_continuous = 1
