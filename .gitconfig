@@ -71,3 +71,6 @@
                     git commit --amend -m \"$(git log -1 --pretty=%B)  Closes #$1.\"; \
             fi \
     }; f"
+
+[github]
+    user = "TKNGUE"
