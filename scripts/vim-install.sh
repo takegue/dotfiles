@@ -8,9 +8,10 @@ fi
 DIST_VIM=/tmp/vim
 
 if [[ ! -d $DIST_VIM ]]; then
-    hg clone https://vim.googlecode.com/hg $DIST_VIM
+    # hg clone https://vim.googlecode.com/hg $DIST_VIM
+    git clone https://github.com/vim/vim.git $DIST_VIM
 else [[ -d $DIST_VIM ]];
-    hg pull -u -R $DIST_VIM 
+    git -C $PATH pull origin master 
 fi
 
 cd $DIST_VIM

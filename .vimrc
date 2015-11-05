@@ -175,7 +175,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'thinca/vim-github'                            " An interface for Github.
   NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
   NeoBundle 'kana/vim-submode'                             " Vim plugin: Create your own submodes
-
+  " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
   " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
@@ -183,6 +183,8 @@ function! s:loads_bundles() abort "{{{
         \   'name': 'vimperator-syntax',
         \   'rtp':  'vimperator/contrib/vim/'
         \ }
+  NeoBundle 'Rykka/InstantRst'
+  NeoBundle 'Rykka/riv.vim'
   "BUNDLE_ENDPOINT
 
 endfunction "}}}
@@ -408,7 +410,7 @@ endfunction
 
 function! OpenFolderOfCurrentFile() abort
   if has('unix') && s:executable('xdg-open')
-    call system('xdg-open '. expand('%:p:h'))
+    call system('xdg-open '. expand('%:p:h:s? ?\\ ?'))
   endif
 endfunction
 
@@ -2704,7 +2706,7 @@ if neobundle#tap('vim-instant-markdown')
         \     ],
         \   },
         \ "build"       : {
-        \   "unix"      : "sudo npm -g install instant-markdown-d",
+        \   "unix"      : "npm -g install instant-markdown-d",
         \}})
   " }}}
 
@@ -2819,8 +2821,9 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
     nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:%<CR>
-    nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-buffer grep:./:-iR<CR>
-    nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-buffer grep:$buffers::<C-R><C-W><CR>
+    nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+    nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
+    nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers::<C-R><C-W><CR>
     nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
     nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
     nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
@@ -3588,7 +3591,7 @@ if neobundle#tap('vim-fugitive')
     if !exists('b:git_dir')
       return
     endif
-    execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h')
+    execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
     nnoremap <buffer> [git] <Nop>
     nmap <buffer> <Leader>g [git]
     nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
@@ -3598,8 +3601,8 @@ if neobundle#tap('vim-fugitive')
     nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
     nnoremap <buffer> [git]p :<C-u>Gpush<CR>
     " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-    if &l:path !~# fnamemodify(b:git_dir, ':p:h:h')
-      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h')  
+    if &l:path !~# fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
+      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')  
     endif
   endfunction "}}}
   "}}}
@@ -4304,6 +4307,36 @@ if neobundle#tap('vim-submode')
 endif
 " }}}"
 
+" Rykka/InstantRst {{{
+if neobundle#tap('InstantRst')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \   "filetypes": ["rst"],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    " let g:instant_rst_browser = 'xdg-open'
+    " let g:instant_rst_localhost_only = 0
+    " let g:instant_rst_bind_scroll  = 1
+  endfunction "}}}
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
 "}}}
