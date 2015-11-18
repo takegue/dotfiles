@@ -224,11 +224,12 @@ alias tmux='tmux -2'
 # alias v='vim --servername VIM'
 # alias vim='vim --servername VIM'
 alias vs='vim -r'
-alias vi='vim -u NONE'
+# alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
 alias c='pygmentize -O style=monokai -f console256 -g'
-alias ls=' ls -G --color -X'
+# alias ls=' ls -G -X'
 alias less='less -IMx4 -X -R'
+alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 alias NOTE=mail_alart 

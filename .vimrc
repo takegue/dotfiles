@@ -258,7 +258,8 @@ if v:version > 704 || v:version == 704 && has("patch786")
 endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎ "
+set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
+  
 set fillchars=vert:\|
 
 set t_vb=
@@ -294,7 +295,7 @@ set ttimeoutlen=1000
 if has('unnamedplus') && !(has("win32") || has("win64") || has("mac"))
   set clipboard=unnamedplus,autoselect
 elseif has('mac')
-  set clipboard=autoselectplus,exclude:cons\|linux
+  set clipboard=autoselect,exclude:cons\|linux
 else
   set clipboard=unnamed
 endif
@@ -412,7 +413,9 @@ endfunction
 
 function! OpenFolderOfCurrentFile() abort
   if has('unix') && s:executable('xdg-open')
-    call system('xdg-open '. expand('%:p:h:s? ?\\ ?'))
+    call system('xdg-open '. expand('%:p:h:gs? ?\\ ?'))
+  elseif has('mac') && s:executable('open')
+    call system('open '. expand('%:p:h:gs? ?\\ ?'))
   endif
 endfunction
 
@@ -690,9 +693,9 @@ endfunction
 
 function! s:ChangeCurrentDir(directory, bang)
   if a:directory == ''
-    lcd %:p:h
+    execute 'lcd ' . expand('%:p:h:gs? ?\\ ?g')
   else
-    execute 'lcd' . a:directory
+    execute 'lcd ' . a:directory
   endif
   if a:bang == ''
     pwd
@@ -3597,7 +3600,7 @@ if neobundle#tap('vim-fugitive')
     if !exists('b:git_dir')
       return
     endif
-    execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
+    execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h:gs? ?\\ ?')
     nnoremap <buffer> [git] <Nop>
     nmap <buffer> <Leader>g [git]
     nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
