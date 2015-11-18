@@ -89,7 +89,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
-  NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
+  " NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
   NeoBundle 'Lokaltog/vim-easymotion'
   NeoBundle 'majutsushi/tagbar'
@@ -291,8 +291,10 @@ set updatetime=1000         " Automatically reload change files on disk
 set ttimeout
 set ttimeoutlen=1000
 
-if has('unnamedplus') && !(has("win32") || has("win64"))
+if has('unnamedplus') && !(has("win32") || has("win64") || has("mac"))
   set clipboard=unnamedplus,autoselect
+elseif has('mac')
+  set clipboard=autoselectplus,exclude:cons\|linux
 else
   set clipboard=unnamed
 endif
@@ -956,17 +958,17 @@ if neobundle#tap('lightline.vim')
     if !exists('*pyenv#info#format')
       return ''
     endif
-    if &ft =~ 'python'
-      let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
-      let val = s:lightline_hit('pyenv', key)
-      if val == ''
-        let val = pyenv#info#format('%av')
-        call s:lightline_cache('pyenv', key, val)
-      endif
-      return val
-    else
-      return ''
-    endif
+    " if &ft =~ 'python'
+    "   let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
+    "   let val = s:lightline_hit('pyenv', key)
+    "   if val == ''
+    "     let val = pyenv#info#format('%av')
+    "     call s:lightline_cache('pyenv', key, val)
+    "   endif
+    "   return val
+    " else
+    "   return ''
+    " endif
   endfunction "}}}
   function! MyFugitive() "{{{
     let statusline = fugitive#head(7)
@@ -1213,6 +1215,7 @@ if neobundle#tap('neocomplete.vim')
       smap <C-k>     <Plug>(neosnippet_expand_or_jump)
       xmap <C-k>     <Plug>(neosnippet_expand_target)
       xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
+
       " SuperTab like snippets behavior.
       imap <expr><CR>  neosnippet#expandable() ? 
             \ "\<Plug>(neosnippet_expand)" : 
@@ -1266,26 +1269,27 @@ if neobundle#tap('neocomplete.vim')
         \ 'vimshell' : $HOME.'/.vimshell_hist',
         \ 'scheme' : $HOME.'/.gosh_completions'
         \ }
+  
 
   let g:neocomplete#enable_multibyte_completion = 1
 
   " " make Vim call omni function when below patterns matchs
-  " let g:neocomplete#sources#omni#functions = {}
+  let g:neocomplete#sources#omni#functions = {}
 
   let g:neocomplete#force_omni_input_patterns = {}
   let g:neocomplete#force_omni_input_patterns.python = 
         \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
-  let g:neocomplete#sources#omni#input_patterns = {}
-  let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-  let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-  let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  " let g:neocomplete#sources#omni#input_patterns = {}
+  " let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+  " let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+  " let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+  " let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-  " if !exists('g:neocomplete#keyword_patterns')
-  "   let g:neocomplete#keyword_patterns = {}
-  " endif
-  " let g:neocomplete#keyword_patterns._ = '\h\w*'
+ if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+  endif
+  let g:neocomplete#keyword_patterns._ = '\h\w*'
   "
 
   "}}}
@@ -2259,6 +2263,7 @@ if neobundle#tap('vim-pyenv')
   call neobundle#config({
         \   'lazy' : 1,
         \   'disabled'    : !has('python'),
+        \   'external_commands'    : ['pyenv'],
         \   'autoload' : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
         \     'unite_sources' : [
@@ -2272,8 +2277,8 @@ if neobundle#tap('vim-pyenv')
   endfunction "}}}
 
   " Setting {{{
-  let g:pyenv#auto_create_ctags = 0
-  let g:pyenv#auto_assign_ctags  = 1
+    let g:pyenv#auto_create_ctags = 0
+    let g:pyenv#auto_assign_ctags  = 1
   "}}}
 
   call neobundle#untap()
@@ -2792,6 +2797,13 @@ if neobundle#tap('unite.vim')
         \ }) "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    call unite#custom#profile('default', 'context', {
+          \   'start_insert': 1,
+          \   'prompt': '» ',
+          \ })
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
@@ -2829,13 +2841,6 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
     nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
 
-  endfunction "}}}
-
-  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
-    call unite#custom#profile('default', 'context', {
-          \   'start_insert': 1,
-          \   'prompt': '» ',
-          \ })
   endfunction "}}}
 
   " Setting {{{
@@ -3300,27 +3305,28 @@ if neobundle#tap('vim-session')
         \ })
   "}}}
 
+
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+    if isdirectory(s:local_session_directory)
+      " session保存ディレクトリをそのディレクトリの設定
+      let g:session_directory = s:local_session_directory
+      " vimを辞める時に自動保存
+      let g:session_autosave = 'yes'
+      " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+      let g:session_autoload = 'yes'
+      " 1分間に1回自動保存
+      let g:session_autosave_periodic = 1
+    else
+      let g:session_autosave = 'no'
+      let g:session_autoload = 'no'
+    endif
+    unlet s:local_session_directory
+
   endfunction "}}}
 
   " Setting {{{
   " 現在のディレクトリ直下の .vimsessions/ を取得 
-  let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
-  if isdirectory(s:local_session_directory)
-    " session保存ディレクトリをそのディレクトリの設定
-    let g:session_directory = s:local_session_directory
-    " vimを辞める時に自動保存
-    let g:session_autosave = 'yes'
-    " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
-    let g:session_autoload = 'yes'
-    " 1分間に1回自動保存
-    let g:session_autosave_periodic = 1
-  else
-    let g:session_autosave = 'no'
-    let g:session_autoload = 'no'
-  endif
-  unlet s:local_session_directory
-
   command! MkDirSession call s:mk_dirsession()
   function! s:mk_dirsession()    "session用のディレクトリ作成関数
     let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')

@@ -1,8 +1,7 @@
 #!/usr/bin/env sh
 #新しい環境に取り込んだ時のインストール
 
-path=`dirname $0`
-DIR=`readlink -f $path` 
+DIR=$(cd `dirname $0`; pwd)
 
 # if [ -e /usr/bin/zsh ]; then
 # 	chsh /usr/bin/zsh
