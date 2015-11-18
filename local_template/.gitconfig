@@ -1,0 +1,9 @@
+[user]
+    name = "USER"
+    email = "tkngue@example.com"
+[github]
+    user = "USER"
+    token = "adsf"
+
+; vim:ft=gitconfig 
+
