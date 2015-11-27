@@ -5,22 +5,19 @@ export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH
 
 MAILTO='tkngue@example.com'
 
-
-PROXY="http://proxy.nagaokaut.ac.jp:8080"
-
-export http_proxy=$PROXY
-export https_proxy=$PROXY
-export ftp_proxy=$PROXY
-export HTTP_PROXY=$PROXY
-export HTTPS_PROXY=$PROXY
-export FTP_PROXY=$PROXY
-
-# export http_proxy=''
-# export https_proxy=''
-# export ftp_proxy=''
-# export HTTP_PROXY=''
-# export HTTPS_PROXY=''
-# export FTP_PROXY=''
+if [ -x `which networksetup` ] && [ `networksetup -getwebproxy Wi-Fi | grep "^Enabled:" | grep -o "\S\+$"` = "Yes" ]; then
+    PROXY=http://`networksetup -getwebproxy Wi-Fi | grep "^Server:.\+$Port" | grep -o "\S\+$"`:`networksetup -getwebproxy Wi-Fi | grep "^Port" | grep -o "\S\+$"`
+    export http_proxy=$PROXY
+    export https_proxy=$PROXY
+    export ftp_proxy=$PROXY
+    echo "SET PROXY TO \"${PROXY}\" "
+else
+    PROXY=""
+    export http_proxy=$PROXY
+    export https_proxy=$PROXY
+    export ftp_proxy=$PROXY
+    echo "SET PROXY TO NO PROXY "
+fi 
 
 if [[ -n $TMUX ]]; then
     export PYENV_ROOT=$HOME/.pyenv
