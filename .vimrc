@@ -412,10 +412,11 @@ function! ToggleWindowSize()
 endfunction
 
 function! OpenFolderOfCurrentFile() abort
+  let path = shellescape(expand('%:p:h')))
   if has('unix') && s:executable('xdg-open')
-    call system('xdg-open '. expand('%:p:h:gs? ?\\ ?'))
+    call system( 'xdg-open '. path)
   elseif has('mac') && s:executable('open')
-    call system('open '. expand('%:p:h:gs? ?\\ ?'))
+    call system('open '. path)
   endif
 endfunction
 
@@ -651,7 +652,7 @@ command! Todo call s:Todo() " Todoコマンド
 function! s:Todo() "{{{
   let l:path  =  '~/.todo'
   if filereadable(expand('~/Dropbox/.todo'))
-    let l:path = expand('~/Dropbox/.todo')
+    let l:path = shellescape(expand('~/Dropbox/.todo'))
   endif
   if bufwinnr(l:path) < 0
     execute 'silent bo 60vs +set\ nonumber ' . l:path
@@ -693,7 +694,7 @@ endfunction
 
 function! s:ChangeCurrentDir(directory, bang)
   if a:directory == ''
-    execute 'lcd ' . expand('%:p:h:gs? ?\\ ?g')
+    execute 'lcd ' . shellescape(expand('%:p:h'))
   else
     execute 'lcd ' . a:directory
   endif
