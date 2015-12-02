@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [[ ! -e `which hg` ]]; then
-    echo 'not found mercurial'
+if [[ ! -e `which git` ]]; then
+    echo 'not found git'
     exit 1;
 fi 
 

@@ -1,8 +1,7 @@
 #!/usr/bin/env sh
 #新しい環境に取り込んだ時のインストール
 
-path=`dirname $0`
-DIR=`readlink -f $path` 
+DIR=$(cd `dirname $0`; pwd)
 
 # if [ -e /usr/bin/zsh ]; then
 # 	chsh /usr/bin/zsh
@@ -41,6 +40,28 @@ for dotfile in $DIR/.* ; do
     echo "$dotfile => $dstpath" 
     ln -s $dotfile ~/ 
 done
+
+for dotfile in $DIR/local_template/.* ; do
+    file_name="${dotfile##*/}" 
+    if [ $file_name = ${DIR}/local_template/.git ]; then
+        continue
+    fi
+    if [ $file_name = '.' ]; then
+        continue
+    fi
+    if [ $file_name = '..' ]; then
+        continue
+    fi
+
+    dstpath="$HOME/.local$file_name"
+    if ! [ -L $dstpath ]; then
+        echo "Already exists: ${dstpath}"
+    else
+        echo "$dotfile => $dstpath" 
+        ln -s -T $dotfile $dstpath
+    fi 
+done
+ 
 
 git submodule init
 git submodule update
