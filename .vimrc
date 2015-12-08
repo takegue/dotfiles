@@ -412,7 +412,7 @@ function! ToggleWindowSize()
 endfunction
 
 function! OpenFolderOfCurrentFile() abort
-  let path = shellescape(expand('%:p:h')))
+  let l:path = shellescape(expand('%:p:h'))
   if has('unix') && s:executable('xdg-open')
     call system( 'xdg-open '. path)
   elseif has('mac') && s:executable('open')
@@ -676,8 +676,7 @@ function! PluginTest(is_gui, extraCommand)
 endfunction
 "
 augroup edit_memo
-  autocmd!
-  autocmd BufNewFile,BufRead *.todo
+  autocmd! BufNewFile,BufRead *.todo
         \ set nonumber norelativenumber filetype=markdown
   autocmd BufNewFile,BufRead *.memo
         \ set nonumber norelativenumber filetype=markdown
@@ -1175,7 +1174,7 @@ if neobundle#tap('neocomplete.vim')
         \ })
   " }}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     " Plugin key-mappings.
     inoremap <expr><C-g>     neocomplete#undo_completion()
     inoremap <expr><C-l>     neocomplete#complete_common_string()
@@ -1238,12 +1237,8 @@ if neobundle#tap('neocomplete.vim')
             \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
             \ pumvisible() ? "\<C-n>" : "\<TAB>"
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-
     endif
     "}}}
-    "
-    " call neocomplete#custom#source('look', 'kind', 'keyword')
-    " call neocomplete#custom#source('look', 'rank', 101)
   endfunction "}}}
 
   " Setting {{{
@@ -1968,6 +1963,7 @@ endif
 if neobundle#tap('vim-rails')
   " Config {{{
   call neobundle#config({
+        \   'lazy' : 1,
         \   'autoload' : {
         \     'unite_sources' : [
         \       'help',
