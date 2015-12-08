@@ -243,10 +243,11 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-which htop 2>/dev/null 1&>2
+which htop 2>/dev/null 1>&2
 if [ $? -eq 0 ]; then
     alias top='htop'
 fi
+
 
 function sshcd()
 {

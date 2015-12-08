@@ -54,14 +54,13 @@ for dotfile in $DIR/local_template/.* ; do
     fi
 
     dstpath="$HOME/.local$file_name"
-    if ! [ -L $dstpath ]; then
+    if [ -e $dstpath ]; then
         echo "Already exists: ${dstpath}"
     else
         echo "$dotfile => $dstpath" 
-        ln -s -T $dotfile $dstpath
+        cp $dotfile $dstpath
     fi 
 done
  
-
 git submodule init
 git submodule update

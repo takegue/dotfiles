@@ -489,10 +489,11 @@ function! ToggleWindowSize()
 endfunction
 
 function! OpenFolderOfCurrentFile() abort
+  let l:path = shellescape(expand('%:p:h'))
   if has('unix') && s:executable('xdg-open')
-    call system('xdg-open '. expand('%:p:h:gs? ?\\ ?'))
+    call system( 'xdg-open '. path)
   elseif has('mac') && s:executable('open')
-    call system('open '. expand('%:p:h:gs? ?\\ ?'))
+    call system('open '. path)
   endif
 endfunction
 
@@ -728,7 +729,7 @@ command! Todo call s:Todo() " Todoコマンド
 function! s:Todo() "{{{
   let l:path  =  '~/.todo'
   if filereadable(expand('~/Dropbox/.todo'))
-    let l:path = expand('~/Dropbox/.todo')
+    let l:path = shellescape(expand('~/Dropbox/.todo'))
   endif
   if bufwinnr(l:path) < 0
     execute 'silent bo 60vs +set\ nonumber ' . l:path
@@ -752,8 +753,7 @@ function! PluginTest(is_gui, extraCommand)
 endfunction
 "
 augroup edit_memo
-  autocmd!
-  autocmd BufNewFile,BufRead *.todo
+  autocmd! BufNewFile,BufRead *.todo
         \ set nonumber norelativenumber filetype=markdown
   autocmd BufNewFile,BufRead *.memo
         \ set nonumber norelativenumber filetype=markdown
@@ -770,7 +770,7 @@ endfunction
 
 function! s:ChangeCurrentDir(directory, bang)
   if a:directory == ''
-    execute 'lcd ' . expand('%:p:h:gs? ?\\ ?g')
+    execute 'lcd ' . shellescape(expand('%:p:h'))
   else
     execute 'lcd ' . a:directory
   endif
@@ -1251,7 +1251,7 @@ if neobundle#tap('neocomplete.vim')
         \ })
   " }}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     " Plugin key-mappings.
     inoremap <expr><C-g>     neocomplete#undo_completion()
     inoremap <expr><C-l>     neocomplete#complete_common_string()
@@ -1314,12 +1314,8 @@ if neobundle#tap('neocomplete.vim')
             \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
             \ pumvisible() ? "\<C-n>" : "\<TAB>"
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-
     endif
     "}}}
-    "
-    " call neocomplete#custom#source('look', 'kind', 'keyword')
-    " call neocomplete#custom#source('look', 'rank', 101)
   endfunction "}}}
 
   " Setting {{{
@@ -1901,7 +1897,7 @@ if neobundle#tap('vim-quickrun')
         \},
         \   "watchdogs_checker/_" : {
         \      "hook/close_quickfix/enable_exit" : 1,
-        \      "runner/vimproc/updatetime" : 1000,
+        \      "runner/vimproc/updatetime" : 100,
         \}}
   let g:quickrun_config.sql ={
         \ 'command' : 'mysql',
@@ -2044,6 +2040,7 @@ endif
 if neobundle#tap('vim-rails')
   " Config {{{
   call neobundle#config({
+        \   'lazy' : 1,
         \   'autoload' : {
         \     'unite_sources' : [
         \       'help',
