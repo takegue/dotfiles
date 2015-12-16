@@ -17,6 +17,7 @@ cd $DIST_VIM
 
 
 ./configure \
+    --prefix=$HOME/.local
     --enable-multibyte \
     --enable-xim \
     --enable-fontset \
@@ -28,5 +29,5 @@ cd $DIST_VIM
     --enable-pythoninterp=yes \
     --enable-python3interp=yes \
 
-make && sudo make install
+make && make install
 

@@ -48,10 +48,87 @@ call neobundle#begin(g:bundle_root)
 function! s:loads_bundles() abort "{{{
   NeoBundleFetch 'Shougo/neobundle.vim'                    " Manage neobundle.vim itself
 
-  " For author/plugin-name sort
-  " :!sort -k2fd
-  " For plugin-name/author sort
-  " :!sort -k2fd -t/
+  " NeoBundle 'welle/targets.vim'
+  NeoBundle 'xolox/vim-session'
+  NeoBundle 'vim-scripts/css_color.vim'
+  NeoBundle 'vim-scripts/Zenburn'
+  NeoBundle 'vim-scripts/Wombat'
+  NeoBundle 'vim-scripts/Lucius'
+  NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
+  NeoBundle 'vim-scripts/Align'
+  NeoBundle 'vim-ruby/vim-ruby'
+  NeoBundle 'vim-jp/vital.vim'
+  NeoBundle 'vim-jp/vimdoc-ja'                             " Add Help in Japanese
+  NeoBundle 'ujihisa/unite-colorscheme'
+  NeoBundle 'ujihisa/neco-look'
+  NeoBundle 'uguu-org/vim-matrix-screensaver'
+  NeoBundle 'tsukkee/unite-tag'
+  NeoBundle 'tsukkee/unite-help'
+  NeoBundle 'tsukkee/lingr-vim'
+  NeoBundle 'tpope/vim-unimpaired'                         " バッファ移動用等
+  NeoBundle 'tpope/vim-surround'                           " surround記号編集オペレータ
+  NeoBundle 'tpope/vim-repeat'
+  NeoBundle 'tpope/vim-fugitive'
+  NeoBundle 'tpope/vim-commentary'                         " コメント切り替えオペレータ
+  NeoBundle 'tomasr/molokai'
+  NeoBundle 'tmhedberg/SimpylFold'
+  NeoBundle 'thinca/vim-textobj-comment'                   " コメントオブジェクト   #ac, ic×
+  NeoBundle 'thinca/vim-template'
+  NeoBundle 'thinca/vim-ref'                               " referecen viwer for vim
+  NeoBundle 'thinca/vim-quickrun'
+  NeoBundle 'tejr/vim-tmux'
+  NeoBundle 'tacroe/unite-mark'
+  NeoBundle 'sjl/badwolf'
+  NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
+  NeoBundle 'rhysd/vim-grammarous'
+  NeoBundle 'rcmdnk/vim-markdown'
+  NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
+  NeoBundle 'othree/html5.vim'
+  " NeoBundle 'osyo-manga/vim-over'
+  NeoBundle 'osyo-manga/unite-fold'
+  NeoBundle 'nathanaelkane/vim-indent-guides'
+  NeoBundle 'nanotech/jellybeans.vim'
+  NeoBundle 'mrkn/mrkn256.vim'
+  NeoBundle 'moznion/github-commit-comment.vim'
+  NeoBundle 'mattn/vim-textobj-url'                        " URLオブジェクト        #au, iu
+  NeoBundle 'mattn/unite-advent_calendar'
+  NeoBundle 'mattn/learn-vimscript'                        " help for vim script
+  NeoBundle 'mattn/ginger-vim'
+  NeoBundle 'mattn/emmet-vim'
+  NeoBundle 'matchit.zip'
+  NeoBundle 'majutsushi/tagbar'
+  NeoBundle 'lambdalisue/vim-gista'
+  NeoBundle 'koron/codic-vim'
+  " NeoBundle 'klen/python-mode'                            " python plugin for vim
+  NeoBundle 'kannokanno/previm'
+  NeoBundle 'kana/vim-textobj-user'
+  NeoBundle 'kana/vim-textobj-function'
+  NeoBundle 'kana/vim-textobj-fold'                        " az, iz
+  NeoBundle 'kana/vim-textobj-entire'                      " 全体選択オブジェクト   #ae, ai
+  NeoBundle 'kana/vim-textobj-datetime'                    " 日付選択オブジェクト   #ada, add, adt
+  NeoBundle 'kana/vim-smartchr'
+  NeoBundle 'kana/vim-operator-user'
+  NeoBundle 'kana/vim-operator-replace'
+  NeoBundle 'jpo/vim-railscasts-theme'
+  NeoBundle 'ivanov/vim-ipython'
+  NeoBundle 'itchyny/lightline.vim'
+  NeoBundle 'itchyny/calendar.vim'
+  NeoBundle 'honza/vim-snippets'
+  NeoBundle 'haya14busa/vim-migemo'                        " Vim Plugin for C/Migemo
+  NeoBundle 'haya14busa/incsearch.vim'
+  NeoBundle 'hail2u/vim-css3-syntax'
+  NeoBundle 'fuenor/im_control.vim'                        " im / ime control plugin for vim
+  NeoBundle 'emonkak/vim-operator-sort'
+  NeoBundle 'elzr/vim-json'
+  NeoBundle 'deton/jasegment.vim'
+  NeoBundle 'deris/vim-visualinc'
+  " NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
+  NeoBundle 'cohama/agit.vim'
+  NeoBundle 'clones/vim-zsh'
+  NeoBundle 'christoomey/vim-tmux-navigator'
+  NeoBundle 'bps/vim-textobj-python'
+  NeoBundle 'benmills/vimux'
+  NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'alfredodeza/pytest.vim'
   NeoBundle 'AndrewRadev/switch.vim'
   NeoBundle 'basyura/unite-rails'                          " a unite.vim plugin for rails
@@ -1817,7 +1894,7 @@ if neobundle#tap('vim-quickrun')
         \},
         \   "watchdogs_checker/_" : {
         \      "hook/close_quickfix/enable_exit" : 1,
-        \      "runner/vimproc/updatetime" : 1000,
+        \      "runner/vimproc/updatetime" : 100,
         \}}
   let g:quickrun_config.sql ={
         \ 'command' : 'mysql',

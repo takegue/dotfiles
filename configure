@@ -9,6 +9,7 @@ DIR=$(cd `dirname $0`; pwd)
 
 if [ ! -e `which git` ]; then
     echo 'not found git'
+    
 fi 
 
 if [ ! -e `which vim` ]; then

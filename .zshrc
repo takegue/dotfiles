@@ -243,6 +243,12 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
+which htop 2>/dev/null 1>&2
+if [ $? -eq 0 ]; then
+    alias top='htop'
+fi
+
+
 function sshcd()
 {
     ssh $1 -t "cd `pwd`; zsh"
@@ -302,6 +308,8 @@ ls_abbrev() {
 }
 
 #### Export Configurations #### e
+export PATH=/usr/local/bin:$PATH
+export LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib:$LD_LIBRARY_PATH
 export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -e "$HOME/Dropbox" ]; then
