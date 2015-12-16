@@ -89,7 +89,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
-  " NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
+  NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
   NeoBundle 'Lokaltog/vim-easymotion'
   NeoBundle 'majutsushi/tagbar'
@@ -143,7 +143,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'TKNGUE/sum-it.vim'
   " NeoBundle 'vim-latex/vim-latex'
   NeoBundle 'lervag/vimtex'
-  NeoBundle 'TKNGUE/vim-reveal'
+  "NeoBundle 'TKNGUE/vim-reveal'
   NeoBundle 'tmhedberg/SimpylFold'
   NeoBundle 'tomasr/molokai'
   NeoBundle 'tpope/vim-commentary'                         " コメント切り替えオペレータ
@@ -165,7 +165,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-ruby/vim-ruby'
   NeoBundle 'vim-scripts/Align'
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
-  NeoBundle 'vim-scripts/css_color.vim'
+  " NeoBundle 'vim-scripts/css_color.vim'
   NeoBundle 'xolox/vim-session'
   NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
@@ -650,9 +650,9 @@ endfunction "}}}
 " TODOコマンド
 command! Todo call s:Todo() " Todoコマンド
 function! s:Todo() "{{{
-  let l:path  =  '~/.todo'
-  if filereadable(expand('~/Dropbox/.todo'))
-    let l:path = shellescape(expand('~/Dropbox/.todo'))
+  let l:path  =  "~/.todo"
+  if filereadable(expand("~/Dropbox/.todo"))
+    let l:path = expand("~/Dropbox/.todo")
   endif
   if bufwinnr(l:path) < 0
     execute 'silent bo 60vs +set\ nonumber ' . l:path
@@ -958,20 +958,17 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MyPyenv() "{{{
-    if !exists('*pyenv#info#format')
+    if &ft =~ 'python'
+      let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
+      let val = s:lightline_hit('pyenv', key)
+      if val == ''
+        let val = pyenv#info#format('%av')
+        call s:lightline_cache('pyenv', key, val)
+      endif
+      return val
+    else
       return ''
     endif
-    " if &ft =~ 'python'
-    "   let key = exists('b:git_dir') ? b:git_dir : expand('%:p')
-    "   let val = s:lightline_hit('pyenv', key)
-    "   if val == ''
-    "     let val = pyenv#info#format('%av')
-    "     call s:lightline_cache('pyenv', key, val)
-    "   endif
-    "   return val
-    " else
-    "   return ''
-    " endif
   endfunction "}}}
   function! MyFugitive() "{{{
     let statusline = fugitive#head(7)
@@ -2624,7 +2621,14 @@ endif
 if neobundle#tap('vim-markdown')
   " Config {{{
   call neobundle#config( {
-        \ 'depends' : ['godlygeek/tabular', 'joker1007/vim-markdown-quote-syntax']
+        \  'lazy' : 1,
+        \  'autoload' : {
+        \     'filetypes': ['markdown'],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   },
+        \  'depends' : ['godlygeek/tabular', 'joker1007/vim-markdown-quote-syntax']
         \})
   "}}}
 
@@ -2632,10 +2636,10 @@ if neobundle#tap('vim-markdown')
   endfunction "}}}
 
   " Setting {{{
-  let g:vim_markdown_math=1
-  let g:vim_markdown_frontmatter = 1
+  let g:vim_markdown_math=0
+  let g:vim_markdown_frontmatter = 0
   let g:vim_markdown_no_default_key_mappings = 0
-  let g:vim_markdown_better_folding=1
+  let g:vim_markdown_better_folding=0
 
   let g:vim_markdown_initial_foldlevel=2
   let g:vim_markdown_folding_disabled=1
@@ -2650,7 +2654,7 @@ endif
 if neobundle#tap('hateblo.vim')
   " Config {{{
   call neobundle#config({
-        \ 'lazy'  : 1,
+        \ 'lazy'  : 0,
         \ 'autoload'  : {
         \   'commands' : ['HatebloCreate', 'HatebloList', 'HatebloCreateDraft'],
         \ },
@@ -4137,7 +4141,7 @@ if neobundle#tap('vim-precious')
         \     "setfiletype" : 1
         \   },
         \   "markdown" : {
-        \     "setfiletype" : 1
+        \     "setfiletype" : 0
         \   },
         \}
 

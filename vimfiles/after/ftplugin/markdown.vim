@@ -1,5 +1,5 @@
-set nowrap
-set norelativenumber nonumber
+setl nowrap
+setl norelativenumber nonumber
 
 augroup markdown_augrope
     autocmd!
