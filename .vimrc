@@ -166,7 +166,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-scripts/Align'
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   " NeoBundle 'vim-scripts/css_color.vim'
-  NeoBundle 'xolox/vim-session'
+  " NeoBundle 'xolox/vim-session'
   NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
   NeoBundle 'stephpy/vim-yaml'                             " Override vim syntax for yaml files
@@ -626,9 +626,7 @@ augroup END
 " 一時ファイルコマンド
 
 " Open junk file:{{{
-command! -nargs=? -complete=filetype Tmp call s:open_junk_file('<args>')
-command! -nargs=? -complete=filetype Temp call s:open_junk_file('<args>')
-command! -nargs=0 -complete=filetype Memo call s:open_junk_file('memo')
+command! -nargs=? -complete=filetype Memo call s:open_junk_file('<args>')
 " command! Memo call s:Memo() " Memoコマンド
 function! s:open_junk_file(type)
   " execute "%d a"
@@ -646,6 +644,7 @@ function! s:open_junk_file(type)
     " execute 'put a'
   endif
 endfunction "}}}
+
 
 " TODOコマンド
 command! Todo call s:Todo() " Todoコマンド
@@ -2716,6 +2715,7 @@ if neobundle#tap('vim-instant-markdown')
         \   },
         \ "build"       : {
         \   "unix"      : "npm -g install instant-markdown-d",
+        \   "mac"       : "npm -g install instant-markdown-d",
         \}})
   " }}}
 
@@ -3008,9 +3008,6 @@ endif
 " Shougo/unite-outline {{{
 if neobundle#tap('unite-outline')
   " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
   "}}}
 
   " Setting {{{
@@ -3024,9 +3021,6 @@ endif
 " tsukkee/unite-tag {{{
 if neobundle#tap('unite-tag')
   " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
@@ -3034,7 +3028,6 @@ if neobundle#tap('unite-tag')
           \   if empty(&buftype)
     " \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
           \|  endif
-    call neobundle#untap()
   endfunction "}}}
 
   " Setting {{{
@@ -3044,23 +3037,6 @@ if neobundle#tap('unite-tag')
 endif
 " }}} "
 
-" ujihisa/unite-colorscheme {{{
-if neobundle#tap('unite-colorscheme')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
 
 " Shougo/neomru.vim {{{
 if neobundle#tap('neomru.vim')
@@ -3090,9 +3066,6 @@ endif
 " tsukkee/unite-help {{{
 if neobundle#tap('unite-help')
   " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
   "}}}
 
   call neobundle#untap()
@@ -3120,9 +3093,6 @@ endif
 " mattn/unite-advent_calendar {{{
 if neobundle#tap('unite-advent_calendar')
   " Config {{{
-  call neobundle#config( {
-        \ "depends": ['Shougo/unite.vim','tyru/open-browser.vim', 'mattn/webapi-vim'],
-        \})
   "}}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
@@ -3209,7 +3179,7 @@ if neobundle#tap('vim-template')
   endfunction "}}}
 
   " Setting {{{
-
+  let g:template_basedir = '~/.vim'
   autocmd User plugin-template-loaded call s:template_keywords()
   autocmd User plugin-template-loaded 
         \    if search('<+CURSOR+>')
@@ -3224,7 +3194,23 @@ if neobundle#tap('vim-template')
     " And more...
   endfunction
 
-  "}}}
+  command! -nargs=0 -complete=filetype Temp call s:open_template()
+  function! s:open_template()
+      let l:template_name = template#search(expand('%:p'))
+      if l:template_name == ''
+        let l:template_name = g:template_basedir. '/template/template.'. &ft
+      endif
+      let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
+      if l:filename != ''
+        let l:template_dir= fnamemodify(l:filename, ":p:h")
+        if !isdirectory(l:template_dir)
+            call mkdir(l:template_dir, 'p')
+        endif
+        execute 'edit ' . l:filename
+      endif
+  endfunction
+    "}}}
+
 
   call neobundle#untap()
 endif
