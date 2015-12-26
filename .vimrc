@@ -2,6 +2,7 @@
 " URL: https://github.com/TKNGUE/dotfiles
 " Description:
 "   This is TKNGUE's vimrc
+"
 
 " Startup {{{ =======================
 " NOTE: Skip initialization for tiny or small.
@@ -85,7 +86,7 @@ function! s:loads_bundles() abort "{{{
   " NeoBundle 'kannokanno/previm'
   NeoBundle 'KazuakiM/vim-qfstatusline'
   NeoBundle 'KazuakiM/vim-regexper'
-  " NeoBundle 'klen/python-mode'                             " python plugin for vim
+  NeoBundle 'klen/python-mode'                             " python plugin for vim
   NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
@@ -113,7 +114,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'osyo-manga/vim-watchdogs'
   NeoBundle 'othree/html5.vim'
   NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
-  NeoBundle 'rcmdnk/vim-markdown'                          " Markdown Vim Mode
+  " NeoBundle 'rcmdnk/vim-markdown'                          " Markdown Vim Mode
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'suan/vim-instant-markdown'                    " Instant Markdown previews from VIm!
@@ -176,7 +177,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
   NeoBundle 'kana/vim-submode'                             " Vim plugin: Create your own submodes
   " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
-  " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
+  NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
   NeoBundle 'vimperator/vimperator-labs', {
@@ -292,12 +293,10 @@ set updatetime=1000         " Automatically reload change files on disk
 set ttimeout
 set ttimeoutlen=1000
 
-if has('unnamedplus') && !(has("win32") || has("win64") || has("mac"))
+if has('unnamedplus')
   set clipboard=unnamedplus,autoselect
-elseif has('mac')
-  set clipboard=autoselect,exclude:cons\|linux
 else
-  set clipboard=unnamed
+  set clipboard=unnamed,autoselect,exclude:cons\|linux
 endif
 
 
@@ -1268,7 +1267,7 @@ if neobundle#tap('neocomplete.vim')
 
   let g:neocomplete#enable_multibyte_completion = 1
 
-  " " make Vim call omni function when below patterns matchs
+  " make Vim call omni function when below patterns matchs
   let g:neocomplete#sources#omni#functions = {}
 
   let g:neocomplete#force_omni_input_patterns = {}
@@ -1281,12 +1280,9 @@ if neobundle#tap('neocomplete.vim')
   " let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   " let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
- if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
-  let g:neocomplete#keyword_patterns._ = '\h\w*'
-  "
-
+  " if !exists('g:neocomplete#keyword_patterns')
+  "   let g:neocomplete#keyword_patterns = {}
+  " endif
   "}}}
 
   call neobundle#untap()
@@ -1839,7 +1835,7 @@ if neobundle#tap('vim-quickrun')
         \}
   let g:quickrun_config.markdown  = {
         \ 'type' : 'markdown/pandoc',
-        \ 'cmdopt': '-v -s -mathjax',
+        \ 'cmdopt': '-v -s -mathjax -f markdown -t html',
         \ 'outputter' : 'browser'
         \ }
   let g:quickrun_config.html  = {
@@ -2565,7 +2561,18 @@ if neobundle#tap('vimtex')
   let g:latex_fold_automatic = 1
   let g:latex_fold_envs = 1
 
-  let g:vimtex_latexmk_options = '--pdfps'
+  " let g:vimtex_latexmk_options = '--pdfdvi'
+
+  if has('unix') && s:executable('okular')
+    let g:vimtex_view_general_viewer = 'okular'
+    let g:vimtex_view_general_options = '--unique @pdf\#src:@line@tex'
+    let g:vimtex_view_general_options_latexmk = '--unique'
+  elseif has('mac')
+    let g:vimtex_view_general_viewer
+        \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+    let g:vimtex_view_general_options = '@line @pdf @tex'
+  endif
+  
 
   " 自動コンパイル
   let g:latex_latexmk_continuous = 1
@@ -2653,7 +2660,7 @@ endif
 if neobundle#tap('hateblo.vim')
   " Config {{{
   call neobundle#config({
-        \ 'lazy'  : 0,
+        \ 'lazy'  : 1,
         \ 'autoload'  : {
         \   'commands' : ['HatebloCreate', 'HatebloList', 'HatebloCreateDraft'],
         \ },
@@ -3183,7 +3190,7 @@ if neobundle#tap('vim-template')
   autocmd User plugin-template-loaded call s:template_keywords()
   autocmd User plugin-template-loaded 
         \    if search('<+CURSOR+>')
-        \  |   execute 'normal! "_da>'
+        \  |   normal! dae
         \  | endif
 
   function! s:template_keywords()
@@ -3195,6 +3202,7 @@ if neobundle#tap('vim-template')
   endfunction
 
   command! -nargs=0 -complete=filetype Temp call s:open_template()
+  nmap <Space>/ :<C-u>call <SID>open_template()<CR>
   function! s:open_template()
       let l:template_name = template#search(expand('%:p'))
       if l:template_name == ''
@@ -4127,7 +4135,7 @@ if neobundle#tap('vim-precious')
         \     "setfiletype" : 1
         \   },
         \   "markdown" : {
-        \     "setfiletype" : 0
+        \     "setfiletype" : 1
         \   },
         \}
 

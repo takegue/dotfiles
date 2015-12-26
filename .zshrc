@@ -137,11 +137,8 @@ case "${TERM}" in
     kterm*|xterm*)
         preexec() {
             TMP_COMMAND=$1
-            mycmd=(${(s: :)${1}})
-            echo -ne "\033]0;${USER}@${HOST%%.*}:$mycmd[1]\007"
         }
         precmd() {
-            echo -ne "\033]0;${USER}@${HOST%%.*}\007"
         }
         ;;
 esac
@@ -327,4 +324,26 @@ export PATH=\$HOME/.local/bin:\$PATH
 export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOS
 fi
+
+path=(
+    /usr/local/bin
+    /bin
+    /usr/bin
+    /usr/X11/bin
+    /usr/bin/X11
+    /usr/local/X11/bin
+    /usr/local/games
+    /usr/games
+    /usr/lib/nagios/plugins
+    "$fpath[@]"
+    "$path[@]"
+    "$PATH[@]"
+)
+
+typeset -gU path
+typeset -gU LD_LIBRARY_PATH
+export PYTHONSTARTUP
+
+export PATH LD_LIBRARY_PATH
+
 

@@ -1,0 +1,14 @@
+snippet     cron_every_15m
+abbr        cron_base
+options     head
+        ${1:min} ${2:hrs} ${3:day-of-month} ${4:month} ${5:weekday} ${6:COMMAND}
+
+snippet     cron_every_15m
+abbr        cron15m
+options     head
+        */15 * * * * ${1:COMMAND}
+
+snippet     cron_every_week
+abbr        cron7d
+options     head
+        * * * * */7 ${1:COMMAND}
