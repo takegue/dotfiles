@@ -2219,8 +2219,8 @@ if neobundle#tap('jedi-vim')
 
   "quickrunと被るため大文字に変更
   " let g:jedi#rename_command = 'R'
-  " let g:jedi#goto_assignments_command = 'gf'
-  " let g:jedi#goto_definitions_command = 'gd'
+  let g:jedi#goto_assignments_command = 'gf'
+  let g:jedi#goto_definitions_command = 'gd'
   " let g:jedi#use_tabs_not_buffers = 1
   " let g:jedi#completions_enabled = 1
   "
@@ -2867,7 +2867,7 @@ if neobundle#tap('unite.vim')
     " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
     nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
-    nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:%<CR>
+    nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:$buffers<CR>
     nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
     nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
     nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers::<C-R><C-W><CR>

@@ -30,6 +30,12 @@ chpwd() {
   ls_abbrev
 }
 
+if ! [[ -d ~/.zsh ]]; then
+    mkdir ~/.zsh
+fi
+
+
+
 # ### Complement ###
 autoload -U compinit; compinit # 補完機能を有効にする
 setopt auto_list               # 補完候補を一覧で表示する(d)
@@ -132,19 +138,10 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
     PROMPT="($tmp_la_prompt)$tmp_rprompt 
-    %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
+%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;
 
 ### Title (user@hostname) ###
-case "${TERM}" in
-    kterm*|xterm*)
-        preexec() {
-            TMP_COMMAND=$1
-        }
-        precmd() {
-        }
-        ;;
-esac
 
 # ------------------------------
 # Other Settings
@@ -173,9 +170,11 @@ for code in {0..255}; do
     echo -e "\e[38;05;${code}m $code: Test"
 done
 }
+
 function body(){
     tail -n +$1 | head -$((M-N+1)); 
 }
+
 function head_tail(){
     contents=`cat -`
     {
@@ -193,7 +192,7 @@ function mail_alart(){
             out=$1
         else
             out=/dev/tty
-        fi
+        fi &&
         tee -a $out | head_tail 10 10 | sed '1iCOMMAND:\n\t'${TMP_COMMAND}'\n\nCONTENTS:'  | nkf -w \
             | mail -s 'Complete Running Command' $EMAIL
     else
@@ -203,17 +202,6 @@ function mail_alart(){
 }
 
 today(){ echo `date +%Y%m%d` } 
-
-if ! [[ -d ~/.zsh ]]; then
-    mkdir ~/.zsh
-fi
-if [[ -d ~/.zsh/zsh-completions ]]; then
-    fpath=(~/.zsh/zsh-completions/src $fpath)
-else
-    git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
-    fpath=(~/.zsh/zsh-completions/src $fpath)
-    rm -f ~/.zcompdump; compinit
-fi
 
 
 ### Aliases ###
@@ -307,6 +295,126 @@ ls_abbrev() {
     fi
 }
 
+# only do this if we're in an interactive shell
+# [[ -o interactive ]] || return
+
+# get $EPOCHSECONDS. builtins are faster than date(1)
+zmodload zsh/datetime || return
+
+ # make sure we can register hooks
+autoload -Uz add-zsh-hook || return
+
+(( ${+zbell_duration} )) || zbell_duration=60
+(( ${+zbell_duration_email} )) || zbell_duration_email=300
+
+# initialize zbell_ignore if not set
+(( ${+zbell_ignore} )) || zbell_ignore=($EDITOR $PAGER ls watch htop top ssh iotop dstat vmstat nano ipython emacs vim vim bwm-ng less more fdisk audacious play aplay sqlite3 wine mtr ping traceroute vlc mplayer smplayer tail tmux screen man sawfish-config powertop g)
+
+# initialize it because otherwise we compare a date and an empty string
+# the first time we see the prompt. it's fine to have lastcmd empty on the
+# initial run because it evaluates to an empty string, and splitting an
+# empty string just results in an empty array.
+zbell_timestamp=$EPOCHSECONDS
+
+# right before we begin to execute something, store the time it started at
+zbell_begin() {
+    zbell_timestamp=$EPOCHSECONDS
+    export zbell_lastcmd=$1
+}
+
+zbell_noise() {
+    # play -q /home/wonko/Seafile/Phone/media/audio/notifications/Bazinga.mp3 &|
+    echo "\a" &|
+}
+
+zbell_email() {
+    echo "$zbell_lastcmd"
+    mail -s 'Complete Running Command' $EMAIL <<EOS 
+Hi! I notify that below long process have been finished.
+It is completed with exit status ${zbell_exit_status}
+
+LOG
+------------
+"${zbell_lastcmd}"
+staerted: ${zbell_timestamp}
+end: ${zbell_last_timestamp}
+
+Love,
+
+Zbell
+
+EOS
+}
+
+# when it finishes, if it's been running longer than $zbell_duration,
+# and we dont have an ignored command in the line, then print a bell.
+zbell_end() {
+    zbell_exit_status=$?
+    ran_long=$(( $EPOCHSECONDS - $zbell_timestamp >= $zbell_duration ))
+
+    local has_ignored_cmd=0
+    local zbell_lastcmd_tmp
+    zbell_lastcmd_tmp="$zbell_lastcmd"
+    zbell_lastcmd_tmp=$(echo zbell_lastcmd_tmp | sed s/"^sudo "//)
+
+    if [[ $zbell_last_timestamp == $zbell_timestamp ]]; then
+        return
+    fi
+
+    if [[ $zbell_lastcmd_tmp == "" ]]; then
+        return;
+    fi
+
+    zbell_last_timestamp=$zbell_timestamp
+
+    for cmd in ${(s:;:)zbell_lastcmd_tmp//|/;}; do
+        words=(${(z)cmd})
+        util=${words[1]}
+        if (( ${zbell_ignore[(i)$util]} <= ${#zbell_ignore} )); then
+            has_ignored_cmd=1
+            break
+        fi
+    done
+
+    if (( ! $has_ignored_cmd )) && (( ran_long )); then
+        local zbell_cmd_duration
+        zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+        if [[ $zbell_cmd_duration -gt $zbell_duration_email ]]; then
+            zbell_email
+        else
+            zbell_noise
+        fi
+        # notify-send "Job completed on $HOST:" "$zbell_lastcmd"
+    fi
+}
+
+case "${TERM}" in
+    kterm*|xterm*)
+        preexec() {
+            zbell_begin
+        }
+        precmd() {
+            zbell_end
+        }
+        ;;
+esac
+ 
+
+fpath=( $HOME/.zsh/functions $fpath[@] ) 
+if [[ -d ~/.zsh/zsh-completions ]]; then
+    fpath=(~/.zsh/zsh-completions/src $fpath[@])
+else
+    git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
+    fpath=(~/.zsh/zsh-completions/src $fpath[@])
+    rm -f ~/.zcompdump; compinit
+fi
+
+# for paths in "$fpath[@]"; do
+#     autoload -Uz "$paths"/*(N:t) >/dev/null
+# done
+# unset paths
+
+
 #### Export Configurations #### e
 export PATH=/usr/local/bin:$PATH
 export LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib:$LD_LIBRARY_PATH
@@ -328,25 +436,9 @@ export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
 EOF
 fi
 
-# path=(
-#     /usr/local/bin
-#     /bin
-#     /usr/bin
-#     /usr/X11/bin
-#     /usr/bin/X11
-#     /usr/local/X11/bin
-#     /usr/local/games
-#     /usr/games
-#     /usr/lib/nagios/plugins
-#     "$fpath[@]"
-#     "$path[@]"
-#     "$PATH[@]"
-# )
+typeset -gU path
+typeset -gU LD_LIBRARY_PATH
 
-# typeset -gU path
-# typeset -gU LD_LIBRARY_PATH
 export PYTHONSTARTUP
 
 export PATH LD_LIBRARY_PATH
-
-
