@@ -114,6 +114,7 @@ tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
 tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
 tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
 
+tmp_la_prompt="L:\$(sysctl vm.loadavg | cut -f3 -d' ')"
 # rootユーザ時(太字にし、アンダーバーをつける)
 if [ ${UID} -eq 0 ]; then
     tmp_prompt="%B%U${tmp_prompt}%u%b"
@@ -122,9 +123,10 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-PROMPT=$tmp_prompt    # 通常のプロンプト
+PROMPT="($tmp_la_prompt)$tmp_rprompt 
+$tmp_prompt"    # 通常のプロンプト
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-RPROMPT=$tmp_rprompt  # 右側のプロンプト
+RPROMPT=  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # SSHログイン時のプロンプト
