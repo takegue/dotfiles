@@ -1,6 +1,8 @@
 # code snippet, to be included in 'sitecustomize.py'
 import sys
 
+sys.setdefaultencoding('utf-8')
+
 def info(type, value, tb):
    if hasattr(sys, 'ps1') or not sys.stderr.isatty():
       # we are in interactive mode or we don't have a tty-like

@@ -321,29 +321,29 @@ fi
 if [ -f "$HOME/.local.zshrc" ]; then
     source $HOME/.local.zshrc
 else
-    cat <<EOS > $HOME/.local.zshrc
+    cat > $HOME/.local.zshrc <<EOF 
 export PATH=\$HOME/.local/bin:\$PATH
 export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
-EOS
+EOF
 fi
 
-path=(
-    /usr/local/bin
-    /bin
-    /usr/bin
-    /usr/X11/bin
-    /usr/bin/X11
-    /usr/local/X11/bin
-    /usr/local/games
-    /usr/games
-    /usr/lib/nagios/plugins
-    "$fpath[@]"
-    "$path[@]"
-    "$PATH[@]"
-)
+# path=(
+#     /usr/local/bin
+#     /bin
+#     /usr/bin
+#     /usr/X11/bin
+#     /usr/bin/X11
+#     /usr/local/X11/bin
+#     /usr/local/games
+#     /usr/games
+#     /usr/lib/nagios/plugins
+#     "$fpath[@]"
+#     "$path[@]"
+#     "$PATH[@]"
+# )
 
-typeset -gU path
-typeset -gU LD_LIBRARY_PATH
+# typeset -gU path
+# typeset -gU LD_LIBRARY_PATH
 export PYTHONSTARTUP
 
 export PATH LD_LIBRARY_PATH

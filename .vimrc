@@ -103,7 +103,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'mattn/vim-textobj-url'                        " URLオブジェクト        #au, iu
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'mbbill/undotree'                              " The ultimate undo history visualizer for VIM
-  NeoBundle 'moznion/github-commit-comment.vim'
+  " NeoBundle 'moznion/github-commit-comment.vim'
   NeoBundle 'mrkn/mrkn256.vim'
   NeoBundle 'nanotech/jellybeans.vim'
   NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -172,12 +172,12 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
   NeoBundle 'stephpy/vim-yaml'                             " Override vim syntax for yaml files
   NeoBundle 'hsanson/vim-android'                          " Android development plugin for vim
-  NeoBundle 'rhysd/github-complete.vim'                    " Vim input completion for GitHub
-  NeoBundle 'thinca/vim-github'                            " An interface for Github.
+  " NeoBundle 'rhysd/github-complete.vim'                    " Vim input completion for GitHub
+  " NeoBundle 'thinca/vim-github'                            " An interface for Github.
   NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
   NeoBundle 'kana/vim-submode'                             " Vim plugin: Create your own submodes
   " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
-  NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
+  " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
   NeoBundle 'vimperator/vimperator-labs', {
@@ -296,7 +296,7 @@ set ttimeoutlen=1000
 if has('unnamedplus')
   set clipboard=unnamedplus,autoselect
 else
-  set clipboard=unnamed,autoselect,exclude:cons\|linux
+  set clipboard=unnamed,exclude:cons\|linux
 endif
 
 
@@ -493,8 +493,10 @@ function! s:toggle_line_number()
   if exists('+relativenumber')
     if (v:version >= 704)
       " Toggle between relative with absolute on cursor line and no numbers.
-      let [&l:relativenumber, &l:number] =
-            \ (&l:relativenumber || &l:number) ? [0, 0] : [1, 1]
+      let l:mapping = [[[0,1],[1,0]],[[1,1],[0,0]]]
+      " let [&l:relativenumber, &l:number] =
+      "       \ (&l:relativenumber || &l:number) ? [0, 0] : [1, 1]
+      let [&l:relativenumber, &l:number] = l:mapping[&l:relativenumber][&l:number]
     else
       " Rotate absolute => relative => no numbers.
       execute 'setlocal' (&l:number == &l:relativenumber) ?
@@ -932,7 +934,7 @@ if neobundle#tap('lightline.vim')
 
   let s:_lightline = {}
   let s:_lightline_counter = 0
-  let g:lightline_update = 5
+  let g:lightline_update = 20
   function! s:lightline_cache(name, key, val) abort "{{{
     if !has_key(s:_lightline, a:name)
       let s:_lightline[a:name] = {a:key : a:val}
@@ -969,30 +971,20 @@ if neobundle#tap('lightline.vim')
     endif
   endfunction "}}}
   function! MyFugitive() "{{{
-    let statusline = fugitive#head(7)
+    let statusline = ''
+    " return statusline != '' ? '⭠ '. statusline : ''
+    if &ft !~? 'help\|vimfiler\|gundo' && exists('b:git_dir')
+      let fname = expand('%')
+      if fname == ''
+          return ''
+      endif
+      let statusline = s:lightline_hit('fugitive', fname)
+      if statusline == ''
+        let statusline = fugitive#head()
+        call s:lightline_cache('fugitive', fname, statusline)
+      endif  
+    endif 
     return statusline != '' ? '⭠ '. statusline : ''
-    " if &ft !~? 'help\|vimfiler\|gundo' && exists('b:git_dir')
-    "   let s:_lightline_counter += 1
-    "   let statusline = ''
-    "   if s:_lightline_counter % g:lightline_update == 0
-    "     let s:_lightline_counter = 0
-    "     let statusline = fugitive#head(7)
-    "     call s:lightline_cache('fugitive', 'previous', statusline)
-    "   else
-    "     let statusline = s:lightline_hit('fugitive', 'previous') 
-    "     if statusline == ''
-    "       let statusline = fugitive#head(7)
-    "       call s:lightline_cache('fugitive', 'previous', statusline)
-    "     endif
-    "   endif
-    "   if statusline != ''
-    "     return 
-    "   else
-    "     return ''
-    "   endif
-    " else 
-    "   return ''
-    " endif 
   endfunction "}}}
 
   function! MyFileformat()
@@ -1263,7 +1255,7 @@ if neobundle#tap('neocomplete.vim')
         \ 'vimshell' : $HOME.'/.vimshell_hist',
         \ 'scheme' : $HOME.'/.gosh_completions'
         \ }
-  
+
 
   let g:neocomplete#enable_multibyte_completion = 1
 
@@ -1541,13 +1533,13 @@ if neobundle#tap('switch.vim')
       autocmd FileType gitrebase let b:switch_custom_definitions = [
             \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
             \]
-      autocmd FileType python let b:switch_custom_definitions =
+      autocmd FileType python let g:switch_custom_definitions =
             \[
             \   ['and', 'or'],
             \   {
             \     '\(.\+\) if \(.\+\) else \(.\+\)' : { 
             \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' : 
-            \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \4'
+            \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \5'
             \      }
             \   },
             \]
@@ -1805,7 +1797,7 @@ if neobundle#tap('vim-quickrun')
         \   "hook/qfstatusline_update/enable_exit" : 1,
         \   "hook/qfstatusline_update/priority_exit" : 4,
         \   "runner"                   : 'vimproc',
-        \   "runner/vimproc/read_timeout" : 10,
+        \   "runner/vimproc/read_timeout" : 100,
         \   "runner/vimproc/sleep"      : 100,
         \   "runner/vimproc/updatetime" : 100,
         \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
@@ -2269,8 +2261,8 @@ if neobundle#tap('vim-pyenv')
   endfunction "}}}
 
   " Setting {{{
-    let g:pyenv#auto_create_ctags = 0
-    let g:pyenv#auto_assign_ctags  = 1
+  let g:pyenv#auto_create_ctags = 0
+  let g:pyenv#auto_assign_ctags  = 1
   "}}}
 
   call neobundle#untap()
@@ -2569,10 +2561,10 @@ if neobundle#tap('vimtex')
     let g:vimtex_view_general_options_latexmk = '--unique'
   elseif has('mac')
     let g:vimtex_view_general_viewer
-        \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+          \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
     let g:vimtex_view_general_options = '@line @pdf @tex'
   endif
-  
+
 
   " 自動コンパイル
   let g:latex_latexmk_continuous = 1
@@ -3204,20 +3196,20 @@ if neobundle#tap('vim-template')
   command! -nargs=0 -complete=filetype Temp call s:open_template()
   nmap <Space>/ :<C-u>call <SID>open_template()<CR>
   function! s:open_template()
-      let l:template_name = template#search(expand('%:p'))
-      if l:template_name == ''
-        let l:template_name = g:template_basedir. '/template/template.'. &ft
+    let l:template_name = template#search(expand('%:p'))
+    if l:template_name == ''
+      let l:template_name = g:template_basedir. '/template/template.'. &ft
+    endif
+    let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
+    if l:filename != ''
+      let l:template_dir= fnamemodify(l:filename, ":p:h")
+      if !isdirectory(l:template_dir)
+        call mkdir(l:template_dir, 'p')
       endif
-      let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
-      if l:filename != ''
-        let l:template_dir= fnamemodify(l:filename, ":p:h")
-        if !isdirectory(l:template_dir)
-            call mkdir(l:template_dir, 'p')
-        endif
-        execute 'edit ' . l:filename
-      endif
+      execute 'edit ' . l:filename
+    endif
   endfunction
-    "}}}
+  "}}}
 
 
   call neobundle#untap()
@@ -4335,7 +4327,7 @@ if neobundle#tap('InstantRst')
   endfunction "}}}
 
   " Setting {{{
-  
+
   "}}}
 
   call neobundle#untap()
