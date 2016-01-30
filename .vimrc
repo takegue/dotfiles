@@ -2,7 +2,7 @@
 " URL: https://github.com/TKNGUE/dotfiles
 " Description:
 "   This is TKNGUE's vimrc
-"
+scriptencoding utf-8
 
 " Startup {{{ =======================
 " NOTE: Skip initialization for tiny or small.
@@ -11,14 +11,14 @@ if !&compatible | set nocompatible | endif      " Disable vi compatible
 
 " Echo startup time on start:{{{
 if has('vim_starting') && has('reltime')
-  " Shell: vim --startuptime filename -q; vim filename
-  " vim --cmd 'profile start profile.txt' --cmd 'profile file $HOME/.vimrc' +q && vim profile.txt
-  let g:startuptime = reltime()
-  augroup VimStart
-    autocmd!
-    autocmd VimEnter * let g:startuptime = reltime(g:startuptime) | redraw
-          \ | echomsg 'startuptime:' . reltimestr(g:startuptime) 
-  augroup END
+" Shell: vim --startuptime filename -q; vim filename
+" vim --cmd 'profile start profile.txt' --cmd 'profile file $HOME/.vimrc' +q && vim profile.txt
+let g:startuptime = reltime()
+augroup VimStart
+autocmd!
+autocmd VimEnter * let g:startuptime = reltime(g:startuptime) | redraw
+\ | echomsg 'startuptime:' . reltimestr(g:startuptime) 
+augroup END
 endif
 " }}}
 
@@ -120,6 +120,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'suan/vim-instant-markdown'                    " Instant Markdown previews from VIm!
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
   NeoBundle 'Shougo/neocomplete.vim'
+  NeoBundle 'Shougo/deoplete.nvim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/neosnippet-snippets'
   NeoBundle 'Shougo/neosnippet.vim'
@@ -205,7 +206,7 @@ NeoBundleCheck
 " Basic Settings: {{{
 
 " Encodings: {{{
-set encoding=utf8
+" set encoding=utf8
 set termencoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,cp932,euc-jp "A list of character encodings
@@ -2759,6 +2760,37 @@ if neobundle#tap('previm')
   call neobundle#untap()
 endif
 " }}} "
+"
+" Rykka/InstantRst {{{
+if neobundle#tap('InstantRst')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'autoload' : {
+        \   "filetypes": ["rst"],
+        \     'unite_sources' : [
+        \       'help',
+        \     ],
+        \   }
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+    " let g:instant_rst_browser = 'xdg-open'
+    " let g:instant_rst_localhost_only = 0
+    " let g:instant_rst_bind_scroll  = 1
+  endfunction "}}}
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  let g:instant_rst_localhost_only  = 1
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
 "}}}
 
 
@@ -4303,36 +4335,6 @@ if neobundle#tap('vim-submode')
 endif
 " }}}"
 
-" Rykka/InstantRst {{{
-if neobundle#tap('InstantRst')
-  " Config {{{
-  call neobundle#config({
-        \   'lazy' : 1,
-        \   'autoload' : {
-        \   "filetypes": ["rst"],
-        \     'unite_sources' : [
-        \       'help',
-        \     ],
-        \   }
-        \ })
-  " }}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    " let g:instant_rst_browser = 'xdg-open'
-    " let g:instant_rst_localhost_only = 0
-    " let g:instant_rst_bind_scroll  = 1
-  endfunction "}}}
-
-  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}}
 " PLUGIN_SETTING_ENDPOINT
 filetype plugin indent on
 "}}}

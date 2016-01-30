@@ -131,7 +131,8 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-    PROMPT="%{${fg[yellow]}%}${HOST%%.*} ${PROMPT}"
+    PROMPT="($tmp_la_prompt)$tmp_rprompt 
+    %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;
 
 ### Title (user@hostname) ###
