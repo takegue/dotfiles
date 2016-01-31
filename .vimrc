@@ -17,7 +17,7 @@ let g:startuptime = reltime()
 augroup VimStart
 autocmd!
 autocmd VimEnter * let g:startuptime = reltime(g:startuptime) | redraw
-\ | echomsg 'startuptime:' . reltimestr(g:startuptime) 
+\ | echomsg 'startuptime:' . reltimestr(g:startuptime)
 augroup END
 endif
 " }}}
@@ -30,7 +30,7 @@ let g:neobundle_root = g:bundle_root . '/neobundle.vim'
 
 if !isdirectory(g:neobundle_root)
   echon 'Installing neobundle.vim...'
-  if !isdirectory(g:bundle_root) 
+  if !isdirectory(g:bundle_root)
     silent call mkdir(g:bundle_root, 'p')
   endif
   execute "silent !git clone https://github.com/Shougo/neobundle.vim ". g:neobundle_root
@@ -90,7 +90,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
   NeoBundle 'koron/codic-vim'
   NeoBundle 'lambdalisue/vim-gista'
-  NeoBundle 'lambdalisue/vim-pyenv'                        " Activate the versions and the virtualenvs of pyenv within a live VIM session
+  NeoBundle 'lambdalisue/vim-pyenv'                      " Activate the versions and the virtualenvs of pyenv within a live VIM session
   NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
   NeoBundle 'Lokaltog/vim-easymotion'
   NeoBundle 'majutsushi/tagbar'
@@ -103,7 +103,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'mattn/vim-textobj-url'                        " URLオブジェクト        #au, iu
   NeoBundle 'mattn/webapi-vim'
   NeoBundle 'mbbill/undotree'                              " The ultimate undo history visualizer for VIM
-  " NeoBundle 'moznion/github-commit-comment.vim'
+  NeoBundle 'moznion/github-commit-comment.vim'
   NeoBundle 'mrkn/mrkn256.vim'
   NeoBundle 'nanotech/jellybeans.vim'
   NeoBundle 'nathanaelkane/vim-indent-guides'
@@ -156,17 +156,17 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'tpope/vim-surround'                           " surround記号編集オペレータ
   NeoBundle 'tpope/vim-unimpaired'                         " バッファ移動用等
   NeoBundle 'tsukkee/lingr-vim'
-  NeoBundle 'tsukkee/unite-help'
+  NeoBundle 'Shougo/unite-help'
   NeoBundle 'tsukkee/unite-tag'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
-  NeoBundle 'uguu-org/vim-matrix-screensaver'
+  " NeoBundle 'uguu-org/vim-matrix-screensaver'
   NeoBundle 'ujihisa/neco-look'
   NeoBundle 'ujihisa/unite-colorscheme'
   NeoBundle 'vim-jp/vimdoc-ja'                             " Add Help in Japanese
   NeoBundle 'vim-jp/vital.vim'
   NeoBundle 'vim-ruby/vim-ruby'
   NeoBundle 'vim-scripts/Align'
-  NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
+  " NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   " NeoBundle 'vim-scripts/css_color.vim'
   " NeoBundle 'xolox/vim-session'
   NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
@@ -181,10 +181,10 @@ function! s:loads_bundles() abort "{{{
   " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
   " NeoBundle 'osyo-manga/vim-over'
   " NeoBundle 'welle/targets.vim'
-  NeoBundle 'vimperator/vimperator-labs', {
-        \   'name': 'vimperator-syntax',
-        \   'rtp':  'vimperator/contrib/vim/'
-        \ }
+  " NeoBundle 'vimperator/vimperator-labs', {
+  "       \   'name': 'vimperator-syntax',
+  "       \   'rtp':  'vimperator/contrib/vim/'
+  "       \ }
   NeoBundle 'Rykka/InstantRst'
   NeoBundle 'Rykka/riv.vim'
   "BUNDLE_ENDPOINT
@@ -256,14 +256,15 @@ if v:version > 703 || v:version == 703 && has("patch541")
 endif
 
 if v:version > 704 || v:version == 704 && has("patch786")
-  set nofixeol                    " Allow to make no-eol files. 
+  set nofixeol                    " Allow to make no-eol files.
 endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
-  
+
 set fillchars=vert:\|
 
+set belloff=error
 set t_vb=
 set novisualbell
 
@@ -291,22 +292,26 @@ set history=10000           " ヒストリ機能を10000件まで有効にする
 set autoread                " Automatically reload change files on disk
 set updatetime=1000         " Automatically reload change files on disk
 
-set ttimeout
-set ttimeoutlen=1000
+if !has('nvim')
+    set ttimeout
+    set ttimeoutlen=2000
+endif
 
 if has('unnamedplus')
   set clipboard=unnamedplus,autoselect
 else
-  set clipboard=unnamed,exclude:cons\|linux
+  if !has('nvim')
+    set clipboard=unnamedplus,autoselect
+  else
+    " set clipboard=unnamed,autoselect,exclude
+  endif
 endif
 
-
 if has("persistent_undo")
-  set undodir='~/.vim/.undodir'
+  set undodir=~/.vim/.undodir
   set undofile
   set undolevels=1000
 endif
-
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
@@ -317,7 +322,6 @@ set nowritebackup
 set nobackup
 set noswapfile
 
-" }}}
 "}}}
 
 " Mappings: {{{
@@ -485,8 +489,8 @@ nnoremap <silent> [toggle]v  :<c-u>
       \:  set completeopt+=preview <CR>
       \:endif<CR> :setl completeopt?<CR>
 
-nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR> 
-      \: setl colorcolumn=0<CR> 
+nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR>
+      \: setl colorcolumn=0<CR>
       \: else<CR> : setl colorcolumn=80<CR> : endif<CR>
 
 " }}}
@@ -534,26 +538,26 @@ endfunction
 " }}}
 
 " Fold: {{{
-noremap [fold] <nop>
-nmap <Space> [fold]
-vmap <Space> [fold]
+" noremap [fold] <nop>
+" nmap <Space> [fold]
+" vmap <Space> [fold]
 
-noremap [fold]j zj
-noremap [fold]k zk
-noremap [fold]n ]z
-noremap [fold]p [z
-noremap [fold]l zo
-noremap [fold]L zO
-noremap [fold]a za
-noremap [fold]m zM
-noremap [fold]i zMzvzz
-noremap [fold]r zR
-noremap [fold]f zf
-noremap [fold]d zd
+" noremap [fold]j zj
+" noremap [fold]k zk
+" noremap [fold]n ]z
+" noremap [fold]p [z
+" noremap [fold]l zo
+" noremap [fold]L zO
+" noremap [fold]a za
+" noremap [fold]m zM
+" noremap [fold]i zMzvzz
+" noremap [fold]r zR
+" noremap [fold]f zf
+" noremap [fold]d zd
 
-nnoremap <expr>l  foldclosed('.') != -1 ? 'zo' : 'l'
+" nnoremap <expr>l  foldclosed('.') != -1 ? 'zo' : 'l'
 
-nnoremap  [fold][     :<C-u>call <SID>put_foldmarker(0)<CR>
+" nnoremap  [fold][     :<C-u>call <SID>put_foldmarker(0)<CR>
 "}}}
 
 " Abbreviations: {{{
@@ -581,7 +585,7 @@ function! s:additional_highlight() "{{{
     highlight Normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
-  " highlight CursorLine cterm=bold ctermbg=darkcyan gui=bold 
+  " highlight CursorLine cterm=bold ctermbg=darkcyan gui=bold
 endfunction "}}}
 "}}}
 
@@ -616,13 +620,21 @@ endif
 "}}}
 
 " Misc: {{{
+" Cached executable "{{{
+let s:_executable = {}
+function! s:executable(expr) "{{{
+  let s:_executable[a:expr] = has_key(s:_executable, a:expr) ?
+        \ s:_executable[a:expr] : executable(a:expr)
+  return s:_executable[a:expr]
+endfunction "}}}
+
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
 
 augroup my_diff_autocmd
   autocmd!
   autocmd  InsertLeave *
-        \ if &diff | diffupdate | echo 'diffupdated' | endif
+        \ if &diff | diffupdate | echo 'diff updated' | endif
 augroup END
 
 " 一時ファイルコマンド
@@ -669,9 +681,9 @@ function! PluginTest(is_gui, extraCommand)
   let cmd = a:is_gui ? 'gvim' : 'vim'
   let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * ' . a:extraCommand . '"'
   if !exists('b:git_dir')
-    let l:additional_path = fnamemodify(b:git_dir, ':p:h:h')
+    let l:additional_path = fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
   else
-    let l:additional_path = getcwd()
+    let l:additional_path = fnamemodify(getcwd(), ':p:h:h:s? ?\\ ?')
   endif
   execute '!' . cmd . ' -u ~/.min.vimrc -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
 endfunction
@@ -725,20 +737,20 @@ augroup MyAutoCmd " {{{
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
   autocmd WinLeave * set nocursorline norelativenumber
   autocmd WinEnter * if &number | set cursorline relativenumber | endif
-  autocmd BufRead .vimrc setlocal path+=$HOME/.vim/bundle
   " autocmd BufReadPost * call s:SwitchToActualFile()
   autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')
 augroup END " }}}
 
-augroup office_format "{{{
-  autocmd!
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set modifiable
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %d
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %read !tika --text %:p
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set readonly
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  normal gg
-augroup END "}}}
-
+if s:executable('tika')
+  augroup office_format "{{{
+    autocmd!
+    autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set modifiable
+    autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %d
+    autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  silent %read !tika --text %:p
+    autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  set readonly
+    autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}  normal gg
+  augroup END "}}}
+endif
 
 function! s:SwitchToActualFile() "{{{
   let l:fname = resolve(expand('%:p'))
@@ -750,7 +762,7 @@ function! s:SwitchToActualFile() "{{{
   call setpos('.', pos)
 endfunction "}}}
 
-command! FollowSymlink  call s:SwitchToActualFile() 
+command! FollowSymlink  call s:SwitchToActualFile()
 
 function! s:RestoreCursorPostion() "{{{
   let ignore_filetypes = ['gitcommit']
@@ -776,26 +788,18 @@ augroup END "}}}
 augroup vimrc_change_cursorline_color "{{{
   autocmd!
   " インサートモードに入った時にカーソル行の色をブルーグリーンにする
-  " autocmd InsertEnter * highlight CursorLine ctermbg=23 guibg=yellow
-  " autocmd InsertEnter * highlight CursorColumn ctermbg=24 guibg=#005f87
+  autocmd InsertEnter * highlight CursorLine ctermbg=23 guibg=yellow
+  autocmd InsertEnter * highlight CursorColumn ctermbg=24 guibg=#005f87
   " インサートモードを抜けた時にカーソル行の色を黒に近いダークグレーにする
-  " autocmd InsertLeave * highlight CursorLine ctermbg=236 guibg=#303030
-  " autocmd InsertLeave * highlight CursorColumn ctermbg=236 guibg=#303030
+  autocmd InsertLeave * highlight CursorLine ctermbg=236 guibg=#303030
+  autocmd InsertLeave * highlight CursorColumn ctermbg=236 guibg=#303030
 augroup END "}}}
 
 augroup edit_vimrc "{{{
   autocmd!
-  autocmd BufReadPost .vimrc setlocal path+=$HOME/.vim
+  autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END "}}}
-
-" Cached executable "{{{
-let s:_executable = {}
-function! s:executable(expr) "{{{
-  let s:_executable[a:expr] = has_key(s:_executable, a:expr) ?
-        \ s:_executable[a:expr] : executable(a:expr)  
-  return s:_executable[a:expr]
-endfunction "}}}
 
 augroup help_setting
   autocmd!
@@ -807,13 +811,15 @@ augroup END
 "}}}
 "}}}
 
+"}}}
+
 " Plugin Settings ============== {{{
 
 " Bundles Settings:{{{
 " Shougo/neobundle-vim-recipes'      {{{
 if neobundle#tap('neobundle-vim-recipes')
   " Config {{{
-  call neobundle#config({}) 
+  call neobundle#config({})
   " }}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
@@ -851,15 +857,15 @@ if neobundle#tap('vim-indent-guides')
   "}}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
-    hi IndentGuidesOdd  ctermbg=237  
-    hi IndentGuidesEven ctermbg=None 
+    hi IndentGuidesOdd  ctermbg=237
+    hi IndentGuidesEven ctermbg=None
   endfunction "}}}
 
   " Setting {{{
   let g:indent_guides_enable_on_vim_startup = 1
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_start_level = 2
-  let g:indent_guides_guide_size = 1 
+  let g:indent_guides_guide_size = 1
   let g:indent_guides_default_mapping = 1
   "}}}
 
@@ -906,7 +912,7 @@ if neobundle#tap('lightline.vim')
   function! MyModified()
     return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
           \ '' : &modified ? '+' : &modifiable ? '' : '-'
-  endfunction 
+  endfunction
 
   function! MyReadonly()
     return &ft !~? 'help\|vimfiler\|gundo' && &readonly ?  '⭤' : ''
@@ -983,8 +989,8 @@ if neobundle#tap('lightline.vim')
       if statusline == ''
         let statusline = fugitive#head()
         call s:lightline_cache('fugitive', fname, statusline)
-      endif  
-    endif 
+      endif
+    endif
     return statusline != '' ? '⭠ '. statusline : ''
   endfunction "}}}
 
@@ -1000,13 +1006,13 @@ if neobundle#tap('lightline.vim')
   function! MyCount()
     if mode() =~ '[vV]\|CTRL-V\|'
       return sumit#count_selected_text()
-    else  
+    else
       return ''
     endif
-  endfunction  
+  endfunction
   function! MyMode()
-    return winwidth(0) > 60 ? lightline#mode() :lightline#mode()[00] 
-  endfunction  
+    return winwidth(0) > 60 ? lightline#mode() :lightline#mode()[00]
+  endfunction
   "}}}
 
   let g:lightline = {
@@ -1046,7 +1052,7 @@ if neobundle#tap('lightline.vim')
         \   'readonly': '&readonly'
         \ },
         \ 'separator': { 'left': '⮀', 'right': '⮂' },
-        \ 'subseparator': { 'left': '⮁', 'right': '⮃' }} 
+        \ 'subseparator': { 'left': '⮁', 'right': '⮃' }}
 
   " :WatchdogsRun後にlightline.vimを更新
   let g:Qfstatusline#UpdateCmd = function('lightline#update')
@@ -1149,14 +1155,14 @@ if neobundle#tap('ginger-vim')
 
   call neobundle#untap()
 endif
-" }}} " 
+" }}} "
 
 " Shougo/neocomplete.vim {{{
 if neobundle#tap('neocomplete.vim')
   " Config {{{
   call neobundle#config({
         \ 'lazy' : 1,
-        \ 'disabled' : !has('lua'),
+        \ 'disabled' : "!has('lua') || has('nvim')",
         \ 'vim_version' : '7.3.885',
         \ 'autoload' : { 'insert' : 1},
         \ })
@@ -1184,7 +1190,7 @@ if neobundle#tap('neocomplete.vim')
     function! s:check_back_space() "{{{
       let col = col('.') - 1
       return !col || getline('.')[col - 1]  =~ '\s'
-    endfunction "}}}   
+    endfunction "}}}
 
     " <C-h>, <BS>: close popup and delete backword char.
     if neobundle#is_installed('neosnippet.vim') "{{{
@@ -1208,8 +1214,8 @@ if neobundle#tap('neocomplete.vim')
       xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
 
       " SuperTab like snippets behavior.
-      imap <expr><CR>  neosnippet#expandable() ? 
-            \ "\<Plug>(neosnippet_expand)" : 
+      imap <expr><CR>  neosnippet#expandable() ?
+            \ "\<Plug>(neosnippet_expand)" :
             \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
 
       " <TAB>: completion.
@@ -1221,7 +1227,7 @@ if neobundle#tap('neocomplete.vim')
       smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
       " SuperTab like snippets behavior.
-      imap <expr><TAB> neosnippet#jumpable() ? 
+      imap <expr><TAB> neosnippet#jumpable() ?
             \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
             \ pumvisible() ? "\<C-n>" : "\<TAB>"
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
@@ -1239,7 +1245,9 @@ if neobundle#tap('neocomplete.vim')
         \ 'plaintex' : 1,
         \ 'gitcommit' : 1
         \}
-  let g:neocomplete#enable_at_startup = 1
+  if !has('nvim')
+    let g:neocomplete#enable_at_startup = 1
+  endif
   " Use smartcase.
   let g:neocomplete#enable_smart_case = 1
   " Set minimum syntax keyword length.
@@ -1264,7 +1272,7 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#sources#omni#functions = {}
 
   let g:neocomplete#force_omni_input_patterns = {}
-  let g:neocomplete#force_omni_input_patterns.python = 
+  let g:neocomplete#force_omni_input_patterns.python =
         \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
   " let g:neocomplete#sources#omni#input_patterns = {}
@@ -1286,7 +1294,7 @@ endif
 if neobundle#tap('neosnippet.vim')
   " Config {{{
   call neobundle#config({
-        \   'lazy'  : 1 , 
+        \   'lazy'  : 1 ,
         \   'autoload' : {
         \     'insert' : 1,
         \     'unite_sources' : [
@@ -1313,7 +1321,7 @@ if neobundle#tap('neosnippet.vim')
   " Enable snipMate compatibility feature.
   let g:neosnippet#enable_snipmate_compatibility = 1
   let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
-  let g:neosnippet#enable_preview = 0	 
+  let g:neosnippet#enable_preview = 0
 
   " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
   " inoremap <expr>() "()\<\`0\`><C-O>F)"
@@ -1336,7 +1344,7 @@ if neobundle#tap('neosnippet-snippets')
         \     'insert' : 1,
         \     'filetypes' : 'neosnippet',
         \     'unite_sources' : [
-        \           'snippet', 
+        \           'snippet',
         \           'neosnippet/user',
         \           'neosnippet/runtime'
         \       ],
@@ -1538,8 +1546,8 @@ if neobundle#tap('switch.vim')
             \[
             \   ['and', 'or'],
             \   {
-            \     '\(.\+\) if \(.\+\) else \(.\+\)' : { 
-            \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' : 
+            \     '\(.\+\) if \(.\+\) else \(.\+\)' : {
+            \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' :
             \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \5'
             \      }
             \   },
@@ -1557,7 +1565,7 @@ if neobundle#tap('switch.vim')
           \     '<='  : '>',
           \   },
           \   {
-          \     '\<[a-z0-9]\+_\k\+\>': { 
+          \     '\<[a-z0-9]\+_\k\+\>': {
           \       '_\(.\)': '\U\1',
           \       '\<\(.\)': '\U\1'
           \     },
@@ -1815,7 +1823,7 @@ if neobundle#tap('vim-quickrun')
   let g:quickrun_config['php.unit'] = {
         \ 'command': 'testrunner',
         \ 'cmdopt': 'phpunit'
-        \} 
+        \}
   let g:quickrun_config['python'] = {
         \ 'command': 'python',
         \}
@@ -1846,7 +1854,7 @@ if neobundle#tap('vim-quickrun')
     if !exists("g:mysql_config_usr")
       let g:mysql_config_user = input("user> ")
     endif
-    if !exists("g:mysql_config_host") 
+    if !exists("g:mysql_config_host")
       let g:mysql_config_host = input("host> ")
     endif
     if !exists("g:mysql_config_port")
@@ -1855,7 +1863,7 @@ if neobundle#tap('vim-quickrun')
     if !exists("g:mysql_config_pass")
       let g:mysql_config_pass = inputsecret("password> ")
     endif
-    if !exists("g:mysql_config_db") 
+    if !exists("g:mysql_config_db")
       let g:mysql_config_db = input("database> ")
     endif
 
@@ -1879,7 +1887,7 @@ if neobundle#tap('vim-quickrun')
       call add(optlist, g:mysql_config_otheropts)
     endif
     return join(optlist, ' ')
-  endfunction 
+  endfunction
 
   augroup QuickRunUnitTest
     autocmd!
@@ -1944,7 +1952,7 @@ endif
 "}}}
 
 " Ruby: {{{
-" tpope/vim-rails {{{  
+" tpope/vim-rails {{{
 if neobundle#tap('vim-rails')
   " Config {{{
   call neobundle#config({
@@ -2148,7 +2156,7 @@ if neobundle#tap('python-mode')
   " "よくわからない機能たち
   " " let g:pymode_rope_move_bind = '<C-c>rv'
   " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
-  " let g:pymode_lint_sort = ['E', 'C', 'I']  
+  " let g:pymode_lint_sort = ['E', 'C', 'I']
 
   let g:pymode_syntax_slow_sync = 0
   let g:pymode_syntax_all = 1
@@ -2233,7 +2241,7 @@ if neobundle#tap('jedi-vim')
   " if !exists('g:neocomplete#force_omni_input_patterns')
   "   let g:neocomplete#sources#omni#input_patterns.python = ''
   " endif
-  " let g:neocomplete#force_omni_input_patterns.python = 
+  " let g:neocomplete#force_omni_input_patterns.python =
   "       \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
   "}}}
 
@@ -2247,7 +2255,7 @@ if neobundle#tap('vim-pyenv')
   " Config {{{
   call neobundle#config({
         \   'lazy' : 1,
-        \   'disabled'    : !has('python'),
+        \   'disabled' : !has('python'),
         \   'external_commands'    : ['pyenv'],
         \   'autoload' : {
         \   "filetypes" : ["python", "python3", "djangohtml"],
@@ -2401,7 +2409,7 @@ if neobundle#tap('vim-json')
 
   call neobundle#untap()
 endif
-" }}} 
+" }}}
 
 "}}}
 
@@ -2454,7 +2462,7 @@ if neobundle#tap('vim-latex')
     ""<Ctrl + J>はパネルの移動と被るので番うのに変える
     imap <C-n> <Plug>IMAP_JumpForward
     nmap <C-n> <Plug>IMAP_JumpForward
-    vmap <C-n> <Plug>IMAP_DeleteAndJumpForward 
+    vmap <C-n> <Plug>IMAP_DeleteAndJumpForward
     " if !has('gui_running')
     "     set <m-i>=i
     "     set <m-b>=b
@@ -2498,8 +2506,8 @@ if neobundle#tap('vim-latex')
   "let g:Tex_ViewRule_pdf = 'mupdf'
   "let g:Tex_ViewRule_pdf = 'firefox -new-window'
   "let g:Tex_ViewRule_pdf = 'chromium --new-window'
-  let g:Tex_IgnoreLevel = 9 
-  let g:Tex_IgnoredWarnings = 
+  let g:Tex_IgnoreLevel = 9
+  let g:Tex_IgnoredWarnings =
         \"Underfull\n".
         \"Overfull\n".
         \"specifier changed to\n".
@@ -2513,7 +2521,7 @@ if neobundle#tap('vim-latex')
 
   call neobundle#untap()
 endif
-" }}} 
+" }}}
 
 " lervag/vimtex {{{
 if neobundle#tap('vimtex')
@@ -2685,7 +2693,7 @@ if neobundle#tap('vim-reveal')
   "
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    command! -buffer -nargs=0 RevealIt   call reveal#Md2Reveal() 
+    command! -buffer -nargs=0 RevealIt   call reveal#Md2Reveal()
     command! -buffer -nargs=0 RevealOpen call reveal#open(reveal#preview_file_path())
     command! -buffer -nargs=0 RevealEdit execute 'edit '.reveal#preview_file_path()
   endfunction "}}}
@@ -2814,7 +2822,7 @@ endif
 " }}}
 
 " Unite Settings: {{{
-" Shougo/unite:vim {{{
+" Shougo/unite.vim {{{
 if neobundle#tap('unite.vim')
   " Config {{{
   call neobundle#config({
@@ -2834,19 +2842,21 @@ if neobundle#tap('unite.vim')
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
   endfunction "}}}
 
+
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     call unite#custom#profile('default', 'context', {
           \   'start_insert': 1,
+          \   'direction': 'dynamicbottom',
           \   'prompt': '» ',
           \ })
     nnoremap [unite]    <Nop>
-    nmap    <Leader>f  [unite]
+    nmap    <Space>  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer  file file_mru 
+          \ bookmark buffer file file_mru
           \ file/new directory/new <CR>
-    nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files 
-          \ buffer bookmark file file_rec/git file
+    nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files
+          \ buffer file file_rec/neovim
           \ file/new directory/new <CR>
     nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
           \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
@@ -2854,20 +2864,21 @@ if neobundle#tap('unite.vim')
           \ -buffer-name=register register<CR>
     nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
-    nnoremap <silent> [unite]n  :<C-u>Unite 
+    nnoremap <silent> [unite]n  :<C-u>Unite
           \ -buffer-name=bundles
           \ neobundle/search <CR>
-    nnoremap <silent> [unite]s  :<C-u>Unite 
+    nnoremap <silent> [unite]s  :<C-u>Unite
           \ -buffer-name=snippets
           \ neosnippet <CR>
-    nnoremap <silent> [unite]ma :<C-u>Unite mapping
-          \ -buffer-name=mapping <CR>
+    nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
+          \ -buffer-name=mapping -hide-source-names<CR>
     nnoremap <silent> [unite]me :<C-u>Unite output:message
           \ -buffer-name=messages <CR>
     " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
     nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
-    nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffer grep:$buffers<CR>
+    nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
+    nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
     nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
     nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
     nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers::<C-R><C-W><CR>
@@ -2875,6 +2886,10 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
     nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
     nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
+    nnoremap <silent> [\ :UniteNext<CR>
+    nnoremap <silent> ]\ :UnitePrevious<CR>
+    nnoremap <silent> ]\ :UniteFirst<CR>
+    nnoremap <silent> [\ :UniteLast<CR>
 
   endfunction "}}}
 
@@ -2898,6 +2913,7 @@ if neobundle#tap('unite.vim')
   function! s:unite_my_settings() "{{{
     " Overwrite settings.
     imap <buffer> jj      <Plug>(unite_insert_leave)
+    imap <buffer> kk      <Plug>(unite_insert_leave)
     "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 
     imap <buffer><expr> j unite#smart_map('j', '')
@@ -2949,7 +2965,7 @@ if neobundle#tap('unite.vim')
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
     let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_rec_async_command ='ag --follow --nocolor --nogroup --hidden -g ""'
+    let g:unite_source_rec_async_command =split('ag --follow --nocolor --nogroup --hidden -g ""')
   endif
   "}}}
   "
@@ -2994,7 +3010,7 @@ if neobundle#tap('vimfiler.vim')
 
   " vimfiler specific key mappings {{{
   function! s:vimfiler_settings()
-    " ^^ to go up 
+    " ^^ to go up
     nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
     " use R to refresh
     nmap <buffer> R <Plug>(vimfiler_redraw_screen)
@@ -3042,7 +3058,7 @@ if neobundle#tap('unite-outline')
   "}}}
 
   " Setting {{{
-  nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
+  nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR>
   "}}}
 
   call neobundle#untap()
@@ -3083,7 +3099,7 @@ if neobundle#tap('neomru.vim')
   " Setting {{{
   let g:neomru#do_validate = 1
 
-  let g:neomru#file_mru_ignore_pattern = 
+  let g:neomru#file_mru_ignore_pattern =
         \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'.
         \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
         \'\|^\%(\\\\\|/mnt/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'.
@@ -3212,7 +3228,7 @@ if neobundle#tap('vim-template')
   " Setting {{{
   let g:template_basedir = '~/.vim'
   autocmd User plugin-template-loaded call s:template_keywords()
-  autocmd User plugin-template-loaded 
+  autocmd User plugin-template-loaded
         \    if search('<+CURSOR+>')
         \  |   normal! dae
         \  | endif
@@ -3275,8 +3291,8 @@ if neobundle#tap('vim-over')
 
   " Setting {{{
   let g:over_enable_cmd_windw = 1
-  " over.vimの起動  
-  nnoremap <silent> <Leader>m :OverCommandLine<CR> 
+  " over.vimの起動
+  nnoremap <silent> <Leader>m :OverCommandLine<CR>
   "}}}
 
   call neobundle#untap()
@@ -3348,7 +3364,7 @@ if neobundle#tap('vim-session')
   endfunction "}}}
 
   " Setting {{{
-  " 現在のディレクトリ直下の .vimsessions/ を取得 
+  " 現在のディレクトリ直下の .vimsessions/ を取得
   command! MkDirSession call s:mk_dirsession()
   function! s:mk_dirsession()    "session用のディレクトリ作成関数
     let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
@@ -3446,7 +3462,7 @@ if neobundle#tap('calendar.vim')
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     augroup MyCalandarVim
       autocmd!
-      autocmd FileType calendar :IndentGuidesDisable 
+      autocmd FileType calendar :IndentGuidesDisable
     augroup END
   endfunction "}}}
 
@@ -3603,11 +3619,11 @@ if neobundle#tap('vim-fugitive')
   function! FugitiveMyMake() "{{{
     let l:error = system(&l:makeprg)
     redraw!
-    " echohl Special 
+    " echohl Special
     for error in split(l:error, '\n')
       echomsg error
     endfor
-    " echohl None 
+    " echohl None
     execute 'call fugitive#cwindow()'
   endfunction "}}}
 
@@ -3630,7 +3646,7 @@ if neobundle#tap('vim-fugitive')
     nnoremap <buffer> [git]p :<C-u>Gpush<CR>
     " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
     if &l:path !~# fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
-      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')  
+      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
     endif
   endfunction "}}}
   "}}}
@@ -3838,7 +3854,7 @@ if neobundle#tap('lingr-vim')
 
   " Setting {{{
   let g:lingr_vim_user = 'mnct.tkn3011@gmail.com'
-  let g:lingr_vim_sidebar_width = 25 
+  let g:lingr_vim_sidebar_width = 25
   let g:lingr_vim_rooms_buffer_height = 10
   let g:lingr_vim_say_buffer_height = 3
   let g:lingr_vim_remain_height_to_auto_scroll = 5
@@ -3898,7 +3914,7 @@ if neobundle#tap('atcoder_helper')
 
   call neobundle#untap()
 endif
-" }}} 
+" }}}
 
 " TKNGUE/sum-it.vim {{{
 if neobundle#tap('sum-it.vim')
@@ -3958,7 +3974,7 @@ if neobundle#tap('matchit.zip')
   "}}}
   call neobundle#untap()
 endif
-"}}} 
+"}}}
 
 " thinca/vim-ref {{{
 if neobundle#tap('vim-ref')
@@ -4183,7 +4199,7 @@ if neobundle#tap('undotree')
   " }}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    let g:undotree_WindowLayout=4 
+    let g:undotree_WindowLayout=4
     let g:undotree_SplitWidth=40
   endfunction "}}}
 
@@ -4195,7 +4211,7 @@ if neobundle#tap('undotree')
 endif
 " }}}
 
-" Shougo/context_filetype.vim {{{      
+" Shougo/context_filetype.vim {{{
 if neobundle#tap('context_filetype.vim')
   " Config {{{
   call neobundle#config({
@@ -4355,4 +4371,4 @@ endif
 set secure
 "}}}
 
-" vim: expandtab softtabstop=2 shiftwidth=2 foldmethod=marker
+" vim: expandtab softtabstop=2 shiftwidth=2 foldmethod=marker number nornu

@@ -20,7 +20,7 @@
     remote = green
 
 [push]
-    default = matching
+    default = simple
 
 [init]
     templatedir = ~/.git_template
@@ -37,6 +37,9 @@
 
 [difftool.latex]
     cmd = latexdiff-git "$LOCAL" "$REMOTE" 
+
+[remote]
+    pushDefault="origin"
 
 [difftool]
     prompt = false
