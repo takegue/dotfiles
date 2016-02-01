@@ -7,7 +7,7 @@ $dvips            = 'dvips %O -o %D %S';
 $ps2pdf           = 'ps2pdf   %O %S %D';
 $makeindex        = 'mendex %O -o %D %S';
 $max_repeat       = 5;
-$pdf_mode         = 2; # generates pdf via dvipdfmx
+$pdf_mode         = 3; # generates pdf via dvipdfmx
 
 # Prevent latexmk from removing PDF after typeset.
 # This enables Skim to chase the update in PDF automatically.

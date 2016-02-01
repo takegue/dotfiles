@@ -17,17 +17,20 @@ cd $DIST_VIM
 
 
 ./configure \
-    --prefix=$HOME/.local
+    --prefix=$HOME/.local \
     --enable-multibyte \
     --enable-xim \
     --enable-fontset \
     --with-features=huge \
     --with-luajit \
     --with-lua-prefix=/usr/local/ \
+    --enable-cscope \
+    --enable-gui=yes \
+    --enable-gnome-check \
     --enable-luainterp=yes \
     --enable-rubyinterp=yes \
     --enable-pythoninterp=yes \
-    --enable-python3interp=yes \
+    --enable-python3interp=yes
 
 make && make install
 

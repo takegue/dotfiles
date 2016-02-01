@@ -23,7 +23,7 @@ endif
 " }}}
 
 " NeoBundle {{{
-let g:noplugin = 0
+let g:noplugin = 1
 let g:bundle_root=  has('win32') || has('win64') ?
       \ expand('~/vimfiles/bundle') : expand('~/.vim/bundle')
 let g:neobundle_root = g:bundle_root . '/neobundle.vim'
@@ -602,138 +602,6 @@ if neobundle#tap('unite.vim')
 endif
 " }}} "
 
-" Shougo/vimfiler.vim {{{
-if neobundle#tap('vimfiler.vim')
-  " Config {{{
-  call neobundle#config({
-        \ "lazy": 1,
-        \ "autoload": {
-        \   "commands": [
-        \       { 'name' : 'VimFiler',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       { 'name' : 'VimFilerTab',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       { 'name' : 'VimFilerBufferDir',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       { 'name' : 'VimFilerExplorer',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       { 'name' : 'Edit',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       { 'name' : 'Write',
-        \         'complete' : 'customlist,vimfiler#complete' },
-        \       'Read', 'Source'
-        \       ],
-        \   "mappings" : '<Plug>(vimfiler_' ,
-        \   "explorer": 1,
-        \ }})
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    call vimfiler#set_execute_file('txt', 'notepad')
-    call vimfiler#set_execute_file('c', ['gvim', 'notepad'])
-    call vimfiler#custom#profile('default', 'auto-cd', 'lcd')
-  endfunction "}}}
-
-  " vimfiler specific key mappings {{{
-  function! s:vimfiler_settings()
-    " ^^ to go up 
-    nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-    " use R to refresh
-    nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-    " overwrite C-l
-    nmap <buffer> <C-l> <C-w>l
-    nmap <buffer> <C-j> <C-w>j
-  endfunction " }}}
-
-  function! VimFilerExplorerWithLCD() abort
-    execute "VimFilerExplorer ". expand('%:p:h')
-  endfunction
-
-  " Setting {{{
-  nnoremap <silent><Leader>e :call VimFilerExplorerWithLCD()<CR>
-  nnoremap <silent><Leader>E :VimFiler<CR>
-
-  augroup vimfile_options
-    " this one is which you're most likely to use?
-    autocmd FileType vimfiler call <SID>vimfiler_settings()
-    autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-  augroup END
-
-  let g:loaded_netrwPlugin = 1
-  let g:vimfiler_ignore_pattern = '\(\.git\|\.DS_Store\|.py[co]\|\%^\..\+\)\%$'
-  let g:vimfiler_tree_leaf_icon = ' '
-  let g:vimfiler_tree_opened_icon = '▾'
-  let g:vimfiler_tree_closed_icon = '▸'
-  let g:vimfiler_file_icon = ' '
-  let g:vimfiler_marked_file_icon = '*'
-  let g:vimfiler_enable_auto_cd = 1
-  let g:vimfiler_as_default_explorer = 1
-  let g:unite_kind_openable_lcd_command='lcd'
-  let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_split_rule="botright"
-  "}}}
-
-  call neobundle#untap()
-endif
-"}}}
-
-" Shougo/unite-outline {{{
-if neobundle#tap('unite-outline')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
-  "}}}
-
-  " Setting {{{
-  nnoremap <silent> <Leader>o :<C-u>botright Unite -vertical -no-quit -winwidth=40 -direction=botright outline<CR> 
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
-" tsukkee/unite-tag {{{
-if neobundle#tap('unite-tag')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    autocmd BufEnter *
-          \   if empty(&buftype)
-    " \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-          \|  endif
-    call neobundle#untap()
-  endfunction "}}}
-
-  " Setting {{{
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
-" ujihisa/unite-colorscheme {{{
-if neobundle#tap('unite-colorscheme')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
 " Shougo/neomru.vim {{{
 if neobundle#tap('neomru.vim')
   " Config {{{
@@ -753,55 +621,6 @@ if neobundle#tap('neomru.vim')
         \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
         \'\|^\%(\\\\\|/mnt/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'.
         \'\|\%(^\%(fugitive\)://\)'
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
-" tsukkee/unite-help {{{
-if neobundle#tap('unite-help')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ["Shougo/unite.vim"],
-        \ })
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
-" Shougo/neossh.vim {{{
-if neobundle#tap('neossh.vim')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ['Shougo/unite.vim']
-        \})
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-  "}}}
-
-  call neobundle#untap()
-endif
-" }}} "
-
-" mattn/unite-advent_calendar {{{
-if neobundle#tap('unite-advent_calendar')
-  " Config {{{
-  call neobundle#config( {
-        \ "depends": ['Shougo/unite.vim','tyru/open-browser.vim', 'mattn/webapi-vim'],
-        \})
-  "}}}
-
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-  endfunction "}}}
-
-  " Setting {{{
-  let g:calendar_frame = 'default'
   "}}}
 
   call neobundle#untap()
