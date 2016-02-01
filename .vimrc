@@ -500,12 +500,6 @@ augroup large_file_config_for_smooth
   autocmd BufNewFile,BufRead * if line('$') > 1000 |
         \   set nonumber norelativenumber nocursorline lazyredraw |
         \ endif
-  autocmd BufNewFile,BufRead * 
-        \ if line('$') > 1000 && exists(':NoMatchParen') == 2 | 
-        \   execute 'NoMatchParen' |
-        \ else |
-        \   execute 'DoMatchParen' |
-        \ endif
 augroup END
 
 " after/ftpluginの作成 User設定のfiletype plugin
