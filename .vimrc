@@ -647,34 +647,40 @@ function! s:loads_bundles() abort "{{{
     NeoBundleFetch 'Shougo/neobundle.vim'                    " Manage neobundle.vim itself
 
     " For author/plugin-name sort
-    " :!sort -k2fd
+    " :!LC_ALL=C sort -k2fd
     " For plugin-name/author sort
+    " :!sort -k2fd
 
     NeoBundle 'alfredodeza/pytest.vim'
     NeoBundle 'AndrewRadev/switch.vim'
     NeoBundle 'basyura/unite-rails'                          " a unite.vim plugin for rails
+    NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
     NeoBundle 'benmills/vimux'
     NeoBundle 'bps/vim-textobj-python'
     NeoBundle 'christoomey/vim-tmux-navigator'
     NeoBundle 'clones/vim-zsh'
     NeoBundle 'cohama/agit.vim'
+    NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
     NeoBundle 'deris/vim-visualinc'
     NeoBundle 'deton/jasegment.vim'
     NeoBundle 'elzr/vim-json'
     NeoBundle 'emonkak/vim-operator-sort'
-    NeoBundle 'fuenor/im_control.vim'                        " im / ime control plugin for vim
     NeoBundle 'flazz/vim-colorschemes'                       " one colorscheme pack to rule them all!
+    NeoBundle 'fuenor/im_control.vim'                        " im / ime control plugin for vim
     NeoBundle 'hail2u/vim-css3-syntax'
     NeoBundle 'haya14busa/incsearch.vim'
     NeoBundle 'haya14busa/vim-migemo'                        " Vim Plugin for C/Migemo
     NeoBundle 'honza/vim-snippets'
+    NeoBundle 'hsanson/vim-android'                          " Android development plugin for vim
+    NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
     NeoBundle 'itchyny/calendar.vim'
+    NeoBundle 'itchyny/dictionary.vim'
     NeoBundle 'itchyny/lightline.vim'
-    " NeoBundle 'ivanov/vim-ipython'
     NeoBundle 'jpo/vim-railscasts-theme'
     NeoBundle 'kana/vim-operator-replace'
     NeoBundle 'kana/vim-operator-user'
     NeoBundle 'kana/vim-smartchr'
+    NeoBundle 'kana/vim-submode'                             " Vim plugin: Create your own submodes
     NeoBundle 'kana/vim-textobj-datetime'                    " 日付選択オブジェクト   #ada, add, adt
     NeoBundle 'kana/vim-textobj-entire'                      " 全体選択オブジェクト   #ae, ai
     NeoBundle 'kana/vim-textobj-fold'                        " az, iz
@@ -683,10 +689,10 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'KazuakiM/vim-qfstatusline'
     NeoBundle 'KazuakiM/vim-regexper'
     NeoBundle 'klen/python-mode'                             " python plugin for vim
-    NeoBundle 'davidhalter/jedi-vim'                         " python plugin for vim
     NeoBundle 'koron/codic-vim'
     NeoBundle 'lambdalisue/vim-gista'
     NeoBundle 'lambdalisue/vim-pyenv'                      " Activate the versions and the virtualenvs of pyenv within a live VIM session
+    NeoBundle 'lervag/vimtex'
     NeoBundle 'lilydjwg/colorizer'                           " A Vim plugin to colorize all text in the form #rrggbb or #rgb.
     NeoBundle 'Lokaltog/vim-easymotion'
     NeoBundle 'majutsushi/tagbar'
@@ -703,6 +709,8 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'mrkn/mrkn256.vim'
     NeoBundle 'nanotech/jellybeans.vim'
     NeoBundle 'nathanaelkane/vim-indent-guides'
+    " NeoBundle 'ivanov/vim-ipython'
+    " NeoBundle 'vim-scripts/css_color.vim'
     NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
     NeoBundle 'osyo-manga/shabadou.vim'
     NeoBundle 'osyo-manga/unite-fold'
@@ -711,25 +719,30 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'othree/html5.vim'
     NeoBundle 'rbonvall/vim-textobj-latex'                   " LaTeXオブジェクト      #\, $ q, Q, e
     NeoBundle 'rcmdnk/vim-markdown'                          " Markdown Vim Mode
+    NeoBundle 'rhysd/github-complete.vim'                    " Vim input completion for GitHub
     NeoBundle 'rhysd/vim-grammarous'
     NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
-    NeoBundle 'suan/vim-instant-markdown'                    " Instant Markdown previews from VIm!
+    NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
+    NeoBundle 'Shougo/deoplete.nvim'
     NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
     NeoBundle 'Shougo/neocomplete.vim'
-    NeoBundle 'Shougo/deoplete.nvim'
     NeoBundle 'Shougo/neomru.vim'
     NeoBundle 'Shougo/neosnippet-snippets'
     NeoBundle 'Shougo/neosnippet.vim'
     NeoBundle 'Shougo/neossh.vim'
+    NeoBundle 'Shougo/unite-help'
     NeoBundle 'Shougo/unite-outline'
     NeoBundle 'Shougo/unite.vim'
     NeoBundle 'Shougo/vimfiler.vim'
     NeoBundle 'Shougo/vimproc.vim'                           " Enable asynchronous processing in vim
     NeoBundle 'Shougo/vimshell'
     NeoBundle 'sjl/badwolf'
+    NeoBundle 'stephpy/vim-yaml'                             " Override vim syntax for yaml files
+    NeoBundle 'suan/vim-instant-markdown'                    " Instant Markdown previews from VIm!
     NeoBundle 'syngan/vim-vimlint'                           " lint for vim script
     NeoBundle 'tacroe/unite-mark'
     NeoBundle 'tejr/vim-tmux'
+    NeoBundle 'thinca/vim-github'                            " An interface for Github.
     NeoBundle 'thinca/vim-quickrun'
     NeoBundle 'thinca/vim-ref'                               " referecen viwer for vim
     NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
@@ -739,7 +752,6 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'TKNGUE/atcoder_helper'
     NeoBundle 'TKNGUE/hateblo.vim'
     NeoBundle 'TKNGUE/sum-it.vim'
-    NeoBundle 'lervag/vimtex'
     "NeoBundle 'TKNGUE/vim-reveal'
     NeoBundle 'tmhedberg/SimpylFold'
     NeoBundle 'tomasr/molokai'
@@ -750,8 +762,8 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'tpope/vim-repeat'
     NeoBundle 'tpope/vim-surround'                           " surround記号編集オペレータ
     NeoBundle 'tpope/vim-unimpaired'                         " バッファ移動用等
+    NeoBundle 'mhinz/vim-signify'                            " 差分表示
     NeoBundle 'tsukkee/lingr-vim'
-    NeoBundle 'Shougo/unite-help'
     NeoBundle 'tsukkee/unite-tag'
     NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
     NeoBundle 'uguu-org/vim-matrix-screensaver'
@@ -762,30 +774,19 @@ function! s:loads_bundles() abort "{{{
     NeoBundle 'vim-ruby/vim-ruby'
     NeoBundle 'vim-scripts/Align'
     NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
-    " NeoBundle 'vim-scripts/css_color.vim'
     NeoBundle 'xolox/vim-session'
-    NeoBundle 'ingydotnet/yaml-vim'                          " YAML Highlight script for VIM editor
-    NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
-    NeoBundle 'stephpy/vim-yaml'                             " Override vim syntax for yaml files
-    NeoBundle 'hsanson/vim-android'                          " Android development plugin for vim
-    NeoBundle 'rhysd/github-complete.vim'                    " Vim input completion for GitHub
-    NeoBundle 'thinca/vim-github'                            " An interface for Github.
-    NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
-    NeoBundle 'kana/vim-submode'                             " Vim plugin: Create your own submodes
-    " " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
-    " " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
-    " " NeoBundle 'osyo-manga/vim-over'
-    " " NeoBundle 'welle/targets.vim'
-    " " NeoBundle 'vimperator/vimperator-labs', {
-    " "       \   'name': 'vimperator-syntax',
-    " "       \   'rtp':  'vimperator/contrib/vim/'
-    " "       \ }
     " NeoBundle 'Rykka/InstantRst'
     " NeoBundle 'Rykka/riv.vim'
     NeoBundleFetch 'tpope/vim-sensible'
+    " " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
+    " " NeoBundle 'osyo-manga/vim-over'
+    " " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
+    " " NeoBundle 'welle/targets.vim'
+    "
     "BUNDLE_ENDPOINT
 
 endfunction "}}}
+
 
 call neobundle#begin(g:bundle_root)
 if !g:noplugin && neobundle#load_cache()
@@ -937,7 +938,7 @@ if neobundle#tap('lightline.vim')
     endfunction "}}}
 
     function! MyFugitive() "{{{
-        if fugitive#is_git_dir(expand('%:p:h'))
+        if exists('b:git_dir')
             if !exists('b:fugitive_branch')
                 let statusline = fugitive#statusline()
                 let b:fugitive_branch = substitute(statusline, '\[Git(\(.\+\))\]', '⭠ \1', '')
@@ -1124,7 +1125,7 @@ if neobundle#tap('neocomplete.vim')
     function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
         " Plugin key-mappings.
         " inoremap <expr><C-g>     neocomplete#undo_completion()
-        inoremap <expr><C-l>     neocomplete#complete_common_string()
+        " inoremap <expr><C-l>     neocomplete#complete_common_string()
 
         " Recommended key-mappings.
         " <CR>: close popup and save indent.
@@ -1261,8 +1262,8 @@ if neobundle#tap('deoplete.nvim')
 
     function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
         " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
-        inoremap <expr><BS>  deoplete#mappings#smart_close_popup()."\<C-h>"
+        " inoremap <expr><C-h> deoplete#mappings#smart_close_popup(). "\<C-h>"
+        " inoremap <expr><BS>  deoplete#mappings#smart_close_popup(). "\<C-h>"
 
         " Plugin key-mappings.
         " inoremap <expr><C-g>     deoplete#undo_completion()
@@ -1273,7 +1274,7 @@ if neobundle#tap('deoplete.nvim')
         function! s:my_cr_function()
             " return deoplete#close_popup() . "\<CR>"
             "For no inserting <CR> key.
-            return pumvisible() ? deoplete#close_popup() : "\<CR>"
+            return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
         endfunction
         " <TAB>: completion.
         " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -1291,10 +1292,10 @@ if neobundle#tap('deoplete.nvim')
         if neobundle#is_installed('neosnippet.vim') "{{{
             inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
             " For cursor moving in insert mode(Not recommended)
-            inoremap <expr><Left>  deoplete#close_popup() . "\<Left>"
-            inoremap <expr><Right> deoplete#close_popup() . "\<Right>"
-            inoremap <expr><Up>    deoplete#close_popup() . "\<Up>"
-            inoremap <expr><Down>  deoplete#close_popup() . "\<Down>"
+            inoremap <expr><Left>  deoplete#mappings#close_popup() . "\<Left>"
+            inoremap <expr><Right> deoplete#mappings#close_popup() . "\<Right>"
+            inoremap <expr><Up>    deoplete#mappings#close_popup() . "\<Up>"
+            inoremap <expr><Down>  deoplete#mappings#close_popup() . "\<Down>"
             " make neocomplcache use jedi#completions omini function for python scripts
 
             augroup tex_complete
@@ -1337,6 +1338,57 @@ if neobundle#tap('deoplete.nvim')
         let g:deoplete#enable_at_startup = 1
         " Use smartcase.
         let g:deoplete#enable_smart_case = 1
+
+    "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+    let g:acp_enableAtStartup = 0
+    " Use neocomplete.
+    let g:deoplete#text_mode_filetypes= {
+                \ 'tex' : 1,
+                \ 'plaintex' : 1,
+                \ 'gitcommit' : 1
+                \}
+    if !has('nvim')
+        let g:deoplete#enable_at_startup = 1
+    endif
+    " Use smartcase.
+    let g:deoplete#enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:deoplete#sources#syntax#min_keyword_length = 3
+    let g:deoplete#max_keyword_width = 50
+    let g:deoplete#lock_buffer_name_pattern = '\*ku\*'
+    let g:deoplete#enable_auto_delimiter = 0
+    let g:deoplete#enable_auto_close_preview = 0
+    let g:deoplete#auto_completion_start_length  = 3
+    let g:deoplete#skip_auto_completion_time  = "0.2"
+    " Define dictionary.
+    let g:deoplete#sources#dictionary#dictionaries = {
+                \ 'default' : '',
+                \ 'vimshell' : $HOME.'/.vimshell_hist',
+                \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
+
+
+    let g:deoplete#enable_multibyte_completion = 1
+
+    " make Vim call omni function when below patterns matchs
+    " let g:deoplete#sources#omni#functions = {}
+
+    let g:deoplete#force_omni_input_patterns = {}
+    let g:deoplete#force_omni_input_patterns.python =
+                \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+    " let g:deoplete#sources#omni#input_patterns = {}
+    " let g:deoplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    " let g:deoplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+    " let g:deoplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+    " let g:deoplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    "
+    "
+
+    " if !exists('g:deoplete#keyword_patterns')
+    "   let g:deoplete#keyword_patterns = {}
+    " endif
+    "}}}
     endif
 
     "}}}
@@ -2471,8 +2523,37 @@ endif
 " }}}
 "}}}
 
-"Wriautoloaoting: {{{
+"Writing: {{{
 
+" itchyny/dictionary.vim {{{
+if neobundle#tap('dictionary.vim')
+  " Config {{{
+  call neobundle#config({
+        \   'lazy' : 1,
+        \   'disabled' : !has('mac'),
+        \   'depends' : [],
+        \   'on_i' : 0,
+        \   'on_unite' : ['help'],
+        \ })
+  " }}}
+
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  endfunction "}}}
+
+  nnoremap <Leader>w :<C-u>Dictionary -cursor-word -no-duplicate<CR>
+  autocmd FileType dicitonary  nnoremap <buffer><Leader>w :<C-u>Dictionary -cursor-word -no-duplicate<CR>
+  autocmd FileType dicitonary  nnoremap <buffer><CR> <Plug>(dictionary_jump)
+  autocmd FileType dicitonary  nnoremap <buffer><BS> <Plug>(dictionary_jump_back)
+
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  endfunction "}}}
+
+  " Setting {{{
+  "}}}
+
+  call neobundle#untap()
+endif
+" }}}
 " vim-latex/vim-latex {{{
 if neobundle#tap('vim-latex')
     " Config {{{
@@ -3236,9 +3317,9 @@ if neobundle#tap('vim-template')
       autocmd!
       autocmd User plugin-template-loaded
               \ silent! %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-              \ silent! %s/<+DATE+>/\=eval(submatch(1))/ge
-              \ silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
-              \ silent! %s/<+FILENAME+>/\=expand('%:'))/ge
+              \ | silent! %s/<+DATE+>/\=eval(submatch(1))/ge
+              \ | silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
+              \ | silent! %s/<+FILENAME+>/\=expand('%:'))/ge
               \ | if search('<+CURSOR+>') | execute 'normal zv"_da>' | endif
     augroup END
 
@@ -3282,7 +3363,7 @@ if neobundle#tap('Align')
     call neobundle#untap()
 endif
 " }}} "
-
+"
 " osyo-manga/vim-over {{{
 if neobundle#tap('vim-over')
     " Config {{{
@@ -3585,7 +3666,7 @@ if neobundle#tap('vim-tmux-navigator')
 endif
 " }}} "
 
-" tpope/vim-fugitive           {{{
+" tpope/vim-fugitive   {{{
 if neobundle#tap('vim-fugitive')
     " Config {{{
     call neobundle#config({'augroup' : 'fugitive'})
@@ -3630,7 +3711,6 @@ if neobundle#tap('vim-fugitive')
             let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
         endif
     endfunction "}}}
-    "}}}
 
     call neobundle#untap()
 endif
@@ -4025,7 +4105,6 @@ if neobundle#tap('vim-ref')
 endif
 " }}}
 
-
 " tyru/open-browser.vim {{{
 if neobundle#tap('open-browser.vim')
     " Config {{{
@@ -4323,9 +4402,6 @@ if neobundle#tap('vim-submode')
     call neobundle#untap()
 endif
 " }}}
-
-
-"
 
 call neobundle#end()
 " PLUGIN_SETTING_ENDPOINT

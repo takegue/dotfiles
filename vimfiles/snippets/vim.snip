@@ -32,7 +32,8 @@ snippet     bundle_tap_*
 abbr        for configration of bundle
 options     head
  " `@*` {{{
- if neobundle#tap('`matchstr(@*, '\h\S\+/\zs\(\h\S\+\)\ze')`')
+
+ if neobundle#tap('`matchstr(@*, '\h\S\+/\zs\(\h\S\+\)\ze)["'']'`')
    " Config {{{
    call neobundle#config({
          \   'lazy' : 1,
@@ -63,7 +64,7 @@ snippet     bundle_tap_+
 abbr        for configration of bundle
 options     head
  " `@+` {{{
- if neobundle#tap('`matchstr(@+, '\h\S\+/\zs\(\h\S\+\)\ze')`')
+ if neobundle#tap('`matchstr(@+, '\h\S\+/\zs\(\h\S\+\)\ze["'']')`')
    " Config {{{
    call neobundle#config({
          \   'lazy' : 1,
