@@ -498,7 +498,7 @@ augroup END
 
 augroup large_file_config_for_smooth
     autocmd!
-    autocmd BufNewFile,BufRead * if line('$') > 1000 |
+    autocmd BufNewFile,BufRead * if line('$') > 200 |
                 \   set nonumber norelativenumber nocursorline lazyredraw |
                 \ endif
 augroup END
@@ -1262,8 +1262,8 @@ if neobundle#tap('deoplete.nvim')
 
     function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
         " <C-h>, <BS>: close popup and delete backword char.
-        " inoremap <expr><C-h> deoplete#mappings#smart_close_popup(). "\<C-h>"
-        " inoremap <expr><BS>  deoplete#mappings#smart_close_popup(). "\<C-h>"
+        inoremap <expr><C-h> deoplete#mappings#smart_close_popup(). "\<C-h>"
+        inoremap <expr><BS>  deoplete#mappings#smart_close_popup(). "\<C-h>"
 
         " Plugin key-mappings.
         " inoremap <expr><C-g>     deoplete#undo_completion()
@@ -1274,7 +1274,7 @@ if neobundle#tap('deoplete.nvim')
         function! s:my_cr_function()
             " return deoplete#close_popup() . "\<CR>"
             "For no inserting <CR> key.
-            return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
+            return pumvisible() ? deoplete#mappings#smart_close_popup() : "\<CR>"
         endfunction
         " <TAB>: completion.
         " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -1290,7 +1290,6 @@ if neobundle#tap('deoplete.nvim')
 
         " <C-h>, <BS>: close popup and delete backword char.
         if neobundle#is_installed('neosnippet.vim') "{{{
-            inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
             " For cursor moving in insert mode(Not recommended)
             inoremap <expr><Left>  deoplete#mappings#close_popup() . "\<Left>"
             inoremap <expr><Right> deoplete#mappings#close_popup() . "\<Right>"
@@ -3317,7 +3316,7 @@ if neobundle#tap('vim-template')
       autocmd!
       autocmd User plugin-template-loaded
               \ silent! %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-              \ | silent! %s/<+DATE+>/\=eval(submatch(1))/ge
+              \ | silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
               \ | silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
               \ | silent! %s/<+FILENAME+>/\=expand('%:'))/ge
               \ | if search('<+CURSOR+>') | execute 'normal zv"_da>' | endif

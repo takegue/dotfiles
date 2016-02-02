@@ -14,6 +14,13 @@ from itertools import *
 from functools import partial
 from math import *
 
+import chainer
+import chainer.functions as F
+import chainer.links as L
+
+from chainer import cuda, Function, gradient_check, Variable, optimizers, serializers, utils
+from chainer import Link, Chain, ChainList
+
 pd.set_option('display.line_width',200)
 
 def main():
