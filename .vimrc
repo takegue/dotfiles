@@ -2963,11 +2963,17 @@ if neobundle#tap('unite.vim')
     nmap    <Leader>f  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer file file_mru
+          \ bookmark buffer file file_mru file_rec:~/Downloads
           \ file/new directory/new <CR>
-    nnoremap <silent> [unite]c  :<C-u>UniteWithCurrentDir -buffer-name=files
-          \ buffer file file_rec/neovim
-          \ file/new directory/new <CR>
+    if has('nvim')
+      nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
+            \ file_rec/neovim
+            \ file/new directory/new <CR>
+    else
+      nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
+            \ file_rec/neovim
+            \ file/new directory/new <CR>
+    endif
     nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
           \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
     nnoremap <silent> [unite]r  :<C-u>Unite
