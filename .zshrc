@@ -308,7 +308,7 @@ autoload -Uz add-zsh-hook || return
 (( ${+zbell_duration_email} )) || zbell_duration_email=300
 
 # initialize zbell_ignore if not set
-(( ${+zbell_ignore} )) || zbell_ignore=($EDITOR $PAGER ls watch htop top ssh iotop dstat vmstat nano ipython emacs vim vim bwm-ng less more fdisk audacious play aplay sqlite3 wine mtr ping traceroute vlc mplayer smplayer tail tmux screen man sawfish-config powertop g)
+(( ${+zbell_ignore} )) || zbell_ignore=($EDITOR $PAGER ls watch htop top ssh iotop dstat vmstat nano ipython emacs nvim vim vim bwm-ng less more fdisk audacious play aplay sqlite3 wine mtr ping traceroute vlc mplayer smplayer tail tmux screen man sawfish-config powertop g)
 
 # initialize it because otherwise we compare a date and an empty string
 # the first time we see the prompt. it's fine to have lastcmd empty on the
@@ -338,6 +338,8 @@ LOG
 "${zbell_lastcmd}"
 staerted: ${zbell_timestamp}
 end: ${zbell_last_timestamp}
+
+Time: ${zbell_cmd_duration}
 
 Love,
 
@@ -384,6 +386,7 @@ zbell_end() {
         else
             zbell_noise
         fi
+        echo 1>/dev/stderr 'Process took the '$zbell_cmd_duration 's'
         # notify-send "Job completed on $HOST:" "$zbell_lastcmd"
     fi
 }

@@ -60,7 +60,7 @@ set ambiwidth=double               " 全角文字で幅が崩れないように�
 set laststatus=2
 
 set number                         " 行番号の表示
-set relativenumber                 " 相対行番号の表示
+set norelativenumber                 " 相対行番号の表示
 set nowrap                         " 長いテキストの折り返し
 set textwidth=0                    " 自動的に改行が入るのを無効化
 set colorcolumn=80                 " その代わり80文字目にラインを入れる
@@ -326,7 +326,7 @@ function! s:toggle_line_number()
   if exists('+relativenumber')
     if (v:version >= 704)
       " Toggle between relative with absolute on cursor line and no numbers.
-      let l:mapping = [[[0,1],[1,0]],[[1,1],[0,0]]]
+      let l:mapping = [[[0,1],[1,1]],[[1,1],[0,0]]]
       " let [&l:relativenumber, &l:number] =
       "       \ (&l:relativenumber || &l:number) ? [0, 0] : [1, 1]
       let [&l:relativenumber, &l:number] = l:mapping[&l:relativenumber][&l:number]
@@ -2208,7 +2208,7 @@ if neobundle#tap('python-mode')
   let g:pymode_lint_message = 1
   " let g:pymode_lint_ignore = "E501,W"
   " let g:pymode_lint_select = "E501,W0011,W430"
-  let g:pymode_lint_cwindow = 0
+  let g:pymode_lint_cwindow = 1
 
   let g:pymode_rope = 0
   let g:pymode_rope_autoimport = 0
@@ -2988,10 +2988,10 @@ if neobundle#tap('unite.vim')
     nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
     nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
-    nnoremap <silent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
+    nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
     nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
     nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
-    nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers::<C-R><C-W><CR>
+    nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
     nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
     nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
     nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
