@@ -318,8 +318,8 @@ zbell_timestamp=$EPOCHSECONDS
 
 # right before we begin to execute something, store the time it started at
 zbell_begin() {
+    zbell_lastcmd=$1
     zbell_timestamp=$EPOCHSECONDS
-    export zbell_lastcmd=$1
 }
 
 zbell_noise() {
@@ -364,7 +364,7 @@ zbell_end() {
     fi
 
     if [[ $zbell_lastcmd_tmp == "" ]]; then
-        return;
+        return
     fi
 
     zbell_last_timestamp=$zbell_timestamp
@@ -394,7 +394,7 @@ zbell_end() {
 case "${TERM}" in
     kterm*|xterm*)
         preexec() {
-            zbell_begin
+            zbell_begin $1
         }
         precmd() {
             zbell_end
