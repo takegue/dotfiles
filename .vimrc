@@ -126,7 +126,7 @@ if !has('nvim')
 endif
 
 if has('nvim')
-  " set clipboard=unnamedplus,autoselect
+  set clipboard=unnamedplus
 else
   if has('unnamedplus')
     set clipboard=unnamedplus,exclude:cons\|linux
@@ -926,7 +926,7 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MyPyenv() "{{{
-    if exists('*pyenv#info#format')
+    if &ft =~ 'python'
       if !exists('b:pyenv_version')
         let statusline = pyenv#info#format('%av')
         let b:pyenv_version = statusline
@@ -2336,11 +2336,11 @@ if neobundle#tap('vim-pyenv')
   " }}}
 
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    augroup vim-pyenv-custom-augroup
-      autocmd! 
-      " autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
-      " autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
-    augroup END
+    " augroup vim-pyenv-custom-augroup
+    "   autocmd! 
+    "   autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+    "   autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+    " augroup END
   endfunction "}}}
 
   " Setting {{{
