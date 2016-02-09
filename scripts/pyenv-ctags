@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pyenv_prefix=`pyenv prefix`
+ctags -f $pyenv_prefix/tags -R $pyenv_prefix/lib/python* 2>/dev/null

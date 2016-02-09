@@ -118,7 +118,7 @@ set matchtime=1             " 対応括弧のハイライト表示を3秒にす�
 set nrformats=hex
 set history=10000           " ヒストリ機能を10000件まで有効にする
 set autoread                " Automatically reload change files on disk
-set updatetime=1000         " Automatically reload change files on disk
+set updatetime=300         " Automatically reload change files on disk
 
 if !has('nvim')
   set ttimeout
@@ -1261,6 +1261,7 @@ if neobundle#tap('deoplete.nvim')
   endfunction "}}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    set completeopt-=preview
     " <C-h>, <BS>: close popup and delete backword char.
     inoremap <expr><C-h> deoplete#mappings#smart_close_popup(). "\<C-h>"
     inoremap <expr><BS>  deoplete#mappings#smart_close_popup(). "\<C-h>"
@@ -1276,7 +1277,12 @@ if neobundle#tap('deoplete.nvim')
       "For no inserting <CR> key.
       return pumvisible() ? deoplete#mappings#smart_close_popup() : "\<CR>"
     endfunction
-    " <TAB>: completion.
+
+      " SuperTab like snippets behavior.
+      imap <expr><CR>  neosnippet#expandable() ?
+            \ "\<Plug>(neosnippet_expand)" :
+            \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
+
     " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " For smart TAB completion.
     inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
@@ -1363,15 +1369,14 @@ if neobundle#tap('deoplete.nvim')
           \ 'scheme' : $HOME.'/.gosh_completions'
           \ }
 
-
     let g:deoplete#enable_multibyte_completion = 1
 
     " make Vim call omni function when below patterns matchs
     " let g:deoplete#sources#omni#functions = {}
 
-    let g:deoplete#force_omni_input_patterns = {}
-    let g:deoplete#force_omni_input_patterns.python =
-          \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    let g:deoplete#omni#input_patterns = {}
+    let g:deoplete#omni#input_patterns.python = ['\s*from\s+\w*', 'import\s+\w*', '\S{2,}\.']
+          " \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import\)\w*'
 
     " let g:deoplete#sources#omni#input_patterns = {}
     " let g:deoplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
@@ -2157,7 +2162,7 @@ if neobundle#tap('python-mode')
         \ "build"       : {
         \   "cygwin"    : "pip install --user pylint rope pyflakes pep8",
         \   "mac"       : "pip install --user pylint rope pyflakes pep8",
-        \   "unix"      : "pip install --user pylint rope pyflake pep8"
+        \   "unix"      : "pip install --user pylint rope pyflakes pep8"
         \ }})
   "}}}
 
@@ -2167,7 +2172,9 @@ if neobundle#tap('python-mode')
 
     augroup pymode_myautocmd
       autocmd!
-      autocmd BufEnter __doc__ nnoremap <buffer>q  <C-w>c
+      autocmd BufEnter '__doc__' nnoremap <buffer>q  <C-w>c
+      autocmd BufEnter '__doc__' normal zr
+      autocmd BufReadPost '__doc__' normal zr
       autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
     augroup END
   endfunction "}}}
@@ -2189,7 +2196,7 @@ if neobundle#tap('python-mode')
 
   let g:pymode_doc = 1
   let g:pymode_doc_bind = 'K'
-
+  let g:jedi#goto_command = 'gd'
   let g:pymode_virtualenv = 0
   let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
 
@@ -2268,23 +2275,23 @@ if neobundle#tap('jedi-vim')
   call neobundle#config( {
         \ "lazy"    : 1,
         \ "disabled"    : !has('python'),
-        \ 'on_ft' : ['python', 'python3', 'djangohtml'],
+        \ "on_ft" : ['python', 'python3', 'djangohtml'],
         \ "on_source" : ['python-mode'],
         \ })
   "}}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
-    call jedi#configure_call_signatures()
     augroup myjedivim
       autocmd!
       autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
       autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
       autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto_definitions()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto()<cr>
       autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
-      autocmd FileType python setlocal omnifunc=jedi#completions
+      " autocmd FileType python setlocal omnifunc=jedi#completions
     augroup END
+    call jedi#configure_call_signatures()
   endfunction "}}}
 
   " Setting {{{
@@ -2296,7 +2303,7 @@ if neobundle#tap('jedi-vim')
   let g:jedi#popup_on_dot = 0
   let g:jedi#auto_close_doc = 0
   let g:jedi#show_call_signatures = 2
-  "
+  let g:jedi#show_call_signatures_delay = -1
 
   "quickrunと被るため大文字に変更
   " let g:jedi#rename_command = 'R'
@@ -2311,13 +2318,6 @@ if neobundle#tap('jedi-vim')
   endif
   let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
 
-  " if !exists('g:neocomplete#force_omni_input_patterns')
-  "   let g:neocomplete#sources#omni#input_patterns.python = ''
-  " endif
-  " let g:neocomplete#force_omni_input_patterns.python =
-  "       \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-  "}}}
-
   call neobundle#untap()
 endif
 " }}} "
@@ -2327,20 +2327,22 @@ endif
 if neobundle#tap('vim-pyenv')
   " Config {{{
   call neobundle#config({
+        \   'lazy' : 1,
         \   'disabled' : !has('python'),
-        \   'external_commands'    : ['pyenv'],
-        \     'on_unite' : [
+        \   'external_commands' : ['pyenv'],
+        \   'on_source' :  ['jedi-vim'],
+        \   'on_unite' : [
         \       'help',
         \     ],
         \ })
   " }}}
 
-  function! neobundle#tapped.hooks.on_source(bundle) "{{{
-    " augroup vim-pyenv-custom-augroup
-    "   autocmd! 
-    "   autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
-    "   autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
-    " augroup END
+  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+    augroup vim-pyenv-custom-augroup
+      autocmd! 
+      autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+      autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+    augroup END
   endfunction "}}}
 
   " Setting {{{
@@ -2349,7 +2351,7 @@ if neobundle#tap('vim-pyenv')
 
   function! s:jedi_auto_force_py_version() abort
     let major_version = pyenv#python#get_internal_major_version()
-    call jedi#forec_py_version(major_version)
+    call jedi#force_py_version(major_version)
   endfunction
 
   "}}}
@@ -3343,7 +3345,7 @@ if neobundle#tap('vim-template')
           \ | silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
           \ | silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
           \ | silent! %s/<+FILENAME+>/\=expand('%:'))/ge
-          \ | if search('<+CURSOR+>') | execute 'normal zv"_da>' | endif
+          \ | if search('<+CURSOR+>') |  execute 'normal zv"_da>'| endif
   augroup END
 
   " Setting {{{
@@ -4426,7 +4428,6 @@ if neobundle#tap('vim-submode')
 endif
 " }}}
 "
-
 call neobundle#end()
 " PLUGIN_SETTING_ENDPOINT
 
