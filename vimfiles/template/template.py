@@ -14,6 +14,9 @@ from itertools import *
 from functools import partial
 from math import *
 
+import logging
+logger = logging.getLogger('app.ane')
+
 pd.set_option('display.line_width',200)
 
 def main():

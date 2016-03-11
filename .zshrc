@@ -412,13 +412,13 @@ else
     rm -f ~/.zcompdump; compinit
 fi
 
-# for paths in "$fpath[@]"; do
+# for paths in "$fpath[@]"; 
 #     autoload -Uz "$paths"/*(N:t) >/dev/null
 # done
 # unset paths
 
 
-#### Export Configurations #### e
+#### Export Configurations ####
 export PATH=/usr/local/bin:$PATH
 export LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib:$LD_LIBRARY_PATH
 export PYTHONSTARTUP=~/.pythonstartup
