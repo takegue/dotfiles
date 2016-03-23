@@ -244,7 +244,7 @@ function! ToggleWindowSize()
 endfunction
 
 function! OpenFolderOfCurrentFile() abort
-  let l:path = fnamemodify("%", ':p:h:h:s? ?\\ ?')
+  let l:path = shellescape(expand("%:p:h"),' ()')
   if has('unix') && s:executable('xdg-open')
     call system( 'xdg-open '. path)
   elseif has('mac') && s:executable('open')
@@ -481,9 +481,9 @@ function! PluginTest(is_gui, extraCommand)
   let extraCommand = escape(a:extraCommand, '!\<>"')
   let extraCommand = empty(a:extraCommand) ? '' : ' -c"au VimEnter * nested ' . extraCommand . '"'
   if exists('b:git_dir')
-    let l:additional_path = fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
+    let l:additional_path = shellescape(fnamemodify(b:git_dir, ':p:h:h'))
   else
-    let l:additional_path = fnamemodify(getcwd(), ':p:h:h:s? ?\\ ?')
+    let l:additional_path = shellescape(fnamemodify(getcwd(), ':p:h:h'))
   endif
   execute '!' . cmd . ' -u ~/.min.vimrc -i NONE -N --cmd "set rtp+=' . additional_path . '"' . extraCommand
 endfunction
@@ -513,7 +513,7 @@ endfunction
 
 function! s:ChangeCurrentDir(directory, bang)
   if a:directory == ''
-    execute 'lcd ' . shellescape(expand('%:p:h'))
+    execute 'lcd ' . escape(expand('%:p:h'), ' ()')
   else
     execute 'lcd ' . a:directory
   endif
@@ -3360,7 +3360,7 @@ if neobundle#tap('vim-template')
     endif
     let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
     if l:filename != ''
-      let l:template_dir= fnamemodify(l:filename, ":p:h")
+      let l:template_dir= escape(fnamemodify(l:filename, ":p:h"), ' ()'))
       if !isdirectory(l:template_dir)
         call mkdir(l:template_dir, 'p')
       endif
@@ -3722,7 +3722,8 @@ if neobundle#tap('vim-fugitive')
     if !exists('b:git_dir')
       return
     endif
-    execute 'lcd '. fnamemodify(b:git_dir, ':p:h:h:gs? ?\\ ?')
+    let git_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
+    execute 'lcd '. git_path
     nnoremap <buffer> [git] <Nop>
     nmap <buffer> <Leader>g [git]
     nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
@@ -3732,8 +3733,8 @@ if neobundle#tap('vim-fugitive')
     nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
     nnoremap <buffer> [git]p :<C-u>Gpush<CR>
     " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-    if &l:path !~# fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
-      let &l:path .= ','.fnamemodify(b:git_dir, ':p:h:h:s? ?\\ ?')
+    if &l:path !~# git_path
+      let &l:path .= ','.git_path
     endif
   endfunction "}}}
 
