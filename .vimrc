@@ -570,6 +570,12 @@ endfunction "}}}
 
 command! FollowSymlink  call s:SwitchToActualFile()
 
+function! Load_webpage(url) abort
+  execute 'r !wget -O - '.a:url.' 2>/dev/null'
+  " echo a:url
+endfunction
+command! -nargs=1 Wget call Load_webpage(<q-args>)
+
 function! s:RestoreCursorPostion() "{{{
   let ignore_filetypes = ['gitcommit']
   if index(ignore_filetypes, &l:filetype) >= 0
