@@ -1,3 +1,45 @@
+
+# ------------------------------
+# Plugin Settings
+# ------------------------------
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/b4b4r07/zplug ~/.zplug
+fi
+source ~/.zplug/zplug
+
+# Make sure you use double quotes
+zplug "zsh-users/zsh-history-substring-search"
+zplug "Jxck/dotfiles", as:command, of:"bin/{histuniq,color}"
+zplug "tcnksm/docker-alias", of:zshrc
+zplug "k4rthik/git-cal", as:command, frozen:1
+zplug "junegunn/fzf-bin", \
+    as:command, \
+    from:gh-r, \
+    file:fzf, \
+    of:"*darwin*amd64*"
+zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
+    from:gist
+zplug "plugins/git",   from:oh-my-zsh, if:"which git"
+zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
+zplug "stedolan/jq", \
+    as:command, \
+    file:jq, \
+    from:gh-r \
+    | zplug "b4b4r07/emoji-cli"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "~/.zsh", from:local
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
+
 # ------------------------------
 # General Settings
 # ------------------------------
@@ -34,7 +76,7 @@ if ! [[ -d ~/.zsh ]]; then
 fi
 
 ### Autoloads ###
-autoload -Uz regexp-replace
+autoload -U colors; colors
 autoload -U compinit; compinit # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
@@ -105,6 +147,7 @@ function history-all { history -E -D 1  }
 # ------------------------------
 # Look And Feel Settings
 # ------------------------------
+
 ### Ls Color ###
 # 色の設定
 export LSCOLORS=Exfxcxdxbxegedabagacad
@@ -113,36 +156,6 @@ export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30
 export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
 
-### Prompt ###
-# プロンプトに色を付ける
-autoload -U colors; colors
-# 一般ユーザ時
-tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
-tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
-tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
-tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
-
-tmp_la_prompt="L:\$(sysctl vm.loadavg | cut -f3 -d' ')"
-# rootユーザ時(太字にし、アンダーバーをつける)
-if [ ${UID} -eq 0 ]; then
-    tmp_prompt="%B%U${tmp_prompt}%u%b"
-    tmp_prompt2="%B%U${tmp_prompt2}%u%b"
-    tmp_rprompt="%B%U${tmp_rprompt}%u%b"
-    tmp_sprompt="%B%U${tmp_sprompt}%u%b"
-fi
-
-PROMPT="($tmp_la_prompt)
-$tmp_rprompt 
-$tmp_prompt"    # 通常のプロンプト
-PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-RPROMPT=  # 右側のプロンプト
-SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
-
-# SSHログイン時のプロンプト
-[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-    PROMPT="($tmp_la_prompt)$tmp_rprompt 
-%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
-;
 
 ### Title (user@hostname) ###
 
@@ -281,8 +294,8 @@ ls_abbrev() {
 }
 
 ## Zbell configuration
-zbell_duration=1
-zbell_duration_email=180
+zbell_duration=30
+zbell_duration_email=300
 zbell_email() {
     echo "$zbell_lastcmd"
     mail -s 'Complete Running Command' $EMAIL <<EOS 
@@ -353,41 +366,34 @@ export PYTHONSTARTUP
 export PATH LD_LIBRARY_PATH
 
 
-if [[ ! -d ~/.zplug ]]; then
-    git clone https://github.com/b4b4r07/zplug ~/.zplug
-fi
-source ~/.zplug/zplug
 
-# Make sure you use double quotes
-zplug "zsh-users/zsh-history-substring-search"
-zplug "Jxck/dotfiles", as:command, of:"bin/{histuniq,color}"
-zplug "tcnksm/docker-alias", of:zshrc
-zplug "k4rthik/git-cal", as:command, frozen:1
-zplug "junegunn/fzf-bin", \
-    as:command, \
-    from:gh-r, \
-    file:fzf, \
-    of:"*darwin*amd64*"
-zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
-    from:gist
-zplug "plugins/git",   from:oh-my-zsh, if:"which git"
-zplug "themes/pygmalion", from:oh-my-zsh
-zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
-zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
-zplug "stedolan/jq", \
-    as:command, \
-    file:jq, \
-    from:gh-r \
-    | zplug "b4b4r07/emoji-cli"
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "~/.zsh", from:local
+### Prompt ###
+# プロンプトに色を付ける
+# 一般ユーザ時
+tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
+tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
+tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
+tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+tmp_la_prompt="L:\$(sysctl vm.loadavg | cut -f3 -d' ')"
+# rootユーザ時(太字にし、アンダーバーをつける)
+if [ ${UID} -eq 0 ]; then
+    tmp_prompt="%B%U${tmp_prompt}%u%b"
+    tmp_prompt2="%B%U${tmp_prompt2}%u%b"
+    tmp_rprompt="%B%U${tmp_rprompt}%u%b"
+    tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
-# Then, source plugins and add commands to $PATH
-zplug load --verbose
+
+PROMPT="($tmp_la_prompt)
+$tmp_rprompt 
+$tmp_prompt"    # 通常のプロンプト
+PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
+RPROMPT=  # 右側のプロンプト
+SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
+
+# SSHログイン時のプロンプト
+[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
+    PROMPT="($tmp_la_prompt)$tmp_rprompt 
+%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
+;
+ 
