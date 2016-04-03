@@ -1,4 +1,20 @@
-
+path=(
+    "$lpath[@]"
+    /usr/local/bin
+    /usr/bin
+    /usr/X11/bin
+    /usr/bin/X11
+    /usr/local/X11/bin
+    /usr/local/games
+    /usr/games
+    /usr/lib/nagios/plugins
+    "$fpath[@]"
+    "$path[@]"
+    "$PATH[@]"
+    /bin
+)
+typeset -gU path
+typeset -gU manpath
 # ------------------------------
 # Plugin Settings
 # ------------------------------
@@ -9,7 +25,6 @@ source ~/.zplug/zplug
 
 # Make sure you use double quotes
 zplug "zsh-users/zsh-history-substring-search"
-zplug "Jxck/dotfiles", as:command, of:"bin/{histuniq,color}"
 zplug "tcnksm/docker-alias", of:zshrc
 zplug "k4rthik/git-cal", as:command, frozen:1
 zplug "junegunn/fzf-bin", \
@@ -167,18 +182,8 @@ export CLICOLOR=true
 if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
 ### Macports ###
-case "${OSTYPE}" in darwin*)
-    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-    export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
-    ;;
-esac
-
-if [[ $PATH == */usr/local/bin* ]]; then
-    export PATH=/usr/local/bin:$PATH
-fi
-
 if [[ -z $LD_LIBRARY_PATH ]]; then
-    export LD_LIBRARY_PATH=${PATH:s/lib/bin}
+    export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 fi
 
 function 256colortest(){
@@ -293,9 +298,9 @@ ls_abbrev() {
     fi
 }
 
-## Zbell configuration
-zbell_duration=30
+zbell_duration=2
 zbell_duration_email=300
+## Zbell configuration
 zbell_email() {
     echo "$zbell_lastcmd"
     mail -s 'Complete Running Command' $EMAIL <<EOS 
@@ -339,7 +344,6 @@ esac
 # fi
 
 #### Export Configurations ####
-export PATH=/usr/local/bin:$PATH
 export LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib:$LD_LIBRARY_PATH
 export PYTHONSTARTUP=~/.pythonstartup
 
@@ -349,23 +353,15 @@ else
     alias todo="$EDITOR ~\/.todo"
 fi
 
-
-if [ -f "$HOME/.local.zshrc" ]; then
-    source $HOME/.local.zshrc
-else
-    cat > $HOME/.local.zshrc <<EOF 
-export PATH=\$HOME/.local/bin:\$PATH
-export LD_LIBRARY_PATH=\$HOME/.local/lib:\$LD_LIBRARY_PATH
-EOF
-fi
-
-typeset -gU path
-typeset -gU LD_LIBRARY_PATH
-
 export PYTHONSTARTUP
 export PATH LD_LIBRARY_PATH
 
 
+if [[ -n $TMUX ]]; then
+    [[ -x `which pyenv` ]] \
+        && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
+    [[ -x `which rbenv` ]] && eval "$(rbenv init -)"
+fi
 
 ### Prompt ###
 # プロンプトに色を付ける
@@ -396,4 +392,3 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
     PROMPT="($tmp_la_prompt)$tmp_rprompt 
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;
- 

@@ -1,0 +1,89 @@
+# -*- mode: sh;-*-
+# We (may) use those variables wherever, so fill them now.
+# Avoids calling the processes all the time we need em.
+OSNAME=`uname -s`
+USER=${USER:-`whoami`}
+UID=${UID:-`id -u`}
+# :r strips "extension" (a . followed by 0 or more characters)
+HOST=$HOST:r:r
+HOST=${HOST:-$(hostname -s)}
+DOMAIN=${DOMAIN:-$(hostname -d 2>&-)}
+[ "$DOMAIN" = "" -o "$DOMAIN" = "localdomain" -o "$DOMAIN" = "(none)" ] && DOMAIN=$(grep "^search " /etc/resolv.conf | cut -d' ' -f2)
+[[ -f /etc/debian_version ]] && DISTRI="Debian"
+[[ -f /etc/redhat-release ]] && DISTRI="RedHat"
+
+# Local settings and styles can go here and (usually) overwrite
+# things defined by me later.
+[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
+
+DEBUG=${DEBUG:-no}
+
+# Path to search for autoloadable functions.
+fpath=( ${ZDOTDIR}/functions $fpath[@] )
+
+# Only unique entries please.
+typeset -U fpath
+fpath=( ${^fpath}(N-/) )
+export fpath
+
+# case "${OSTYPE}" in darwin*)
+#     export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+#     export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
+#     ;;
+# esac
+
+path=(
+    "$lpath[@]"
+    /usr/local/bin
+    /usr/bin
+    /usr/X11/bin
+    /usr/bin/X11
+    /usr/local/X11/bin
+    /usr/local/games
+    /usr/games
+    /usr/lib/nagios/plugins
+    "$fpath[@]"
+    "$path[@]"
+    "$PATH[@]"
+    /bin
+)
+
+if [ "`id -u`" = "0" ] || ! [ -x /usr/bin/id ]; then
+    path=(
+        "$path[@]"
+        /usr/local/sbin
+        /usr/sbin
+        /sbin
+    )
+fi
+
+
+manpath=(
+    "$lmanpath[@]"
+    /usr/share/man
+    /usr/local/share/man
+    "$manpath[@]"
+)
+
+# Only unique entries please.
+typeset -gU path
+typeset -gU manpath
+
+# Remove entries that don't exist on this system.  Just for sanity's
+# sake more than anything.
+path=( ${^path}(N-/) )
+manpath=( ${^manpath}(N-/) )
+
+
+# Command to use when redirecting from/to a null command.
+# READNULLCMD is redefined in .zshrc for interactive shells.
+READNULLCMD=cat
+NULLCMD=cat
+
+# Unix groups: remember the original group ID.  (For prompts.)
+if [[ ${+ORIGGID} -eq 0 ]]; then
+    export ORIGGID="$GID"
+fi
+
+# Just to make damn sure they are there.
+export PATH USER HOST DOMAIN UID OSNAME DISTRI

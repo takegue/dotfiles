@@ -1,0 +1,49 @@
+# -*- mode: sh;-*-
+############
+#
+# .zshenv
+# Written by Joerg Jaspert <joerg@debian.org>
+#
+############
+# This assumes that $HOME/.zshenv is a symlink to
+# $ZDOTDIR/zshenv.home (as is my default).
+if zp=$(readlink -f ${HOME}/.zshenv 2>/dev/null); then
+    zp=${zp%/*}
+elif zp=$(greadlink -f ${HOME}/.zshenv 2>/dev/null); then
+    # MacOS readlink isn't up to the task, user needs to
+    # install the gnu coreutils for it
+    zp=${zp%/*}
+else
+    # If both fail, use the "traditional" way of hardcoding
+    zp="${HOME}/.zsh"
+fi
+ZDOTDIR=${ZDOTDIR:-$zp}
+# In case the user did not symlink us, but copy, we fallback to
+# the traditional way too.
+if [[ ${HOME} == ${ZDOTDIR} ]]; then
+    ZDOTDIR="${HOME}/.zsh"
+fi
+
+[ -r "${ZDOTDIR}/zshenv" ] && source "${ZDOTDIR}/zshenv"
+
+# If you want to "profile" the shell initialization, enable
+# the following lines.
+# Don't have this enabled for normal use, its pretty distracting and
+# also changes some initialization behaviour (re prompts)
+
+## Set the trace prompt to be like
+## YYYY-MM-DD HH:MM:SS scriptname(function):line>
+#PS4='%D{%Y-%m-%d %H:%M:%S} %x(%N):%i> '
+## save file stderr to file descriptor 3 and redirect stderr (including trace
+## output) to a tempfile
+#INITLOG=$(mktemp --tmpdir=/tmp zshlog.XXXXX.${USER}.$(date +%s))
+#exec 3>&2 2>${INITLOG}
+## set options to turn on tracing and expansion of commands contained in the prompt
+#setopt xtrace prompt_subst
+
+# Store "starttime" of shell in case user wants to see how long loading took
+_start_time=$(( $(( $(date +%s) * 1000000000 )) + $(date +%N) ))
+# Variable is removed on end of shell load
+
+# Don't do anything more in here, do everything inside
+# $ZDOTDIR!i
