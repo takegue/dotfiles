@@ -3,7 +3,7 @@
 # ------------------------------
 export EDITOR=vim        # エディタをvimに設定
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-export KCODE=UTF8           # KCODEにUTF-8を設定
+export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 
@@ -17,7 +17,6 @@ setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 setopt prompt_subst      # プロンプト定義内で変数置換やコマンド置換を扱う
 setopt notify            # バックグラウンドジョブの状態変化を即時報告する
 setopt equals            # =commandを`which command`と同じ処理にする
-
 
 DIRSTACKSIZE=9
 DIRSTACKFILE=~/.zdirs
@@ -34,14 +33,18 @@ if ! [[ -d ~/.zsh ]]; then
     mkdir ~/.zsh
 fi
 
-
-
-# ### Complement ###
+### Autoloads ###
+autoload -Uz regexp-replace
 autoload -U compinit; compinit # 補完機能を有効にする
+autoload -Uz history-search-end
+autoload -Uz vcs_info          # VCSの情報を表示する
+
+### Complement ###
 setopt auto_list               # 補完候補を一覧で表示する(d)
 setopt auto_menu               # 補完キー連打で補完候補を順に表示する(d)
 setopt list_packed             # 補完候補をできるだけ詰めて表示する
 setopt list_types              # 補完候補にファイルの種類も表示する
+
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
 zstyle ':completion:*' menu select
@@ -49,6 +52,23 @@ zstyle ':completion:*' verbose yes
 zstyle ':completion:*' format '%B%d%b'
 zstyle ':completion:*:warnings' format 'No matches for: %d'
 zstyle ':completion:*' group-name ''
+
+# 補完候補に色を付ける
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
+zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
+zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
+
+# マッチ種別を別々に表示
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:default' list-colors  ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
+
+zstyle ':vcs_info:*' formats '[%b]'
+zstyle ':vcs_info:*' actionformats '[%b]'
 
 ### Glob ###
 setopt extended_glob # グロブ機能を拡張する
@@ -66,7 +86,6 @@ setopt share_history      # 他のシェルのヒストリをリアルタイム�
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
 # # マッチしたコマンドのヒストリを表示できるようにする
-autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
@@ -83,7 +102,6 @@ bindkey '^E' end-of-line
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 
-
 # ------------------------------
 # Look And Feel Settings
 # ------------------------------
@@ -92,24 +110,8 @@ function history-all { history -E -D 1  }
 export LSCOLORS=Exfxcxdxbxegedabagacad
 # 補完時の色の設定
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-# ZLS_COLORSとは？
 export ZLS_COLORS=$LS_COLORS
-# lsコマンド時、自動で色がつく(ls -Gのようなもの？)
 export CLICOLOR=true
-# 補完候補に色を付ける
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
-zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
-zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
-zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
-
-# マッチ種別を別々に表示
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:default' list-colors  ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
-
 
 ### Prompt ###
 # プロンプトに色を付ける
@@ -129,7 +131,8 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-PROMPT="($tmp_la_prompt)$tmp_rprompt 
+PROMPT="($tmp_la_prompt)
+$tmp_rprompt 
 $tmp_prompt"    # 通常のプロンプト
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
 RPROMPT=  # 右側のプロンプト
@@ -184,23 +187,6 @@ function head_tail(){
     }
 }
 
-function mail_alart(){
-    ##TODO: "| NOTE"の部分を消し去りたい
-    if [ -p /dev/stdin ]; then
-        export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-        if [ $# -gt 0 ]; then
-            out=$1
-        else
-            out=/dev/tty
-        fi &&
-        tee -a $out | head_tail 10 10 | sed '1iCOMMAND:\n\t'${TMP_COMMAND}'\n\nCONTENTS:'  | nkf -w \
-            | mail -s 'Complete Running Command' $EMAIL
-    else
-        echo 'Command\n'$TMP_COMMAND\
-            | mail -s 'Complete Running Command' $EMAIL
-    fi
-}
-
 today(){ echo `date +%Y%m%d` } 
 
 
@@ -235,7 +221,6 @@ which htop 2>/dev/null 1>&2
 if [ $? -eq 0 ]; then
     alias top='htop'
 fi
-
 
 function sshcd()
 {
@@ -295,38 +280,9 @@ ls_abbrev() {
     fi
 }
 
-# only do this if we're in an interactive shell
-# [[ -o interactive ]] || return
-
-# get $EPOCHSECONDS. builtins are faster than date(1)
-zmodload zsh/datetime || return
-
- # make sure we can register hooks
-autoload -Uz add-zsh-hook || return
-
-(( ${+zbell_duration} )) || zbell_duration=60
-(( ${+zbell_duration_email} )) || zbell_duration_email=300
-
-# initialize zbell_ignore if not set
-(( ${+zbell_ignore} )) || zbell_ignore=($EDITOR $PAGER ls watch htop top ssh iotop dstat vmstat nano ipython emacs nvim vim vim bwm-ng less more fdisk audacious play aplay sqlite3 wine mtr ping traceroute vlc mplayer smplayer tail tmux screen man sawfish-config powertop g)
-
-# initialize it because otherwise we compare a date and an empty string
-# the first time we see the prompt. it's fine to have lastcmd empty on the
-# initial run because it evaluates to an empty string, and splitting an
-# empty string just results in an empty array.
-zbell_timestamp=$EPOCHSECONDS
-
-# right before we begin to execute something, store the time it started at
-zbell_begin() {
-    zbell_lastcmd=$1
-    zbell_timestamp=$EPOCHSECONDS
-}
-
-zbell_noise() {
-    # play -q /home/wonko/Seafile/Phone/media/audio/notifications/Bazinga.mp3 &|
-    echo "\a" &|
-}
-
+## Zbell configuration
+zbell_duration=1
+zbell_duration_email=180
 zbell_email() {
     echo "$zbell_lastcmd"
     mail -s 'Complete Running Command' $EMAIL <<EOS 
@@ -344,79 +300,30 @@ Time: ${zbell_cmd_duration}
 Love,
 
 Zbell
-
 EOS
-}
-
-# when it finishes, if it's been running longer than $zbell_duration,
-# and we dont have an ignored command in the line, then print a bell.
-zbell_end() {
-    zbell_exit_status=$?
-    ran_long=$(( $EPOCHSECONDS - $zbell_timestamp >= $zbell_duration ))
-
-    local has_ignored_cmd=0
-    local zbell_lastcmd_tmp
-    zbell_lastcmd_tmp="$zbell_lastcmd"
-    zbell_lastcmd_tmp=$(echo zbell_lastcmd_tmp | sed s/"^sudo "//)
-
-    if [[ $zbell_last_timestamp == $zbell_timestamp ]]; then
-        return
-    fi
-
-    if [[ $zbell_lastcmd_tmp == "" ]]; then
-        return
-    fi
-
-    zbell_last_timestamp=$zbell_timestamp
-
-    for cmd in ${(s:;:)zbell_lastcmd_tmp//|/;}; do
-        words=(${(z)cmd})
-        util=${words[1]}
-        if (( ${zbell_ignore[(i)$util]} <= ${#zbell_ignore} )); then
-            has_ignored_cmd=1
-            break
-        fi
-    done
-
-    if (( ! $has_ignored_cmd )) && (( ran_long )); then
-        local zbell_cmd_duration
-        zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
-        if [[ $zbell_cmd_duration -gt $zbell_duration_email ]]; then
-            zbell_email
-        else
-            zbell_noise
-        fi
-        echo 1>/dev/stderr 'Process took the '$zbell_cmd_duration 's'
-        # notify-send "Job completed on $HOST:" "$zbell_lastcmd"
-    fi
 }
 
 case "${TERM}" in
     kterm*|xterm*)
         preexec() {
-            zbell_begin $1
         }
         precmd() {
-            zbell_end
+            psvar=()
+            LANG=en_US.UTF-8 vcs_info 
+            [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
         }
         ;;
 esac
  
 
-fpath=( $HOME/.zsh/functions $fpath[@] ) 
-if [[ -d ~/.zsh/zsh-completions ]]; then
-    fpath=(~/.zsh/zsh-completions/src $fpath[@])
-else
-    git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
-    fpath=(~/.zsh/zsh-completions/src $fpath[@])
-    rm -f ~/.zcompdump; compinit
-fi
-
-# for paths in "$fpath[@]"; 
-#     autoload -Uz "$paths"/*(N:t) >/dev/null
-# done
-# unset paths
-
+# fpath=( $HOME/.zsh/functions $fpath[@] ) 
+# if [[ -d ~/.zsh/zsh-completions ]]; then
+#     fpath=(~/.zsh/zsh-completions/src $fpath[@])
+# else
+#     git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
+#     fpath=(~/.zsh/zsh-completions/src $fpath[@])
+#     rm -f ~/.zcompdump; compinit
+# fi
 
 #### Export Configurations ####
 export PATH=/usr/local/bin:$PATH
@@ -443,5 +350,44 @@ typeset -gU path
 typeset -gU LD_LIBRARY_PATH
 
 export PYTHONSTARTUP
-
 export PATH LD_LIBRARY_PATH
+
+
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/b4b4r07/zplug ~/.zplug
+fi
+source ~/.zplug/zplug
+
+# Make sure you use double quotes
+zplug "zsh-users/zsh-history-substring-search"
+zplug "Jxck/dotfiles", as:command, of:"bin/{histuniq,color}"
+zplug "tcnksm/docker-alias", of:zshrc
+zplug "k4rthik/git-cal", as:command, frozen:1
+zplug "junegunn/fzf-bin", \
+    as:command, \
+    from:gh-r, \
+    file:fzf, \
+    of:"*darwin*amd64*"
+zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
+    from:gist
+zplug "plugins/git",   from:oh-my-zsh, if:"which git"
+zplug "themes/pygmalion", from:oh-my-zsh
+zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
+zplug "stedolan/jq", \
+    as:command, \
+    file:jq, \
+    from:gh-r \
+    | zplug "b4b4r07/emoji-cli"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "~/.zsh", from:local
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
