@@ -61,5 +61,4 @@ for dotfile in $DIR/local_template/.* ; do
 done
 ln -sf .zsh/zshenv.home ${HOME}/.zshenv
  
-git submodule init
-git submodule update
+git submodule update --init
