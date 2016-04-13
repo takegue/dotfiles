@@ -81,4 +81,4 @@ if [[ ${+ORIGGID} -eq 0 ]]; then
 fi
 
 # Just to make damn sure they are there.
-export PATH USER HOST DOMAIN UID OSNAME DISTRI
+export PATH MANPATH USER HOST DOMAIN UID OSNAME DISTRI
