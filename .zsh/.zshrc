@@ -288,9 +288,9 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-[[ -x `which neovim` ]] && alias vim='neovim'
-[[ -x `which htop` ]]  && alias top='htop'
-[[ -x `which pygmentx` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
+[[ -x `which neovim 2>/dev/null` ]] && alias vim='neovim'
+[[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
+[[ -x `which pygmentx 2>/dev/null` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
 if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]];then
     export PATH="$ANYENV_ROOT/bin:$PATH"
     eval "$(anyenv init -)"
