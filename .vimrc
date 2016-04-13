@@ -572,7 +572,6 @@ command! FollowSymlink  call s:SwitchToActualFile()
 
 function! Load_webpage(url) abort
   execute 'r !wget -O - '.a:url.' 2>/dev/null'
-  " echo a:url
 endfunction
 command! -nargs=1 Wget call Load_webpage(<q-args>)
 
@@ -729,7 +728,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
-  NeoBundle 'Shougo/deoplete.nvim'
+  " NeoBundle 'Shougo/deoplete.nvim'
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
   NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neomru.vim'
@@ -1949,7 +1948,7 @@ if neobundle#tap('vim-quickrun')
 
 
   function! MakeMySQLCommandOptions()
-    if !exists("g:mysql_config_usr")
+    if !exists("g:mysql_config_user")
       let g:mysql_config_user = input("user> ")
     endif
     if !exists("g:mysql_config_host")
@@ -3366,7 +3365,7 @@ if neobundle#tap('vim-template')
     endif
     let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
     if l:filename != ''
-      let l:template_dir= escape(fnamemodify(l:filename, ":p:h"), ' ()'))
+      let l:template_dir = escape(fnamemodify(l:filename, ":p:h"), ' ()')
       if !isdirectory(l:template_dir)
         call mkdir(l:template_dir, 'p')
       endif

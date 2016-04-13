@@ -1,3 +1,9 @@
+# ------------------------------
+# Plugin Settings
+# ------------------------------
+# ZSHENVで書くと ZSHRCを読み込む際に
+# 勝手に順番を書き換えられるのでここで更新
+
 path=(
     "$lpath[@]"
     /usr/local/bin
@@ -13,8 +19,28 @@ path=(
     "$PATH[@]"
     /bin
 )
+
+manpath=(
+    "$lmanpath[@]"
+    /usr/share/man
+    /usr/local/share/man
+    "$manpath[@]"
+)
+
+ld_library_path=(
+    "${(z)path:gs/bin/lib/}[@]"
+    "${(z)path:gs/bin/lib64/}[@]"
+)
+
+path=( ${^path}(N-/) )
+manpath=( ${^manpath}(N-/) )
+ld_library_path=( ${^ld_library_path}(N-/) )
+
+typeset -T LD_LIBRARY_PATH ld_library_path
 typeset -gU path
 typeset -gU manpath
+typeset -gU ld_library_path
+
 # ------------------------------
 # Plugin Settings
 # ------------------------------
@@ -34,8 +60,8 @@ zplug "junegunn/fzf-bin", \
     of:"*darwin*amd64*"
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
-zplug "plugins/git",   from:oh-my-zsh, if:"which git"
-zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+# zplug "plugins/git",   from:oh-my-zsh, if:"which git"
+# zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
 zplug "stedolan/jq", \
     as:command, \
@@ -75,7 +101,7 @@ setopt prompt_subst      # プロンプト定義内で変数置換やコマン�
 setopt notify            # バックグラウンドジョブの状態変化を即時報告する
 setopt equals            # =commandを`which command`と同じ処理にする
 
-DIRSTACKSIZE=9
+DIRSTACKSIZE=12
 DIRSTACKFILE=~/.zdirs
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
@@ -86,15 +112,42 @@ chpwd() {
   ls_abbrev
 }
 
-if ! [[ -d ~/.zsh ]]; then
-    mkdir ~/.zsh
-fi
 
 ### Autoloads ###
+autoload -Uz add-zsh-hook
 autoload -U colors; colors
 autoload -U compinit; compinit # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
+
+autoload -Uz select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+    for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $m $c select-bracketed
+    done
+done
+
+autoload -Uz select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N change-surround surround
+zle -N add-surround surround
+
+bindkey -a cs change-surround
+bindkey -a ds delete-surround
+bindkey -a ys add-surround
+bindkey -M visual S add-surround
+
+### Hooks ###
+add-zsh-hook precmd vcs_info
 
 ### Complement ###
 setopt auto_list               # 補完候補を一覧で表示する(d)
@@ -124,8 +177,8 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors  ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
 
-zstyle ':vcs_info:*' formats '[%b]'
-zstyle ':vcs_info:*' actionformats '[%b]'
+zstyle ':vcs_info:*' formats '(%b)'
+zstyle ':vcs_info:*' actionformats '(%b:%a)'
 
 ### Glob ###
 setopt extended_glob # グロブ機能を拡張する
@@ -172,28 +225,27 @@ export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
 
 
-### Title (user@hostname) ###
-
 # ------------------------------
 # Other Settings
 # ------------------------------
 
-### RVM ###
-if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
-
-### Macports ###
-if [[ -z $LD_LIBRARY_PATH ]]; then
-    export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
-fi
+[[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
 function 256colortest(){
-for code in {0..255}; do
-    echo -e "\e[38;05;${code}m $code: Test"
-done
+    for code in {0..255}; do
+        echo -e "\e[38;05;${code}m $code: Test"
+    done
 }
 
 function body(){
-    tail -n +$1 | head -$((M-N+1)); 
+    if [ -t 0 ]; then
+        range=$(( $3 - $2 ))
+        [[ $range -gt 0 ]] && cat $1 | tail -n +$2 | head -n $range
+    else
+        range=$(( $2 - $1 ))
+        [[ $range -gt 0 ]] && cat - | tail -n +$1 | head -n $range
+    fi
+
 }
 
 function head_tail(){
@@ -208,23 +260,20 @@ function head_tail(){
 today(){ echo `date +%Y%m%d` } 
 
 
-### Aliases ###
+# ------------------------------
+# Aliases
+# ------------------------------
 alias cd=' cd'
-alias r=rails
 # alias python='python'
 alias tmux='tmux -2'
-# alias v='vim --servername VIM'
-# alias vim='vim --servername VIM'
 alias vs='vim -r'
 # alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
-alias c='pygmentize -O style=monokai -f console256 -g'
 # alias ls=' ls -G -X'
 alias less='less -IMx4 -X -R'
 alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
-alias NOTE=mail_alart 
 # alias -s py=python
 alias -g L='| less'
 alias -g H='| head'
@@ -235,11 +284,13 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-which htop 2>/dev/null 1>&2
-if [ $? -eq 0 ]; then
-    alias top='htop'
-fi
+[[ -x `which neovim` ]] && alias vim='neovim'
+[[ -x `which htop` ]]  && alias top='htop'
+[[ -x `which pygmentx` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
 
+# ------------------------------
+# Functions
+# ------------------------------
 function sshcd()
 {
     ssh $1 -t "cd `pwd`; zsh"
@@ -252,15 +303,14 @@ function ssh() {
 }
 
 function foreground-vi() {
-  fg %vim
+    fg %vim
 }
 zle -N foreground-vi
 bindkey '^Z' foreground-vi
 
 zman() {
-  PAGER="less -g -s '+/^       "$1"'" man zshall
+    PAGER="less -g -s '+/^       "$1"'" man zshall
 }
-
 
 ls_abbrev() {
     if [[ ! -r $PWD ]]; then
@@ -298,53 +348,36 @@ ls_abbrev() {
     fi
 }
 
-zbell_duration=2
+zbell_duration=10
 zbell_duration_email=300
 ## Zbell configuration
 zbell_email() {
     echo "$zbell_lastcmd"
     mail -s 'Complete Running Command' $EMAIL <<EOS 
-Hi! I notify that below long process have been finished.
-It is completed with exit status ${zbell_exit_status}
+    Hi! I notify that below long process have been finished.
+    It is completed with exit status ${zbell_exit_status}
 
-LOG
-------------
-"${zbell_lastcmd}"
-staerted: ${zbell_timestamp}
+    LOG
+    ------------
+    "${zbell_lastcmd}"
+    staerted: ${zbell_timestamp}
 end: ${zbell_last_timestamp}
 
-Time: ${zbell_cmd_duration}
+Time: $(( $zbell_cmd_duration / 60 )) m $(( $zbell_cmd_duration % 60 )) s
 
 Love,
 
 Zbell
 EOS
 }
-
-case "${TERM}" in
-    kterm*|xterm*)
-        preexec() {
-        }
-        precmd() {
-            psvar=()
-            LANG=en_US.UTF-8 vcs_info 
-            [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-        }
-        ;;
-esac
- 
-
-# fpath=( $HOME/.zsh/functions $fpath[@] ) 
-# if [[ -d ~/.zsh/zsh-completions ]]; then
-#     fpath=(~/.zsh/zsh-completions/src $fpath[@])
-# else
-#     git clone https://github.com/zsh-users/zsh-completions.git  ~/.zsh/zsh-completions
-#     fpath=(~/.zsh/zsh-completions/src $fpath[@])
-#     rm -f ~/.zcompdump; compinit
-# fi
+function show_process_time_after_cmd(){
+    local zbell_cmd_duration
+    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+    [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
+}
+add-zsh-hook precmd show_process_time_after_cmd
 
 #### Export Configurations ####
-export LD_LIBRARY_PATH=/usr/lib64:/usr/local/lib:$LD_LIBRARY_PATH
 export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -e "$HOME/Dropbox" ]; then
@@ -353,25 +386,14 @@ else
     alias todo="$EDITOR ~\/.todo"
 fi
 
-export PYTHONSTARTUP
-export PATH LD_LIBRARY_PATH
-
-
-if [[ -n $TMUX ]]; then
-    [[ -x `which pyenv` ]] \
-        && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
-    [[ -x `which rbenv` ]] && eval "$(rbenv init -)"
-fi
-
-### Prompt ###
-# プロンプトに色を付ける
-# 一般ユーザ時
+# ------------------------------
+# Prompt Settings
+# ------------------------------
 tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
 tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
 tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
 tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
 
-tmp_la_prompt="L:\$(sysctl vm.loadavg | cut -f3 -d' ')"
 # rootユーザ時(太字にし、アンダーバーをつける)
 if [ ${UID} -eq 0 ]; then
     tmp_prompt="%B%U${tmp_prompt}%u%b"
@@ -380,15 +402,18 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-PROMPT="($tmp_la_prompt)
-$tmp_rprompt 
+PROMPT="
+$tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
+
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
 RPROMPT=  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
+# For tmux powerline, to detect current directory setting
+PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+
 # SSHログイン時のプロンプト
-[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
-    PROMPT="($tmp_la_prompt)$tmp_rprompt 
-%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
+[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && \
+    PROMPT="$tmp_rprompt %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;

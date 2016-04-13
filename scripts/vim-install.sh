@@ -15,7 +15,6 @@ fi
 
 cd $DIST_VIM
 
-
 ./configure \
     --prefix=$HOME/.local \
     --enable-multibyte \
@@ -25,7 +24,7 @@ cd $DIST_VIM
     --with-luajit \
     --with-lua-prefix=/usr/local/ \
     --enable-cscope \
-    --enable-gui=yes \
+    --enable-gui=no \
     --enable-gnome-check \
     --enable-luainterp=yes \
     --enable-rubyinterp=yes \
@@ -33,4 +32,3 @@ cd $DIST_VIM
     --enable-python3interp=yes
 
 make && make install
-

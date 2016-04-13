@@ -24,15 +24,11 @@ fpath=( ${ZDOTDIR}/functions $fpath[@] )
 # Only unique entries please.
 typeset -U fpath
 fpath=( ${^fpath}(N-/) )
-export fpath
 
-# case "${OSTYPE}" in darwin*)
-#     export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-#     export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
-#     ;;
-# esac
+typeset -T LD_LIBRARY_PATH ld_library_path
 
 path=(
+    $HOME/bin
     "$lpath[@]"
     /usr/local/bin
     /usr/bin
@@ -48,7 +44,7 @@ path=(
     /bin
 )
 
-if [ "`id -u`" = "0" ] || ! [ -x /usr/bin/id ]; then
+if [[ "`id -u`" -eq "0" ]] || ! [[ -x /usr/bin/id ]]; then
     path=(
         "$path[@]"
         /usr/local/sbin
@@ -57,13 +53,13 @@ if [ "`id -u`" = "0" ] || ! [ -x /usr/bin/id ]; then
     )
 fi
 
-
 manpath=(
     "$lmanpath[@]"
     /usr/share/man
     /usr/local/share/man
     "$manpath[@]"
 )
+
 
 # Only unique entries please.
 typeset -gU path
@@ -73,7 +69,6 @@ typeset -gU manpath
 # sake more than anything.
 path=( ${^path}(N-/) )
 manpath=( ${^manpath}(N-/) )
-
 
 # Command to use when redirecting from/to a null command.
 # READNULLCMD is redefined in .zshrc for interactive shells.

@@ -15,7 +15,7 @@ from functools import partial
 from math import *
 
 import logging
-logger = logging.getLogger('app.ane')
+logger = logging.getLogger(__name__)
 
 pd.set_option('display.line_width',200)
 

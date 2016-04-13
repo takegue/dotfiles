@@ -59,6 +59,7 @@ for dotfile in $DIR/local_template/.* ; do
         cp $dotfile $dstpath
     fi 
 done
+
 ln -sf .zsh/zshenv.home ${HOME}/.zshenv
 ln -sf plugins/tmux-powerline ${HOME}/.local/src
  
