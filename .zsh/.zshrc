@@ -418,5 +418,6 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && \
-    PROMPT="$tmp_rprompt %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
+    PROMPT="$tmp_rprompt\$vcs_info_msg_0_
+%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;
