@@ -67,9 +67,9 @@ zplug "stedolan/jq", \
     from:gh-r \
     | zplug "b4b4r07/emoji-cli"
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
-zplug "riywo/anyenv", \
-    do:"ln -Fs \`pwd\` ~/.anyenv"\
-    if: ${ANYENV_ROOT:-''}
+[[ ! -d ${ANYENV_ROOT} ]] && \
+    zplug "riywo/anyenv", \
+    do:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
 zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
@@ -288,9 +288,9 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-[[ -x `which neovim` ]] && alias vim='neovim'
-[[ -x `which htop` ]]  && alias top='htop'
-[[ -x `which pygmentx` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
+[[ -x `which neovim 2>/dev/null` ]] && alias vim='neovim'
+[[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
+[[ -x `which pygmentx 2>/dev/null` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
 if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]];then
     export PATH="$ANYENV_ROOT/bin:$PATH"
     eval "$(anyenv init -)"
