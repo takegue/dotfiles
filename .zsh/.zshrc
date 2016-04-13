@@ -52,7 +52,7 @@ source ~/.zplug/zplug
 # Make sure you use double quotes
 zplug "zsh-users/zsh-history-substring-search"
 zplug "tcnksm/docker-alias", of:zshrc
-zplug "k4rthik/git-cal", as:command, frozen:1
+zplug "k4rthik/git-cal", as:command
 zplug "junegunn/fzf-bin", \
     as:command, \
     from:gh-r, \
@@ -60,8 +60,6 @@ zplug "junegunn/fzf-bin", \
     of:"*darwin*amd64*"
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
-# zplug "plugins/git",   from:oh-my-zsh, if:"which git"
-# zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
 zplug "stedolan/jq", \
     as:command, \
@@ -69,6 +67,9 @@ zplug "stedolan/jq", \
     from:gh-r \
     | zplug "b4b4r07/emoji-cli"
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "riywo/anyenv", \
+    do:"ln -Fs \`pwd\` ~/.anyenv"\
+    if: ${ANYENV_ROOT:-''}
 zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
@@ -290,6 +291,10 @@ alias -g W='| wc'
 [[ -x `which neovim` ]] && alias vim='neovim'
 [[ -x `which htop` ]]  && alias top='htop'
 [[ -x `which pygmentx` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
+if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]];then
+    export PATH="$ANYENV_ROOT/bin:$PATH"
+    eval "$(anyenv init -)"
+fi
 
 # ------------------------------
 # Functions
@@ -350,7 +355,6 @@ ls_abbrev() {
         echo "$ls_result"
     fi
 }
-
 zbell_duration=10
 zbell_duration_email=300
 ## Zbell configuration
