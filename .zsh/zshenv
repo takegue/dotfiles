@@ -60,15 +60,22 @@ manpath=(
     "$manpath[@]"
 )
 
+ld_library_path=(
+    "$lld_library_path[@]"
+    "$ld_library_path[@]"
+)
+
 
 # Only unique entries please.
 typeset -gU path
 typeset -gU manpath
+typeset -gU ld_library_path
 
 # Remove entries that don't exist on this system.  Just for sanity's
 # sake more than anything.
 path=( ${^path}(N-/) )
 manpath=( ${^manpath}(N-/) )
+lld_library_path=( ${^ld_library_path}(N-/) )
 
 # Command to use when redirecting from/to a null command.
 # READNULLCMD is redefined in .zshrc for interactive shells.
