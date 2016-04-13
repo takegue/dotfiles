@@ -69,7 +69,10 @@ zplug "stedolan/jq", \
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 [[ ! -d ${ANYENV_ROOT} ]] && \
     zplug "riywo/anyenv", \
-    do:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
+    do:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
+        | zplug "yyuu/pyenv-virtualenv", \
+            do:"ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" \
+
 zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
