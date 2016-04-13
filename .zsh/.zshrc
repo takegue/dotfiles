@@ -119,32 +119,35 @@ autoload -U colors; colors
 autoload -U compinit; compinit # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
+autoload -Uz is-at-least
 
-autoload -Uz select-bracketed
-zle -N select-bracketed
-for m in visual viopp; do
-    for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-    bindkey -M $m $c select-bracketed
-    done
-done
-
-autoload -Uz select-quoted
-zle -N select-quoted
-for m in visual viopp; do
-  for c in {a,i}{\',\",\`}; do
-    bindkey -M $m $c select-quoted
+if is-at-least 5.0.8; then
+  autoload -Uz select-bracketed
+  zle -N select-bracketed
+  for m in visual viopp; do
+      for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+      bindkey -M $m $c select-bracketed
+      done
   done
-done
 
-autoload -Uz surround
-zle -N delete-surround surround
-zle -N change-surround surround
-zle -N add-surround surround
+  autoload -Uz select-quoted
+  zle -N select-quoted
+  for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+      bindkey -M $m $c select-quoted
+    done
+  done
 
-bindkey -a cs change-surround
-bindkey -a ds delete-surround
-bindkey -a ys add-surround
-bindkey -M visual S add-surround
+  autoload -Uz surround
+  zle -N delete-surround surround
+  zle -N change-surround surround
+  zle -N add-surround surround
+
+  bindkey -a cs change-surround
+  bindkey -a ds delete-surround
+  bindkey -a ys add-surround
+  bindkey -M visual S add-surround
+fi
 
 ### Hooks ###
 add-zsh-hook precmd vcs_info
