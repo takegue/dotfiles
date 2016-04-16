@@ -58,6 +58,7 @@ zplug "junegunn/fzf-bin", \
     from:gh-r, \
     file:fzf, \
     of:"*darwin*amd64*"
+zplug "junegunn/fzf", as:command, of:bin/fzf-tmux
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
@@ -72,6 +73,10 @@ zplug "zsh-users/zsh-syntax-highlighting", nice:10
     do:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
         | zplug "yyuu/pyenv-virtualenv", \
             do:"ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" \
+zplug "zsh-users/zsh-completions"
+zplug "carsonmcdonald/tmux-wifi-os-x", \
+    as:command, of:wifi-signal-strength, \
+    if:"[[ $OSTYPE == *darwin* ]]"
 
 zplug "~/.zsh", from:local
 
@@ -120,7 +125,7 @@ chpwd() {
 ### Autoloads ###
 autoload -Uz add-zsh-hook
 autoload -U colors; colors
-autoload -U compinit; compinit # 補完機能を有効にする
+autoload -U compinit   # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
 autoload -Uz is-at-least
@@ -230,6 +235,7 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
+export GREP_OPTIONS='--color=auto' 
 
 
 # ------------------------------

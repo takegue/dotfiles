@@ -92,7 +92,7 @@ set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
 
 set fillchars=vert:\|
 
-set belloff=error
+set belloff=cursor,error,insertmode
 set t_vb=
 set novisualbell
 
