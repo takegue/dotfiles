@@ -300,7 +300,7 @@ alias -g W='| wc'
 [[ -x `which neovim 2>/dev/null` ]] && alias vim='neovim'
 [[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
 [[ -x `which pygmentx 2>/dev/null` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
-if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]];then
+if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]]; then
     export PATH="$ANYENV_ROOT/bin:$PATH"
     eval "$(anyenv init -)"
 fi
@@ -364,19 +364,21 @@ ls_abbrev() {
         echo "$ls_result"
     fi
 }
-zbell_duration=10
+zbell_duration=5
 zbell_duration_email=300
 ## Zbell configuration
 zbell_email() {
-    echo "$zbell_lastcmd"
-    mail -s 'Complete Running Command' $EMAIL <<EOS 
-    Hi! I notify that below long process have been finished.
-    It is completed with exit status ${zbell_exit_status}
+    local zbell_cmd_duration
+    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+    datetime=$( LC_ALL=C date +'%Y-%m-%d:%H:%M:%S' )
+    mail -s "Complete Running Command (@${datetime})" $EMAIL <<EOS 
+Hi! I notify that below long process have been finished.
+It is completed with exit status ${zbell_exit_status}
 
-    LOG
-    ------------
-    "${zbell_lastcmd}"
-    staerted: ${zbell_timestamp}
+LOG
+------------
+"${zbell_lastcmd}"
+staerted: ${zbell_timestamp}
 end: ${zbell_last_timestamp}
 
 Time: $(( $zbell_cmd_duration / 60 )) m $(( $zbell_cmd_duration % 60 )) s
@@ -386,11 +388,13 @@ Love,
 Zbell
 EOS
 }
+
 function show_process_time_after_cmd(){
     local zbell_cmd_duration
     zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
     [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
 }
+
 add-zsh-hook precmd show_process_time_after_cmd
 
 #### Export Configurations ####
@@ -418,7 +422,7 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-PROMPT="
+PROMPT="(\$get_pyenv_version)
 $tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
 
@@ -426,11 +430,17 @@ PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以
 RPROMPT=  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
+get_pyenv_version()
+{
+  name=$( pyenv version-name )
+  [[ -n $name ]] && echo "(🐍 :$name)"
+}
 # For tmux powerline, to detect current directory setting
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && \
-    PROMPT="$tmp_rprompt\$vcs_info_msg_0_
+    PROMPT="\$(get_pyenv_version)
+$tmp_rprompt\$vcs_info_msg_0_
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 ;
