@@ -77,6 +77,9 @@ zplug "zsh-users/zsh-completions"
 zplug "carsonmcdonald/tmux-wifi-os-x", \
     as:command, of:wifi-signal-strength, \
     if:"[[ $OSTYPE == *darwin* ]]"
+zplug "thewtex/tmux-mem-cpu-load", \
+    as:command, of:"tmux-mem-cpu-load", \
+    do:'cmake . && make'
 
 zplug "~/.zsh", from:local
 
@@ -158,6 +161,59 @@ if is-at-least 5.0.8; then
   bindkey -M visual S add-surround
 fi
 
+# Key bindings
+# ------------
+
+# CTRL-T - Paste the selected file path(s) into the command line
+__fsel() {
+  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+    -o -type f -print \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null | sed 1d | cut -b3-"}"
+  eval "$cmd" | $(__fzfcmd) -m | while read item; do
+    printf '%q ' "$item"
+  done
+  echo
+}
+
+__fzfcmd() {
+  [ ${FZF_TMUX:-1} -eq 1 ] && echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
+}
+
+
+fzf-file-widget() {
+  LBUFFER="${LBUFFER}$(__fsel)"
+  zle redisplay
+}
+zle     -N   fzf-file-widget
+bindkey '^T' fzf-file-widget
+
+# ALT-C - cd into the selected directory
+fzf-cd-widget() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L . \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | sed 1d | cut -b3-"}"
+  cd "${$(eval "$cmd" | $(__fzfcmd) +m):-.}"
+  zle reset-prompt
+}
+zle     -N    fzf-cd-widget
+bindkey '\e' fzf-cd-widget
+
+# CTRL-R - Paste the selected command from history into the command line
+fzf-history-widget() {
+  local selected num
+  selected=( $(fc -l 1 | $(__fzfcmd) +s --tac +m -n2..,.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} -q "${LBUFFER//$/\\$}") )
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle redisplay
+}
+zle     -N   fzf-history-widget
+bindkey '^R' fzf-history-widget
+
+
 ### Hooks ###
 add-zsh-hook precmd vcs_info
 
@@ -215,8 +271,8 @@ bindkey "^N" history-beginning-search-forward-end
 
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
-bindkey -M viins '^F' history-incremental-search-backward
-bindkey -M viins '^R' history-incremental-search-forward
+# bindkey -M viins '^F' history-incremental-search-backward
+# bindkey -M viins '^R' history-incremental-search-forward
 
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
@@ -422,7 +478,13 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-PROMPT="(\$get_pyenv_version)
+get_pyenv_version()
+{
+  name=$( pyenv version-name )
+  [[ -n $name ]] && echo "(🐍 :$name)"
+}
+
+PROMPT="\$(get_pyenv_version)
 $tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
 
@@ -430,11 +492,6 @@ PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以
 RPROMPT=  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
-get_pyenv_version()
-{
-  name=$( pyenv version-name )
-  [[ -n $name ]] && echo "(🐍 :$name)"
-}
 # For tmux powerline, to detect current directory setting
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
