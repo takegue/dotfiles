@@ -427,7 +427,6 @@ get_pyenv_version()
 {
   name=$( pyenv version-name )
   [[ -n $name ]] && echo "(🐍 :$name)"
-<<<<<<< HEAD
 
 }
 get_rbenv_version()
@@ -437,13 +436,7 @@ get_rbenv_version()
 
 }
  	
-
 PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
-=======
-}
-
-PROMPT="\$(get_pyenv_version)
->>>>>>> e47fe1968c800bb88795293d0eb259c41a1bc770
 $tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
 
