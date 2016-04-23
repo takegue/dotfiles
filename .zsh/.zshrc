@@ -258,23 +258,6 @@ setopt hist_ignore_space  # spaceから始まるコマンドは記録しない
 setopt share_history      # 他のシェルのヒストリをリアルタイムで共有する
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
-<<<<<<< HEAD
-=======
-# # マッチしたコマンドのヒストリを表示できるようにする
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey "^P" history-beginning-search-backward-end
-bindkey "^N" history-beginning-search-forward-end
-
-bindkey -M vicmd '?' history-incremental-search-backward
-bindkey -M vicmd '/' history-incremental-search-forward
-# bindkey -M viins '^F' history-incremental-search-backward
-# bindkey -M viins '^R' history-incremental-search-forward
-
-bindkey '^A' beginning-of-line
-bindkey '^E' end-of-line
-
->>>>>>> e47fe1968c800bb88795293d0eb259c41a1bc770
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 
