@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+autoload -Uz fzf-cmd
+
+fzf-cd-widget() {
+  local cmd="${FZF_ALT_C_COMMAND:-"command find -L . \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
+    -o -type d -print 2> /dev/null | sed 1d | cut -b3-"}"
+  cd "${$(eval "$cmd" | $(fzf-cmd) +m):-.}"
+  zle reset-prompt
+}

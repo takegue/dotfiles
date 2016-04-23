@@ -1,11 +1,26 @@
-# ------------------------------
-# Plugin Settings
-# ------------------------------
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#        |''||''| '||'  |'  '|.   '|'  ..|'''.|  '||'  '|' '||''''|
+#           ||     || .'     |'|   |  .|'     '   ||    |   ||  .
+#           ||     ||'|.     | '|. |  ||    ....  ||    |   ||''|
+#           ||     ||  ||    |   |||  '|.    ||   ||    |   ||
+#          .||.   .||.  ||. .|.   '|   ''|...'|    '|..'   .||.....|
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -----------------------------------------------------------------------------
+#                                 PATH SETTINGS
+# -----------------------------------------------------------------------------
 # ZSHENVで書くと ZSHRCを読み込む際に
 # 勝手に順番を書き換えられるのでここで更新
 
+export GOPATH=$HOME/.go
+[[ ! -d $GOPATH ]] && mkdir -p
+
 path=(
     "$lpath[@]"
+    $GOPATH/bin
     /usr/local/bin
     /usr/bin
     /usr/X11/bin
@@ -41,9 +56,9 @@ typeset -gU path
 typeset -gU manpath
 typeset -gU ld_library_path
 
-# ------------------------------
-# Plugin Settings
-# ------------------------------
+# -----------------------------------------------------------------------------
+#                               PLUGIN SETTINGS
+# -----------------------------------------------------------------------------
 if [[ ! -d ~/.zplug ]]; then
     git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
@@ -93,9 +108,9 @@ fi
 # Then, source plugins and add commands to $PATH
 zplug load --verbose
 
-# ------------------------------
-# General Settings
-# ------------------------------
+# -----------------------------------------------------------------------------
+#                               GENERAL SETTINGS
+# -----------------------------------------------------------------------------
 export EDITOR=vim        # エディタをvimに設定
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
@@ -119,6 +134,8 @@ if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
 fi
+
+autoload -Uz ls_abbrev
 chpwd() {
   print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
   ls_abbrev
@@ -132,6 +149,7 @@ autoload -U compinit   # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
 autoload -Uz is-at-least
+autoload -Uz replace-string
 
 if is-at-least 5.0.8; then
   autoload -Uz select-bracketed
@@ -161,58 +179,37 @@ if is-at-least 5.0.8; then
   bindkey -M visual S add-surround
 fi
 
-# Key bindings
-# ------------
+# -----------------------------------------------------------------------------
+#                               KEY BINDINGS
+# -----------------------------------------------------------------------------
+
+autoload -Uz bindkey_function
 
 # CTRL-T - Paste the selected file path(s) into the command line
-__fsel() {
-  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
-    -o -type f -print \
-    -o -type d -print \
-    -o -type l -print 2> /dev/null | sed 1d | cut -b3-"}"
-  eval "$cmd" | $(__fzfcmd) -m | while read item; do
-    printf '%q ' "$item"
-  done
-  echo
-}
+if [[ -x `which fzf` ]]; then
+  bindkey_function '^T' fzf-file-widget
+  bindkey_function '^P' fzf-cd-widget
+  bindkey_function '^F' fzf-history-widget
 
-__fzfcmd() {
-  [ ${FZF_TMUX:-1} -eq 1 ] && echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
-}
+else 
+  bindkey -M viins '^F' history-incremental-search-backward
+fi
 
+# # マッチしたコマンドのヒストリを表示できるようにする
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^P" history-beginning-search-backward-end
+bindkey "^N" history-beginning-search-forward-end
 
-fzf-file-widget() {
-  LBUFFER="${LBUFFER}$(__fsel)"
-  zle redisplay
-}
-zle     -N   fzf-file-widget
-bindkey '^T' fzf-file-widget
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
 
-# ALT-C - cd into the selected directory
-fzf-cd-widget() {
-  local cmd="${FZF_ALT_C_COMMAND:-"command find -L . \\( -path '*/\\.*' -o -fstype 'dev' -o -fstype 'proc' \\) -prune \
-    -o -type d -print 2> /dev/null | sed 1d | cut -b3-"}"
-  cd "${$(eval "$cmd" | $(__fzfcmd) +m):-.}"
-  zle reset-prompt
-}
-zle     -N    fzf-cd-widget
-bindkey '\e' fzf-cd-widget
+bindkey_function '^R' replace-string
+bindkey_function -M vicmd v edit-command-line
+bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 
-# CTRL-R - Paste the selected command from history into the command line
-fzf-history-widget() {
-  local selected num
-  selected=( $(fc -l 1 | $(__fzfcmd) +s --tac +m -n2..,.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} -q "${LBUFFER//$/\\$}") )
-  if [ -n "$selected" ]; then
-    num=$selected[1]
-    if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
-    fi
-  fi
-  zle redisplay
-}
-zle     -N   fzf-history-widget
-bindkey '^R' fzf-history-widget
-
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
 
 ### Hooks ###
 add-zsh-hook precmd vcs_info
@@ -223,7 +220,6 @@ setopt auto_menu               # 補完キー連打で補完候補を順に表�
 setopt list_packed             # 補完候補をできるだけ詰めて表示する
 setopt list_types              # 補完候補にファイルの種類も表示する
 
-bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
 zstyle ':completion:*' menu select
 zstyle ':completion:*' verbose yes
@@ -245,7 +241,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors  ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
 
-zstyle ':vcs_info:*' formats '(%b)'
+zstyle ':vcs_info:*' formats '(⭠ %b)'
 zstyle ':vcs_info:*' actionformats '(%b:%a)'
 
 ### Glob ###
@@ -254,36 +250,20 @@ unsetopt caseglob    # ファイルグロブで大文字小文字を区別しな
 
 # ### History ###
 HISTFILE=~/.zsh_history   # ヒストリを保存するファイル
-HISTSIZE=20000            # メモリに保存されるヒストリの件数
-SAVEHIST=20000            # 保存されるヒストリの件数
-setopt no_bang_hist          # !を使ったヒストリ展開を行う(d)
+HISTSIZE=100000            # メモリに保存されるヒストリの件数
+SAVEHIST=1000000            # 保存されるヒストリの件数
 setopt extended_history   # ヒストリに実行時間も保存する
 setopt hist_ignore_dups   # 直前と同じコマンドはヒストリに追加しない
 setopt hist_ignore_space  # spaceから始まるコマンドは記録しない
 setopt share_history      # 他のシェルのヒストリをリアルタイムで共有する
 setopt hist_reduce_blanks # 余分なスペースを削除してヒストリに保存する
 
-# # マッチしたコマンドのヒストリを表示できるようにする
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey "^P" history-beginning-search-backward-end
-bindkey "^N" history-beginning-search-forward-end
-
-bindkey -M vicmd '?' history-incremental-search-backward
-bindkey -M vicmd '/' history-incremental-search-forward
-# bindkey -M viins '^F' history-incremental-search-backward
-# bindkey -M viins '^R' history-incremental-search-forward
-
-bindkey '^A' beginning-of-line
-bindkey '^E' end-of-line
-
 # すべてのヒストリを表示する
 function history-all { history -E -D 1  }
 
-# ------------------------------
-# Look And Feel Settings
-# ------------------------------
-
+# -----------------------------------------------------------------------------
+#                             LOOK AND FEEL SETTINGS
+# -----------------------------------------------------------------------------
 ### Ls Color ###
 # 色の設定
 export LSCOLORS=Exfxcxdxbxegedabagacad
@@ -294,9 +274,9 @@ export CLICOLOR=true
 export GREP_OPTIONS='--color=auto' 
 
 
-# ------------------------------
-# Other Settings
-# ------------------------------
+# -----------------------------------------------------------------------------
+#                                     OTHERS
+# -----------------------------------------------------------------------------
 
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
@@ -385,41 +365,6 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
-ls_abbrev() {
-    if [[ ! -r $PWD ]]; then
-        return
-    fi
-    # -a : Do not ignore entries starting with ..
-    # -C : Force multi-column output.
-    # -F : Append indicator (one of */=>@|) to entries.
-    local cmd_ls='ls'
-    local -a opt_ls
-    opt_ls=('-aCF' '--color=always')
-    case "${OSTYPE}" in
-        freebsd*|darwin*)
-            if type gls > /dev/null 2>&1; then
-                cmd_ls='gls'
-            else
-                # -G : Enable colorized output.
-                opt_ls=('-aCFG')
-            fi
-            ;;
-    esac
-
-    local ls_result
-    ls_result=$(CLICOLOR_FORCE=1 COLUMNS=$COLUMNS command $cmd_ls ${opt_ls[@]} | sed $'/^\e\[[0-9;]*m$/d')
-
-    local ls_lines=$(echo "$ls_result" | wc -l | tr -d ' ')
-
-    if [ $ls_lines -gt 10 ]; then
-        echo "$ls_result" | head -n 5
-        echo '...'
-        echo "$ls_result" | tail -n 5
-        echo "$(command ls -1 -A | wc -l | tr -d ' ') files exist"
-    else
-        echo "$ls_result"
-    fi
-}
 zbell_duration=5
 zbell_duration_email=300
 ## Zbell configuration
@@ -482,9 +427,17 @@ get_pyenv_version()
 {
   name=$( pyenv version-name )
   [[ -n $name ]] && echo "(🐍 :$name)"
-}
 
-PROMPT="\$(get_pyenv_version)
+}
+get_rbenv_version()
+{
+  name=$( rbenv version-name )
+  [[ -n $name ]] && echo "(💎 :$name)"
+
+}
+ 	
+
+PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
 $tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
 

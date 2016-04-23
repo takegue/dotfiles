@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+autoload -Uz $@[-1]
+zle     -N   $@[-1]
+bindkey $@

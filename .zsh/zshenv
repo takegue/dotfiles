@@ -19,7 +19,7 @@ DOMAIN=${DOMAIN:-$(hostname -d 2>&-)}
 DEBUG=${DEBUG:-no}
 
 # Path to search for autoloadable functions.
-fpath=( ${ZDOTDIR}/functions $fpath[@] )
+fpath=( ${ZDOTDIR}/functions $ompath[@] $fpath[@] )
 
 # Only unique entries please.
 typeset -U fpath
