@@ -335,11 +335,7 @@ alias -g W='| wc'
 
 [[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
-[[ -x `which pygmentx 2>/dev/null` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
-if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]]; then
-    export PATH="$ANYENV_ROOT/bin:$PATH"
-    eval "$(anyenv init -)"
-fi
+(( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'
 
 # ------------------------------
 # Functions
