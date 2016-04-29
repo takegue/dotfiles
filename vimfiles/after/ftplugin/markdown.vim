@@ -59,3 +59,5 @@ endfunction
 " todoリストのon/offを切り替える
 nnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
 vnoremap <buffer><silent> <Leader><Leader> :<C-u>call ToggleCheckbox()<CR>
+
+set shiftwidth=4

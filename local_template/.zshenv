@@ -14,7 +14,12 @@ lpath=(
 MAILTO='tkngue@example.com'
 EMAIL='tkngue@example.com'
 
-if [ -x `which networksetup` ] && [ `networksetup -getwebproxy Wi-Fi | grep "^Enabled:" | grep -o "\S\+$"` = "Yes" ]; then
+if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]]; then
+    export PATH="$ANYENV_ROOT/bin:$PATH"
+    eval "$(anyenv init -)"
+fi
+
+if  (( $+commands[zsh] )) && [ `networksetup -getwebproxy Wi-Fi | grep "^Enabled:" | grep -o "\S\+$"` = "Yes" ]; then
     PROXY=http://`networksetup -getwebproxy Wi-Fi | grep "^Server:.\+$Port" | grep -o "\S\+$"`:`networksetup -getwebproxy Wi-Fi | grep "^Port" | grep -o "\S\+$"`
     export http_proxy=$PROXY
     export https_proxy=$PROXY
