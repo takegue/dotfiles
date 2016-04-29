@@ -728,9 +728,9 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
-  " NeoBundle 'Shougo/deoplete.nvim'
+  NeoBundle 'Shougo/deoplete.nvim'
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
-  NeoBundle 'Shougo/neocomplete.vim'
+  " NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/neosnippet-snippets'
   NeoBundle 'Shougo/neosnippet.vim'
@@ -780,8 +780,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-scripts/Align'
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   NeoBundle 'xolox/vim-session'
-  NeoBundle 'Rykka/InstantRst'
-  NeoBundle 'Rykka/riv.vim'
+  " NeoBundle 'Rykka/InstantRst'
+  " NeoBundle 'Rykka/riv.vim'
   NeoBundleFetch 'tpope/vim-sensible'
   " " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
   " " NeoBundle 'osyo-manga/vim-over'
@@ -1054,7 +1054,6 @@ endif
 if neobundle#tap('neco-look')
   " Config {{{
   call neobundle#config({
-        \ 'depends' : ['neocomplete.vim']
         \ })
   "}}}
 
@@ -1121,9 +1120,8 @@ if neobundle#tap('neocomplete.vim')
   " Config {{{
   call neobundle#config({
         \ 'lazy' : 1,
-        \ 'disabled' : "!has('lua') || has('nvim')",
-        \ 'vim_version' : '7.3.885',
-        \  'insert' : 1,
+        \ 'disabled' : "!has('lua') || !has('nvim')",
+        \ 'insert' : 1,
         \ })
   " }}}
 
@@ -1273,7 +1271,7 @@ if neobundle#tap('deoplete.nvim')
 
     " Plugin key-mappings.
     " inoremap <expr><C-g>     deoplete#undo_completion()
-    inoremap <expr><C-l>     deoplete#complete_common_string()
+    " inoremap <expr><C-l>     deoplete#complete_common_string()
 
     " Recommended key-mappings.
     " <CR>: close popup and save indent.
@@ -1286,7 +1284,7 @@ if neobundle#tap('deoplete.nvim')
       " SuperTab like snippets behavior.
       imap <expr><CR>  neosnippet#expandable() ?
             \ "\<Plug>(neosnippet_expand)" :
-            \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
+            \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
 
     " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " For smart TAB completion.
@@ -2185,6 +2183,14 @@ if neobundle#tap('python-mode')
   endfunction "}}}
 
   " Setting {{{
+
+  if has('python')
+    let g:pymode_python = 'python2'
+  elseif has('python3')
+    let g:pymode_python = 'python3'
+  else
+    let g:loaded_jedi = 1
+  endif
   let g:pymode = 1
   let g:pymode_warnings = 1
   " let g:pymode_paths = ['shutil', 'datetime', 'time',
@@ -2279,13 +2285,12 @@ if neobundle#tap('jedi-vim')
   " Config {{{
   call neobundle#config( {
         \ "lazy"    : 1,
-        \ "disabled"    : !has('python'),
         \ "on_ft" : ['python', 'python3', 'djangohtml'],
         \ "on_source" : ['python-mode'],
         \ })
   "}}}
 
-  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
     " If not setting this, set pythoncomplete to omnifunc, which is uncomfortable
     augroup myjedivim
       autocmd!
@@ -2298,6 +2303,18 @@ if neobundle#tap('jedi-vim')
     augroup END
     call jedi#configure_call_signatures()
   endfunction "}}}
+
+ 
+
+  if has('python')
+    let g:jedi#force_py_version = 2
+    let g:pymode_python = 'python2'
+  elseif has('python3')
+    let g:jedi#force_py_version = 3
+    let g:pymode_python = 'python3'
+  else
+    let g:loaded_jedi = 1
+  endif
 
   " Setting {{{
   " let g:jedi#completions_command = "<C-N>"
@@ -2333,7 +2350,6 @@ if neobundle#tap('vim-pyenv')
   " Config {{{
   call neobundle#config({
         \   'lazy' : 1,
-        \   'disabled' : !has('python'),
         \   'external_commands' : ['pyenv'],
         \   'on_source' :  ['jedi-vim'],
         \   'on_unite' : [

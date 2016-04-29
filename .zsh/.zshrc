@@ -14,7 +14,7 @@
 # -----------------------------------------------------------------------------
 # ZSHENVで書くと ZSHRCを読み込む際に
 # 勝手に順番を書き換えられるのでここで更新
-
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export GOPATH=$HOME/.go
 [[ ! -d $GOPATH ]] && mkdir -p
 
@@ -333,8 +333,8 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
-[[ -x `which neovim 2>/dev/null` ]] && alias vim='neovim'
 [[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
+# [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 [[ -x `which pygmentx 2>/dev/null` ]] && alias c='pygmentx -O style=monokai -f console256 -g'
 if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]]; then
     export PATH="$ANYENV_ROOT/bin:$PATH"
