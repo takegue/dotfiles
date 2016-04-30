@@ -14,3 +14,4 @@ fzf-history-widget() {
   zle redisplay
 }
  
+fzf-history-widget $@

@@ -17,3 +17,5 @@ fzf-file-widget() {
   LBUFFER="${LBUFFER}$(__fsel)"
   zle redisplay
 }
+
+fzf-file-widget $@

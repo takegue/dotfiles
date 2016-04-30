@@ -8,3 +8,5 @@ fzf-cd-widget() {
   cd "${$(eval "$cmd" | $(fzf-cmd) +m):-.}"
   zle reset-prompt
 }
+
+fzf-cd-widget $@
