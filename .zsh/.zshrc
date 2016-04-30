@@ -74,6 +74,7 @@ zplug "junegunn/fzf-bin", \
     file:fzf, \
     of:"*darwin*amd64*"
 zplug "junegunn/fzf", as:command, of:bin/fzf-tmux
+# zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
@@ -92,6 +93,7 @@ zplug "zsh-users/zsh-completions"
 zplug "carsonmcdonald/tmux-wifi-os-x", \
     as:command, of:wifi-signal-strength, \
     if:"[[ $OSTYPE == *darwin* ]]"
+
 zplug "thewtex/tmux-mem-cpu-load", \
     as:command, of:"tmux-mem-cpu-load", \
     do:'cmake . && make'
@@ -188,9 +190,8 @@ autoload -Uz bindkey_function
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
   bindkey_function '^T' fzf-file-widget
-  bindkey_function '^P' fzf-cd-widget
+  bindkey_function '^G' fzf-cd-widget
   bindkey_function '^F' fzf-history-widget
-
 else 
   bindkey -M viins '^F' history-incremental-search-backward
 fi

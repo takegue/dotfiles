@@ -15,8 +15,12 @@ MAILTO='tkngue@example.com'
 EMAIL='tkngue@example.com'
 
 if [[ -d ${ANYENV_ROOT:=$HOME/.anyenv} ]]; then
-    export PATH="$ANYENV_ROOT/bin:$PATH"
-    eval "$(anyenv init -)"
+    lpath=( $ANYENV_ROOT/bin $lpath )
+    eval "$( $ANYENV_ROOT/bin/anyenv init -)"
+    for D in ${(s/:/z)PATH}
+    do
+        [[ $D =~ $ANYENV_ROOT ]] && echo $D && lpath=( $D $lpath )
+    done
 fi
 
 if  (( $+commands[zsh] )) && [ `networksetup -getwebproxy Wi-Fi | grep "^Enabled:" | grep -o "\S\+$"` = "Yes" ]; then
