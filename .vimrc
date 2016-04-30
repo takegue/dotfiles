@@ -728,9 +728,9 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
-  NeoBundle 'Shougo/deoplete.nvim'
+  " NeoBundle 'Shougo/deoplete.nvim'
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
-  " NeoBundle 'Shougo/neocomplete.vim'
+  NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neomru.vim'
   NeoBundle 'Shougo/neosnippet-snippets'
   NeoBundle 'Shougo/neosnippet.vim'
@@ -783,7 +783,7 @@ function! s:loads_bundles() abort "{{{
   " NeoBundle 'Rykka/InstantRst'
   " NeoBundle 'Rykka/riv.vim'
   NeoBundleFetch 'tpope/vim-sensible'
-  " " NeoBundle 'jaxbot/github-issues.vim'                   " Github issue lookup in Vim
+  " NeoBundle 'TKNGUE/github-issues.vim'                   " Github issue lookup in Vim
   " " NeoBundle 'osyo-manga/vim-over'
   " " NeoBundle 'Shougo/junkfile.vim'                          " Create temporary file for memo, testing, ...
   " " NeoBundle 'welle/targets.vim'
@@ -1120,7 +1120,7 @@ if neobundle#tap('neocomplete.vim')
   " Config {{{
   call neobundle#config({
         \ 'lazy' : 1,
-        \ 'disabled' : "!has('lua') || !has('nvim')",
+        \ 'disabled' : "!has('lua') || has('nvim')",
         \ 'insert' : 1,
         \ })
   " }}}
@@ -2304,14 +2304,10 @@ if neobundle#tap('jedi-vim')
     call jedi#configure_call_signatures()
   endfunction "}}}
 
- 
-
   if has('python')
     let g:jedi#force_py_version = 2
-    let g:pymode_python = 'python2'
   elseif has('python3')
     let g:jedi#force_py_version = 3
-    let g:pymode_python = 'python3'
   else
     let g:loaded_jedi = 1
   endif
@@ -2339,11 +2335,12 @@ if neobundle#tap('jedi-vim')
     let g:neocomplete#sources#omni#functions = {}
   endif
   let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
+ " }}}
+ " }}}
 
   call neobundle#untap()
 endif
 " }}} "
-"}}}
 
 " lambdalisue/vim-pyenv {{{
 if neobundle#tap('vim-pyenv')
@@ -2379,6 +2376,7 @@ if neobundle#tap('vim-pyenv')
 
   call neobundle#untap()
 endif
+" }}}
 " }}}
 "}}}
 

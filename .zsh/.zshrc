@@ -74,7 +74,6 @@ zplug "junegunn/fzf-bin", \
     file:fzf, \
     of:"*darwin*amd64*"
 zplug "junegunn/fzf", as:command, of:bin/fzf-tmux
-# zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
