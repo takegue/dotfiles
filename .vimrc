@@ -27,7 +27,13 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog  = '/usr/local/bin/python3'
+  let g:python3_host_prog = ''
+  if executable('pyenv')
+    let g:python3_host_prog  = split(system('pyenv prefix vim_dev3'), '\n')[0] . '/bin/python3'
+  endif
+  if !exists(g:python3_host_prog)
+      let g:python3_host_prog  = system('which python3')
+  endif
 endif
 "}}}
 
@@ -656,12 +662,12 @@ function! s:loads_bundles() abort "{{{
   " For plugin-name/author sort
   " :!sort -k2fd
 
-  NeoBundle 'alfredodeza/pytest.vim'
+  " NeoBundle 'alfredodeza/pytest.vim'
   NeoBundle 'AndrewRadev/switch.vim'
   NeoBundle 'basyura/unite-rails'                          " a unite.vim plugin for rails
   NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
   NeoBundle 'benmills/vimux'
-  NeoBundle 'bps/vim-textobj-python'
+  " NeoBundle 'bps/vim-textobj-python'
   NeoBundle 'christoomey/vim-tmux-navigator'
   NeoBundle 'clones/vim-zsh'
   NeoBundle 'cohama/agit.vim'
@@ -728,7 +734,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'rhysd/vim-grammarous'
   NeoBundle 'sgur/vim-textobj-parameter'                   " 引数オブジェクト #a, i,
   NeoBundle 'Shougo/context_filetype.vim'                  " Context filetype library for Vim script
-  " NeoBundle 'Shougo/deoplete.nvim'
+  NeoBundle 'Shougo/deoplete.nvim'
   NeoBundle 'Shougo/neobundle-vim-recipes'                 " Use neobundle standard rescipes
   NeoBundle 'Shougo/neocomplete.vim'
   NeoBundle 'Shougo/neomru.vim'
@@ -750,8 +756,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'thinca/vim-github'                            " An interface for Github.
   NeoBundle 'thinca/vim-quickrun'
   NeoBundle 'thinca/vim-ref'                               " referecen viwer for vim
-  NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
-  NeoBundle 'thinca/vim-template'
+  " NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
+  " NeoBundle 'thinca/vim-template'
   NeoBundle 'thinca/vim-textobj-comment'                   " コメントオブジェクト   #ac, ic
   NeoBundle 'thisivan/vim-ruby-matchit'                    " Map '%' to jump from one keyword to its corresponding 'end' in Ruby files. Inspired by 'matchit.vim' that comes with Vim.
   NeoBundle 'TKNGUE/atcoder_helper'
@@ -931,6 +937,9 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MyPyenv() "{{{
+    if !exists('*pyenv#activate')
+      return ''
+    endif
     if &ft =~ 'python'
       if !exists('b:pyenv_version')
         let statusline = pyenv#info#format('%av')
@@ -1639,7 +1648,7 @@ if neobundle#tap('switch.vim')
   call neobundle#config({})
   "}}}
 
-  function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
+  function! neobundle#tapped.hooks.on_source(bundle) "{{{
     augroup switch_autocmd
       autocmd FileType gitrebase let b:switch_custom_definitions = [
             \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
@@ -2159,13 +2168,12 @@ if neobundle#tap('python-mode')
   call neobundle#config( {
         \ 'lazy' : 1,
         \ 'external_commands' : ['pyflakes', 'pylint'],
-        \ "disable"    : !has('python'),
+        \ "disable"    : !has('python') && !has('python3'),
         \ "on_ft" : ["python", "python3", "djangohtml"],
-        \ "build_commands"  : ['pip'],
         \ "build"       : {
-        \   "cygwin"    : "pip install --user pylint rope pyflakes pep8",
-        \   "mac"       : "pip install --user pylint rope pyflakes pep8",
-        \   "unix"      : "pip install --user pylint rope pyflakes pep8"
+        \   "cygwin"    : "pip install pylint rope pyflakes pep8",
+        \   "mac"       : "pip install pylint rope pyflakes pep8",
+        \   "unix"      : "pip install pylint rope pyflakes pep8"
         \ }})
   "}}}
 
@@ -2183,14 +2191,13 @@ if neobundle#tap('python-mode')
   endfunction "}}}
 
   " Setting {{{
-
   if has('python')
     let g:pymode_python = 'python2'
   elseif has('python3')
     let g:pymode_python = 'python3'
   else
-    let g:loaded_jedi = 1
   endif
+
   let g:pymode = 1
   let g:pymode_warnings = 1
   " let g:pymode_paths = ['shutil', 'datetime', 'time',
@@ -2200,7 +2207,6 @@ if neobundle#tap('python-mode')
   let g:pymode_options_colorcolumn = 1
   let g:pymode_quickfix_minheight = 3
   let g:pymode_quickfix_maxheight = 6
-  let g:pymode_python = 'python'
   " let g:pymode_indent = []
   let g:pymode_folding = 1
   let g:pymode_motion = 1
@@ -2299,7 +2305,7 @@ if neobundle#tap('jedi-vim')
       autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
       autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto()<cr>
       autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
-      " autocmd FileType python setlocal omnifunc=jedi#completions
+      autocmd FileType python setlocal omnifunc=jedi#completions
     augroup END
     call jedi#configure_call_signatures()
   endfunction "}}}
