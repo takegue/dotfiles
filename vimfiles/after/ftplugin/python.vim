@@ -1,8 +1,8 @@
 setlocal nowrap
 setlocal textwidth=79
 setlocal nowrap
-setlocal tags+=$HOME/python.tags
-setlocal omnifunc=jedi#completions
+" setlocal tags+=$HOME/python.tags
+" setlocal omnifunc=jedi#completions
 
 iab <buffer> code # -*- coding:utf-8 -*-<CR>
 iab <buffer> pypath #!/usr/bin/env python<CR>

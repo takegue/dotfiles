@@ -31,10 +31,12 @@ if has('nvim')
   if executable('pyenv')
     let g:python3_host_prog  = split(system('pyenv prefix vim_dev3'), '\n')[0] . '/bin/python3'
   endif
-  if !exists(g:python3_host_prog)
+  if !executable(g:python3_host_prog)
       let g:python3_host_prog  = system('which python3')
   endif
+  let g:python_host_prog = g:python3_host_prog
 endif
+
 "}}}
 
 " Basic Settings: {{{
@@ -2192,7 +2194,7 @@ if neobundle#tap('python-mode')
 
   " Setting {{{
   if has('python')
-    let g:pymode_python = 'python2'
+    let g:pymode_python = 'python'
   elseif has('python3')
     let g:pymode_python = 'python3'
   else
@@ -2384,7 +2386,6 @@ if neobundle#tap('vim-pyenv')
 endif
 " }}}
 " }}}
-"}}}
 
 " Vim: {{{
 " syngan/vim-vimlint {{{
@@ -2513,7 +2514,7 @@ endif
 
 "}}}
 
-" Java:
+" Java: {{{
 
 " Android: {{{
 " hsanson/vim-android {{{
@@ -2960,6 +2961,10 @@ endif
 " }}}
 " }}}
 
+"}}}
+
+" Utilities Settings: {{{
+
 " Unite Settings: {{{
 " Shougo/unite.vim {{{
 if neobundle#tap('unite.vim')
@@ -3296,8 +3301,6 @@ endif
 " }}} "
 
 " }}}
-
-" Utilities Settings: {{{
 
 " Shougo/vimshell {{{
 if neobundle#tap('vimshell')

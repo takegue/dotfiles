@@ -350,7 +350,11 @@ function ssh() {
     command ssh $@
     tmux rename-window $window_name
 }
-
+function frepo() {
+  local dir
+  dir=$(ghq list > /dev/null | fzf-tmux --reverse +m) &&
+    cd $(ghq root)/$dir
+}
 function foreground-vi() {
     fg %vim
 }
