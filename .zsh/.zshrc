@@ -14,10 +14,6 @@
 # -----------------------------------------------------------------------------
 # ZSHENVで書くと ZSHRCを読み込む際に
 # 勝手に順番を書き換えられるのでここで更新
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-export GOPATH=$HOME/.go
-[[ ! -d $GOPATH ]] && mkdir -p
-
 path=(
     "$lpath[@]"
     $GOPATH/bin
@@ -117,6 +113,13 @@ export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
+export GREP_OPTION="--color auto"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+export GOPATH=$HOME/.go
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line root)
+ZSH_HIGHLIGHT_STYLES[line]='bold'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
+[[ ! -d $GOPATH ]] && mkdir -p
 
 bindkey -v              # キーバインドをviモードに設定
 
@@ -350,11 +353,13 @@ function ssh() {
     command ssh $@
     tmux rename-window $window_name
 }
+
 function frepo() {
   local dir
   dir=$(ghq list > /dev/null | fzf-tmux --reverse +m) &&
     cd $(ghq root)/$dir
 }
+
 function foreground-vi() {
     fg %vim
 }

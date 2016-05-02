@@ -3723,13 +3723,13 @@ endif
 if neobundle#tap('vim-fugitive')
   " Config {{{
   call neobundle#config({'augroup' : 'fugitive'})
-  " }}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     silent call ConfigOnGitRepository()
     augroup FUGITIVE
       autocmd!
-      autocmd BufReadPost * silent call ConfigOnGitRepository()
+      autocmd BufNewFile,BufReadPost * silent call ConfigOnGitRepository()
+      autocmd VimEnter * silent call ConfigOnGitRepository()
     augroup END
   endfunction "}}}
 
