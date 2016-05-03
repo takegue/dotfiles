@@ -116,8 +116,7 @@ export LESSCHARSET=UTF-8
 export GREP_OPTION="--color auto"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export GOPATH=$HOME/.go
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line root)
-ZSH_HIGHLIGHT_STYLES[line]='bold'
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root)
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
 [[ ! -d $GOPATH ]] && mkdir -p
 
@@ -283,9 +282,13 @@ export GREP_OPTIONS='--color=auto'
 
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
-function 256colortest(){
+function colortest(){
+    for code in ${(o)color}; do
+        printf "${fg[$code]} %s " $code
+    done
     for code in {0..255}; do
-        echo -e "\e[38;05;${code}m $code: Test"
+        printf "\e[38;05;%sm %3d " $code $code
+        (( ( $code + 1 ) % 16  == 0 )) && echo
     done
 }
 
