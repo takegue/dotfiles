@@ -35,6 +35,15 @@ if has('nvim')
       let g:python3_host_prog  = system('which python3')
   endif
   let g:python_host_prog = g:python3_host_prog
+elseif has('gui_macvim')
+   set pythondll=
+   set pythonthreedll=/Users/alrescha/.zplug/repos/riywo/anyenv/envs/pyenv/versions/3.5.1/Python.framework/Versions/3.5/Python
+   let s:python_path = split(system('pyenv prefix vim_dev3'), '\n')[0] .  '/lib/python3.5/site-packages'
+python <<EOM
+python_path = vim.eval('s:python_path')
+sys.path.insert(0, python_path)
+sys.path.insert(0, "/Users/alrescha/.zplug/repos/riywo/anyenv/envs/pyenv/versions/3.5.1/Python.framework/Versions/3.5/Python")
+EOM
 endif
 
 "}}}
@@ -50,61 +59,6 @@ set fileencodings=utf-8,cp932,euc-jp "A list of character encodings
 set fileformats=unix,dos,mac "This gives the end-of-line (<EOL>) formats
 " }}}
 
-" Display: {{{
-
-if exists('&ambiwidth')
-  " For Ubuntu: gnome-terminal, terminator, guake
-  "   /bin/sh -c "VTE_CJK_WIDTH=1 terminator -m"
-  "   /bin/sh -c "VTE_CJK_WIDTH=1 gnome-terminal --disable-factory"
-  "   /bin/sh -c "VTE_CJK_WIDTH=1 guake"
-  "   https://gist.github.com/sgk/5991138
-  set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
-endif
-
-set helplang=ja,en
-set spelllang+=cjk
-set title                          " 編集中のファイル名を表示
-set ambiwidth=double               " 全角文字で幅が崩れないように調整する
-set laststatus=2
-
-set number                         " 行番号の表示
-set norelativenumber                 " 相対行番号の表示
-set nowrap                         " 長いテキストの折り返し
-set textwidth=0                    " 自動的に改行が入るのを無効化
-set colorcolumn=80                 " その代わり80文字目にラインを入れる
-set cursorline                     " 編集中の行のハイライト
-
-set smartindent                    " オートインデント
-" set autoindent
-set cindent
-set tabstop=8
-set shiftwidth=4                   " オートインデントの幅
-set softtabstop=4                  " インデントをスペース4つ分に設定
-set expandtab                      " タブ→スペースの変換
-set wildmenu wildmode=longest,full " コマンドラインの補間表示
-set foldmethod=marker
-set display=lastline
-set cmdheight=2                    " To suppress '<Press Enter>'
-set pumheight=15
-
-if v:version > 703 || v:version == 703 && has("patch541")
-  set formatoptions+=j             " Delete comment character when joining commented lines
-endif
-
-if v:version > 704 || v:version == 704 && has("patch786")
-  set nofixeol                    " Allow to make no-eol files.
-endif
-
-" デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
-
-set fillchars=vert:\|
-
-set belloff=cursor,error,insertmode
-set t_vb=
-set novisualbell
-
-" }}}
 
 " Search: {{{
 set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
@@ -438,6 +392,12 @@ endfunction "}}}
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
 
+" augroup update_autocmd
+"   autocmd!
+"   autocmd  BufEnter * checktime
+"   autocmd  WinEnter * checktime
+" augroup END
+
 augroup my_diff_autocmd
   autocmd!
   autocmd  InsertLeave *
@@ -722,6 +682,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'mrkn/mrkn256.vim'
   NeoBundle 'nanotech/jellybeans.vim'
   NeoBundle 'nathanaelkane/vim-indent-guides'
+  NeoBundle 'mattn/googletranslate-vim'
   " NeoBundle 'ivanov/vim-ipython'
   " NeoBundle 'vim-scripts/css_color.vim'
   NeoBundle 'NLKNguyen/papercolor-theme'                   " colorscheme paperolor
@@ -758,8 +719,8 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'thinca/vim-github'                            " An interface for Github.
   NeoBundle 'thinca/vim-quickrun'
   NeoBundle 'thinca/vim-ref'                               " referecen viwer for vim
-  " NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
-  " NeoBundle 'thinca/vim-template'
+  NeoBundle 'thinca/vim-singleton'                         " Uses Vim with singleton.
+  NeoBundle 'thinca/vim-template'
   NeoBundle 'thinca/vim-textobj-comment'                   " コメントオブジェクト   #ac, ic
   NeoBundle 'thisivan/vim-ruby-matchit'                    " Map '%' to jump from one keyword to its corresponding 'end' in Ruby files. Inspired by 'matchit.vim' that comes with Vim.
   NeoBundle 'TKNGUE/atcoder_helper'
@@ -788,6 +749,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-scripts/Align'
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   NeoBundle 'xolox/vim-session'
+  NeoBundle 'mattn/qiita-vim'
   " NeoBundle 'Rykka/InstantRst'
   " NeoBundle 'Rykka/riv.vim'
   NeoBundleFetch 'tpope/vim-sensible'
@@ -2313,7 +2275,7 @@ if neobundle#tap('jedi-vim')
   endfunction "}}}
 
   if has('python')
-    let g:jedi#force_py_version = 2
+    let g:jedi#force_py_version = 3
   elseif has('python3')
     let g:jedi#force_py_version = 3
   else
