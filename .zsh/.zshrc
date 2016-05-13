@@ -33,6 +33,7 @@ path=(
 
 manpath=(
     "$lmanpath[@]"
+    ~/.zplug/man
     /usr/share/man
     /usr/local/share/man
     "$manpath[@]"
@@ -62,36 +63,43 @@ source ~/.zplug/zplug
 
 # Make sure you use double quotes
 zplug "zsh-users/zsh-history-substring-search"
-zplug "tcnksm/docker-alias", of:zshrc
+zplug "tcnksm/docker-alias", use:zshrc
 zplug "k4rthik/git-cal", as:command
 zplug "junegunn/fzf-bin", \
-    as:command, \
     from:gh-r, \
-    file:fzf, \
-    of:"*darwin*amd64*"
-zplug "junegunn/fzf", as:command, of:bin/fzf-tmux
+    as:command, \
+    rename-to:fzf, \
+    use:"*darwin*amd64*"
+
+zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
+
 zplug "stedolan/jq", \
     as:command, \
-    file:jq, \
-    from:gh-r \
-    | zplug "b4b4r07/emoji-cli"
+    rename-to:jq
+
+zplug "b4b4r07/emoji-cli", \
+    on:"stedolan/jq"
+
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 [[ ! -d ${ANYENV_ROOT} ]] && \
     zplug "riywo/anyenv", \
-    do:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
-        | zplug "yyuu/pyenv-virtualenv", \
-            do:"ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" \
+    hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
+zplug "yyuu/pyenv-virtualenv", \
+    on:"riywo/anyenv", \
+    hook-build:"ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+
+
 zplug "zsh-users/zsh-completions"
 zplug "carsonmcdonald/tmux-wifi-os-x", \
-    as:command, of:wifi-signal-strength, \
+    as:command, use:wifi-signal-strength, \
     if:"[[ $OSTYPE == *darwin* ]]"
 
 zplug "thewtex/tmux-mem-cpu-load", \
-    as:command, of:"tmux-mem-cpu-load", \
-    do:'cmake . && make'
+    as:command, use:"tmux-mem-cpu-load", \
+    hook-build:'cmake . && make'
 
 zplug "~/.zsh", from:local
 
