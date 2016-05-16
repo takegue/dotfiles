@@ -1,4 +1,7 @@
 
 setl wrap
 setl nonumber
-setl norelativenumber
+setl nonumber
+setl shiftwidth=4
+
+inoremap "" ``''<Left><Left>

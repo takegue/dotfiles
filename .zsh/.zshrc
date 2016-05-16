@@ -87,9 +87,16 @@ zplug "zsh-users/zsh-syntax-highlighting", nice:10
 [[ ! -d ${ANYENV_ROOT} ]] && \
     zplug "riywo/anyenv", \
     hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
-zplug "yyuu/pyenv-virtualenv", \
+
+[[ ! -d ${ANYENV_ROOT}/plugins ]] && \
+    zplug "znz/anyenv-update", \
     on:"riywo/anyenv", \
-    hook-build:"ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+    hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
+
+[[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
+	zplug "yyuu/pyenv-virtualenv", \
+			on:"riywo/anyenv", \
+			hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
 
 
 zplug "zsh-users/zsh-completions"

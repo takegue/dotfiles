@@ -141,14 +141,15 @@ inoremap <C-D> <C-g>u<Del>
 inoremap <C-W> <C-g>u<C-w>
 inoremap <C-U> <C-g>u<C-U>
 
+
 "
 nnoremap Y y$
 nnoremap & g&
 
 nnoremap z& :<C-u>spellr<CR>
 
-" ESCを二回押すことでハイライトを消す
-nnoremap <silent> <Esc><Esc>    :noh<CR>
+" " ESCを二回押すことでハイライトを消す
+" nnoremap <silent> <Esc><Esc>    :noh<CR>
 
 " カーソル下の単語を * で検索
 vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
@@ -395,7 +396,7 @@ cmap w!! w !sudo tee > /dev/null %
 " augroup update_autocmd
 "   autocmd!
 "   autocmd  BufEnter * checktime
-"   autocmd  WinEnter * checktime
+  autocmd  WinEnter * checktime
 " augroup END
 
 augroup my_diff_autocmd
@@ -466,7 +467,7 @@ augroup END
 
 augroup large_file_config_for_smooth
   autocmd!
-  autocmd BufNewFile,BufRead * if line('$') > 200 |
+  autocmd BufNewFile,BufRead * if line('$') > 1000 |
         \   set nonumber norelativenumber nocursorline lazyredraw |
         \ endif
 augroup END
@@ -750,7 +751,9 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'vim-scripts/CSS-one-line--multi-line-folding'
   NeoBundle 'xolox/vim-session'
   NeoBundle 'mattn/qiita-vim'
+  NeoBundle 'wannesm/wmgraphviz.vim'
   " NeoBundle 'Rykka/InstantRst'
+	"
   " NeoBundle 'Rykka/riv.vim'
   NeoBundleFetch 'tpope/vim-sensible'
   " NeoBundle 'TKNGUE/github-issues.vim'                   " Github issue lookup in Vim
