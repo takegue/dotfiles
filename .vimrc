@@ -27,13 +27,10 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog = ''
-  if executable('pyenv')
-    let g:python3_host_prog  = split(system('pyenv prefix vim_dev3'), '\n')[0] . '/bin/python3'
-  endif
-  if !executable(g:python3_host_prog)
-      let g:python3_host_prog  = system('which python3')
-  endif
+  let g:python3_host_prog = $PYENV_ROOT . '/versions/vim_dev3/bin/python3'
+  " if !executable(g:python3_host_prog)
+  "     let g:python3_host_prog  = system('which python3')
+  " endif
   let g:python_host_prog = g:python3_host_prog
 elseif has('gui_macvim')
    set pythondll=
@@ -45,7 +42,6 @@ sys.path.insert(0, python_path)
 sys.path.insert(0, "/Users/alrescha/.zplug/repos/riywo/anyenv/envs/pyenv/versions/3.5.1/Python.framework/Versions/3.5/Python")
 EOM
 endif
-
 "}}}
 
 " Basic Settings: {{{
@@ -78,7 +74,7 @@ set switchbuf=usetab       " 新しく開く代わりにすでに開いてある
 set showmatch               " 対応する括弧などをハイライト表示する
 set matchtime=1             " 対応括弧のハイライト表示を3秒にする
 set nrformats=hex
-set history=10000           " ヒストリ機能を10000件まで有効にする
+set history=10000         
 set autoread                " Automatically reload change files on disk
 set updatetime=300         " Automatically reload change files on disk
 
@@ -2276,14 +2272,6 @@ if neobundle#tap('jedi-vim')
     augroup END
     call jedi#configure_call_signatures()
   endfunction "}}}
-
-  if has('python')
-    let g:jedi#force_py_version = 3
-  elseif has('python3')
-    let g:jedi#force_py_version = 3
-  else
-    let g:loaded_jedi = 1
-  endif
 
   " Setting {{{
   " let g:jedi#completions_command = "<C-N>"

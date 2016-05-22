@@ -65,12 +65,12 @@ source ~/.zplug/zplug
 zplug "zsh-users/zsh-history-substring-search"
 zplug "tcnksm/docker-alias", use:zshrc
 zplug "k4rthik/git-cal", as:command
+zplug "b4b4r07/enhancd", use:init.sh
 zplug "junegunn/fzf-bin", \
     from:gh-r, \
     as:command, \
     rename-to:fzf, \
     use:"*darwin*amd64*"
-
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
@@ -94,9 +94,9 @@ zplug "zsh-users/zsh-syntax-highlighting", nice:10
     hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
 
 [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
-	zplug "yyuu/pyenv-virtualenv", \
-			on:"riywo/anyenv", \
-			hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+    zplug "yyuu/pyenv-virtualenv", \
+	on:"riywo/anyenv", \
+	hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
 
 
 zplug "zsh-users/zsh-completions"
@@ -123,7 +123,12 @@ zplug load --verbose
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
 # -----------------------------------------------------------------------------
-export EDITOR=vim        # エディタをvimに設定
+if (( $commands['nvim'] ));then
+    export EDITOR=nvim 
+else
+    export EDITOR=vim 
+fi
+
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
@@ -205,9 +210,13 @@ autoload -Uz bindkey_function
 
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
+  export FZF_COMPLETION_OPTS='+c -x'
+  export FZF_ALT_C_COMMAND='^G'
+
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
   bindkey_function '^F' fzf-history-widget
+  bindkey_function '^I' fzf-completion
 else 
   bindkey -M viins '^F' history-incremental-search-backward
 fi
@@ -284,7 +293,6 @@ function history-all { history -E -D 1  }
 ### Ls Color ###
 # 色の設定
 export LSCOLORS=Exfxcxdxbxegedabagacad
-# 補完時の色の設定
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
@@ -333,13 +341,17 @@ today(){ echo `date +%Y%m%d` }
 # ------------------------------
 # Aliases
 # ------------------------------
-alias cd=' cd'
-# alias python='python'
 alias tmux='tmux -2'
 alias vs='vim -r'
 # alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
-# alias ls=' ls -G -X'
+case "$OS_TYPE" in
+	darwin*)
+		alias ls=' ls -G -X '
+		;;
+	*)
+		ls='ls --color=auto'
+esac
 alias less='less -IMx4 -X -R'
 alias rm='rm -i'
 alias sort="LC_ALL=C sort"
