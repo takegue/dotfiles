@@ -463,8 +463,8 @@ augroup END
 
 augroup large_file_config_for_smooth
   autocmd!
-  autocmd BufNewFile,BufRead * if line('$') > 1000 |
-        \   set nonumber norelativenumber nocursorline lazyredraw |
+  autocmd BufNewFile,BufRead * if line('$') > 2000 |
+        \   set nonumber norelativenumber nocursorline |
         \ endif
 augroup END
 

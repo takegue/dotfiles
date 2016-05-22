@@ -109,6 +109,7 @@ zplug "thewtex/tmux-mem-cpu-load", \
     as:command, use:"tmux-mem-cpu-load", \
     hook-build:'cmake . && make'
 
+zplug "$HOME/.zsh/plugins/fzf-tmux-widgets", from:local
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -211,8 +212,14 @@ autoload -Uz bindkey_function
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
   export FZF_COMPLETION_OPTS='+c -x'
-  export FZF_ALT_C_COMMAND='^G'
-
+  (( $commands[ag] )) \
+    && export FZF_DEFAULT_COMMAND='ag -g ""' \
+    && _fzf_compgen_path() { ag -g "" "$1" }
+  export FZF_DEFAULT_OPTS='
+	--bind ctrl-f:page-down,ctrl-b:page-up
+	--color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
+	--color info:183,prompt:110,spinner:107,pointer:167,marker:215
+ ' 
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
   bindkey_function '^F' fzf-history-widget
@@ -314,25 +321,6 @@ function colortest(){
     done
 }
 
-function body(){
-    if [ -t 0 ]; then
-        range=$(( $3 - $2 ))
-        [[ $range -gt 0 ]] && cat $1 | tail -n +$2 | head -n $range
-    else
-        range=$(( $2 - $1 ))
-        [[ $range -gt 0 ]] && cat - | tail -n +$1 | head -n $range
-    fi
-
-}
-
-function head_tail(){
-    contents=`cat -`
-    {
-        echo $contents | head -n $1
-        echo '...'
-        echo $contents | tail -n $2 
-    }
-}
 
 today(){ echo `date +%Y%m%d` } 
 
