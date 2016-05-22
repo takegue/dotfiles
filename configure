@@ -19,14 +19,8 @@ fi
 echo "$DIR/vimfiles => ~/.vim"
 ln -s $DIR/vimfiles ~/.vim
 
-for dotfile in $DIR/.* ; do
+for dotfile in $DIR/.*(.) ; do
     if [ $dotfile = ${DIR}/.git ]; then
-        continue
-    fi
-    if [ $dotfile = '.' ]; then
-        continue
-    fi
-    if [ $dotfile = '..' ]; then
         continue
     fi
 
@@ -39,15 +33,9 @@ for dotfile in $DIR/.* ; do
     ln -s $dotfile ~/ 
 done
 
-for dotfile in $DIR/local_template/.* ; do
+for dotfile in $DIR/local_template/.*(.) ; do
     file_name="${dotfile##*/}" 
     if [ $file_name = ${DIR}/local_template/.git ]; then
-        continue
-    fi
-    if [ $file_name = '.' ]; then
-        continue
-    fi
-    if [ $file_name = '..' ]; then
         continue
     fi
 
@@ -57,6 +45,21 @@ for dotfile in $DIR/local_template/.* ; do
     else
         echo "$dotfile => $dstpath" 
         cp $dotfile $dstpath
+    fi 
+done
+
+for dotfile in $DIR/scripts/.*(x) ; do
+    file_name="${dotfile##*/}" 
+    if [ $file_name = ${DIR}/local_template/.git ]; then
+        continue
+    fi
+
+    dstpath="$HOME/.local/bin/${dotfile##*/}" 
+    if [ -e $dstpath ]; then
+        echo "Already exists: ${dstpath}"
+    else
+        echo "$dotfile => $dstpath" 
+				ln -s $dotfile(:A) $dstpath 
     fi 
 done
 
