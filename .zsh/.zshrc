@@ -136,10 +136,9 @@ export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 export GREP_OPTION="--color auto"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-export GOPATH=$HOME/.go
+export GOPATH=$HOME/.go && [[ ! -d $GOPATH ]] && mkdir -p $GOPATH
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root)
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
-[[ ! -d $GOPATH ]] && mkdir -p
 
 bindkey -v              # キーバインドをviモードに設定
 
