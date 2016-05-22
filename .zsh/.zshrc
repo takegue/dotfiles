@@ -72,6 +72,7 @@ zplug "junegunn/fzf-bin", \
     rename-to:fzf, \
     use:"*darwin*amd64*"
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+zplug "junegunn/fzf", use:shell/completion.zsh
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
@@ -108,7 +109,6 @@ zplug "thewtex/tmux-mem-cpu-load", \
     as:command, use:"tmux-mem-cpu-load", \
     hook-build:'cmake . && make'
 
-zplug "~/.zsh", from:local
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -216,7 +216,6 @@ if [[ -x `which fzf` ]]; then
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
   bindkey_function '^F' fzf-history-widget
-  bindkey_function '^I' fzf-completion
 else 
   bindkey -M viins '^F' history-incremental-search-backward
 fi
