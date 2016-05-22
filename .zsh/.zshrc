@@ -70,7 +70,7 @@ zplug "junegunn/fzf-bin", \
     from:gh-r, \
     as:command, \
     rename-to:fzf, \
-    use:"*darwin*amd64*"
+    use:"*$OSNAME:l*amd64*"
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 zplug "junegunn/fzf", use:shell/completion.zsh
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
@@ -78,8 +78,8 @@ zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
 
 zplug "stedolan/jq", \
-    as:command, \
-    rename-to:jq
+    from:gh-r, \
+    as:command
 
 zplug "b4b4r07/emoji-cli", \
     on:"stedolan/jq"
@@ -87,7 +87,7 @@ zplug "b4b4r07/emoji-cli", \
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 [[ ! -d ${ANYENV_ROOT} ]] && \
     zplug "riywo/anyenv", \
-    hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}" \
+    hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
 
 [[ ! -d ${ANYENV_ROOT}/plugins ]] && \
     zplug "znz/anyenv-update", \
@@ -96,8 +96,8 @@ zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
 [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
     zplug "yyuu/pyenv-virtualenv", \
-	on:"riywo/anyenv", \
-	hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+    on:"riywo/anyenv", \
+    hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
 
 
 zplug "zsh-users/zsh-completions"
