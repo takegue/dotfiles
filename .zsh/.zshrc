@@ -212,7 +212,7 @@ autoload -Uz bindkey_function
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
   export FZF_COMPLETION_OPTS='+c -x'
-  (( $commands[ag] )) \
+  (( $+commands[ag] )) \
     && export FZF_DEFAULT_COMMAND='ag -g ""' \
     && _fzf_compgen_path() { ag -g "" "$1" }
   export FZF_DEFAULT_OPTS='
