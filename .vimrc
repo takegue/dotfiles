@@ -55,7 +55,61 @@ set fileencodings=utf-8,cp932,euc-jp "A list of character encodings
 set fileformats=unix,dos,mac "This gives the end-of-line (<EOL>) formats
 " }}}
 
+" Display: {{{
 
+if exists('&ambiwidth')
+  " For Ubuntu: gnome-terminal, terminator, guake
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 terminator -m"
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 gnome-terminal --disable-factory"
+  "   /bin/sh -c "VTE_CJK_WIDTH=1 guake"
+  "   https://gist.github.com/sgk/5991138
+  set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
+endif
+
+set helplang=ja,en
+set spelllang+=cjk
+set title                          " 編集中のファイル名を表示
+set ambiwidth=double               " 全角文字で幅が崩れないように調整する
+set laststatus=2
+
+set number                         " 行番号の表示
+set norelativenumber                 " 相対行番号の表示
+set nowrap                         " 長いテキストの折り返し
+set textwidth=0                    " 自動的に改行が入るのを無効化
+set colorcolumn=80                 " その代わり80文字目にラインを入れる
+set cursorline                     " 編集中の行のハイライト
+
+set smartindent                    " オートインデント
+" set autoindent
+set cindent
+set tabstop=8
+set shiftwidth=4                   " オートインデントの幅
+set softtabstop=4                  " インデントをスペース4つ分に設定
+set expandtab                      " タブ→スペースの変換
+set wildmenu wildmode=longest,full " コマンドラインの補間表示
+set foldmethod=marker
+set display=lastline
+set cmdheight=2                    " To suppress '<Press Enter>'
+set pumheight=15
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j             " Delete comment character when joining commented lines
+endif
+
+if v:version > 704 || v:version == 704 && has("patch786")
+  set nofixeol                    " Allow to make no-eol files.
+endif
+
+" デフォルト不可視文字は美しくないのでUnicodeで綺麗に
+set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
+
+set fillchars=vert:\|
+
+set belloff=cursor,error,insertmode
+set t_vb=
+set novisualbell
+
+" }}}
 " Search: {{{
 set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
 set wrapscan            "検索時に最後まで行ったら最初に戻る
