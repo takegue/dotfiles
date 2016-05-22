@@ -79,7 +79,8 @@ zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
 
 zplug "stedolan/jq", \
     from:gh-r, \
-    as:command
+    as:command, \
+    rename-to:jq
 
 zplug "b4b4r07/emoji-cli", \
     on:"stedolan/jq"
