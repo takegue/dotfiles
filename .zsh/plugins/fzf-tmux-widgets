@@ -1,0 +1,6 @@
+
+fzf_ssh(){
+    cat <(cat ~/.ssh/config /etc/ssh/ssh_config 0> /dev/null | \grep -i '^host' | tr ' ' '\n' | awk 'tolower($1) !~/^host/{print "host",$1}' | \grep -v '*') \
+        <(\grep -v '^\s*#' /etc/hosts | \grep -Fv '0.0.0.0') \
+        | awk '{if (length($2) > 0) {print $2}}' | sort -u  | fzf --reverse 
+}
