@@ -216,9 +216,9 @@ if [[ -x `which fzf` ]]; then
     && export FZF_DEFAULT_COMMAND='ag -g ""' \
     && _fzf_compgen_path() { ag -g "" "$1" }
   export FZF_DEFAULT_OPTS='
-	--bind ctrl-f:page-down,ctrl-b:page-up
-	--color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
-	--color info:183,prompt:110,spinner:107,pointer:167,marker:215
+    --bind ctrl-f:page-down,ctrl-b:page-up
+    --color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
+    --color info:183,prompt:110,spinner:107,pointer:167,marker:215
  ' 
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
@@ -337,7 +337,7 @@ case "$OS_TYPE" in
 		alias ls=' ls -G -X '
 		;;
 	*)
-		ls='ls --color=auto'
+		alias ls='ls --color=auto'
 esac
 alias less='less -IMx4 -X -R'
 alias rm='rm -i'
