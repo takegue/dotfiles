@@ -321,7 +321,6 @@ function colortest(){
     done
 }
 
-
 today(){ echo `date +%Y%m%d` } 
 
 
@@ -329,15 +328,16 @@ today(){ echo `date +%Y%m%d` }
 # Aliases
 # ------------------------------
 alias tmux='tmux -2'
-alias vs='vim -r'
 # alias vi='vim -u NONE'
 alias vtime="vim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
-case "$OS_TYPE" in
-	darwin*)
-		alias ls=' ls -G -X '
-		;;
-	*)
-		alias ls='ls --color=auto'
+case "$OSTYPE" in
+    darwin*)
+        alias ls='ls -G'
+        (( $+commands[terminal-notifier])) && \
+            alias terminal-notifier='reattach-to-user-namespace terminal-notifier'
+        ;;
+    *)
+        alias ls='ls --color=auto'
 esac
 alias less='less -IMx4 -X -R'
 alias rm='rm -i'
@@ -372,9 +372,9 @@ function ssh() {
 }
 
 function frepo() {
-  local dir
-  dir=$(ghq list > /dev/null | fzf-tmux --reverse +m) &&
-    cd $(ghq root)/$dir
+    local dir
+    dir=$(ghq list > /dev/null | fzf-tmux --reverse +m) &&
+        cd $(ghq root)/$dir
 }
 
 function foreground-vi() {
@@ -395,13 +395,13 @@ zbell_email() {
     zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
     datetime=$( LC_ALL=C date +'%Y-%m-%d:%H:%M:%S' )
     mail -s "Complete Running Command (@${datetime})" $EMAIL <<EOS 
-Hi! I notify that below long process have been finished.
-It is completed with exit status ${zbell_exit_status}
+    Hi! I notify that below long process have been finished.
+    It is completed with exit status ${zbell_exit_status}
 
-LOG
-------------
-"${zbell_lastcmd}"
-staerted: ${zbell_timestamp}
+    LOG
+    ------------
+    "${zbell_lastcmd}"
+    staerted: ${zbell_timestamp}
 end: ${zbell_last_timestamp}
 
 Time: $(( $zbell_cmd_duration / 60 )) m $(( $zbell_cmd_duration % 60 )) s
@@ -447,17 +447,17 @@ fi
 
 get_pyenv_version()
 {
-  name=$( pyenv version-name )
-  [[ -n $name ]] && echo "(🐍 :$name)"
+    name=$( pyenv version-name )
+    [[ -n $name ]] && echo "(🐍 :$name)"
 
 }
 get_rbenv_version()
 {
-  name=$( rbenv version-name )
-  [[ -n $name ]] && echo "(💎 :$name)"
+    name=$( rbenv version-name )
+    [[ -n $name ]] && echo "(💎 :$name)"
 
 }
- 	
+
 PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
 $tmp_rprompt\$vcs_info_msg_0_
 $tmp_prompt"    # 通常のプロンプト
