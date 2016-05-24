@@ -387,30 +387,9 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
-zbell_duration=5
-zbell_duration_email=300
 ## Zbell configuration
-zbell_email() {
-    local zbell_cmd_duration
-    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
-    datetime=$( LC_ALL=C date +'%Y-%m-%d:%H:%M:%S' )
-    mail -s "Complete Running Command (@${datetime})" $EMAIL <<EOS 
-    Hi! I notify that below long process have been finished.
-    It is completed with exit status ${zbell_exit_status}
-
-    LOG
-    ------------
-    "${zbell_lastcmd}"
-    staerted: ${zbell_timestamp}
-end: ${zbell_last_timestamp}
-
-Time: $(( $zbell_cmd_duration / 60 )) m $(( $zbell_cmd_duration % 60 )) s
-
-Love,
-
-Zbell
-EOS
-}
+zbell_duration=50
+zbell_duration_email=300
 
 function show_process_time_after_cmd(){
     local zbell_cmd_duration
