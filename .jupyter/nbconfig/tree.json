@@ -1,0 +1,5 @@
+{
+  "load_extensions": {
+    "usability/tree-filter/index": true
+  }
+}

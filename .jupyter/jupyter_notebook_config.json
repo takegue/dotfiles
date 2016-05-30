@@ -1,0 +1,11 @@
+{
+  "NotebookApp": {
+    "extra_template_paths": [
+      "/Users/alrescha/Library/Jupyter/templates"
+    ],
+    "nbserver_extensions": {
+      "nbextensions": true
+    }
+  },
+  "version": 1
+}

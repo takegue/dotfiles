@@ -110,6 +110,7 @@ set t_vb=
 set novisualbell
 
 " }}}
+
 " Search: {{{
 set smartcase           "検索文字列に大文字が含まれている場合は区別して検索する
 set wrapscan            "検索時に最後まで行ったら最初に戻る
@@ -148,7 +149,7 @@ else
 endif
 
 if has("persistent_undo")
-  set undodir=~/.vim/.undodir
+  set undodir=$HOME/.vim/.undodir
   set undofile
   set undolevels=1000
 endif
@@ -792,7 +793,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'tsukkee/unite-tag'
   NeoBundle 'tyru/open-browser.vim'                        " Open URI with your favorite browser from your most favorite editor
   NeoBundle 'uguu-org/vim-matrix-screensaver'
-  NeoBundle 'ujihisa/neco-look'
+  " NeoBundle 'ujihisa/neco-look'
   NeoBundle 'ujihisa/unite-colorscheme'
   NeoBundle 'vim-jp/vimdoc-ja'                             " Add Help in Japanese
   NeoBundle 'vim-jp/vital.vim'
@@ -802,6 +803,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'xolox/vim-session'
   NeoBundle 'mattn/qiita-vim'
   NeoBundle 'wannesm/wmgraphviz.vim'
+  NeoBundle 'vim-scripts/dbext.vim'
   " NeoBundle 'Rykka/InstantRst'
 	"
   " NeoBundle 'Rykka/riv.vim'
@@ -1223,11 +1225,17 @@ if neobundle#tap('neocomplete.vim')
   " Disable AutoComplPop.
   let g:acp_enableAtStartup = 0
   " Use neocomplete.
-  let g:neocomplete#text_mode_filetypes= {
-        \ 'tex' : 1,
-        \ 'plaintex' : 1,
-        \ 'gitcommit' : 1
-        \}
+  let g:neocomplete#text_mode_filetypes = {
+            \ 'rst': 1,
+            \ 'markdown': 1,
+            \ 'gitrebase': 1,
+            \ 'gitcommit': 1,
+            \ 'vcs-commit': 1,
+            \ 'hybrid': 1,
+            \ 'text': 1,
+            \ 'help': 1,
+            \ 'tex': 1,
+            \ }
   if !has('nvim')
     let g:neocomplete#enable_at_startup = 1
   endif
@@ -1521,7 +1529,6 @@ if neobundle#tap('vim-migemo')
 
   call neobundle#untap()
 endif
-" }}}
 " }}}
 
 " Vim Operator Settings: {{{
@@ -3730,6 +3737,7 @@ endif
 if neobundle#tap('vim-fugitive')
   " Config {{{
   call neobundle#config({'augroup' : 'fugitive'})
+  "}}}
 
   function! neobundle#tapped.hooks.on_post_source(bundle) "{{{
     silent call ConfigOnGitRepository()
@@ -4301,6 +4309,7 @@ if neobundle#tap('vim-precious')
         \}
 
   "}}}
+  "
   call neobundle#untap()
 endif
 " }}}
@@ -4464,6 +4473,8 @@ if neobundle#tap('vim-submode')
 endif
 " }}}
 "
+"
+" }}}
 call neobundle#end()
 " PLUGIN_SETTING_ENDPOINT
 

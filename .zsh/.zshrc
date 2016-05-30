@@ -12,8 +12,8 @@
 # -----------------------------------------------------------------------------
 #                                 PATH SETTINGS
 # -----------------------------------------------------------------------------
-# ZSHENVで書くと ZSHRCを読み込む際に
-# 勝手に順番を書き換えられるのでここで更新
+# ZSHENVで環境変数の設定を書くと ZSHRCを読み込む際に
+# 勝手に順番を書き換えられるのでここで再度更新
 path=(
     "$lpath[@]"
     $GOPATH/bin
@@ -76,40 +76,31 @@ zplug "junegunn/fzf", use:shell/completion.zsh
 zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
     from:gist
 zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
-
 zplug "stedolan/jq", \
     from:gh-r, \
     as:command, \
     rename-to:jq
-
 zplug "b4b4r07/emoji-cli", \
     on:"stedolan/jq"
-
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 [[ ! -d ${ANYENV_ROOT} ]] && \
     zplug "riywo/anyenv", \
     hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
-
 [[ ! -d ${ANYENV_ROOT}/plugins ]] && \
     zplug "znz/anyenv-update", \
     on:"riywo/anyenv", \
     hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
-
 [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
     zplug "yyuu/pyenv-virtualenv", \
     on:"riywo/anyenv", \
     hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
-
-
 zplug "zsh-users/zsh-completions"
 zplug "carsonmcdonald/tmux-wifi-os-x", \
     as:command, use:wifi-signal-strength, \
     if:"[[ $OSTYPE == *darwin* ]]"
-
 zplug "thewtex/tmux-mem-cpu-load", \
     as:command, use:"tmux-mem-cpu-load", \
     hook-build:'cmake . && make'
-
 zplug "$HOME/.zsh/plugins/fzf-tmux-widgets", from:local
 
 # Install plugins if there are plugins that have not been installed
@@ -311,18 +302,7 @@ export GREP_OPTIONS='--color=auto'
 
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
-function colortest(){
-    for code in ${(o)color}; do
-        printf "${fg[$code]} %s " $code
-    done
-    for code in {0..255}; do
-        printf "\e[38;05;%sm %3d " $code $code
-        (( ( $code + 1 ) % 16  == 0 )) && echo
-    done
-}
-
 today(){ echo `date +%Y%m%d` } 
-
 
 # ------------------------------
 # Aliases
@@ -360,6 +340,18 @@ alias -g W='| wc'
 # ------------------------------
 # Functions
 # ------------------------------
+function man()
+{
+    env LESS_TERMCAP_mb=$'\E[01;31m' \
+        LESS_TERMCAP_md=$'\E[01;38;5;74m' \
+        LESS_TERMCAP_me=$'\E[0m' \
+        LESS_TERMCAP_se=$'\E[0m' \
+        LESS_TERMCAP_so=$'\E[30;43m' \
+        LESS_TERMCAP_ue=$'\E[0m' \
+        LESS_TERMCAP_us=$'\E[04;38;5;146m' \
+        man "$@"
+}
+
 function sshcd()
 {
     ssh $1 -t "cd `pwd`; zsh"
