@@ -96,7 +96,7 @@
 # c.NotebookApp.browser = ''
 
 # The full path to an SSL/TLS certificate file.
-# c.NotebookApp.certfile = ''
+# c.NotebookApp.certfile = '$HOME/.ssh/jupyter.pem'
 
 # The full path to a certificate authority certifificate for SSL/TLS client
 # authentication.
@@ -205,7 +205,7 @@
 # platform dependent and determined by the python standard library `webbrowser`
 # module, unless it is overridden using the --browser (NotebookApp.browser)
 # configuration option.
-# c.NotebookApp.open_browser = True
+c.NotebookApp.open_browser = False
 
 # Hashed password to use for web authentication.
 #
@@ -214,7 +214,7 @@
 #   from notebook.auth import passwd; passwd()
 #
 # The string should be of the form type:salt:hashed-password.
-# c.NotebookApp.password = ''
+c.NotebookApp.password = 'sha1:2aacce6ecd25:bfe31d36f511027ee8f66596be789b7767b96d7b'
 
 # The port the notebook server will listen on.
 # c.NotebookApp.port = 8888
@@ -563,6 +563,17 @@
 # c.NotebookNotary.secret_file = ''
 
 c.InteractiveShellApp.matplotlib = "inline"
+
+import sys
+import os
+import subprocess
+sys.path.insert(0,
+    os.path.join(
+        subprocess.check_output(
+            ['jupyter', '--data-dir']
+        ).decode('utf-8').strip(),
+        'extensions')
+)
 
 
 #------------------------------------------------------------------------------
