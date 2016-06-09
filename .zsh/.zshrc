@@ -1,4 +1,3 @@
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #        |''||''| '||'  |'  '|.   '|'  ..|'''.|  '||'  '|' '||''''|
@@ -12,6 +11,7 @@
 # -----------------------------------------------------------------------------
 #                                 PATH SETTINGS
 # -----------------------------------------------------------------------------
+#
 # ZSHENVで環境変数の設定を書くと ZSHRCを読み込む際に
 # 勝手に順番を書き換えられるのでここで再度更新
 path=(
@@ -95,6 +95,9 @@ zplug "zsh-users/zsh-syntax-highlighting", nice:10
     on:"riywo/anyenv", \
     hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
 zplug "zsh-users/zsh-completions"
+zplug "direnv/direnv", \
+    hook-build:"make", \
+     as:command, use:direnv
 zplug "carsonmcdonald/tmux-wifi-os-x", \
     as:command, use:wifi-signal-strength, \
     if:"[[ $OSTYPE == *darwin* ]]"

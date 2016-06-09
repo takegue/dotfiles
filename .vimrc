@@ -1675,7 +1675,7 @@ if neobundle#tap('switch.vim')
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     augroup switch_autocmd
       autocmd FileType gitrebase let b:switch_custom_definitions = [
-            \ ['pick' , 'reword', 'edit'  , 'squash' , 'fixup' , 'exec'],
+            \ ['pick', 'reword', 'edit', 'squash' , 'fixup' , 'exec', 'drop'],
             \]
       autocmd FileType python let g:switch_custom_definitions =
             \[
