@@ -1,5 +1,6 @@
 {
   "load_extensions": {
+    "ipyparallel/main": true,
     "usability/tree-filter/index": true
   }
 }
