@@ -950,7 +950,7 @@ if neobundle#tap('lightline.vim')
           \  &bt == 'help'     ? '[Help]'                     :
           \  fname =~ '^['     ?  fname                       :
           \  &bt == 'nofile' && &bh =='hide'  ? '[Scratch]'   :
-          \  fname) .
+          \  fname . " #" . bufnr('%') ) .
           \ ('' != MyModified() ? ' ' . MyModified() : '')
     return b:lightline_filename
   endfunction "}}}
