@@ -154,14 +154,19 @@ if has("persistent_undo")
   set undolevels=1000
 endif
 
+set swapfile
+set directory=$HOME/.vim/.swap
+
+set nobackup
+set writebackup
+set patchmode='orig'
+set backupdir=$HOME/.vim/.backup
+
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
 " バックスペースでなんでも消せるようにする
 set backspace=indent,eol,start
 
-set nowritebackup
-set nobackup
-set noswapfile
 
 "}}}
 
@@ -4329,6 +4334,7 @@ if neobundle#tap('undotree')
   function! neobundle#tapped.hooks.on_source(bundle) "{{{
     let g:undotree_WindowLayout=4
     let g:undotree_SplitWidth=40
+    let g:undotree_SetFocusWhenToggle=1
   endfunction "}}}
 
   " Setting {{{
