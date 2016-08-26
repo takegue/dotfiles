@@ -77,3 +77,5 @@
 
 [github]
     user = "TKNGUE"
+[commit]
+	template = /Users/alrescha/.gitmessage
