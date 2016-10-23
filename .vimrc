@@ -133,7 +133,7 @@ if !has('nvim')
 endif
 
 if has('nvim')
-  set clipboard=unnamedplus
+  set clipboard=unnamed
 else
   if has('unnamedplus')
     set clipboard=unnamedplus,exclude:cons\|linux
@@ -533,6 +533,8 @@ augroup END "}}}
 augroup edit_vimrc "{{{
   autocmd!
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
+  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*/*"), '\n', ',', 'g')
+  autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/*/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END "}}}
@@ -545,7 +547,6 @@ augroup END
 "}}}
 
 "}}}
-
 " Plugin Settings ============== {{{
 
 " dein.vim Initilization {{{
@@ -585,7 +586,6 @@ if dein#check_install() && !has('vim_starting')
 endif
 
 " END dein}}}
-
 "}}}
 
 " Local settings ================ {{{
@@ -622,14 +622,15 @@ if has('vim_starting')
         endif
     endif
     "}}}
-
+    "
+    syntax sync minlines=512
+    syntax enable
+    filetype plugin indent on
+else
     call dein#call_hook('on_source')
     call dein#call_hook('on_post_source')
-
-    syntax on
-    filetype plugin indent on
-    syntax sync minlines=512
 endif
+
 
 
 "}}}

@@ -1,0 +1,16 @@
+[TICKET: #xxxx][TASK/BUG] Subject line
+
+WHAT happened and how/why
+REF : ticket link
+
+#### COMMID TYPES for 1st lines
+# FIX     : Fixed the bugs
+# HOTFIX  : Fixed the critical bugs
+# ADD     : Added new file/functions
+# UPDATE  : Update functions (not fixing bugs)
+# CHANGE  : Change the behavior
+# CLEAN   : Refactoring the codes
+# DISABLE : Disabling the functions
+# REMOVE  : Deleting the files/functions
+# UPGRADE : Upgrades apps/tags released
+# REVERT  : Revert commits

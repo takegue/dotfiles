@@ -1,4 +1,3 @@
-
 [[plugins]] # Shougo/dein.vim {{{
   repo = 'Shougo/dein.vim'
 #}}}
@@ -17,7 +16,7 @@
 # Appearence Plugins {{{
 [[plugins]] # vim-indent {{{
   repo = 'nathanaelkane/vim-indent-guides'
-  hook_add = '''
+  hook_post_source= '''
     hi IndentGuidesOdd  ctermbg=237
     hi IndentGuidesEven ctermbg=None
   '''
@@ -33,46 +32,7 @@
 [[plugins]] # itchyny/lightline.vim {{{
   repo = 'itchyny/lightline.vim'
   depends = ['vim-fugitive', 'vim-qfstatusline']
-  hook_post_source = '''
-    augroup LightLineColorscheme
-      autocmd!
-      autocmd ColorScheme * call s:lightline_update()
-    augroup END
-    augroup LightLineStatus
-      autocmd!
-      autocmd BufRead * if exists('fugitive_branch') | :unlet b:fugitive_branch | endif
-      autocmd User vim-pyenv-activate-post if exists('b:pyenv_version') | :unlet b:pyenv_version | endif
-    augroup END
-  '''
-
-  hook_source = '''
-    let g:indent_guides_enable_on_vim_startup = 1
-    let g:indent_guides_auto_colors = 0
-    let g:indent_guides_start_level = 2
-    let g:indent_guides_guide_size = 1
-    let g:indent_guides_default_mapping = 1
-
-    " :WatchdogsRun後にlightline.vimを更新
-    let g:Qfstatusline#UpdateCmd = function('lightline#update')
-    let g:Qfstatusline#Text      = 0
-
-    function! s:lightline_update() "{{{
-      if !exists('g:loaded_lightline')
-        return
-      endif
-      try
-        if g:colors_name =~# 'wombat\|solarized\|landscape\|jellybeans\|Tomorrow\|PaperColor'
-          let g:lightline.colorscheme =
-                \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '') .
-                \ (g:colors_name ==# 'solarized\|PaperColor' ? '_' . &background : '')
-          call lightline#init()
-          call lightline#colorscheme()
-          call lightline#update()
-        endif
-      catch
-      endtry
-    endfunction "}}}
-
+  hook_add ='''
     function! MyModified() "{{{
       return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
             \ '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -143,7 +103,7 @@
     endfunction"}}}
 
     function! MyCount() "{{{
-      if mode() =~ '[vV]\|CTRL-V\|'
+      if dein#is_sourced('sum-it') && mode() =~ '[vV]\|CTRL-V\|'
         return sumit#count_selected_text()
       else
         return ''
@@ -154,44 +114,76 @@
       return winwidth(0) > 60 ? lightline#mode() :lightline#mode()[00]
     endfunction"}}}
 
-  let g:lightline = {
-          \ 'colorscheme': 'solarized',
-          \ 'mode_map': {'c': 'COMMAND'},
-          \ 'active': {
-          \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'pyenv', 'rubyenv'], ['filename'] ],
-          \   'right': [ [ 'lineinfo' ],
-          \              [ 'percent' ],
-          \              [ 'fileformat', 'fileencoding', 'filetype' ],
-          \              [ 'count'], ],
-          \ },
-          \ 'component': {
-          \   'lineinfo': '%3l:%-2v',
-          \ },
-          \ 'component_expand': {
-          \   'syntaxcheck': 'qfstatusline#Update',
-          \ },
-          \ 'component_type': {
-          \   'syntaxcheck': 'error',
-          \ },
-          \ 'component_function': {
-          \   'syntaxcheck': 'qfstatusline#Update',
-          \   'modified': 'MyModified',
-          \   'readonly': 'MyReadonly',
-          \   'fugitive': 'MyFugitive',
-          \   'count': 'MyCount',
-          \   'pyenv': 'MyPyenv',
-          \   'filename': 'MyFilename',
-          \   'fileformat': 'MyFileformat',
-          \   'filetype': 'MyFiletype',
-          \   'fileencoding': 'MyFileencoding',
-          \   'mode': 'MyMode'
-          \ },
-          \ 'component_visible_condition' :{
-          \   'modified': '&modified||!&modifiable',
-          \   'readonly': '&readonly'
-          \ },
-          \ 'separator': { 'left': '⮀', 'right': '⮂' },
-          \ 'subseparator': { 'left': '⮁', 'right': '⮃' }}
+    let g:lightline = {
+            \ 'colorscheme': 'solarized',
+            \ 'mode_map': {'c': 'COMMAND'},
+            \ 'active': {
+            \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'pyenv', 'rubyenv'], ['filename'] ],
+            \   'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ],
+            \              [ 'fileformat', 'fileencoding', 'filetype' ],
+            \              [ 'count'], ],
+            \ },
+            \ 'component': {
+            \   'lineinfo': '%3l:%-2v',
+            \ },
+            \ 'component_expand': {
+            \   'syntaxcheck': 'qfstatusline#Update',
+            \ },
+            \ 'component_type': {
+            \   'syntaxcheck': 'error',
+            \ },
+            \ 'component_function': {
+            \   'syntaxcheck': 'qfstatusline#Update',
+            \   'modified': 'MyModified',
+            \   'readonly': 'MyReadonly',
+            \   'fugitive': 'MyFugitive',
+            \   'count': 'MyCount',
+            \   'pyenv': 'MyPyenv',
+            \   'filename': 'MyFilename',
+            \   'fileformat': 'MyFileformat',
+            \   'filetype': 'MyFiletype',
+            \   'fileencoding': 'MyFileencoding',
+            \   'mode': 'MyMode'
+            \ },
+            \ 'component_visible_condition' :{
+            \   'modified': '&modified||!&modifiable',
+            \   'readonly': '&readonly'
+            \ },
+            \ 'separator': { 'left': '⮀', 'right': '⮂' },
+            \ 'subseparator': { 'left': '⮁', 'right': '⮃' }}
+
+    " :WatchdogsRun後にlightline.vimを更新
+    let g:Qfstatusline#UpdateCmd = function('lightline#update')
+    let g:Qfstatusline#Text      = 0
+
+    function! s:lightline_update() "{{{
+      if !exists('g:loaded_lightline')
+        return
+      endif
+      try
+        if g:colors_name =~# 'wombat\|solarized\|landscape\|jellybeans\|Tomorrow\|PaperColor'
+          let g:lightline.colorscheme =
+                \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '') .
+                \ (g:colors_name ==# 'solarized\|PaperColor' ? '_' . &background : '')
+          call lightline#init()
+          call lightline#colorscheme()
+          call lightline#update()
+        endif
+      catch
+      endtry
+    endfunction "}}}
+
+    augroup LightLineColorscheme
+      autocmd!
+      autocmd ColorScheme * call s:lightline_update()
+    augroup END
+
+    augroup LightLineStatus
+      autocmd!
+      autocmd BufRead * if exists('fugitive_branch') | :unlet b:fugitive_branch | endif
+      autocmd User vim-pyenv-activate-post if exists('b:pyenv_version') | :unlet b:pyenv_version | endif
+    augroup END
   '''
 
 #}}}
@@ -364,9 +356,11 @@ hook_source = '''
 
   [[plugins]] # Shougo/unite.vim {{{
     repo = 'Shougo/unite.vim'
+    on_cmd = 'Unite'
     hook_add = '''
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
+    nmap    <Leader>e  :VimFilerSimple -direction=bo<CR>
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
           \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
@@ -505,7 +499,6 @@ hook_source = '''
   repo = 'Shougo/neomru.vim'
  #}}}
 
-
 [[plugins]] # Shougo/neossh.vim {{{
   repo = 'Shougo/neossh.vim'
  #}}}
@@ -582,201 +575,155 @@ augroup END
 '''
 #}}}
 
-[[plugins]] # tpope/vim-fugitive {{{
-  repo = 'tpope/vim-fugitive'
-augroup = 'fugitive'
-
-hook_source = '''
-  augroup FUGITIVE
-      autocmd!
-      autocmd BufNewFile,BufReadPost * silent call ConfigOnGitRepository()
-      autocmd VimEnter * silent call ConfigOnGitRepository()
-  augroup END
-
-  function! FugitiveMyMake() "{{{
-    let l:error = system(&l:makeprg)
-    redraw!
-    " echohl Special
-    for error in split(l:error, '\n')
-      echomsg error
-    endfor
-    " echohl None
-    execute 'call fugitive#cwindow()'
-  endfunction "}}}
-
-  command! Make call FugitiveMyMake()
-
-  function! ConfigOnGitRepository() "{{{
-    if !exists('b:git_dir')
-      return
-    endif
-    let git_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-    execute 'lcd '. git_path
-    nnoremap <buffer> [git] <Nop>
-    nmap <buffer> <Leader>g [git]
-    nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
-    nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
-    nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
-    nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
-    nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
-    nnoremap <buffer> [git]p :<C-u>Gpush<CR>
-    " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-    if &l:path !~# git_path
-      let &l:path .= ','.git_path
-    endif
-  endfunction "}}}
-  silent call ConfigOnGitRepository()
-'''
-# }}}
-
 [[plugins]] # thinca/vim-template {{{
   repo = 'thinca/vim-template'
-hook_source = '''
-  command! -nargs=0 -complete=filetype Temp call s:open_template()
-  nmap <Space>/ :<C-u>call <SID>open_template()<CR>
-  function! s:open_template()
-    let l:template_name = template#search(expand('%:p'))
-    if l:template_name == ''
-      let l:template_name = g:template_basedir. '/template/template.'. &ft
-    endif
-    let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
-    if l:filename != ''
-      let l:template_dir = escape(fnamemodify(l:filename, ":p:h"), ' ()')
-      if !isdirectory(l:template_dir)
-        call mkdir(l:template_dir, 'p')
+  hook_add = '''
+    command! -nargs=0 -complete=filetype Temp call s:open_template()
+    nmap <Space>/ :<C-u>call <SID>open_template()<CR>
+    function! s:open_template()
+      let l:template_name = template#search(expand('%:p'))
+      if l:template_name == ''
+        let l:template_name = g:template_basedir. '/template/template.'. &ft
       endif
-      execute 'edit ' . l:filename
-    endif
-  endfunction
-'''
-hook_post_source = '''
-  augroup vim-template
-    autocmd!
-    autocmd User plugin-template-loaded
-          \ silent! %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
-          \ | silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-          \ | silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
-          \ | silent! %s/<+FILENAME+>/\=expand('%:'))/ge
-          \ | if search('<+CURSOR+>') |  execute 'normal zv"_da>'| endif
-  augroup END
+      let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
+      if l:filename != ''
+        let l:template_dir = escape(fnamemodify(l:filename, ":p:h"), ' ()')
+        if !isdirectory(l:template_dir)
+          call mkdir(l:template_dir, 'p')
+        endif
+        execute 'edit ' . l:filename
+      endif
+    endfunction
+
+    augroup vim-template
+      autocmd!
+      autocmd User plugin-template-loaded
+            \ silent! %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+            \ | silent! %s/<+DATE+>/\=strftime('%Y-%m-%d')/ge
+            \ | silent! %s/<+MONTH+>/\=eval(submatch(1))/ge
+            \ | silent! %s/<+FILENAME+>/\=expand('%:'))/ge
+            \ | if search('<+CURSOR+>') |  execute 'normal zR"_da>'| endif
+    augroup END
 '''
 # }}}
+
+[[plugins]] # osyo-manga/shabadou.vim  {{{
+  repo = 'osyo-manga/shabadou.vim'
+#}}}
+
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
-on_cmd = 'QuickRun'
-depends = ['vimproc.vim', 'shabadou.vim']
-hook_add = '''
-nnoremap <leader>r :cclose<CR>:write<CR>:QuickRun <CR>
-'''
-hook_source = '''
-  let g:quickrun_config = {
-        \ "_": {
-        \   "hook/my_anime/enable" : 1,
-        \   "hook/my_anime/wait" : 2,
-        \   "hook/qfsigns_update/enable_exit":   1,
-        \   "hook/qfsigns_update/priority_exit": 3,
-        \   "hook/qfstatusline_update/enable_exit" : 1,
-        \   "hook/qfstatusline_update/priority_exit" : 4,
-        \   "runner"                   : 'vimproc',
-        \   "runner/vimproc/read_timeout" : 100,
-        \   "runner/vimproc/sleep"      : 100,
-        \   "runner/vimproc/updatetime" : 100,
-        \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
-        \},
-        \   "watchdogs_checker/_" : {
-        \      "hook/close_quickfix/enable_exit" : 1,
-        \      "runner/vimproc/updatetime" : 1000,
-        \}}
-  let g:quickrun_config.sql ={
-        \ 'command' : 'mysql',
-        \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
-        \ 'exec'    : ['%c %o < %s' ] ,
-        \}
-  let g:quickrun_config['php.unit'] = {
-        \ 'command': 'testrunner',
-        \ 'cmdopt': 'phpunit'
-        \}
-  let g:quickrun_config['python'] = {
-        \ 'command': 'python',
-        \}
-  let g:quickrun_config['python/watchdogs_checker'] = {
-        \  "type" : "watchdogs_checker/flake8",
-        \}
-  let g:quickrun_config['python.pytest'] = {
-        \ 'command': 'py.test',
-        \ 'cmdopt': '-v'
-        \}
-  let g:quickrun_config.markdown  = {
-        \ 'type' : 'markdown/pandoc',
-        \ 'cmdopt': '-v -s -mathjax -f markdown -t html',
-        \ 'outputter' : 'browser'
-        \ }
-  let g:quickrun_config.html  = {
-        \ 'command' : 'cygstart',
-        \ 'cmdopt'  : '%c %o' ,
-        \ 'outputter' : 'browser'
-        \ }
-  let g:quickrun_config['ruby.rspec']  = {
-        \ 'command': 'rspec'
-        \ , 'cmdopt': '-f d'
-        \ }
+  on_cmd = 'QuickRun'
+  depends = ['vimproc.vim', 'shabadou.vim']
+  hook_add = '''
+    let g:quickrun_config = {
+          \ "_": {
+          \   "hook/my_anime/enable" : 1,
+          \   "hook/my_anime/wait" : 2,
+          \   "hook/qfsigns_update/enable_exit":   1,
+          \   "hook/qfsigns_update/priority_exit": 3,
+          \   "hook/qfstatusline_update/enable_exit" : 1,
+          \   "hook/qfstatusline_update/priority_exit" : 4,
+          \   "runner"                   : 'vimproc',
+          \   "runner/vimproc/read_timeout" : 100,
+          \   "runner/vimproc/sleep"      : 100,
+          \   "runner/vimproc/updatetime" : 100,
+          \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
+          \},
+          \   "watchdogs_checker/_" : {
+          \      "hook/close_quickfix/enable_exit" : 1,
+          \      "runner/vimproc/updatetime" : 1000,
+          \}}
+    let g:quickrun_config.sql ={
+          \ 'command' : 'mysql',
+          \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
+          \ 'exec'    : ['%c %o < %s' ] ,
+          \}
+    let g:quickrun_config['php.unit'] = {
+          \ 'command': 'testrunner',
+          \ 'cmdopt': 'phpunit'
+          \}
+    let g:quickrun_config['python'] = {
+          \ 'command': 'python',
+          \}
+    let g:quickrun_config['python/watchdogs_checker'] = {
+          \  "type" : "watchdogs_checker/flake8",
+          \}
+    let g:quickrun_config['python.pytest'] = {
+          \ 'command': 'py.test',
+          \ 'cmdopt': '-v'
+          \}
+    let g:quickrun_config.markdown  = {
+          \ 'type' : 'markdown/pandoc',
+          \ 'cmdopt': '-v -s -mathjax -f markdown -t html',
+          \ 'outputter' : 'browser'
+          \ }
+    let g:quickrun_config.html  = {
+          \ 'command' : 'cygstart',
+          \ 'cmdopt'  : '%c %o' ,
+          \ 'outputter' : 'browser'
+          \ }
+    let g:quickrun_config['ruby.rspec']  = {
+          \ 'command': 'rspec'
+          \ , 'cmdopt': '-f d'
+          \ }
 
 
-  function! MakeMySQLCommandOptions()
-    if !exists("g:mysql_config_user")
-      let g:mysql_config_user = input("user> ")
-    endif
-    if !exists("g:mysql_config_host")
-      let g:mysql_config_host = input("host> ")
-    endif
-    if !exists("g:mysql_config_port")
-      let g:mysql_config_port = input("port> ")
-    endif
-    if !exists("g:mysql_config_pass")
-      let g:mysql_config_pass = inputsecret("password> ")
-    endif
-    if !exists("g:mysql_config_db")
-      let g:mysql_config_db = input("database> ")
-    endif
+    function! MakeMySQLCommandOptions()
+      if !exists("g:mysql_config_user")
+        let g:mysql_config_user = input("user> ")
+      endif
+      if !exists("g:mysql_config_host")
+        let g:mysql_config_host = input("host> ")
+      endif
+      if !exists("g:mysql_config_port")
+        let g:mysql_config_port = input("port> ")
+      endif
+      if !exists("g:mysql_config_pass")
+        let g:mysql_config_pass = inputsecret("password> ")
+      endif
+      if !exists("g:mysql_config_db")
+        let g:mysql_config_db = input("database> ")
+      endif
 
-    let optlist = []
-    if g:mysql_config_user != ''
-      call add(optlist, '-u ' . g:mysql_config_user)
-    endif
-    if g:mysql_config_host != ''
-      call add(optlist, '-h ' . g:mysql_config_host)
-    endif
-    if g:mysql_config_db != ''
-      call add(optlist, '-D ' . g:mysql_config_db)
-    endif
-    if g:mysql_config_pass != ''
-      call add(optlist, '-p' . g:mysql_config_pass)
-    endif
-    if g:mysql_config_port != ''
-      call add(optlist, '-P ' . g:mysql_config_port)
-    endif
-    if exists("g:mysql_config_otheropts")
-      call add(optlist, g:mysql_config_otheropts)
-    endif
-    return join(optlist, ' ')
-  endfunction
+      let optlist = []
+      if g:mysql_config_user != ''
+        call add(optlist, '-u ' . g:mysql_config_user)
+      endif
+      if g:mysql_config_host != ''
+        call add(optlist, '-h ' . g:mysql_config_host)
+      endif
+      if g:mysql_config_db != ''
+        call add(optlist, '-D ' . g:mysql_config_db)
+      endif
+      if g:mysql_config_pass != ''
+        call add(optlist, '-p' . g:mysql_config_pass)
+      endif
+      if g:mysql_config_port != ''
+        call add(optlist, '-P ' . g:mysql_config_port)
+      endif
+      if exists("g:mysql_config_otheropts")
+        call add(optlist, g:mysql_config_otheropts)
+      endif
+      return join(optlist, ' ')
+    endfunction
 
-  augroup QuickRunUnitTest
-    autocmd!
-    autocmd BufWinEnter,BufNewFile *test.php setlocal filetype=php.unit
-    "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.unit
-    autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.pytest
-    autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
-    autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
-  augroup END
-
-'''
+    augroup QuickRunUnitTest
+      autocmd!
+      autocmd BufWinEnter,BufNewFile *test.php setlocal filetype=php.unit
+      "autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.unit
+      autocmd BufWinEnter,BufNewFile test_*.py setlocal filetype=python.pytest
+      autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
+      autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
+    augroup END
+  '''
 # }}}
 
 [[plugins]] # Kosyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
-hook_source = '''
+  on_cmd = 'WatchdogsRun'
+  hook_source = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
         \   "python"  : 0,
@@ -790,16 +737,11 @@ hook_source = '''
         \   "haskell" : 1,
         \}
     let g:watchdogs_check_BufWritePost_enable_on_wq = 0
-'''
+  '''
 # [[plugins.on_cmd]]
 # name = 'WatchdogsRun'
 # complete = 'customlist,quickrun#complete'
 # }}}
-
-[[plugins]] # deton/jasegment.vim {{{
-  repo = 'deton/jasegment.vim'
- #}}}
-
 
 [[plugins]] # KazuakiM/vim-qfstatusline {{{
   repo = 'KazuakiM/vim-qfstatusline'
@@ -807,61 +749,61 @@ hook_source = '''
 
 [[plugins]] # mhinz/vim-signify {{{
   repo = 'mhinz/vim-signify'
- #}}}
+#}}}
 
 [[plugins]] # christoomey/vim-tmux-navigator {{{
   repo = 'christoomey/vim-tmux-navigator'
-hook_source = '''
-  let g:tmux_navigator_save_on_switch = 0
-  let g:tmux_navigator_no_mappings = 0
-  nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-  nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-  nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-  nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-  nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
+  hook_source = '''
+    let g:tmux_navigator_save_on_switch = 0
+    let g:tmux_navigator_no_mappings = 0
+    nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+    nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+    nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+    nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+    nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 '''
  #}}}
 
 [[plugins]] # mbbill/undotree {{{
 # The ultimate undo history visualizer for VIM
   repo = 'mbbill/undotree'
-on_cmd = ['UndotreeToggle']
-hook_source = '''
-  let g:undotree_WindowLayout=4
-  let g:undotree_SplitWidth=40
-  let g:undotree_SetFocusWhenToggle=1
-'''
-hook_add = '''
-  nnoremap U :UndotreeToggle<CR>
-'''
+  on_cmd = ['UndotreeToggle']
+  hook_source = '''
+    let g:undotree_WindowLayout=4
+    let g:undotree_SplitWidth=40
+    let g:undotree_SetFocusWhenToggle=1
+  '''
+  hook_add = '''
+    nnoremap U :UndotreeToggle<CR>
+  '''
 # }}}
 
 [[plugins]] # kana/vim-submode {{{
   repo = 'kana/vim-submode'
-hook_post_source = '''
-function! s:SIDP()
-  return '<SNR>' . matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SIDP$') . '_'
-endfunction
-function! s:movetab(nr)
-  execute 'tabmove' g:V.modulo(tabpagenr() + a:nr - 1, tabpagenr('$'))
-endfunction
+  hook_add = '''
+    function! s:SIDP()
+      return '<SNR>' . matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SIDP$') . '_'
+    endfunction
+    function! s:movetab(nr)
+      execute 'tabmove' g:V.modulo(tabpagenr() + a:nr - 1, tabpagenr('$'))
+    endfunction
 
-let s:movetab = ':<C-u>call ' . s:SIDP() . 'movetab(%d)<CR>'
-call submode#enter_with('movetab', 'n', '', '<Space>gt', printf(s:movetab, 1))
-call submode#enter_with('movetab', 'n', '', '<Space>gT', printf(s:movetab, -1))
-call submode#map('movetab', 'n', '', 't', printf(s:movetab, 1))
-call submode#map('movetab', 'n', '', 'T', printf(s:movetab, -1))
-unlet s:movetab
+    let s:movetab = ':<C-u>call ' . s:SIDP() . 'movetab(%d)<CR>'
+    call submode#enter_with('movetab', 'n', '', '<Space>gt', printf(s:movetab, 1))
+    call submode#enter_with('movetab', 'n', '', '<Space>gT', printf(s:movetab, -1))
+    call submode#map('movetab', 'n', '', 't', printf(s:movetab, 1))
+    call submode#map('movetab', 'n', '', 'T', printf(s:movetab, -1))
+    unlet s:movetab
 
-call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
-call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
-call submode#map('winsize', 'n', '', '>', '<C-w>>')
-call submode#map('winsize', 'n', '', '<', '<C-w><')
-call submode#map('winsize', 'n', '', '+', '<C-w>-')
-call submode#map('winsize', 'n', '', '-', '<C-w>+')
-'''
+    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
+    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
+    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
+    call submode#map('winsize', 'n', '', '>', '<C-w>>')
+    call submode#map('winsize', 'n', '', '<', '<C-w><')
+    call submode#map('winsize', 'n', '', '+', '<C-w>-')
+    call submode#map('winsize', 'n', '', '-', '<C-w>+')
+  '''
 
 # }}}
 
@@ -873,13 +815,13 @@ call submode#map('winsize', 'n', '', '-', '<C-w>+')
   repo = 'deton/jasegment.vim'
  #}}}
 
-
 [[plugins]] # Shougo/deoplete.nvim {{{
   repo = 'Shougo/deoplete.nvim'
-on_i = 1
-depends = 'context_filetype.vim'
-if = 'has("nvim")'
-hook_source = '''
+  on_i = 1
+  depends = 'context_filetype.vim'
+  if = 'has("nvim")'
+
+  hook_source = '''
     let g:deoplete#enable_at_startup = 1
     " Use smartcase.
     let g:deoplete#enable_smart_case = 1
@@ -1007,144 +949,141 @@ hook_source = '''
 
 [[plugins]] # Shougo/neocomplete.vim {{{
   repo = 'Shougo/neocomplete.vim'
-depends = 'context_filetype.vim'
-if = "has('lua') && !has('nvim')"
-on_event = 'InsertEnter'
-hook_source = '''
-  let g:neocomplete#enable_at_startup = 1
-  let g:acp_enableAtStartup = 0
-  " Use neocomplete.
-  let g:neocomplete#text_mode_filetypes = {
-            \ 'rst': 1,
-            \ 'markdown': 1,
-            \ 'gitrebase': 1,
-            \ 'gitcommit': 1,
-            \ 'vcs-commit': 1,
-            \ 'hybrid': 1,
-            \ 'text': 1,
-            \ 'help': 1,
-            \ 'tex': 1,
-            \ }
-  if !has('nvim')
+  depends = 'context_filetype.vim'
+  if = "has('lua') && !has('nvim')"
+  on_event = 'InsertEnter'
+  hook_source = '''
     let g:neocomplete#enable_at_startup = 1
-  endif
-  " Use smartcase.
-  let g:neocomplete#enable_smart_case = 1
-  " Set minimum syntax keyword length.
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-  let g:neocomplete#max_keyword_width = 50
-  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-  let g:neocomplete#enable_auto_delimiter = 0
-  let g:neocomplete#enable_auto_close_preview = 0
-  let g:neocomplete#auto_completion_start_length  = 3
-  let g:neocomplete#skip_auto_completion_time  = "0.2"
-  " Define dictionary.
-  let g:neocomplete#sources#dictionary#dictionaries = {
-        \ 'default' : '',
-        \ 'vimshell' : $HOME.'/.vimshell_hist',
-        \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+    let g:acp_enableAtStartup = 0
+    " Use neocomplete.
+    let g:neocomplete#text_mode_filetypes = {
+              \ 'rst': 1,
+              \ 'markdown': 1,
+              \ 'gitrebase': 1,
+              \ 'gitcommit': 1,
+              \ 'vcs-commit': 1,
+              \ 'hybrid': 1,
+              \ 'text': 1,
+              \ 'help': 1,
+              \ 'tex': 1,
+              \ }
+    if !has('nvim')
+      let g:neocomplete#enable_at_startup = 1
+    endif
+    " Use smartcase.
+    let g:neocomplete#enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#max_keyword_width = 50
+    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+    let g:neocomplete#enable_auto_delimiter = 0
+    let g:neocomplete#enable_auto_close_preview = 0
+    let g:neocomplete#auto_completion_start_length  = 3
+    let g:neocomplete#skip_auto_completion_time  = "0.2"
+    " Define dictionary.
+    let g:neocomplete#sources#dictionary#dictionaries = {
+          \ 'default' : '',
+          \ 'vimshell' : $HOME.'/.vimshell_hist',
+          \ 'scheme' : $HOME.'/.gosh_completions'
+          \ }
 
 
-  let g:neocomplete#enable_multibyte_completion = 1
+    let g:neocomplete#enable_multibyte_completion = 1
 
-  " make Vim call omni function when below patterns matchs
-  " let g:neocomplete#sources#omni#functions = {}
+    " make Vim call omni function when below patterns matchs
+    " let g:neocomplete#sources#omni#functions = {}
 
-  let g:neocomplete#force_omni_input_patterns = {}
-  let g:neocomplete#force_omni_input_patterns.python =
-        \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    let g:neocomplete#force_omni_input_patterns = {}
+    let g:neocomplete#force_omni_input_patterns.python =
+          \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 
-  " let g:neocomplete#sources#omni#input_patterns = {}
-  " let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-  " let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-  " let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-  " let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    " let g:neocomplete#sources#omni#input_patterns = {}
+    " let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    " let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+    " let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+    " let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-  " if !exists('g:neocomplete#keyword_patterns')
-  "   let g:neocomplete#keyword_patterns = {}
-  " endif
+    " if !exists('g:neocomplete#keyword_patterns')
+    "   let g:neocomplete#keyword_patterns = {}
+    " endif
 
-'''
-hook_post_source = '''
-  " Plugin key-mappings.
-  " inoremap <expr><C-g>     neocomplete#undo_completion()
-  " inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-  " Recommended key-mappings.
-  " <CR>: close popup and save indent.
-  function! s:my_cr_function()
-    " return neocomplete#close_popup() . "\<CR>"
-    "For no inserting <CR> key.
-    return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-  endfunction
-  " <TAB>: completion.
-  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  " For smart TAB completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ neocomplete#start_manual_complete()
-
-  function! s:check_back_space() "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction "}}}
-
-  " <C-h>, <BS>: close popup and delete backword char.
-  if neobundle#is_installed('neosnippet.vim') "{{{
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-    " For cursor moving in insert mode(Not recommended)
-    inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-    inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-    inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-    inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-    " make neocomplcache use jedi#completions omini function for python scripts
-
-    augroup tex_complete
-      autocmd!
-      autocmd FileType *.tex inoremap <expr>$$ $$<left>
-    augroup END
-
-    " SuperTab like snippets behavior.
-    imap <expr><CR>  neosnippet#expandable() ?
-          \ "\<Plug>(neosnippet_expand)" :
-          \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
-
-    " <TAB>: completion.
-    " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
+  '''
+  hook_post_source = '''
     " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    " inoremap <expr><C-g>     neocomplete#undo_completion()
+    " inoremap <expr><C-l>     neocomplete#complete_common_string()
 
-    " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#jumpable() ?
-          \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
-          \ pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-  endif
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    function! s:my_cr_function()
+      " return neocomplete#close_popup() . "\<CR>"
+      "For no inserting <CR> key.
+      return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+    endfunction
+    " <TAB>: completion.
+    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    " For smart TAB completion.
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ neocomplete#start_manual_complete()
+
+    function! s:check_back_space() "{{{
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction "}}}
+
+    " <C-h>, <BS>: close popup and delete backword char.
+    if neobundle#is_installed('neosnippet.vim') "{{{
+      inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+      " For cursor moving in insert mode(Not recommended)
+      inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+      inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+      inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+      inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+      " make neocomplcache use jedi#completions omini function for python scripts
+
+      augroup tex_complete
+        autocmd!
+        autocmd FileType *.tex inoremap <expr>$$ $$<left>
+      augroup END
+
+      " SuperTab like snippets behavior.
+      imap <expr><CR>  neosnippet#expandable() ?
+            \ "\<Plug>(neosnippet_expand)" :
+            \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
+
+      " <TAB>: completion.
+      " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+      " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+      " Plugin key-mappings.
+      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+
+      " SuperTab like snippets behavior.
+      imap <expr><TAB> neosnippet#jumpable() ?
+            \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
+            \ pumvisible() ? "\<C-n>" : "\<TAB>"
+      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
+    endif
     "}}}
 '''
 # }}}}
 
 [[plugins]] # zchee/deoplete-clang {{{
   repo = 'zchee/deoplete-clang'
-on_ft = ['c', 'cpp']
+  on_ft = ['c', 'cpp']
  #}}}
-
 
 [[plugins]] # zchee/deoplete-jedi {{{
   repo = 'zchee/deoplete-jedi'
-on_ft = 'python'
+  on_ft = 'python'
  #}}}
-
 
 [[plugins]] # zchee/deoplete-go {{{
   repo = 'zchee/deoplete-go'
-on_ft = 'go'
+  on_ft = 'go'
  #}}}
-
 
 [[plugins]] # Shougo/neosnippet-snippets {{{
   repo = 'Shougo/neosnippet-snippets'
@@ -1154,7 +1093,6 @@ on_ft = 'go'
 
 # }}}
  #}}}
-
 
 [[plugins]] # vim-jp/vimdoc-ja {{{
   repo = 'vim-jp/vimdoc-ja'
@@ -1179,38 +1117,38 @@ hook_source = '''
 
 [[plugins]] # Shougo/neosnippet.vim {{{
   repo = 'Shougo/neosnippet.vim'
-on_i = 1
-hook_source = '''
-  " Enable snipMate compatibility feature.
-  let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
-  let g:neosnippet#enable_preview = 0
+  on_i = 1
+  hook_source = '''
+    " Enable snipMate compatibility feature.
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
+    let g:neosnippet#enable_preview = 0
 
-  " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
-  " inoremap <expr>() "()\<\`0\`><C-O>F)"
-  " inoremap <expr>[] "[]\<\`0\`><C-O>F]"
-  " inoremap <expr><> "<>\<\`0\`><C-O>F>"
-  " inoremap <expr>'' "''\<\`0\`><C-O>F'"
-  " inoremap <expr>`` "``\<\`0\`><C-O>3F`"
-  " inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
-'''
-hook_post_source = '''
-  augroup neosnippet_setting
-    autocmd!
-    " autocmd InsertLeave * NeoSnippetClearMarkers
-  augroup END
+    " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
+    " inoremap <expr>() "()\<\`0\`><C-O>F)"
+    " inoremap <expr>[] "[]\<\`0\`><C-O>F]"
+    " inoremap <expr><> "<>\<\`0\`><C-O>F>"
+    " inoremap <expr>'' "''\<\`0\`><C-O>F'"
+    " inoremap <expr>`` "``\<\`0\`><C-O>3F`"
+    " inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
+  '''
+  hook_post_source = '''
+    augroup neosnippet_setting
+      autocmd!
+      " autocmd InsertLeave * NeoSnippetClearMarkers
+    augroup END
 
 
-  " For snippet_complete marker.
-  if has('conceal')
-    set conceallevel=0 concealcursor=nivc
-  endif
-'''
+    " For snippet_complete marker.
+    if has('conceal')
+      set conceallevel=0 concealcursor=nivc
+    endif
+  '''
 # }}}
 
 [[plugins]] # Shougo/neosnippet-snippets {{{
     repo = 'Shougo/neosnippet-snippets'
-  on_source = 'neosnippet.vim'
+    on_source = 'neosnippet.vim'
  #}}}
 
 [[plugins]] # honza/vim-snippets {{{
@@ -1231,68 +1169,68 @@ nnoremap <silent> ,q :TagbarToggle<CR>
 '''
  #}}}
 
-[[plugins]] # majutsushi/tagbar {{{
-  repo = 'majutsushi/tagbar'
+[[plugins]] # haya14busa/incsearch.vim {{{
+  repo = 'haya14busa/incsearch.vim'
 
-hook_source = '''
-  " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
-  " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}} })
-  " map /  <Plug>(incsearch-forward)
-  " map ?  <Plug>(incsearch-backward)
-  " map g/ <Plug>(incsearch-stay)
+  hook_source = '''
+    " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
+    " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}} })
+    " map /  <Plug>(incsearch-forward)
+    " map ?  <Plug>(incsearch-backward)
+    " map g/ <Plug>(incsearch-stay)
 
-  " let g:incsearch#separate_highlight = 1
-  " let g:incsearch#auto_nohlsearch = 1
-  " map n  <Plug>(incsearch-nohl-n)zz
-  " map N  <Plug>(incsearch-nohl-N)zz
-  " map *  <Plug>(incsearch-nohl-*)zz
-  " map #  <Plug>(incsearch-nohl-#)zz
-  " map g* <Plug>(incsearch-nohl-g*)zz
-  " map g# <Plug>(incsearch-nohl-g#)zz
-'''
+    " let g:incsearch#separate_highlight = 1
+    " let g:incsearch#auto_nohlsearch = 1
+    " map n  <Plug>(incsearch-nohl-n)zz
+    " map N  <Plug>(incsearch-nohl-N)zz
+    " map *  <Plug>(incsearch-nohl-*)zz
+    " map #  <Plug>(incsearch-nohl-#)zz
+    " map g* <Plug>(incsearch-nohl-g*)zz
+    " map g# <Plug>(incsearch-nohl-g#)zz
+  '''
  #}}}
 
 [[plugins]] # tsukkee/lingr-vim {{{
   repo = 'tsukkee/lingr-vim'
-on_cmd = 'Lingr'
-hook_source = '''
-  let g:lingr_vim_user = 'mnct.tkn3011@gmail.com'
-  let g:lingr_vim_sidebar_width = 25
-  let g:lingr_vim_rooms_buffer_height = 10
-  let g:lingr_vim_say_buffer_height = 3
-  let g:lingr_vim_remain_height_to_auto_scroll = 5
-  let g:lingr_vim_time_format     = '%c'
-  let g:lingr_vim_command_to_open_url = 'firefox %s'
+  on_cmd = 'Lingr'
+  hook_source = '''
+    let g:lingr_vim_user = 'mnct.tkn3011@gmail.com'
+    let g:lingr_vim_sidebar_width = 25
+    let g:lingr_vim_rooms_buffer_height = 10
+    let g:lingr_vim_say_buffer_height = 3
+    let g:lingr_vim_remain_height_to_auto_scroll = 5
+    let g:lingr_vim_time_format     = '%c'
+    let g:lingr_vim_command_to_open_url = 'firefox %s'
 
-  function! s:notify(title, message)
-    if has('unix') && executable('notify-send')
-      let notify_cmd = 'notify-send %s %s'
-    elseif has('windows')
-      let notify_cmd = 'notify-send %s %s'
-    elseif has('mac')
-      let notify_cmd = 'growlnotify -t %s -m %s'
-    else
-    endif
-    execute printf('silent !'. notify_cmd, shellescape(a:title, 1), shellescape(a:message, 1))
-  endfunction
+    function! s:notify(title, message)
+      if has('unix') && executable('notify-send')
+        let notify_cmd = 'notify-send %s %s'
+      elseif has('windows')
+        let notify_cmd = 'notify-send %s %s'
+      elseif has('mac')
+        let notify_cmd = 'growlnotify -t %s -m %s'
+      else
+      endif
+      execute printf('silent !'. notify_cmd, shellescape(a:title, 1), shellescape(a:message, 1))
+    endfunction
 
-  augroup lingr-vim
-    autocmd!
-    " autocmd User WinEnter
-    autocmd User plugin-lingr-message
-          \   let s:temp = lingr#get_last_message()
-          \|  if !empty(s:temp)
-            \|      call s:notify(s:temp.nickname, s:temp.text)
-            \|  endif
-            \|  unlet s:temp
+    augroup lingr-vim
+      autocmd!
+      " autocmd User WinEnter
+      autocmd User plugin-lingr-message
+            \   let s:temp = lingr#get_last_message()
+            \|  if !empty(s:temp)
+              \|      call s:notify(s:temp.nickname, s:temp.text)
+              \|  endif
+              \|  unlet s:temp
 
-    autocmd User plugin-lingr-presence
-          \   let s:temp = lingr#get_last_member()
-          \|  if !empty(s:temp)
-            \|      call s:notify(s:temp.name, (s:temp.presence ? 'online' : 'offline'))
-            \|  endif
-            \|  unlet s:temp
-  augroup END
+      autocmd User plugin-lingr-presence
+            \   let s:temp = lingr#get_last_member()
+            \|  if !empty(s:temp)
+              \|      call s:notify(s:temp.name, (s:temp.presence ? 'online' : 'offline'))
+              \|  endif
+              \|  unlet s:temp
+    augroup END
 '''
 #}}}
 
@@ -1306,31 +1244,30 @@ hook_source = '''
 
 [[plugins]] # cespare/vim-toml {{{
  repo = 'cespare/vim-toml'
-  on_ft = 'toml'
 #}}}
 
 # Vim: {{{
-[[plugins]] # syngan/vim-vimlint {{{
- # lint for vim script
-  repo = 'syngan/vim-vimlint'
-on_ft = 'vim'
-on_func = 'vimlint#vimlint'
+  [[plugins]] # syngan/vim-vimlint {{{
+  # lint for vim script
+    repo = 'syngan/vim-vimlint'
+  on_ft = 'vim'
+  on_func = 'vimlint#vimlint'
 
- #}}}
+  #}}}
 
-[[plugins]] # vim-jp/vital.vim {{{
- on_ft = 'vim'
-  repo = 'vim-jp/vital.vim'
+  [[plugins]] # vim-jp/vital.vim {{{
+  on_ft = 'vim'
+    repo = 'vim-jp/vital.vim'
+#}}}
 
 #}}}
-# }}}
 
 # Python {{{
 [[plugins]] # lambdalisue/vim-pyenv {{{
  # Activate the versions and the virtualenvs of pyenv within a live VIM session
   repo = 'lambdalisue/vim-pyenv'
-on_if = "executable('pyenv')"
-on_source = ['deoplete-jedi', 'jedi-vim']
+  on_if = "executable('pyenv')"
+  on_source = ['deoplete-jedi', 'jedi-vim']
 
 hook_post_source = '''
 augroup vim-pyenv-custom-augroup
@@ -1502,11 +1439,9 @@ on_ft = ['html', 'svg', 'rdf']
   repo = 'koron/codic-vim'
 #}}}
 
-
 [[plugins]] # mattn/ginger-vim {{{
   repo = 'mattn/ginger-vim'
  #}}}
-
 
 [[plugins]] # itchyny/dictionary.vim {{{
   repo = 'itchyny/dictionary.vim'
@@ -1519,18 +1454,9 @@ hook_post_source = '''
 '''
  #}}}
 
-
 [[plugins]] # vim-scripts/Align {{{
   repo = 'vim-scripts/Align'
  #}}}
-
-
-[[plugins]] # lambdalisue/vim-gista {{{
-  repo = 'lambdalisue/vim-gista'
-depends = ['unite.vim', 'open-browser.vim']
-on_cmd = 'Gista'
- #}}}
-
 
   # Latex {{{
   [[plugins]] # lervag/vimtex {{{
@@ -1674,15 +1600,67 @@ on_cmd = 'Gista'
 #}}}
 
     # VCS {{{
+
+      [[plugins]] # lambdalisue/vim-gista {{{
+        repo = 'lambdalisue/vim-gista'
+      depends = ['unite.vim', 'open-browser.vim']
+      on_cmd = 'Gista'
+      #}}}
+
+      [[plugins]] # tpope/vim-fugitive {{{
+        repo = 'tpope/vim-fugitive'
+        augroup = 'fugitive'
+        hook_add = '''
+          function! ConfigOnGitRepository() "{{{
+            if !exists('b:git_dir')
+              return
+            endif
+            let git_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
+            execute 'lcd '. git_path
+            nnoremap <buffer> [git] <Nop>
+            nmap <buffer> <Leader>g [git]
+            nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
+            nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
+            nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
+            nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
+            nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
+            nnoremap <buffer> [git]p :<C-u>Gpush<CR>
+            " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
+            if &l:path !~# git_path
+              let &l:path .= ','.git_path
+            endif
+          endfunction "}}}
+
+          function! FugitiveMyMake() "{{{
+            let l:error = system(&l:makeprg)
+            redraw!
+            " echohl Special
+            for error in split(l:error, '\n')
+              echomsg error
+            endfor
+            " echohl None
+            execute 'call fugitive#cwindow()'
+          endfunction "}}}
+
+          command! Make call FugitiveMyMake()
+
+          augroup FUGITIVE
+              autocmd!
+              autocmd User Fugitive call ConfigOnGitRepository()
+          augroup END
+        '''
+      #}}}
+
       [[plugins]] # moznion/github-commit-comment.vim {{{
           repo = 'moznion/github-commit-comment.vim'
         lazy = 1
         depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
-      # }}}
+      #}}}
 
-[[plugins]] # cohama/agit.vim {{{
-  repo = 'cohama/agit.vim'
- #}}}
+      [[plugins]] # cohama/agit.vim {{{
+        repo = 'cohama/agit.vim'
+      #}}}
+
     #}}}
 
 # }}}

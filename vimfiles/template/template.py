@@ -25,5 +25,6 @@ pd.set_option('display.line_width',200)
 def main():
     <+CURSOR+>
 
+
 if __name__ == '__main__':
     main()
