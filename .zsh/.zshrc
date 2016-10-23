@@ -119,12 +119,7 @@ zplug load --verbose
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
 # -----------------------------------------------------------------------------
-if (( $commands['nvim'] ));then
-    export EDITOR=nvim 
-else
-    export EDITOR=vim 
-fi
-
+export EDITOR=vim 
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
@@ -323,6 +318,7 @@ case "$OSTYPE" in
         alias ls='ls --color=auto'
 esac
 alias less='less -IMx4 -X -R'
+alias -g NL='>/dev/null'
 alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
@@ -336,6 +332,7 @@ alias -g S='| sed'
 alias -g A='| awk'
 alias -g W='| wc'
 
+[[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim' && export EDITOR=nvim
 [[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 (( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'

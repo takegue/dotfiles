@@ -4,7 +4,7 @@ $latex_silent     = 'platex -synctex=1 -kanji=utf8 -halt-on-error -interaction=b
 $bibtex           = 'pbibtex -kanji=utf8';
 $dvipdf           = 'dvipdfmx %O -o %D %S';
 $dvips            = 'dvips %O -o %D %S';
-# $pdflatex 	  = 'pdflatex -8bit -etex -halt-on-error -synctex=1 -kanji=utf8 -inputenc=utf8 %O %S';
+$pdflatex         = 'pdflatex -8bit -etex -halt-on-error -synctex=1 -kanji=utf8 -inputenc=utf8 %O %S';
 $ps2pdf           = 'ps2pdf   %O %S %D';
 $makeindex        = 'mendex %O -o %D %S';
 $max_repeat       = 5;

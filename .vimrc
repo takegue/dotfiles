@@ -159,7 +159,6 @@ set directory=$HOME/.vim/.swap
 
 set nobackup
 set writebackup
-set patchmode='orig'
 set backupdir=$HOME/.vim/.backup
 
 " 対応括弧に'<'と'>'のペアを追加
@@ -263,7 +262,7 @@ function! ToggleWindowSize()
 endfunction
 
 function! OpenFolderOfCurrentFile() abort
-  let l:path = shellescape(expand("%:p:h"),' ()')
+  let l:path = escape(expand("%:p:h"),' ()')
   if has('unix') && s:executable('xdg-open')
     call system( 'xdg-open '. path)
   elseif has('mac') && s:executable('open')
@@ -686,7 +685,7 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'basyura/unite-rails'                          " a unite.vim plugin for rails
   NeoBundle 'beloglazov/vim-online-thesaurus'              " A Vim plugin for looking up words in an online thesaurus
   NeoBundle 'benmills/vimux'
-  " NeoBundle 'bps/vim-textobj-python'
+  " NeoBundle 'bps/vim-textobj-python'                
   NeoBundle 'christoomey/vim-tmux-navigator'
   NeoBundle 'clones/vim-zsh'
   NeoBundle 'cohama/agit.vim'
@@ -696,7 +695,6 @@ function! s:loads_bundles() abort "{{{
   NeoBundle 'elzr/vim-json'
   NeoBundle 'emonkak/vim-operator-sort'
   NeoBundle 'flazz/vim-colorschemes'                       " one colorscheme pack to rule them all!
-  NeoBundle 'fuenor/im_control.vim'                        " im / ime control plugin for vim
   NeoBundle 'hail2u/vim-css3-syntax'
   NeoBundle 'haya14busa/incsearch.vim'
   NeoBundle 'haya14busa/vim-migemo'                        " Vim Plugin for C/Migemo
@@ -1453,8 +1451,9 @@ if neobundle#tap('neosnippet.vim')
 
     augroup neosnippet_setting
       autocmd!
-      autocmd InsertLeave * NeoSnippetClearMarkers
+      " autocmd InsertLeave * NeoSnippetClearMarkers
     augroup END
+
 
     " For snippet_complete marker.
     if has('conceal')
@@ -3014,7 +3013,7 @@ if neobundle#tap('unite.vim')
     nmap    <Leader>f  [unite]
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer file file_mru file_rec:~/Downloads
+          \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads 
           \ file/new directory/new <CR>
     if has('nvim')
       nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
@@ -4506,6 +4505,7 @@ endif
 "
 if has('vim_starting')
   syntax on
+  syntax sync minlines=256
   set t_Co=256
   let g:solarized_termcolors=256
 
