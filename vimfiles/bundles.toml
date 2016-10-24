@@ -1,5 +1,9 @@
 [[plugins]] # Shougo/dein.vim {{{
   repo = 'Shougo/dein.vim'
+  hook_add = '''
+    let g:dein#install_progress_type = 'title'
+    let g:dein#install_message_type = 'none'
+  '''
 #}}}
 
 [[plugins]] # tpope/vim-sensible {{{
@@ -360,7 +364,7 @@ hook_source = '''
     hook_add = '''
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
-    nmap    <Leader>e  :VimFilerSimple -direction=bo<CR>
+    nmap    <Leader>e  :VimFilerExplorer  -direction=bo<CR>
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
           \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
@@ -521,6 +525,7 @@ hook_source = '''
 
 [[plugins]] # Shougo/vimfiler.vim {{{
   repo = 'Shougo/vimfiler.vim'
+  on_cmd = 'VimFiler'
 #}}}
 
 [[plugins]]  # Shougo/context_filetype.vim {{{
@@ -611,11 +616,13 @@ augroup END
   repo = 'osyo-manga/shabadou.vim'
 #}}}
 
+[[plugins]] # jceb/vim-hier  {{{
+  repo = 'jceb/vim-hier'
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
   on_cmd = 'QuickRun'
-  depends = ['vimproc.vim', 'shabadou.vim']
+  depends = ['vim-hier', 'vimproc.vim', 'shabadou.vim']
   hook_add = '''
     let g:quickrun_config = {
           \ "_": {
@@ -625,15 +632,17 @@ augroup END
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "hook/qfstatusline_update/enable_exit" : 1,
           \   "hook/qfstatusline_update/priority_exit" : 4,
-          \   "runner"                   : 'vimproc',
+          \   "runner"                    : 'vimproc',
           \   "runner/vimproc/read_timeout" : 100,
           \   "runner/vimproc/sleep"      : 100,
           \   "runner/vimproc/updatetime" : 100,
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
           \},
-          \   "watchdogs_checker/_" : {
-          \      "hook/close_quickfix/enable_exit" : 1,
+          \ "watchdogs_checker/_" : {
           \      "runner/vimproc/updatetime" : 1000,
+          \ },
+          \ "watchdogs_checker/redpen" : {
+          \      'errorformat' : '%f:%l: Validation%trror[%s]\, %m,%-G,%-G%m',
           \}}
     let g:quickrun_config.sql ={
           \ 'command' : 'mysql',
@@ -670,7 +679,7 @@ augroup END
           \ }
 
 
-    function! MakeMySQLCommandOptions()
+    function! MakeMySQLCommandOptions() "{{{
       if !exists("g:mysql_config_user")
         let g:mysql_config_user = input("user> ")
       endif
@@ -707,7 +716,7 @@ augroup END
         call add(optlist, g:mysql_config_otheropts)
       endif
       return join(optlist, ' ')
-    endfunction
+    endfunction "}}}
 
     augroup QuickRunUnitTest
       autocmd!
@@ -738,6 +747,10 @@ augroup END
         \}
     let g:watchdogs_check_BufWritePost_enable_on_wq = 0
   '''
+  hook_post_source = '''
+    call watchdogs#setup(g:quickrun_config)
+  '''
+
 # [[plugins.on_cmd]]
 # name = 'WatchdogsRun'
 # complete = 'customlist,quickrun#complete'
@@ -780,20 +793,12 @@ augroup END
 
 [[plugins]] # kana/vim-submode {{{
   repo = 'kana/vim-submode'
-  hook_add = '''
-    function! s:SIDP()
-      return '<SNR>' . matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SIDP$') . '_'
-    endfunction
-    function! s:movetab(nr)
-      execute 'tabmove' g:V.modulo(tabpagenr() + a:nr - 1, tabpagenr('$'))
-    endfunction
-
-    let s:movetab = ':<C-u>call ' . s:SIDP() . 'movetab(%d)<CR>'
-    call submode#enter_with('movetab', 'n', '', '<Space>gt', printf(s:movetab, 1))
-    call submode#enter_with('movetab', 'n', '', '<Space>gT', printf(s:movetab, -1))
-    call submode#map('movetab', 'n', '', 't', printf(s:movetab, 1))
-    call submode#map('movetab', 'n', '', 'T', printf(s:movetab, -1))
-    unlet s:movetab
+  on_event = 'WinEnter'
+  hook_post_source = '''
+    call submode#enter_with('changetab', 'n', '', 'gt', 'gt')
+    call submode#enter_with('changetab', 'n', '', 'gT', 'gT')
+    call submode#map('changetab', 'n', '', 't', 'gt')
+    call submode#map('changetab', 'n', '', 'T', 'gT')
 
     call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
     call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
@@ -804,8 +809,13 @@ augroup END
     call submode#map('winsize', 'n', '', '+', '<C-w>-')
     call submode#map('winsize', 'n', '', '-', '<C-w>+')
   '''
-
 # }}}
+
+      [[plugins]] # dannyob/quickfixstatus {{{
+        repo = 'dannyob/quickfixstatus'
+        # lazy = 1
+        # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
+      #}}}
 
 # }}}
 
@@ -820,6 +830,11 @@ augroup END
   on_i = 1
   depends = 'context_filetype.vim'
   if = 'has("nvim")'
+
+  hook_post_source = '''
+     call deoplete#custom#set('look', 'filetypes', ['tex', 'markdown', 'rst', 'txt'])
+  '''
+
 
   hook_source = '''
     let g:deoplete#enable_at_startup = 1
@@ -1243,7 +1258,8 @@ nnoremap <silent> ,q :TagbarToggle<CR>
 #}}}
 
 [[plugins]] # cespare/vim-toml {{{
- repo = 'cespare/vim-toml'
+  repo = 'cespare/vim-toml'
+  on_ft = 'toml'
 #}}}
 
 # Vim: {{{
@@ -1269,13 +1285,13 @@ nnoremap <silent> ,q :TagbarToggle<CR>
   on_if = "executable('pyenv')"
   on_source = ['deoplete-jedi', 'jedi-vim']
 
-hook_post_source = '''
-augroup vim-pyenv-custom-augroup
-  autocmd!
-  autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
-  autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
-augroup END
-'''
+  hook_post_source = '''
+  augroup vim-pyenv-custom-augroup
+    autocmd!
+    autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
+    autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
+  augroup END
+  '''
  #}}}
 
 [[plugins]] # klen/python-mode {{{
@@ -1284,128 +1300,169 @@ augroup END
   on_if = "(has('python') || has('python3')) && executable('pyflakes') && executable('pylint')"
   on_ft = ["python", "python3", "djangohtml"]
 
-hook_post_source ='''
-  nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-  nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
+  hook_post_source ='''
+    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
+    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
 
-  augroup pymode_myautocmd
-    autocmd!
-    autocmd BufEnter '__doc__' nnoremap <buffer>q  <C-w>c
-    autocmd BufEnter '__doc__' normal zr
-    autocmd BufReadPost '__doc__' normal zr
-    autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
-  augroup END
-'''
+    augroup pymode_myautocmd
+      autocmd!
+      autocmd BufEnter '__doc__' nnoremap <buffer>q  <C-w>c
+      autocmd BufEnter '__doc__' normal zr
+      autocmd BufReadPost '__doc__' normal zr
+      autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
+    augroup END
+  '''
 
-hook_source = '''
-  if has('python')
-    let g:pymode_python = 'python'
-  elseif has('python3')
-    let g:pymode_python = 'python3'
-  else
-  endif
+  hook_source = '''
+    if has('python')
+      let g:pymode_python = 'python'
+    elseif has('python3')
+      let g:pymode_python = 'python3'
+    else
+    endif
 
-  let g:pymode = 1
-  let g:pymode_warnings = 1
-  " let g:pymode_paths = ['shutil', 'datetime', 'time',
-  "       \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-  let g:pymode_trim_whitespaces = 1
-  let g:pymode_options = 1
-  let g:pymode_options_colorcolumn = 1
-  let g:pymode_quickfix_minheight = 3
-  let g:pymode_quickfix_maxheight = 6
-  " let g:pymode_indent = []
-  let g:pymode_folding = 1
-  let g:pymode_motion = 1
+    let g:pymode = 1
+    let g:pymode_warnings = 1
+    " let g:pymode_paths = ['shutil', 'datetime', 'time',
+    "       \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
+    let g:pymode_trim_whitespaces = 1
+    let g:pymode_options = 1
+    let g:pymode_options_colorcolumn = 1
+    let g:pymode_quickfix_minheight = 3
+    let g:pymode_quickfix_maxheight = 6
+    " let g:pymode_indent = []
+    let g:pymode_folding = 1
+    let g:pymode_motion = 1
 
-  let g:pymode_doc = 1
-  let g:pymode_doc_bind = 'K'
-  let g:jedi#goto_command = 'gd'
-  let g:pymode_virtualenv = 0
-  let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
+    let g:pymode_doc = 1
+    let g:pymode_doc_bind = 'K'
+    let g:jedi#goto_command = 'gd'
+    let g:pymode_virtualenv = 0
+    let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
 
-  let g:pymode_run = 0            "QuickRunの方が優秀
-  " let g:pymode_run_bind = '<leader>R'
+    let g:pymode_run = 0            "QuickRunの方が優秀
+    " let g:pymode_run_bind = '<leader>R'
 
-  let g:pymode_breakpoint = 1
-  let g:pymode_breakpoint_bind = '<leader>b'
+    let g:pymode_breakpoint = 1
+    let g:pymode_breakpoint_bind = '<leader>b'
 
-  let g:pymode_lint = 1
-  let g:pymode_lint_on_write = 1
+    let g:pymode_lint = 1
+    let g:pymode_lint_on_write = 1
 
-  "Check code on every save (every)
-  let g:pymode_lint_unmodified = 0
-  let g:pymode_lint_on_fly = 0
-  let g:pymode_lint_message = 1
-  " let g:pymode_lint_ignore = "E501,W"
-  " let g:pymode_lint_select = "E501,W0011,W430"
-  let g:pymode_lint_cwindow = 1
+    "Check code on every save (every)
+    let g:pymode_lint_unmodified = 0
+    let g:pymode_lint_on_fly = 0
+    let g:pymode_lint_message = 1
+    " let g:pymode_lint_ignore = "E501,W"
+    " let g:pymode_lint_select = "E501,W0011,W430"
+    let g:pymode_lint_cwindow = 1
 
-  let g:pymode_rope = 0
-  let g:pymode_rope_autoimport = 0
-  " let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
-  "             \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-  " let g:pymode_rope_autoimport_import_after_complete = 0
-  " let g:pymode_rope_organize_imports_bind = '<F11>'
+    let g:pymode_rope = 0
+    let g:pymode_rope_autoimport = 0
+    " let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
+    "             \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
+    " let g:pymode_rope_autoimport_import_after_complete = 0
+    " let g:pymode_rope_organize_imports_bind = '<F11>'
 
-  " let g:pymode_rope_goto_definition_bind = 'gf'
-  " " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
+    " let g:pymode_rope_goto_definition_bind = 'gf'
+    " " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
 
-  " let g:pymode_rope_rename_bind = 'R'
-  " " let g:pymode_rope_rename_module_bind = '<C-S-R>'
+    " let g:pymode_rope_rename_bind = 'R'
+    " " let g:pymode_rope_rename_module_bind = '<C-S-R>'
 
-  " let g:pymode_rope_extract_method_bind = '<C-c>rm'
-  " let g:pymode_rope_extract_variable_bind = '<C-c>rl'
-  " let g:pymode_rope_use_function_bind = '<C-c>ru'
+    " let g:pymode_rope_extract_method_bind = '<C-c>rm'
+    " let g:pymode_rope_extract_variable_bind = '<C-c>rl'
+    " let g:pymode_rope_use_function_bind = '<C-c>ru'
 
-  " "よくわからない機能たち
-  " " let g:pymode_rope_move_bind = '<C-c>rv'
-  " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
-  " let g:pymode_lint_sort = ['E', 'C', 'I']
+    " "よくわからない機能たち
+    " " let g:pymode_rope_move_bind = '<C-c>rv'
+    " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
+    " let g:pymode_lint_sort = ['E', 'C', 'I']
 
-  let g:pymode_syntax_slow_sync = 0
-  let g:pymode_syntax_all = 1
-  let g:pymode_syntax_print_as_function = 0
-  let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
-  let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
-  " Highlight 'self' keyword
-  let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
-  " Highlight indent's errors
-  let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
-  " Highlight space's errors
-  let g:pymode_syntax_space_errors             = g:pymode_syntax_all
-  " Highlight string formatting
-  let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
-  let g:pymode_syntax_string_format            = g:pymode_syntax_all
-  let g:pymode_syntax_string_templates         = g:pymode_syntax_all
-  let g:pymode_syntax_doctests                 = g:pymode_syntax_all
-  " Highlight builtin objects (True, False, ...)
-  let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
-  " Highlight builtin types (str, list, ...)
-  let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
-  " Highlight exceptions (TypeError, ValueError, ...)
-  let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
-  " Highlight docstrings as pythonDocstring (otherwise as pythonString)
-  let g:pymode_syntax_docstrings               = g:pymode_syntax_all
-'''
+    let g:pymode_syntax_slow_sync = 0
+    let g:pymode_syntax_all = 1
+    let g:pymode_syntax_print_as_function = 0
+    let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
+    let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
+    " Highlight 'self' keyword
+    let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
+    " Highlight indent's errors
+    let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
+    " Highlight space's errors
+    let g:pymode_syntax_space_errors             = g:pymode_syntax_all
+    " Highlight string formatting
+    let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
+    let g:pymode_syntax_string_format            = g:pymode_syntax_all
+    let g:pymode_syntax_string_templates         = g:pymode_syntax_all
+    let g:pymode_syntax_doctests                 = g:pymode_syntax_all
+    " Highlight builtin objects (True, False, ...)
+    let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
+    " Highlight builtin types (str, list, ...)
+    let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
+    " Highlight exceptions (TypeError, ValueError, ...)
+    let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
+    " Highlight docstrings as pythonDocstring (otherwise as pythonString)
+    let g:pymode_syntax_docstrings               = g:pymode_syntax_all
+  '''
 
  #}}}
 
 [[plugins]] # davidhalter/jedi-vim {{{
  # python plugin for vim
   repo = 'davidhalter/jedi-vim'
-on_if = "!has('nvim')"
-on_ft = ['python', 'python3', 'djangohtml']
-on_source = ['python-mode']
+  on_if = "!has('nvim')"
+  # on_if = 0
+  # on_ft = ['python', 'python3', 'djangohtml']
+  # on_source = ['python-mode']
+
+  hook_add = '''
+  " let g:jedi#completions_command = "<C-N>"
+  " 自動設定機能をoffにし手動で設定を行う
+  set noshowmode
+  let g:jedi#auto_initialization  = 0
+  let g:jedi#auto_vim_configuration = 0
+  let g:jedi#popup_on_dot = 0
+  let g:jedi#auto_close_doc = 0
+  let g:jedi#show_call_signatures = 2
+  let g:jedi#show_call_signatures_delay = -1
+
+  "quickrunと被るため大文字に変更
+  " let g:jedi#rename_command = 'R'
+  let g:jedi#goto_assignments_command = 'gf'
+  let g:jedi#goto_definitions_command = 'gd'
+  " let g:jedi#use_tabs_not_buffers = 1
+  " let g:jedi#completions_enabled = 1
+  "
+  " Configuration necocomplete, because of conflicts to one {{{
+  if !exists('g:neocomplete#sources#omni#functions')
+    let g:neocomplete#sources#omni#functions = {}
+  endif
+  let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
+  '''
+
+  hoook_source = '''
+    augroup myjedivim
+      autocmd!
+      autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto()<cr>
+      autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
+      autocmd FileType python setlocal omnifunc=jedi#completions
+    augroup END
+    call jedi#configure_call_signatures()
+  '''
+
 
 # }}}
 
  #}}}
+# }}}
 
 # WEB Programming {{{
 [[plugins]] # elzr/vim-json {{{
   repo = 'elzr/vim-json'
-on_ft = ['json']
+  on_ft = ['json']
  #}}}
 
 
@@ -1461,12 +1518,12 @@ hook_post_source = '''
   # Latex {{{
   [[plugins]] # lervag/vimtex {{{
     repo = 'lervag/vimtex'
-  on_ft=['tex']
-  hook_post_source = '''
-  nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
-  vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
-  nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
-  '''
+    on_ft=['tex']
+    hook_post_source = '''
+      nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
+      vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
+      nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
+    '''
   hook_source = '''
     let g:latex_fold_parts = [
           \ "appendix",
