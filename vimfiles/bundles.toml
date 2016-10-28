@@ -817,6 +817,10 @@ augroup END
         # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
       #}}}
 
+      [[plugins]] # Konfekt/FastFold {{{
+      repo = 'Konfekt/FastFold'
+      # }}}
+
 # }}}
 
 # Editor {{{
@@ -1541,12 +1545,11 @@ hook_post_source = '''
     let g:latex_fold_enabled = 1
     let g:latex_fold_automatic = 1
     let g:latex_fold_envs = 1
- #}}}
 
 
     " let g:vimtex_latexmk_options = '--pdfdvi'
 
-    if has('unix') && s:executable('okular')
+    if has('unix') && executable('okular')
       let g:vimtex_view_general_viewer = 'okular'
       let g:vimtex_view_general_options = '--unique @pdf\#src:@line@tex'
       let g:vimtex_view_general_options_latexmk = '--unique'
@@ -1601,12 +1604,12 @@ hook_post_source = '''
     "\citeも自動補完するなら
     let g:neocomplete#sources#omni#input_patterns.tex = '\\cite{\s*[0-9A-Za-z_:]*\|\\ref{\s*[0-9A-Za-z_:]*'
   '''
+  #}}}
 
   [[plugins]] # kana/vim-smartchr {{{
     repo = 'kana/vim-smartchr'
   on_ft = 'tex'
  #}}}
-
 
   # }}}
 
