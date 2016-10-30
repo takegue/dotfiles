@@ -726,6 +726,7 @@ augroup END
       autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
       autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
     augroup END
+    nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
 # }}}
 
@@ -1724,6 +1725,15 @@ hook_post_source = '''
     #}}}
 
 # }}}
+
+# GO {{{
+  [[plugins]] # fatih/vim-go {{{
+    repo = 'fatih/vim-go'
+    on_ft = 'go'
+  #}}}
+# }}}
+
+
 
     # Other {{{
     [[plugins]] # thinca/vim-ref {{{
