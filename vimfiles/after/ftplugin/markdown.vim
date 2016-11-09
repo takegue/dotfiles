@@ -7,7 +7,7 @@ augroup markdown_augrope
 augroup END
 
 nnoremap <buffer><silent><Leader>= :<C-u>call append('.', repeat('=', max([40, strdisplaywidth(getline('.'))])))<CR>
-nnoremap <buffer><silent><Leader>- :<C-u>call append('.', repeat('=', max([40, strdisplaywidth(getline('.'))])))<CR>
+nnoremap <buffer><silent><Leader>- :<C-u>call append('.', repeat('-', max([40, strdisplaywidth(getline('.'))])))<CR>
 
 iab <buffer> tl - [ ]
 

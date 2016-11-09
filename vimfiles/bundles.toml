@@ -364,7 +364,7 @@ hook_source = '''
     hook_add = '''
     nnoremap [unite]    <Nop>
     nmap    <Leader>f  [unite]
-    nmap    <Leader>e  :VimFilerExplorer  -direction=bo<CR>
+    nmap    <Leader>e  :VimFilerExplorer -direction=bo <C-R>=expand('%:p:h')<CR><CR>
     nnoremap  [unite]s  :<C-u>Unite source<CR>
     nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
           \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
@@ -384,9 +384,9 @@ hook_source = '''
           \ -buffer-name=register register<CR>
     nnoremap <silent> [unite]o  :<C-u>Unite outline tag
           \ -buffer-name=outline <CR>
-    nnoremap <silent> [unite]n  :<C-u>Unite
-          \ -buffer-name=bundles
-          \ neobundle/search <CR>
+    " nnoremap <silent> [unite]n  :<C-u>Unite
+    "      \ -buffer-name=bundles
+    "      \ neobundle/search <CR>
     nnoremap <silent> [unite]s  :<C-u>Unite
           \ -buffer-name=snippets
           \ neosnippet <CR>
@@ -507,9 +507,14 @@ hook_source = '''
   repo = 'Shougo/neossh.vim'
  #}}}
 
-
 [[plugins]] # Shougo/unite-help {{{
   repo = 'Shougo/unite-help'
+ #}}}
+
+[[plugins]] # rhysd/unite-redpen.vim {{{
+  repo = 'rhysd/unite-redpen.vim'
+  hook_add = '''
+  '''
  #}}}
 
 
@@ -526,9 +531,15 @@ hook_source = '''
 [[plugins]] # Shougo/vimfiler.vim {{{
   repo = 'Shougo/vimfiler.vim'
   on_cmd = 'VimFiler'
+
+  hook_post_source = '''
+    call vimfiler#custom#profile('default', 'context', {
+          \ 'safe' : 0,
+          \ })
+  '''
 #}}}
 
-[[plugins]]  # Shougo/context_filetype.vim {{{
+[[plugins]] # Shougo/context_filetype.vim {{{
   repo = 'Shougo/context_filetype.vim'
 hook_source = '''
   let g:context_filetype#filetypes = {
@@ -584,6 +595,7 @@ augroup END
   repo = 'thinca/vim-template'
   hook_add = '''
     command! -nargs=0 -complete=filetype Temp call s:open_template()
+
     nmap <Space>/ :<C-u>call <SID>open_template()<CR>
     function! s:open_template()
       let l:template_name = template#search(expand('%:p'))
@@ -642,7 +654,9 @@ augroup END
           \      "runner/vimproc/updatetime" : 1000,
           \ },
           \ "watchdogs_checker/redpen" : {
-          \      'errorformat' : '%f:%l: Validation%trror[%s]\, %m,%-G,%-G%m',
+          \      'cmdopt' : '-r plain2 -f %{&filetype}',
+          \      'exec' : '%c %o %s 2>/dev/null',
+          \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}}
     let g:quickrun_config.sql ={
           \ 'command' : 'mysql',
@@ -662,6 +676,9 @@ augroup END
     let g:quickrun_config['python.pytest'] = {
           \ 'command': 'py.test',
           \ 'cmdopt': '-v'
+          \}
+    let g:quickrun_config['python.unit'] = {
+          \ 'command': 'python',
           \}
     let g:quickrun_config.markdown  = {
           \ 'type' : 'markdown/pandoc',
@@ -764,6 +781,10 @@ augroup END
 [[plugins]] # mhinz/vim-signify {{{
   repo = 'mhinz/vim-signify'
 #}}}
+
+[[plugins]]  # keith/tmux.vim {{{
+  repo = 'keith/tmux.vim'
+# }}}
 
 [[plugins]] # christoomey/vim-tmux-navigator {{{
   repo = 'christoomey/vim-tmux-navigator'
@@ -1053,7 +1074,7 @@ augroup END
     endfunction "}}}
 
     " <C-h>, <BS>: close popup and delete backword char.
-    if neobundle#is_installed('neosnippet.vim') "{{{
+    if dein#is_sourced('neosnippet.vim') "{{{
       inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
       " For cursor moving in insert mode(Not recommended)
       inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"

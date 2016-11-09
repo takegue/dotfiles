@@ -491,8 +491,11 @@ else
     call dein#call_hook('on_post_source')
 endif
 
-autocmd MyAutoCmd FileType,Syntax,BufNewFile,BufNew,BufRead  * 
-      \ call s:my_on_filetype()
+
+if has('nvim')
+  autocmd MyAutoCmd FileType,Syntax,BufNewFile,BufNew,BufRead  * 
+        \ call s:my_on_filetype()
+endif
 
 function! s:my_on_filetype() abort "{{{
   if &l:filetype == '' && bufname('%') == ''
