@@ -50,6 +50,8 @@
       let fname = expand('%:t')
       if fname =~ '^lingr-'
         let fname = '['. fname . ']'
+      elseif &ft == 'dirvish'
+        let fname = @%
       elseif fname == ''
         let fname = '[No Name]'
       endif
@@ -211,6 +213,18 @@
 
 # Utilities {{{
 
+    [[plugins]] # {{{
+      repo = 'daisuzu/translategoogle.vim'
+    #}}}
+
+    [[plugins]]# mattn/webapi-vim {{{{
+      repo = 'mattn/webapi-vim'
+  # }}}
+
+    [[plugins]] # kana/vim-metarw{{{
+      repo = 'kana/vim-metarw'
+    # }}}
+
 # Text Object Settings: {{{
 
 [[plugins]] # kana/vim-textobj-user {{{
@@ -239,7 +253,7 @@
   on_ft = ['cpp', 'java', 'vim']
  #}}}
 
-[[plugins]] # maaxis=0ttn/vim-textobj-url {{{
+[[plugins]] # mattn/vim-textobj-url {{{
 # URLオブジェクト
 # au, iu
   repo = 'mattn/vim-textobj-url'
@@ -252,10 +266,6 @@
 [[plugins]] # rbonvall/vim-textobj-latex {{{
   repo = 'rbonvall/vim-textobj-latex'
 #}}}
-
-[[plugins]] # bps/vim-textobj-python {{{
-  repo = 'bps/vim-textobj-python'
-# }}}
 
 # }}}
 
@@ -358,58 +368,121 @@ hook_source = '''
 
 # Unite plugins {{{
 
+  [[plugins]] # Shougo/denite.nvim {{{
+    repo = 'Shougo/denite.nvim'
+    on_if = "has('nvim') && has('python3')"
+    on_cmd = 'Denite'
+    hook_post_source = '''
+      call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+      call denite#custom#var('file_rec/git', 'command',
+        \ ['git', '-C', ':directory', 'ls-files', '-c', '--full-name','--exclude-standard'])
+
+      call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+      call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+      call denite#custom#map('insert', '<C-f>', 'scroll_page_forwards')
+      call denite#custom#map('insert', '<C-b>', 'scroll_page_forwards')
+
+      " unite grep に ag(The Silver Searcher) を使う
+      if tkngue#util#executable('rg')
+        call denite#custom#var('grep', 'command', ['rg'])
+        call denite#custom#var('grep', 'recursive_opts', [])
+        call denite#custom#var('grep', 'final_opts', [])
+        call denite#custom#var('grep', 'separator', ['--'])
+        call denite#custom#var('grep', 'default_opts',
+            \ ['--vimgrep', '--no-heading'])
+      elseif tkngue#util#executable('ag')
+        call denite#custom#var('grep', 'command', ['ag'])
+        call denite#custom#var('grep', 'recursive_opts', [])
+        call denite#custom#var('grep', 'final_opts', [])
+        call denite#custom#var('grep', 'separator', [])
+        call denite#custom#var('grep', 'default_opts',
+            \ ['--nopager', '--nocolor', '--nogroup', '--column'])
+      endif
+
+    '''
+
+    hook_add = '''
+      cnoremap <expr> h   getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h'
+      nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file_rec/git:~/.dotfiles<CR>
+
+      nnoremap [denite]    <Nop>
+      nmap    <Leader>f  [denite]
+      nnoremap  [denite]s  :<C-u>Denite source<CR>
+      nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
+            \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`
+            \ file_rec:~/Downloads file_mru <CR>
+      nnoremap <silent> [denite]r  :<C-u>Denite
+            \ -buffer-name=register unite:register<CR>
+      nnoremap <silent> [denite]s  :<C-u>Denite
+            \ -buffer-name=snippets
+            \ unite:neosnippet <CR>
+      nnoremap <silent> [denite]me :<C-u>Denite output:message
+            \ -buffer-name=messages <CR>
+
+      nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
+      nnoremap <qsilent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
+      nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+      nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
+      nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
+      nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
+      nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -buffer-name=help help<CR>
+
+    '''
+  # }}}
+
   [[plugins]] # Shougo/unite.vim {{{
     repo = 'Shougo/unite.vim'
     on_cmd = 'Unite'
+    if = 0
+    on_if = "!has('nvim')"
     hook_add = '''
-    nnoremap [unite]    <Nop>
-    nmap    <Leader>f  [unite]
-    nmap    <Leader>e  :VimFilerExplorer -direction=bo <C-R>=expand('%:p:h')<CR><CR>
-    nnoremap  [unite]s  :<C-u>Unite source<CR>
-    nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-          \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
-          \ file/new directory/new <CR>
-    if has('nvim')
-      nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
-            \ file_rec/neovim
+      nnoremap [unite]    <Nop>
+      nmap    <Leader>f  [unite]
+      nnoremap  [unite]s  :<C-u>Unite source<CR>
+      nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
+            \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
             \ file/new directory/new <CR>
-    else
-      nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
-            \ file_rec/neovim
-            \ file/new directory/new <CR>
-    endif
-    nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-          \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
-    nnoremap <silent> [unite]r  :<C-u>Unite
-          \ -buffer-name=register register<CR>
-    nnoremap <silent> [unite]o  :<C-u>Unite outline tag
-          \ -buffer-name=outline <CR>
-    " nnoremap <silent> [unite]n  :<C-u>Unite
-    "      \ -buffer-name=bundles
-    "      \ neobundle/search <CR>
-    nnoremap <silent> [unite]s  :<C-u>Unite
-          \ -buffer-name=snippets
-          \ neosnippet <CR>
-    nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
-          \ -buffer-name=mapping -hide-source-names<CR>
-    nnoremap <silent> [unite]me :<C-u>Unite output:message
-          \ -buffer-name=messages <CR>
-    " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
-    nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
+      if has('nvim')
+        nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
+              \ file_rec/neovim
+              \ file/new directory/new <CR>
+      else
+        nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
+              \ file_rec/neovim
+              \ file/new directory/new <CR>
+      endif
+      nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
+            \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
+      nnoremap <silent> [unite]r  :<C-u>Unite
+            \ -buffer-name=register register<CR>
+      nnoremap <silent> [unite]o  :<C-u>Unite outline tag
+            \ -buffer-name=outline <CR>
+      " nnoremap <silent> [unite]n  :<C-u>Unite
+      "      \ -buffer-name=bundles
+      "      \ neobundle/search <CR>
+      nnoremap <silent> [unite]s  :<C-u>Unite
+            \ -buffer-name=snippets
+            \ neosnippet <CR>
+      nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
+            \ -buffer-name=mapping -hide-source-names<CR>
+      nnoremap <silent> [unite]me :<C-u>Unite output:message
+            \ -buffer-name=messages <CR>
+      " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
+      nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
 
-    nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
-    nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
-    nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
-    nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
-    nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
-    nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
-    nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
-    nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
-    nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
-    nnoremap <silent> [\ :UniteNext<CR>
-    nnoremap <silent> ]\ :UnitePrevious<CR>
-    nnoremap <silent> ]\ :UniteFirst<CR>
-    nnoremap <silent> [\ :UniteLast<CR>
+      nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
+      nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
+      nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+      nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
+      nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
+      nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
+      nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
+      nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
+      nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
+      nnoremap <silent> [\ :UniteNext<CR>
+      nnoremap <silent> ]\ :UnitePrevious<CR>
+      nnoremap <silent> ]\ :UniteFirst<CR>
+      nnoremap <silent> [\ :UniteLast<CR>
   '''
 
   hook_source = '''
@@ -517,11 +590,9 @@ hook_source = '''
   '''
  #}}}
 
-
 [[plugins]] # tsukkee/unite-tag {{{
   repo = 'tsukkee/unite-tag'
  #}}}
-
 
 [[plugins]] # Shougo/unite-outline {{{
   repo = 'Shougo/unite-outline'
@@ -530,6 +601,7 @@ hook_source = '''
 
 [[plugins]] # Shougo/vimfiler.vim {{{
   repo = 'Shougo/vimfiler.vim'
+  depends = ['unite.vim']
   on_cmd = 'VimFiler'
 
   hook_post_source = '''
@@ -541,23 +613,23 @@ hook_source = '''
 
 [[plugins]] # Shougo/context_filetype.vim {{{
   repo = 'Shougo/context_filetype.vim'
-hook_source = '''
-  let g:context_filetype#filetypes = {
-        \ 'markdown': [
-        \   {
-        \     'start' : '^---$',
-        \     'end' : '^...$',
-        \     'filetype' : 'yaml',
-        \   },
-        \   {
-        \    'start' : '^\s*```\s*\(\h\w*\)',
-        \    'end' : '^\s*```$', 'filetype' : '\1',
-        \   },
-        \ ],
-        \}
+  hook_source = '''
+    let g:context_filetype#filetypes = {
+          \ 'markdown': [
+          \   {
+          \     'start' : '^---$',
+          \     'end' : '^...$',
+          \     'filetype' : 'yaml',
+          \   },
+          \   {
+          \    'start' : '^\s*```\s*\(\h\w*\)',
+          \    'end' : '^\s*```$', 'filetype' : '\1',
+          \   },
+          \ ],
+          \}
 
-  let g:context_filetype#search_offset = 30
-'''
+    let g:context_filetype#search_offset = 30
+  '''
 #}}}
 
 [[plugins]] # vim-precious {{{
@@ -630,6 +702,7 @@ augroup END
 
 [[plugins]] # jceb/vim-hier  {{{
   repo = 'jceb/vim-hier'
+# }}}
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
@@ -780,6 +853,11 @@ augroup END
 
 [[plugins]] # mhinz/vim-signify {{{
   repo = 'mhinz/vim-signify'
+
+ hook_add = '''
+    let g:signify_skip_filename_pattern = [ '.git/*', ]
+ '''
+
 #}}}
 
 [[plugins]]  # keith/tmux.vim {{{
@@ -833,15 +911,15 @@ augroup END
   '''
 # }}}
 
-      [[plugins]] # dannyob/quickfixstatus {{{
-        repo = 'dannyob/quickfixstatus'
-        # lazy = 1
-        # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
-      #}}}
+[[plugins]] # dannyob/quickfixstatus {{{
+  repo = 'dannyob/quickfixstatus'
+  # lazy = 1
+  # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
+#}}}
 
-      [[plugins]] # Konfekt/FastFold {{{
-      repo = 'Konfekt/FastFold'
-      # }}}
+[[plugins]] # Konfekt/FastFold {{{
+repo = 'Konfekt/FastFold'
+# }}}
 
 # }}}
 
@@ -1329,14 +1407,6 @@ nnoremap <silent> ,q :TagbarToggle<CR>
   hook_post_source ='''
     nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
     nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
-
-    augroup pymode_myautocmd
-      autocmd!
-      autocmd BufEnter '__doc__' nnoremap <buffer>q  <C-w>c
-      autocmd BufEnter '__doc__' normal zr
-      autocmd BufReadPost '__doc__' normal zr
-      autocmd BufEnter __doc____rope__ nnoremap <buffer>q  <C-w>c
-    augroup END
   '''
 
   hook_source = '''
@@ -1366,7 +1436,7 @@ nnoremap <silent> ,q :TagbarToggle<CR>
     let g:pymode_virtualenv = 0
     let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
 
-    let g:pymode_run = 0            "QuickRunの方が優秀
+    let g:pymode_run = 0            "QuickRunの方が優秀(asyncじゃない)
     " let g:pymode_run_bind = '<leader>R'
 
     let g:pymode_breakpoint = 1
@@ -1384,26 +1454,6 @@ nnoremap <silent> ,q :TagbarToggle<CR>
     let g:pymode_lint_cwindow = 1
 
     let g:pymode_rope = 0
-    let g:pymode_rope_autoimport = 0
-    " let g:pymode_rope_autoimport_modules = ['shutil', 'datetime', 'time',
-    "             \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-    " let g:pymode_rope_autoimport_import_after_complete = 0
-    " let g:pymode_rope_organize_imports_bind = '<F11>'
-
-    " let g:pymode_rope_goto_definition_bind = 'gf'
-    " " let g:pymode_rope_goto_definition_cmd = 'botrightn new'
-
-    " let g:pymode_rope_rename_bind = 'R'
-    " " let g:pymode_rope_rename_module_bind = '<C-S-R>'
-
-    " let g:pymode_rope_extract_method_bind = '<C-c>rm'
-    " let g:pymode_rope_extract_variable_bind = '<C-c>rl'
-    " let g:pymode_rope_use_function_bind = '<C-c>ru'
-
-    " "よくわからない機能たち
-    " " let g:pymode_rope_move_bind = '<C-c>rv'
-    " " let g:pymode_rope_change_signature_bind = '<C-c>rs'
-    " let g:pymode_lint_sort = ['E', 'C', 'I']
 
     let g:pymode_syntax_slow_sync = 0
     let g:pymode_syntax_all = 1
@@ -1436,49 +1486,53 @@ nnoremap <silent> ,q :TagbarToggle<CR>
 [[plugins]] # davidhalter/jedi-vim {{{
  # python plugin for vim
   repo = 'davidhalter/jedi-vim'
-  on_if = "!has('nvim')"
-  # on_if = 0
-  # on_ft = ['python', 'python3', 'djangohtml']
+  # on_if = "!has('nvim')"
+  on_ft = ['python', 'python3', 'djangohtml']
   # on_source = ['python-mode']
 
-  hook_add = '''
-  " let g:jedi#completions_command = "<C-N>"
-  " 自動設定機能をoffにし手動で設定を行う
+  hook_source = '''
   set noshowmode
   let g:jedi#auto_initialization  = 0
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#popup_on_dot = 0
   let g:jedi#auto_close_doc = 0
-  let g:jedi#show_call_signatures = 2
-  let g:jedi#show_call_signatures_delay = -1
+  let g:jedi#show_call_signatures = 1
+  let g:jedi#show_call_signatures_delay = 0
+
+  let g:jedi#smart_auto_mappings = 1
 
   "quickrunと被るため大文字に変更
   " let g:jedi#rename_command = 'R'
-  let g:jedi#goto_assignments_command = 'gf'
-  let g:jedi#goto_definitions_command = 'gd'
+  let g:jedi#max_doc_height = 20
   " let g:jedi#use_tabs_not_buffers = 1
-  " let g:jedi#completions_enabled = 1
+  if has('nvim')
+    let g:jedi#completions_enabled = 0
+  endif
+
   "
   " Configuration necocomplete, because of conflicts to one {{{
   if !exists('g:neocomplete#sources#omni#functions')
     let g:neocomplete#sources#omni#functions = {}
+  else
+    let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
   endif
-  let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
-  '''
 
-  hoook_source = '''
-    augroup myjedivim
+  augroup jedi_myautocmd
       autocmd!
       autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
       autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
       autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
       autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto()<cr>
       autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
-      autocmd FileType python setlocal omnifunc=jedi#completions
-    augroup END
-    call jedi#configure_call_signatures()
+      autocmd FileType python nnoremap <silent> <buffer> <leader>n :call jedi#usages()<cr>
+      autocmd FileType python setlocal omnifunc=
+      autocmd FileType python call jedi#configure_call_signatures()
+      autocmd FileType python inoremap <silent> <buffer> <space> <C-R>=jedi#smart_auto_mappings()<CR>
+      autocmd BufEnter,BufRead '__doc__' nnoremap <buffer>q  <C-w>c 
+          \| set previewwindow
+          \| silent set foldlevel=1
+  augroup END
   '''
-
 
 # }}}
 
@@ -1486,24 +1540,21 @@ nnoremap <silent> ,q :TagbarToggle<CR>
 # }}}
 
 # WEB Programming {{{
+
 [[plugins]] # elzr/vim-json {{{
   repo = 'elzr/vim-json'
   on_ft = ['json']
  #}}}
-
-
 
 [[plugins]] # vim-scripts/css_color.vim {{{
   repo = 'vim-scripts/css_color.vim'
 on_ft = ['html','css']
  #}}}
 
-
 [[plugins]] # hail2u/vim-css3-syntax {{{
     repo = 'hail2u/vim-css3-syntax'
   on_ft = ['css']
  #}}}
-
 
 [[plugins]] # othree/html5.vim {{{
   repo = 'othree/html5.vim'
@@ -1683,6 +1734,7 @@ hook_post_source = '''
 
     # VCS {{{
 
+
       [[plugins]] # lambdalisue/vim-gista {{{
         repo = 'lambdalisue/vim-gista'
       depends = ['unite.vim', 'open-browser.vim']
@@ -1729,21 +1781,23 @@ hook_post_source = '''
           augroup FUGITIVE
               autocmd!
               autocmd User Fugitive call ConfigOnGitRepository()
+              autocmd FileType dirvish call fugitive#detect(@%)
           augroup END
         '''
       #}}}
 
-      [[plugins]] # moznion/github-commit-comment.vim {{{
-          repo = 'moznion/github-commit-comment.vim'
-        lazy = 1
-        depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
-      #}}}
+      #[[plugins]] # moznion/github-commit-comment.vim {{{
+      #    repo = 'moznion/github-commit-comment.vim'
+      #    lazy = 1
+      #    depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
+      ##}}}
 
       [[plugins]] # cohama/agit.vim {{{
         repo = 'cohama/agit.vim'
       #}}}
 
     #}}}
+
 
 # }}}
 
@@ -1754,37 +1808,10 @@ hook_post_source = '''
   #}}}
 # }}}
 
-
-
     # Other {{{
     [[plugins]] # thinca/vim-ref {{{
-        repo = 'thinca/vim-ref'
-      hook_source = '''
-        augroup ref_vim
-          autocmd!
-          autocmd FileType ref-webdict call s:initialize_ref_viewer()
-          autocmd FileType ref-man call s:initialize_ref_viewer()
-        augroup END
-        function! s:initialize_ref_viewer() "{{{
-          nmap <buffer> b <Plug>(ref-back)
-          nmap <buffer> f <Plug>(ref-forward)
-          nnoremap <buffer> q <C-w>c
-          setlocal nonumber
-          " ... and more settings ...
-        endfunction "}}}
-        function! g:ref_source_webdict_sites.alc.filter(output) "{{{
-          let l:output = substitute(a:output, "^.\\+_\\+", "", "")
-          return "ALC dictoinary\n------------\n". join(split(l:output,'\n')[10:], "\n")
-        endfunction "}}}
-        function! g:ref_source_webdict_sites.weblio.filter(output) "{{{
-          let l:output = substitute(a:output, '.\{-}から変更可能\n', '', "")
-          let l:output = substitute(l:output, '\n\n', '\n', "g")
-          let l:output = substitute(l:output, '\(\w\{1,2\}\)\n', '\1 ', "g")
-          " let l:output = substitute(l:output, '\s*\a\zs\n\+', '', "g")
-          return "Weblio dictoinary\n------------\n".join(split(l:output,'\n'), "\n")
-        endfunction "}}}
-      '''
-      hook_source = '''
+      repo = 'thinca/vim-ref'
+      hook_add = '''
         "Ref webdictでalcを使う設定
         let g:ref_no_default_key_mappings = 0
         " let g:ref_source_webdict_cmd = 'lynx -dump -nonumbers %s'
@@ -1813,10 +1840,32 @@ hook_post_source = '''
               \ 'erlang': 'erlang',
               \ 'python': 'pydoc',
               \}
+
+        augroup ref_vim
+          autocmd!
+          autocmd FileType ref-webdict call s:initialize_ref_viewer()
+          autocmd FileType ref-man call s:initialize_ref_viewer()
+        augroup END
+        function! s:initialize_ref_viewer() "{{{
+          nmap <buffer> b <Plug>(ref-back)
+          nmap <buffer> f <Plug>(ref-forward)
+          nnoremap <buffer> q <C-w>c
+          setlocal nonumber
+          " ... and more settings ...
+        endfunction "}}}
+        function! g:ref_source_webdict_sites.alc.filter(output) "{{{
+          let l:output = substitute(a:output, "^.\\+_\\+", "", "")
+          return "ALC dictoinary\n------------\n". join(split(l:output,'\n')[10:], "\n")
+        endfunction "}}}
+        function! g:ref_source_webdict_sites.weblio.filter(output) "{{{
+          let l:output = substitute(a:output, '.\{-}から変更可能\n', '', "")
+          let l:output = substitute(l:output, '\n\n', '\n', "g")
+          let l:output = substitute(l:output, '\(\w\{1,2\}\)\n', '\1 ', "g")
+          " let l:output = substitute(l:output, '\s*\a\zs\n\+', '', "g")
+          return "Weblio dictoinary\n------------\n".join(split(l:output,'\n'), "\n")
+        endfunction "}}}
       '''
  #}}}
-
-
     [[plugins]] # tyru/open-browser.vim {{{
       repo = 'tyru/open-browser.vim'
     on_cmd = 'OpenURL'
@@ -1850,8 +1899,6 @@ hook_post_source = '''
       vmap gs :OpenBrowserSearch -goole-scholar <C-R><C-W><CR>
     '''
  #}}}
-
-
   [[plugins]] # lilydjwg/colorizer {{{
     repo = 'lilydjwg/colorizer'
     on_cmd = ['ColorHighlight']
@@ -1862,4 +1909,18 @@ hook_post_source = '''
   #}}}
 #}}}
 
+[[plugins]]
+  repo = 'justinmk/vim-dirvish'
+  
+  hook_add='''
+    nnoremap <silent><leader>e :e .<CR>
+    augroup dirvish_autocmd
+    autocmd!
+      autocmd FileType dirvish nmap <silent><buffer> <BS> <Plug>(dirvish_up)
+      autocmd FileType dirvish nnoremap <silent> O  :!open <C-R><C-F><CR>
+      autocmd FileType dirvish nnoremap <silent><buffer>
+        \ gh :silent keeppatterns g@\v/\.[^\/]+/?$@d<cr>
+    augroup END
+
+  '''
 #}}}

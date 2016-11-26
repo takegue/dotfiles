@@ -121,7 +121,7 @@ set matchtime=1
 set nrformats=bin,hex
 set history=10000
 set autoread
-set updatetime=300
+set updatetime=4000
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs+=<:>,「:」,“:”,『:』,【:】
@@ -201,11 +201,6 @@ nnoremap <C-l> <C-w>l
 nnoremap <silent> <C-W><C-z> :call tkngue#util#toggle_windowsize()<CR>
 nnoremap <silent> <C-W>z :call tkngue#util#toggle_windowsize()<CR>
 
-" nnoremap <silent> <Space>h  :<C-u>wincmd h<CR>
-" nnoremap <silent> <Space>j  :<C-u>wincmd j<CR>
-" nnoremap <silent> <Space>k  :<C-u>wincmd k<CR>
-" nnoremap <silent> <Space>l  :<C-u>wincmd l<CR>
-
 nnoremap <silent> <Space>o :call tkngue#util#open_folder_of_currentfile()<CR>
 
 if has('gui_running')
@@ -220,6 +215,11 @@ cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 cnoremap <C-p>  <Up>
 cnoremap <C-n>  <Down>
 cnoremap <C-a>  <Home>
+
+if has('nvim')
+  tnoremap <Esc><Esc> <C-\><C-n>
+endif
+
 
 " Toggle: {{{
 nnoremap [toggle] <Nop>
@@ -301,7 +301,10 @@ function! s:additional_highlight() "{{{
     highlight Normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
-  " highlight CursorLine cterm=bold ctermbg=darkcyan gui=bold
+  highlight CursorLine cterm=bold ctermfg=lightcyan ctermbg=None gui=bold
+  highlight IncSearch cterm=bold ctermfg=green ctermbg=None gui=bold
+  highlight Search cterm=bold ctermfg=green ctermbg=None gui=bold
+  " highlight IncSearch Search cterm=bold ctermfg=green ctermbg=None gui=bold
 endfunction "}}}
 "}}}
 
@@ -319,28 +322,6 @@ command! -bang -nargs=* PluginTest
 command! FollowSymlink  call tkngue#util#switch_to_actualfile()
 command! -nargs=1 Wget call tkngue#util#load_webpage(<q-args>)
 
-
-augroup my_diff_autocmd
-  autocmd!
-  autocmd  InsertLeave *
-        \ if &diff | diffupdate | echo 'diff updated' | endif
-augroup END
-
-augroup edit_memo
-  autocmd!
-  autocmd BufNewFile,BufRead *.todo
-        \ set nonumber norelativenumber filetype=markdown
-  autocmd BufNewFile,BufRead *.memo
-        \ set nonumber norelativenumber filetype=markdown
-augroup END
-
-augroup large_file_config_for_smooth
-  autocmd!
-  autocmd BufNewFile,BufRead * if line('$') > 2000 |
-        \   set nonumber norelativenumber nocursorline |
-        \ endif
-augroup END
-
 " after/ftpluginの作成 User設定のfiletype plugin
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/"
 nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
@@ -357,6 +338,19 @@ function! s:mkdir(dir, force)
   endif
 endfunction
 
+function! s:my_on_filetype() abort "{{{
+  if &l:filetype == '' && bufname('%') == ''
+    return
+  endif
+
+  if execute('filetype') =~# 'OFF'
+    " Lazy loading
+    silent! filetype plugin indent on
+    syntax enable
+    filetype detect
+  endif
+endfunction "}}}
+
 if tkngue#util#executable('tika')
   augroup office_format "{{{
     autocmd!
@@ -366,18 +360,6 @@ if tkngue#util#executable('tika')
           \ set readonly normal gg
   augroup END "}}}
 endif
-
-augroup MyAutoCmd " {{{
-  autocmd!
-  autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
-  autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
-  autocmd FileType help,qf nnoremap <buffer> q <C-w>c
-  autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-  " autocmd BufReadPost * call s:SwitchToActualFile()
-  autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')
-  autocmd BufWinEnter * call tkngue#util#restore_curosr_position()
-augroup END " }}}
 
 augroup vimrc_change_cursorline_color "{{{
   autocmd!
@@ -398,11 +380,35 @@ augroup edit_vimrc "{{{
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END "}}}
 
-augroup help_setting
+augroup My Autocmd Group "{{{
   autocmd!
+  autocmd BufNewFile,BufRead *.todo
+        \ set nonumber norelativenumber filetype=markdown
+  " diff
+  autocmd  InsertLeave *
+        \ if &diff | diffupdate | echo 'diff updated' | endif
+  " large_file_config_for_smooth
+  autocmd BufNewFile,BufRead * if line('$') > 2000 |
+        \   set nonumber norelativenumber nocursorline |
+        \ endif
+
+  autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
+  autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
+  autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  " autocmd BufReadPost * call s:SwitchToActualFile()
+  autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')
+  autocmd BufWinEnter * call tkngue#util#restore_curosr_position()
+
+  " help, quickfix settings
+  autocmd FileType help,qf nnoremap <buffer> q <C-w>c
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
-augroup END
+
+  autocmd FileType,Syntax,BufNewFile,BufNew,BufRead  * 
+        \ call s:my_on_filetype()
+augroup END"}}}
+
 "}}}
 
 "}}}
@@ -456,33 +462,31 @@ endif
 " }}}
 
 " Finally ======================={{{
+"
+" Colorscheme: {{{
+" Check color
+" :so $VIMRUNTIME/syntax/colortest.vim
+" Check syntax
+" :so $VIMRUNTIME/syntax/hitest.vim
+"
+if has('gui_running')
+    colorscheme PaperColor
+else
+    set background=light
+    if &t_Co < 256
+        colorscheme default
+    else
+        try
+            colorscheme molokai
+        catch
+            colorscheme blue
+        endtry
+    endif
+endif
+"}}}
 
 if has('vim_starting')
     set t_Co=256
-    let g:solarized_termcolors=256
-
-    " Colorscheme: {{{
-    " Check color
-    " :so $VIMRUNTIME/syntax/colortest.vim
-    " Check syntax
-    " :so $VIMRUNTIME/syntax/hitest.vim
-    "
-    if has('gui_running')
-        colorscheme PaperColor
-    else
-        set background=light
-        if &t_Co < 256
-            colorscheme default
-        else
-            try
-                colorscheme molokai
-            catch
-                colorscheme blue
-            endtry
-        endif
-    endif
-    "}}}
-    "
     syntax sync minlines=512
     syntax enable
     filetype plugin indent on
@@ -492,23 +496,6 @@ else
 endif
 
 
-if has('nvim')
-  autocmd MyAutoCmd FileType,Syntax,BufNewFile,BufNew,BufRead  * 
-        \ call s:my_on_filetype()
-endif
-
-function! s:my_on_filetype() abort "{{{
-  if &l:filetype == '' && bufname('%') == ''
-    return
-  endif
-
-  if execute('filetype') =~# 'OFF'
-    " Lazy loading
-    silent! filetype plugin indent on
-    syntax enable
-    filetype detect
-  endif
-endfunction "}}}
 
 
 "}}}
