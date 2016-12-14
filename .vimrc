@@ -47,7 +47,7 @@ endif
 " set encoding=utf8
 set termencoding=utf-8
 set fileencodings=utf-8,cp932,euc-jp
-set fileformats=unix,dos,mac 
+set fileformats=unix,dos,mac
 " }}}
 
 " Display: {{{
@@ -150,10 +150,13 @@ endif
 
 set swapfile
 set directory=$HOME/.vim/.swap
-set directory=~/.vim/.swap
 set writebackup
 set backupdir=$HOME/.vim/.backup
-set nobackup
+set backupext=.old
+if !isdirectory("$HOME/.vim/.backup")
+    call tkngue#util#mkdir(expand("$HOME/.vim/.backup"), 1)
+endif
+set backup
 "}}}
 
 " Mappings: {{{
@@ -305,6 +308,9 @@ function! s:additional_highlight() "{{{
   highlight IncSearch cterm=bold ctermfg=green ctermbg=None gui=bold
   highlight Search cterm=bold ctermfg=green ctermbg=None gui=bold
   " highlight IncSearch Search cterm=bold ctermfg=green ctermbg=None gui=bold
+  " highlight Visual cterm=bold ctermfg=red ctermbg=None guibg=#403D3D
+
+
 endfunction "}}}
 "}}}
 
@@ -313,11 +319,11 @@ endfunction "}}}
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
 " Open junk file
-command! -nargs=? -complete=filetype Memo 
+command! -nargs=? -complete=filetype Memo
             \ call tkngue#util#open_junk_file('<args>')
 " Todoコマンド
 command! Todo call s:Todo()
-command! -bang -nargs=* PluginTest 
+command! -bang -nargs=* PluginTest
             \ call tkngue#util#test_plugin(<bang>0, <q-args>)
 command! FollowSymlink  call tkngue#util#switch_to_actualfile()
 command! -nargs=1 Wget call tkngue#util#load_webpage(<q-args>)
@@ -328,14 +334,6 @@ nnoremap <silent>  <Space>, :<C-u>call <SID>openFTPluginFile()<CR>
 function! s:openFTPluginFile()
   let l:ftpFileName = g:ftpPath . &filetype . ".vim"
   execute 'botright vsplit ' . l:ftpFileName
-endfunction
-
-" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
-function! s:mkdir(dir, force)
-  if !isdirectory(a:dir) && (a:force ||
-        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-  endif
 endfunction
 
 function! s:my_on_filetype() abort "{{{
@@ -355,8 +353,8 @@ if tkngue#util#executable('tika')
   augroup office_format "{{{
     autocmd!
     autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}
-          \ set modifiable | 
-          \ silent %d |  silent %read !tika --text %:p | 
+          \ set modifiable |
+          \ silent %d |  silent %read !tika --text %:p |
           \ set readonly normal gg
   augroup END "}}}
 endif
@@ -392,7 +390,7 @@ augroup My Autocmd Group "{{{
         \   set nonumber norelativenumber nocursorline |
         \ endif
 
-  autocmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
+  autocmd BufWritePre * call tkngue#util#mkdir(expand('<afile>:p:h'), v:cmdbang)
   autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
   autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
@@ -405,7 +403,7 @@ augroup My Autocmd Group "{{{
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
 
-  autocmd FileType,Syntax,BufNewFile,BufNew,BufRead  * 
+  autocmd FileType,Syntax,BufNewFile,BufNew,BufRead  *
         \ call s:my_on_filetype()
 augroup END"}}}
 
@@ -446,7 +444,7 @@ if dein#load_state(s:dein_dir)
     call dein#save_state()
 endif
 
-if dein#check_install() && !has('vim_starting') 
+if dein#check_install() && !has('vim_starting')
     " Installation check.
     call dein#install()
 endif

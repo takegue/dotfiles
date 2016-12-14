@@ -130,6 +130,19 @@ function! tkngue#util#change_current_dirr(directory, bang) abort
   endif
 endfunction
 
+" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
+function! tkngue#util#mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
+endfunction
+
+function! tkngue#util#intaractive_mkdir(input) abort
+  let path = input('mkdir>', a:input)
+  call tkngue#util#mkdir(path, 1)
+endfunction
+
 
 function! tkngue#util#load_webpage(url) abort
   execute 'r !wget -O - '.a:url.' 2>/dev/null'

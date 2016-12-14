@@ -402,7 +402,7 @@ hook_source = '''
     '''
 
     hook_add = '''
-      cnoremap <expr> h   getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h'
+      cnoremap <silent><expr> h<Space>   getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h'
       nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file_rec/git:~/.dotfiles<CR>
 
       nnoremap [denite]    <Nop>
@@ -418,6 +418,8 @@ hook_source = '''
             \ unite:neosnippet <CR>
       nnoremap <silent> [denite]me :<C-u>Denite output:message
             \ -buffer-name=messages <CR>
+      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
+            \ -buffer-name=projects <CR>
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
       nnoremap <qsilent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
@@ -1750,7 +1752,11 @@ hook_post_source = '''
               return
             endif
             let git_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            execute 'lcd '. git_path
+            if &ft != 'dirvish'
+              execute 'lcd '. git_path
+            endif
+
+            setl nobackup
             nnoremap <buffer> [git] <Nop>
             nmap <buffer> <Leader>g [git]
             nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
@@ -1914,12 +1920,16 @@ hook_post_source = '''
   
   hook_add='''
     nnoremap <silent><leader>e :e .<CR>
+
     augroup dirvish_autocmd
     autocmd!
       autocmd FileType dirvish nmap <silent><buffer> <BS> <Plug>(dirvish_up)
       autocmd FileType dirvish nnoremap <silent> O  :!open <C-R><C-F><CR>
+      autocmd FileType dirvish nnoremap <silent> O  :!open <C-R><C-F><CR>
       autocmd FileType dirvish nnoremap <silent><buffer>
         \ gh :silent keeppatterns g@\v/\.[^\/]+/?$@d<cr>
+      autocmd FileType dirvish nnoremap <buffer> N :e <C-R>=expand('%')<CR>
+      autocmd FileType dirvish nnoremap <buffer> K :call tkngue#util#intaractive_mkdir(expand('%:p'))<CR>
     augroup END
 
   '''
