@@ -69,7 +69,6 @@ set laststatus=2
 
 set number nornu
 set nowrap
-set textwidth=80
 set colorcolumn=80
 set cursorline
 set noequalalways
@@ -85,6 +84,7 @@ set display=lastline
 set cmdheight=2
 set pumheight=15
 
+set formatoptions+=tcqM1ro
 if v:version > 703 || v:version == 703 && has("patch541")
   " Delete comment character when joining commented lines
   set formatoptions+=j
@@ -152,7 +152,7 @@ set swapfile
 set directory=$HOME/.vim/.swap
 set writebackup
 set backupdir=$HOME/.vim/.backup
-set backupext=.old
+set backupext='.old'
 if !isdirectory("$HOME/.vim/.backup")
     call tkngue#util#mkdir(expand("$HOME/.vim/.backup"), 1)
 endif
@@ -234,7 +234,7 @@ nnoremap <silent> [toggle]w  :<C-u> setl wrap!<CR>           : setl wrap?<CR>
 nnoremap <silent> [toggle]z  :<C-u> setl lazyredraw!<CR>     : setl lazyredraw?<CR>
 nnoremap <silent> [toggle]cc : setl cursorline!<CR>     : setl cursorline?<CR>
 nnoremap <silent> [toggle]cr : setl cursorcolumn!<CR>   : setl cursorcolumn?<CR>
-nnoremap <silent> [toggle]n  :<C-u> call <SID>toggle_line_number()<CR>
+nnoremap <silent> [toggle]n  :<C-u> call tkngue#util#toggle_line_numbers()<CR>
 nnoremap <silent> [toggle]p  :<C-u> set paste!<CR>
 nnoremap <silent> [toggle]b  :<C-u> set binary!<CR> :
 nnoremap <silent> [toggle]m  :<C-u>let &mouse = (&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
@@ -492,7 +492,6 @@ else
     call dein#call_hook('on_source')
     call dein#call_hook('on_post_source')
 endif
-
 
 
 

@@ -307,7 +307,7 @@ today(){ echo `date +%Y%m%d` }
 # ------------------------------
 alias tmux='tmux -2'
 # alias vi='vim -u NONE'
-alias vtime="nvim $HOME/.vim/.log --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! %'"
+alias vtime="nvim  --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! $HOME/.vim/.log' "
 case "$OSTYPE" in
     darwin*)
         alias ls='ls -G'
@@ -428,9 +428,17 @@ get_rbenv_version()
     [[ -n $name ]] && echo "(💎 :$name)"
 
 }
+get_myvcs_info()
+{
+    root=$(git rev-parse --git-dir 2> /dev/null)
+    [[ -z ${root} ]] && echo '' && return
+    cd $root >/dev/null && cd ../ > /dev/null
+    branch=$(git diff --shortstat | sed -E -e 's/, / /g' -e 's/([0-9]*) insertions?\(\+\)/+\1/' -e 's/([0-9]*) deletions?\(-\)/-\1/' -e 's/ ([0-9]+) files? changed/📚 \1/')
+    echo "${branch}"
+}
 
 PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
-$tmp_rprompt\$vcs_info_msg_0_
+$tmp_rprompt\$vcs_info_msg_0_(\$(get_myvcs_info))
 $tmp_prompt"    # 通常のプロンプト
 
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)

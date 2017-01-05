@@ -19,6 +19,7 @@
 
 # Appearence Plugins {{{
 [[plugins]] # vim-indent {{{
+  on_idle = 1
   repo = 'nathanaelkane/vim-indent-guides'
   hook_post_source= '''
     hi IndentGuidesOdd  ctermbg=237
@@ -36,6 +37,7 @@
 [[plugins]] # itchyny/lightline.vim {{{
   repo = 'itchyny/lightline.vim'
   depends = ['vim-fugitive', 'vim-qfstatusline']
+  on_if = 1
   hook_add ='''
     function! MyModified() "{{{
       return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
@@ -214,6 +216,7 @@
 # Utilities {{{
 
     [[plugins]] # {{{
+      on_cmd = 'Trans'
       repo = 'daisuzu/translategoogle.vim'
     #}}}
 
@@ -233,6 +236,7 @@
 
 [[plugins]] # kana/vim-textobj-datetime {{{
  # 日付オブジェクト#ada, add, adt
+  on_idle = 1
   repo = 'kana/vim-textobj-datetime'
 #}}}
 
@@ -240,12 +244,14 @@
  # 全体オブジェクト
  # ae, ai
   repo = 'kana/vim-textobj-entire'
+  on_if = 1
 #}}}
 
 [[plugins]] # kana/vim-textobj-fold {{{
 # 降りたたみオブジェクト
 # az, iz
   repo = 'kana/vim-textobj-fold'
+  on_if = 1
  #}}}
 
 [[plugins]] # kana/vim-textobj-function {{{
@@ -257,14 +263,12 @@
 # URLオブジェクト
 # au, iu
   repo = 'mattn/vim-textobj-url'
+  on_if = 1
 #}}}
 
 [[plugins]] # sgur/vim-textobj-parameter {{{
   repo = 'sgur/vim-textobj-parameter'
-#}}}
-
-[[plugins]] # rbonvall/vim-textobj-latex {{{
-  repo = 'rbonvall/vim-textobj-latex'
+  on_if = 1
 #}}}
 
 # }}}
@@ -274,11 +278,13 @@
 [[plugins]] # tpope/vim-commentary {{{
  # コメント切り替えオペレータ
   repo = 'tpope/vim-commentary'
+  on_if = 1
  #}}}
 
 [[plugins]] # tpope/vim-endwise {{{
  # endwise.vim: wisely add 'end'
   repo = 'tpope/vim-endwise'
+  on_idle = 1
  #}}}
 
 [[plugins]] # tpope/vim-repeat {{{
@@ -288,19 +294,23 @@
 [[plugins]] # tpope/vim-surround {{{
  # surround記号編集オペレータ
   repo = 'tpope/vim-surround'
+  on_if = 1
  #}}}
 
 [[plugins]] # tpope/vim-unimpaired {{{
  # バッファ移動用等
   repo = 'tpope/vim-unimpaired'
+  on_if = 1
  #}}}
 
 [[plugins]] # emonkak/vim-operator-sort {{{
   repo = 'emonkak/vim-operator-sort'
+  on_if = 1
  #}}}
 
 [[plugins]] # kana/vim-operator-replace {{{
   repo = 'kana/vim-operator-replace'
+  on_if = 1
   hook_add = '''
     map _ <Plug>(operator-replace)
   '''
@@ -310,6 +320,7 @@
 
 [[plugins]] # michaeljsmith/vim-indent-object {{{
   repo = 'michaeljsmith/vim-indent-object'
+  on_if = 1
  #}}}
 
  #}}}
@@ -370,12 +381,13 @@ hook_source = '''
 
   [[plugins]] # Shougo/denite.nvim {{{
     repo = 'Shougo/denite.nvim'
-    on_if = "has('nvim') && has('python3')"
+    if = "has('nvim') && has('python3')"
+    on_if = 1
     on_cmd = 'Denite'
     hook_post_source = '''
       call denite#custom#alias('source', 'file_rec/git', 'file_rec')
       call denite#custom#var('file_rec/git', 'command',
-        \ ['git', '-C', ':directory', 'ls-files', '-c', '--full-name','--exclude-standard'])
+        \ ['git', '-C', ':directory', 'ls-files', '-c', '--exclude-standard'])
 
       call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
       call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
@@ -420,6 +432,8 @@ hook_source = '''
             \ -buffer-name=messages <CR>
       nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
             \ -buffer-name=projects <CR>
+      nnoremap <silent> [denite]o  :<C-u>Denite unite:outline 
+            \ -buffer-name=outline <CR>
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
       nnoremap <qsilent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
@@ -434,129 +448,126 @@ hook_source = '''
 
   [[plugins]] # Shougo/unite.vim {{{
     repo = 'Shougo/unite.vim'
-    on_cmd = 'Unite'
-    if = 0
-    on_if = "!has('nvim')"
+    on_cmd = "Unite"
+    on_source = "denite.nvim"
+    # on_if = "has('nvim') && has('python3')"
+    # on_map = "{ 'n' : [denite]}"
+    # on_func = "denite"
     hook_add = '''
-      nnoremap [unite]    <Nop>
-      nmap    <Leader>f  [unite]
-      nnoremap  [unite]s  :<C-u>Unite source<CR>
-      nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-            \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
-            \ file/new directory/new <CR>
-      if has('nvim')
+      if !has('nvim')
+        nnoremap [unite]    <Nop>
+        nmap    <Leader>f  [unite]
+        nnoremap  [unite]s  :<C-u>Unite source<CR>
+        nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
+              \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
+              \ file/new directory/new <CR>
         nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
               \ file_rec/neovim
               \ file/new directory/new <CR>
-      else
-        nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
-              \ file_rec/neovim
-              \ file/new directory/new <CR>
+        nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
+              \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
+        nnoremap <silent> [unite]r  :<C-u>Unite
+              \ -buffer-name=register register<CR>
+        nnoremap <silent> [unite]o  :<C-u>Unite outline tag
+              \ -buffer-name=outline <CR>
+        " nnoremap <silent> [unite]n  :<C-u>Unite
+        "      \ -buffer-name=bundles
+        "      \ neobundle/search <CR>
+        nnoremap <silent> [unite]s  :<C-u>Unite
+              \ -buffer-name=snippets
+              \ neosnippet <CR>
+        nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
+              \ -buffer-name=mapping -hide-source-names<CR>
+        nnoremap <silent> [unite]me :<C-u>Unite output:message
+              \ -buffer-name=messages <CR>
+        " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
+        nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
+
+        nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
+        nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
+        nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+        nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
+        nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
+        nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
+        nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
+        nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
+        nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
+        nnoremap <silent> [\ :UniteNext<CR>
+        nnoremap <silent> ]\ :UnitePrevious<CR>
+        nnoremap <silent> ]\ :UniteFirst<CR>
+        nnoremap <silent> [\ :UniteLast<CR>
       endif
-      nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-            \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
-      nnoremap <silent> [unite]r  :<C-u>Unite
-            \ -buffer-name=register register<CR>
-      nnoremap <silent> [unite]o  :<C-u>Unite outline tag
-            \ -buffer-name=outline <CR>
-      " nnoremap <silent> [unite]n  :<C-u>Unite
-      "      \ -buffer-name=bundles
-      "      \ neobundle/search <CR>
-      nnoremap <silent> [unite]s  :<C-u>Unite
-            \ -buffer-name=snippets
-            \ neosnippet <CR>
-      nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
-            \ -buffer-name=mapping -hide-source-names<CR>
-      nnoremap <silent> [unite]me :<C-u>Unite output:message
-            \ -buffer-name=messages <CR>
-      " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
-      nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
+    '''
 
-      nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
-      nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
-      nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
-      nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
-      nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
-      nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
-      nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
-      nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
-      nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
-      nnoremap <silent> [\ :UniteNext<CR>
-      nnoremap <silent> ]\ :UnitePrevious<CR>
-      nnoremap <silent> ]\ :UniteFirst<CR>
-      nnoremap <silent> [\ :UniteLast<CR>
-  '''
+    hook_source = '''
+      call unite#custom#profile('default', 'context', {
+            \   'start_insert': 1,
+            \   'direction': 'dynamictop',
+            \   'prompt': '» ',
+            \ })
+      function! s:unite_my_settings() "{{{
+        " Overwrite settings.
+        imap <buffer> jj      <Plug>(unite_insert_leave)
+        imap <buffer> kk      <Plug>(unite_insert_leave)
+        "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
 
-  hook_source = '''
-    call unite#custom#profile('default', 'context', {
-          \   'start_insert': 1,
-          \   'direction': 'dynamictop',
-          \   'prompt': '» ',
-          \ })
-    function! s:unite_my_settings() "{{{
-      " Overwrite settings.
-      imap <buffer> jj      <Plug>(unite_insert_leave)
-      imap <buffer> kk      <Plug>(unite_insert_leave)
-      "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+        imap <buffer><expr> j unite#smart_map('j', '')
+        imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+        imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+        imap <buffer> '     <Plug>(unite_quick_match_default_action)
+        nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+        imap <buffer><expr> x
+              \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+        nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+        imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+        nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+        " nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+        imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+        nnoremap <silent><buffer><expr> l
+              \ unite#smart_map('l', unite#do_action('default'))
 
-      imap <buffer><expr> j unite#smart_map('j', '')
-      imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-      imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-      imap <buffer> '     <Plug>(unite_quick_match_default_action)
-      nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-      imap <buffer><expr> x
-            \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-      nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
-      imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-      nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-      " nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-      imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-      nnoremap <silent><buffer><expr> l
-            \ unite#smart_map('l', unite#do_action('default'))
+        let unite = unite#get_current_unite()
+        if unite.profile_name ==# 'search'
+          nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+        else
+          nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+        endif
 
-      let unite = unite#get_current_unite()
-      if unite.profile_name ==# 'search'
-        nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-      else
-        nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+        nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+        nnoremap <buffer><expr>S      unite#mappings#set_current_sorters(
+              \ empty(unite#mappings#get_current_sorters()) ?
+              \ ['sorter_reverse'] : [])
+        nnoremap <buffer><expr>M    unite#mappings#set_current_matchers(
+              \ empty(unite#mappings#get_current_matchers()) ?
+              \ ['matcher_migemo'] : [])
+        nnoremap <buffer><expr>R    unite#mappings#set_current_matchers(
+              \ empty(unite#mappings#get_current_matchers()) ?
+              \ ['matcher_regexp'] : [])
+
+        " Runs "split" action by <C-s>.
+        imap <silent><buffer><expr> <C-s>     unite#do_action('split')
+
+        setl nofoldenable
+      endfunction "}}}
+
+      autocmd FileType unite call s:unite_my_settings()
+
+      " mappingが競合するためデフォルトマッピング無効
+      " let g:unite_no_default_keymappings = 1
+      " nnoremap <silent> <Plug>(unite_exit)
+
+      let g:unite_source_history_yank_save_clipboard = 0
+      let g:unite_redraw_hold_candidates = 50000
+      let g:unite_source_file_rec_max_cache_files = 50000
+
+      " unite grep に ag(The Silver Searcher) を使う
+      if executable('ag')
+        let g:unite_source_grep_command = 'ag'
+        let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+        let g:unite_source_grep_recursive_opt = ''
+        let g:unite_source_rec_async_command =split('ag --follow --nocolor --nogroup --hidden -g ""')
       endif
-
-      nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-      nnoremap <buffer><expr>S      unite#mappings#set_current_sorters(
-            \ empty(unite#mappings#get_current_sorters()) ?
-            \ ['sorter_reverse'] : [])
-      nnoremap <buffer><expr>M    unite#mappings#set_current_matchers(
-            \ empty(unite#mappings#get_current_matchers()) ?
-            \ ['matcher_migemo'] : [])
-      nnoremap <buffer><expr>R    unite#mappings#set_current_matchers(
-            \ empty(unite#mappings#get_current_matchers()) ?
-            \ ['matcher_regexp'] : [])
-
-      " Runs "split" action by <C-s>.
-      imap <silent><buffer><expr> <C-s>     unite#do_action('split')
-
-      setl nofoldenable
-    endfunction "}}}
-
-    autocmd FileType unite call s:unite_my_settings()
-
-    " mappingが競合するためデフォルトマッピング無効
-    " let g:unite_no_default_keymappings = 1
-    " nnoremap <silent> <Plug>(unite_exit)
-
-    let g:unite_source_history_yank_save_clipboard = 0
-    let g:unite_redraw_hold_candidates = 50000
-    let g:unite_source_file_rec_max_cache_files = 50000
-
-    " unite grep に ag(The Silver Searcher) を使う
-    if executable('ag')
-      let g:unite_source_grep_command = 'ag'
-      let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-      let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_rec_async_command =split('ag --follow --nocolor --nogroup --hidden -g ""')
-    endif
-  '''
-  on_cmd = 'Unite'
+    '''
 
 # [[plugins.on_cmd]]
 # name = 'Unite'
@@ -637,32 +648,32 @@ hook_source = '''
 [[plugins]] # vim-precious {{{
 # Vim constext filetype
   repo = 'osyo-manga/vim-precious'
-lazy = 1
-augroup = 'vim-precious'
-on_ft = ['markdown', 'rst', 'help', 'toml']
-on_cmd = ['Precious']
-depends = ['context_filetype.vim', 'vim-textobj-user']
-
-hook_source = '''
-" let g:precious_enable_switchers = {
-"         \   "*" : { "setfiletype" : 0 },
-"         \}
-let g:precious_enable_switch_CursorMoved = {
-      \   "*" : 0
-      \}
-
-let g:precious_enable_switch_CursorMoved_i = {
-      \   "*" : 0
-      \}
-
-augroup precious_autocmd
-  autocmd!
-  autocmd FileType markdown,rst,help,toml
-        \ nmap <buffer><leader>r
-        \ <Plug>(precious-quickrun-op)icx
-  " autocmd User PreciousFileType :echo precious#context_filetype()
-augroup END
-'''
+  lazy = 1
+  augroup = 'vim-precious'
+  on_ft = ['markdown', 'rst', 'help', 'toml']
+  on_cmd = ['Precious']
+  depends = ['context_filetype.vim', 'vim-textobj-user']
+  
+  hook_source = '''
+     " let g:precious_enable_switchers = {
+     "         \   "*" : { "setfiletype" : 0 },
+     "         \}
+     let g:precious_enable_switch_CursorMoved = {
+           \   "*" : 0
+           \}
+     
+     let g:precious_enable_switch_CursorMoved_i = {
+           \   "*" : 0
+           \}
+     
+     augroup precious_autocmd
+       autocmd!
+       autocmd FileType markdown,rst,help,toml
+             \ nmap <buffer><leader>r
+             \ <Plug>(precious-quickrun-op)icx
+       " autocmd User PreciousFileType :echo precious#context_filetype()
+     augroup END
+   '''
 #}}}
 
 [[plugins]] # thinca/vim-template {{{
@@ -722,7 +733,7 @@ augroup END
           \   "runner"                    : 'vimproc',
           \   "runner/vimproc/read_timeout" : 100,
           \   "runner/vimproc/sleep"      : 100,
-          \   "runner/vimproc/updatetime" : 100,
+          \   "runner/vimproc/updatetime" : 500,
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
           \},
           \ "watchdogs_checker/_" : {
@@ -733,6 +744,10 @@ augroup END
           \      'exec' : '%c %o %s 2>/dev/null',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}}
+    let g:quickrun_config.tex ={
+          \ 'command' : 'latexmk',
+          \ 'cmdopt' : '-pdf',
+          \}
     let g:quickrun_config.sql ={
           \ 'command' : 'mysql',
           \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
@@ -769,7 +784,6 @@ augroup END
           \ 'command': 'rspec'
           \ , 'cmdopt': '-f d'
           \ }
-
 
     function! MakeMySQLCommandOptions() "{{{
       if !exists("g:mysql_config_user")
@@ -851,6 +865,7 @@ augroup END
 
 [[plugins]] # KazuakiM/vim-qfstatusline {{{
   repo = 'KazuakiM/vim-qfstatusline'
+  on_if = 1
  #}}}
 
 [[plugins]] # mhinz/vim-signify {{{
@@ -901,6 +916,8 @@ augroup END
     call submode#enter_with('changetab', 'n', '', 'gT', 'gT')
     call submode#map('changetab', 'n', '', 't', 'gt')
     call submode#map('changetab', 'n', '', 'T', 'gT')
+    call submode#map('changetab', 'n', '', 'gt', 'gt')
+    call submode#map('changetab', 'n', '', 'gT', 'gT')
 
     call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
     call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
@@ -975,17 +992,20 @@ repo = 'Konfekt/FastFold'
     let g:deoplete#enable_multibyte_completion = 1
 
     " make Vim call omni function when below patterns matchs
-    " let g:deoplete#sources#omni#functions = {}
+    let g:deoplete#omni#functions = {}
+    let g:deoplete#omni#functions.tex = 'vimtex#complete#omnifunc'
 
     let g:deoplete#omni#input_patterns = {}
-    let g:deoplete#omni#input_patterns.python = ['\s*from\s+\w*', 'import\s+\w*', '\S{2,}\.']
-            " \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import\)\w*'
+    " let g:deoplete#omni#input_patterns.python = ['\s*from\s+\w*', 'import\s+\w*', '\S{2,}\.']
+             " \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import\)\w*'
 
-    " let g:deoplete#sources#omni#input_patterns = {}
+    let g:deoplete#omni#input_patterns = {}
     " let g:deoplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     " let g:deoplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
     " let g:deoplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     " let g:deoplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:deoplete#omni#input_patterns.tex = '\\\w+{'
+
 
     " if !exists('g:deoplete#keyword_patterns')
     "   let g:deoplete#keyword_patterns = {}
@@ -1026,17 +1046,11 @@ repo = 'Konfekt/FastFold'
 
     " <C-h>, <BS>: close popup and delete backword char.
     if dein#tap('neosnippet.vim') "{{{
-      " For cursor moving in insert mode(Not recommended)
-      inoremap <expr><Left>  deoplete#mappings#close_popup() . "\<Left>"
-      inoremap <expr><Right> deoplete#mappings#close_popup() . "\<Right>"
-      inoremap <expr><Up>    deoplete#mappings#close_popup() . "\<Up>"
-      inoremap <expr><Down>  deoplete#mappings#close_popup() . "\<Down>"
-      " make neocomplcache use jedi#completions omini function for python scripts
-
       augroup tex_complete
         autocmd!
         autocmd FileType *.tex inoremap <expr>$$ $$<left>
       augroup END
+
 
       " Plugin key-mappings.
       imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -1058,13 +1072,12 @@ repo = 'Konfekt/FastFold'
       smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
       " SuperTab like snippets behavior.
-      imap <expr><TAB> neosnippet#jumpable() ?
-            \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
-            \ pumvisible() ? "\<C-n>" : "\<TAB>"
+      imap <expr><TAB> pumvisible() ? "\<C-n>" : neosnippet#jumpable() ?
+        \ "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
     endif
     " }}}
-'''
+  '''
 
 # }}}
 
@@ -1219,9 +1232,6 @@ repo = 'Konfekt/FastFold'
   repo = 'vim-jp/vimdoc-ja'
  #}}}
 
-[[plugins]] # koron/codic-vim {{{
-  repo = 'koron/codic-vim'
- #}}}
 
 [[plugins]] # ujihisa/neco-look {{{
   repo = 'ujihisa/neco-look'
@@ -1231,9 +1241,10 @@ on_source = ['neocomplete.vim', 'deoplete.nvim']
 [[plugins]] # beloglazov/vim-online-thesaurus {{{
 # A Vim plugin for looking up words in an online thesaurus
   repo = 'beloglazov/vim-online-thesaurus'
-hook_source = '''
-  let g:online_thesaurus_map_keys=0
-'''
+  on_cmd = 'Thes'
+  hook_source = '''
+    let g:online_thesaurus_map_keys=0
+  '''
 # }}}
 
 [[plugins]] # Shougo/neosnippet.vim {{{
@@ -1279,15 +1290,17 @@ hook_source = '''
  #}}}
 
 [[plugins]] # benmills/vimux {{{
+  on_if = 1
   repo = 'benmills/vimux'
  #}}}
 
 [[plugins]] # majutsushi/tagbar {{{
+  on_cmd = 'Tagbar'
   repo = 'majutsushi/tagbar'
 
-hook_add = '''
-nnoremap <silent> ,q :TagbarToggle<CR>
-'''
+  hook_add = '''
+    nnoremap <silent> ,q :TagbarToggle<CR>
+  '''
  #}}}
 
 [[plugins]] # haya14busa/incsearch.vim {{{
@@ -1573,6 +1586,7 @@ on_ft = ['html', 'svg', 'rdf']
 
 [[plugins]] # koron/codic-vim {{{
   repo = 'koron/codic-vim'
+  on_if = '1'
 #}}}
 
 [[plugins]] # mattn/ginger-vim {{{
@@ -1591,38 +1605,44 @@ hook_post_source = '''
  #}}}
 
 [[plugins]] # vim-scripts/Align {{{
+  on_cmd = 'Align'
   repo = 'vim-scripts/Align'
  #}}}
 
   # Latex {{{
   [[plugins]] # lervag/vimtex {{{
     repo = 'lervag/vimtex'
-    on_ft=['tex']
-    hook_post_source = '''
-      nnoremap <buffer> <Space>la :call latex#motion#next_section(0,1,0)<CR>v:call latex#motion#next_section(0,0,1)<CR>:call <SID>previewTex()<CR>
-      vnoremap <buffer> <Space>la :call <SID>previewTex()<CR>
-      nnoremap <buffer> <Space>ls :call <SID>syncTexForward()<CR>
-    '''
-  hook_source = '''
-    let g:latex_fold_parts = [
-          \ "appendix",
-          \ "frontmatter",
-          \ "mainmatter",
-          \ "backmatter",
-          \ ]
-    let g:latex_fold_sections = [
-          \ "part",
-          \ "chapter",
-          \ "section",
-          \ "subsection",
-          \ "subsubsection",
-          \ ]
+    on_ft='tex'
+
+    hook_source = '''
+      let g:latex_fold_parts = [
+            \ "appendix",
+            \ "frontmatter",
+            \ "mainmatter",
+            \ "backmatter",
+            \ ]
+      let g:latex_fold_sections = [
+            \ "part",
+            \ "chapter",
+            \ "section",
+            \ "subsection",
+            \ "subsubsection",
+            \ ]
+
     let g:latex_fold_enabled = 1
     let g:latex_fold_automatic = 1
     let g:latex_fold_envs = 1
 
+    let g:vimtex_quickfix_ignored_warnings = [
+        \ 'Underfull',
+        \ 'Overfull',
+        \ 'specifier changed to',
+      \ ]
 
-    " let g:vimtex_latexmk_options = '--pdfdvi'
+    let g:vimtex_latexmk_options = '-file-line-error'
+    if has('nvim') && tkngue#util#executable('nvr')
+      let g:vimtex_latexmk_progname = 'nvr'
+    endif
 
     if has('unix') && executable('okular')
       let g:vimtex_view_general_viewer = 'okular'
@@ -1632,52 +1652,27 @@ hook_post_source = '''
       let g:vimtex_view_general_viewer
             \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
       let g:vimtex_view_general_options = '@line @pdf @tex'
+
+      let g:vimtex_latexmk_callback_hooks = ['UpdateSkim']
+      function! UpdateSkim(status)
+        if !a:status | return | endif
+
+        let l:out = b:vimtex.out()
+        let l:tex = expand('%:p')
+        let l:cmd = [g:vimtex_view_general_viewer, '-r']
+        if !empty(system('pgrep Skim'))
+          call extend(l:cmd, ['-g'])
+        endif
+        if has('nvim')
+          call jobstart(l:cmd + [line('.'), l:out, l:tex])
+        elseif has('job')
+          call job_start(l:cmd + [line('.'), l:out, l:tex])
+        else
+          call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
+        endif
+      endfunction
     endif
 
-
-    " 自動コンパイル
-    let g:latex_latexmk_continuous = 1
-    let g:latex_latexmk_background = 1
-    " コンパイル終了後のエラー通知オフ
-    let g:latex_latexmk_callback = 0
-
-    let g:latex_toc_split_pos = "topleft"
-    let g:latex_toc_width = 10
-
-    " SyncTex
-    function! s:syncTexForward() "{{{
-      call system('/Applications/Skim.app/Contents/SharedSupport/displayline -g '
-            \ . line(".") . " "
-            \ . g:latex#data[b:latex.id].out() . " "
-            \ . expand('%:p'))
-    endfunction"}}}
-
-    " Preview
-    function! s:previewTex() range "{{{
-      let l:tmp = @@
-      silent normal gvy
-      let l:selected = split(@@, "\n")
-      let @@ = l:tmp
-
-      let l:template1 = ["\\documentclass[a4paper]{jsarticle}",
-            \"\\usepackage[dvipdfmx]{graphicx}",
-            \"\\usepackage{amsmath,amssymb,bm}",
-            \"\\pagestyle{empty}",
-            \"\\begin{document}"]
-      let l:template2 = ["\\end{document}"]
-
-      let l:output_file = "preview.tex"
-      call writefile(extend(extend(l:template1, l:selected), template2), l:output_file)
-      silent call system("latexmk -pdfdvi preview &")
-    endfunction"}}}
-
-    " for neocomplete
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-      let g:neocomplete#sources#omni#input_patterns = {}
-    endif
-    let g:neocomplete#sources#omni#input_patterns.tex = '\\ref{\s*[0-9A-Za-z_:]*'
-    "\citeも自動補完するなら
-    let g:neocomplete#sources#omni#input_patterns.tex = '\\cite{\s*[0-9A-Za-z_:]*\|\\ref{\s*[0-9A-Za-z_:]*'
   '''
   #}}}
 
@@ -1736,7 +1731,6 @@ hook_post_source = '''
 
     # VCS {{{
 
-
       [[plugins]] # lambdalisue/vim-gista {{{
         repo = 'lambdalisue/vim-gista'
       depends = ['unite.vim', 'open-browser.vim']
@@ -1746,14 +1740,17 @@ hook_post_source = '''
       [[plugins]] # tpope/vim-fugitive {{{
         repo = 'tpope/vim-fugitive'
         augroup = 'fugitive'
+        # lazy = 1
+        # if = 0
+        on_if = 'finddir( getcwd()."/.git") != ""'
         hook_add = '''
           function! ConfigOnGitRepository() "{{{
             if !exists('b:git_dir')
               return
             endif
-            let git_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            if &ft != 'dirvish'
-              execute 'lcd '. git_path
+            let root_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
+            if &ft != 'dirvish' && getcwd() !~# root_path
+              execute 'lcd '. root_path
             endif
 
             setl nobackup
@@ -1766,8 +1763,8 @@ hook_post_source = '''
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
             nnoremap <buffer> [git]p :<C-u>Gpush<CR>
             " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-            if &l:path !~# git_path
-              let &l:path .= ','.git_path
+            if &l:path !~# root_path
+              let &l:path = join([&g:path, root_path], ',')
             endif
           endfunction "}}}
 
@@ -1799,6 +1796,7 @@ hook_post_source = '''
       ##}}}
 
       [[plugins]] # cohama/agit.vim {{{
+        on_cmd = 'Agit'
         repo = 'cohama/agit.vim'
       #}}}
 
@@ -1874,36 +1872,37 @@ hook_post_source = '''
  #}}}
     [[plugins]] # tyru/open-browser.vim {{{
       repo = 'tyru/open-browser.vim'
-    on_cmd = 'OpenURL'
-    hook_source = '''
-      let g:openbrowser_search_engines = {
-            \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
-            \       'askubuntu': 'http://askubuntu.com/search?q={query}',
-            \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
-            \       'blekko': 'http://blekko.com/ws/+{query}',
-            \       'cpan': 'http://search.cpan.org/search?query={query}',
-            \       'devdocs': 'http://devdocs.io/#q={query}',
-            \       'duckduckgo': 'http://duckduckgo.com/?q={query}',
-            \       'github': 'http://github.com/search?q={query}',
-            \       'google': 'http://google.com/search?q={query}',
-            \       'google-scholar': 'https://scholar.google.co.jp/scholar?hl=ja&as_sdt=0,5&q={query}',
-            \       'google-code': 'http://code.google.com/intl/en/query/#q={query}',
-            \       'php': 'http://php.net/{query}',
-            \       'python': 'http://docs.python.org/dev/search.html?q={query}&check_keywords=yes&area=default',
-            \       'twitter-search': 'http://twitter.com/search/{query}',
-            \       'twitter-user': 'http://twitter.com/{query}',
-            \       'verycd': 'http://www.verycd.com/search/entries/{query}',
-            \       'vim': 'http://www.google.com/cse?cx=partner-pub-3005259998294962%3Abvyni59kjr1&ie=ISO-8859-1&q={query}&sa=Search&siteurl=www.vim.org%2F#gsc.tab=0&gsc.q={query}&gsc.page=1',
-            \       'wikipedia': 'http://en.wikipedia.org/wiki/{query}',
-            \       'wikipedia-ja': 'http://ja.wikipedia.org/wiki/{query}',
-            \       'yahoo': 'http://search.yahoo.com/search?p={query}',
-            \}
-      nmap gb <Plug>(openbrowser-smart-search)
-      vmap gb <Plug>(openbrowser-smart-search)
-      nmap gw :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
-      nmap gs :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
-      vmap gs :OpenBrowserSearch -goole-scholar <C-R><C-W><CR>
-    '''
+      on_if = 1
+      on_cmd = 'OpenURL'
+      hook_source = '''
+        let g:openbrowser_search_engines = {
+              \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
+              \       'askubuntu': 'http://askubuntu.com/search?q={query}',
+              \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
+              \       'blekko': 'http://blekko.com/ws/+{query}',
+              \       'cpan': 'http://search.cpan.org/search?query={query}',
+              \       'devdocs': 'http://devdocs.io/#q={query}',
+              \       'duckduckgo': 'http://duckduckgo.com/?q={query}',
+              \       'github': 'http://github.com/search?q={query}',
+              \       'google': 'http://google.com/search?q={query}',
+              \       'google-scholar': 'https://scholar.google.co.jp/scholar?hl=ja&as_sdt=0,5&q={query}',
+              \       'google-code': 'http://code.google.com/intl/en/query/#q={query}',
+              \       'php': 'http://php.net/{query}',
+              \       'python': 'http://docs.python.org/dev/search.html?q={query}&check_keywords=yes&area=default',
+              \       'twitter-search': 'http://twitter.com/search/{query}',
+              \       'twitter-user': 'http://twitter.com/{query}',
+              \       'verycd': 'http://www.verycd.com/search/entries/{query}',
+              \       'vim': 'http://www.google.com/cse?cx=partner-pub-3005259998294962%3Abvyni59kjr1&ie=ISO-8859-1&q={query}&sa=Search&siteurl=www.vim.org%2F#gsc.tab=0&gsc.q={query}&gsc.page=1',
+              \       'wikipedia': 'http://en.wikipedia.org/wiki/{query}',
+              \       'wikipedia-ja': 'http://ja.wikipedia.org/wiki/{query}',
+              \       'yahoo': 'http://search.yahoo.com/search?p={query}',
+              \}
+        nmap gb <Plug>(openbrowser-smart-search)
+        vmap gb <Plug>(openbrowser-smart-search)
+        nmap gw :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
+        nmap gs :OpenBrowserSearch -wikipedia-ja <C-R><C-W><CR>
+        vmap gs :OpenBrowserSearch -goole-scholar <C-R><C-W><CR>
+      '''
  #}}}
   [[plugins]] # lilydjwg/colorizer {{{
     repo = 'lilydjwg/colorizer'
@@ -1923,9 +1922,9 @@ hook_post_source = '''
 
     augroup dirvish_autocmd
     autocmd!
+      autocmd FileType dirvish lcd %
       autocmd FileType dirvish nmap <silent><buffer> <BS> <Plug>(dirvish_up)
-      autocmd FileType dirvish nnoremap <silent> O  :!open <C-R><C-F><CR>
-      autocmd FileType dirvish nnoremap <silent> O  :!open <C-R><C-F><CR>
+      autocmd FileType dirvish nnoremap <silent><buffer> O  :!open <C-R><C-F><CR>
       autocmd FileType dirvish nnoremap <silent><buffer>
         \ gh :silent keeppatterns g@\v/\.[^\/]+/?$@d<cr>
       autocmd FileType dirvish nnoremap <buffer> N :e <C-R>=expand('%')<CR>
