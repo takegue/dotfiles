@@ -728,7 +728,7 @@ hook_source = '''
   repo = 'thinca/vim-quickrun'
   on_cmd = 'QuickRun'
   depends = ['vim-hier', 'shabadou.vim']
-
+  on_if = 1
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
@@ -764,6 +764,7 @@ hook_source = '''
           \      'cmdopt' : '-r plain2 -f %{&filetype}',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}})
+    let g:quickrun_config['runner'] = has('nvim') ? 'jobstart' : has('job') ? 'job' : 'vimproc' 
     let g:quickrun_config.tex ={
           \ 'command' : 'latexmk',
           \ 'cmdopt' : '-pdf',
@@ -1057,9 +1058,9 @@ repo = 'Konfekt/FastFold'
     endfunction
 
     " SuperTab like snippets behavior.
-    " imap <expr><CR>  neosnippet#expandable() ?
-    "     \ "\<Plug>(neosnippet_expand)" :
-    "     \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
+    imap <expr><CR>  neosnippet#expandable() ?
+         \ "\<Plug>(neosnippet_expand)" :
+         \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
 
     " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " For smart TAB completion.
