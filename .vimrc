@@ -341,7 +341,7 @@ function! s:my_on_filetype() abort "{{{
     return
   endif
 
-  if execute('filetype') =~# 'OFF'
+ if execute('filetype') =~# 'OFF'
     " Lazy loading
     silent! filetype plugin indent on
     syntax enable
@@ -414,7 +414,8 @@ augroup END"}}}
 " Plugin Settings ============== {{{
 
 " dein.vim Initilization {{{
-let g:noplugin = 0
+
+let g:noplugin = 1
 
 " Load dein.
 let s:dein_dir = finddir('dein.vim', '.;')
@@ -432,7 +433,6 @@ if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
         \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 
 endif
-
 let s:dein_dir = expand('$CACHE/dein')
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)

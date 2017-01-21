@@ -335,49 +335,47 @@
 
 [[plugins]] # AndrewRadev/switch.vim {{{
   repo = 'AndrewRadev/switch.vim'
+  hook_add = '''
+    nnoremap <silient> - :Switch<CR>
+    augroup switch_autocmd
+      autocmd FileType gitrebase let b:switch_custom_definitions = [ ['pick', 'reword', 'edit', 'squash' , 'fixup' , 'exec', 'drop'], ]
+      autocmd FileType python let g:switch_custom_definitions =
+            \[
+            \   ['and', 'or'],
+            \   {
+            \     '\(.\+\) if \(.\+\) else \(.\+\)' : {
+            \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' :
+            \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \5'
+            \      }
+            \   },
+            \]
+    augroup END
 
-hook_source = '''
-  augroup switch_autocmd
-    autocmd FileType gitrebase let b:switch_custom_definitions = [
-          \ ['pick', 'reword', 'edit', 'squash' , 'fixup' , 'exec', 'drop'],
-          \]
-    autocmd FileType python let g:switch_custom_definitions =
-          \[
-          \   ['and', 'or'],
+    let g:switch_custom_definitions = [
+          \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
+          \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
+          \   ['!=', '=='],
           \   {
-          \     '\(.\+\) if \(.\+\) else \(.\+\)' : {
-          \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' :
-          \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \5'
-          \      }
+          \     '>\(=\)\@!'  : '>=',
+          \     '>='  : '<',
+          \     '<\(=\)\@!'  : '<=',
+          \     '<='  : '>',
           \   },
-          \]
-  augroup END
-
-  let g:switch_custom_definitions = [
-        \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
-        \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
-        \   ['!=', '=='],
-        \   {
-        \     '>\(=\)\@!'  : '>=',
-        \     '>='  : '<',
-        \     '<\(=\)\@!'  : '<=',
-        \     '<='  : '>',
-        \   },
-        \   {
-        \     '\<[a-z0-9]\+_\k\+\>': {
-        \       '_\(.\)': '\U\1',
-        \       '\<\(.\)': '\U\1'
-        \     },
-        \     '\<[A-Za-z][a-z0-9]\+[A-Z]\k\+\>': {
-        \       '\(\u\)': '_\l\1',
-        \       '\<_': ''
-        \     },
-        \   }
-        \ ]
-  let g:switch_increment_definitions = []
-  let g:switch_decrement_definitions = []
-  let g:switch_mapping = "-"
-'''
+          \   {
+          \     '\<[a-z0-9]\+_\k\+\>': {
+          \       '_\(.\)': '\U\1',
+          \       '\<\(.\)': '\U\1'
+          \     },
+          \     '\<[A-Za-z][a-z0-9]\+[A-Z]\k\+\>': {
+          \       '\(\u\)': '_\l\1',
+          \       '\<_': ''
+          \     },
+          \   }
+          \ ]
+    let g:switch_increment_definitions = []
+    let g:switch_decrement_definitions = []
+    let g:switch_mapping = "-"
+  '''
 
 
 # }}}
