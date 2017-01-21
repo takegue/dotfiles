@@ -393,10 +393,10 @@
       call denite#custom#var('file_rec/git', 'command',
         \ ['git', '-C', ':directory', 'ls-files', '-c', '--exclude-standard'])
 
-      call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
-      call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-      call denite#custom#map('insert', '<C-f>', 'scroll_page_forwards')
-      call denite#custom#map('insert', '<C-b>', 'scroll_page_forwards')
+      call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
+      call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
+      call denite#custom#map('insert', '<C-f>', '<denite:scroll_page_forwards>')
+      call denite#custom#map('insert', '<C-b>', '<denite:scroll_page_backwards>')
 
       " unite grep に ag(The Silver Searcher) を使う
       if tkngue#util#executable('rg')
@@ -421,12 +421,13 @@
       cnoremap <silent><expr> h<Space>   getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h'
       nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file_rec/git:~/.dotfiles<CR>
 
+
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
       nnoremap  [denite]s  :<C-u>Denite source<CR>
       nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
-            \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`
-            \ file_mru <CR>
+              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'` 
+              \ file_mru <CR>
 
       nnoremap <silent> [denite]r  :<C-u>Denite
             \ -buffer-name=register unite:register<CR>
@@ -676,6 +677,7 @@
        autocmd FileType markdown,rst,help,toml
              \ nmap <buffer><leader>r
              \ <Plug>(precious-quickrun-op)icx
+
        " autocmd User PreciousFileType :echo precious#context_filetype()
      augroup END
    '''
