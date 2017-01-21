@@ -372,7 +372,7 @@ augroup END "}}}
 augroup edit_vimrc "{{{
   autocmd!
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
-  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*/*"), '\n', ',', 'g')
+  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*"), '\n', ',', 'g')
   autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/*/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC

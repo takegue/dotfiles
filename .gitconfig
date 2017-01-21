@@ -36,7 +36,7 @@
     textconv = "tika --text"
 
 [difftool.latex]
-    cmd = latexdiff-git "$LOCAL" "$REMOTE" 
+    cmd = latexdiff-vc --git "$LOCAL" "$REMOTE" 
 
 [remote]
     pushDefault="origin"

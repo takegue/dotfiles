@@ -49,7 +49,13 @@
     endfunction "}}}
 
     function! MyFilename() "{{{
-      let fname = expand('%:t')
+
+      if !exists('b:git_dir')
+        let fname = expand('%:t')
+      else
+        let fname = expand('%')
+      endif
+
       if fname =~ '^lingr-'
         let fname = '['. fname . ']'
       elseif &ft == 'dirvish'
@@ -119,7 +125,7 @@
     endfunction "}}}
 
     function! MyMode() "{{{
-      return winwidth(0) > 60 ? lightline#mode() :lightline#mode()[00]
+      return winwidth(0) > 80 ? lightline#mode() :lightline#mode()[00]
     endfunction"}}}
 
     let g:lightline = {
@@ -422,7 +428,8 @@ hook_source = '''
       nnoremap  [denite]s  :<C-u>Denite source<CR>
       nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
             \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`
-            \ file_rec:~/Downloads file_mru <CR>
+            \ file_mru <CR>
+
       nnoremap <silent> [denite]r  :<C-u>Denite
             \ -buffer-name=register unite:register<CR>
       nnoremap <silent> [denite]s  :<C-u>Denite
@@ -720,9 +727,15 @@ hook_source = '''
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
   on_cmd = 'QuickRun'
-  depends = ['vim-hier', 'vimproc.vim', 'shabadou.vim']
+  depends = ['vim-hier', 'shabadou.vim']
+
   hook_add = '''
-    let g:quickrun_config = {
+    nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
+  '''
+
+  hook_post_source = '''
+    let g:quickrun_config = deepcopy(g:quickrun#default_config)
+    call extend(g:quickrun_config, {
           \ "_": {
           \   "hook/my_anime/enable" : 1,
           \   "hook/my_anime/wait" : 2,
@@ -730,23 +743,33 @@ hook_source = '''
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "hook/qfstatusline_update/enable_exit" : 1,
           \   "hook/qfstatusline_update/priority_exit" : 4,
-          \   "runner"                    : 'vimproc',
-          \   "runner/vimproc/read_timeout" : 100,
-          \   "runner/vimproc/sleep"      : 100,
-          \   "runner/vimproc/updatetime" : 500,
-          \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 > winheight(0) * 5 ? "vertical" : ""}',
+          \   "runner"                    : 'jobstart',
+          \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
+          \   "outputter/buffer/close_on_empty" : 1,
           \},
           \ "watchdogs_checker/_" : {
-          \      "runner/vimproc/updatetime" : 1000,
+          \      'outputter/quickfix/open_cmd' : '',
+          \ },
+          \ "watchdogs_checker/jalatexdiff" : {
+          \      'command': 'jlatexdiff-vc',
+          \      'cmdopt' : '-r --git --force -e utf8',
+          \      'exec' : '%c %o %s',
+          \ },
+          \ "watchdogs_checker/latexdiff" : {
+          \      'command': 'latexdiff-vc',
+          \      'cmdopt' : '-r --git --force -e utf8',
+          \      'exec' : '%c %o %s',
           \ },
           \ "watchdogs_checker/redpen" : {
           \      'cmdopt' : '-r plain2 -f %{&filetype}',
-          \      'exec' : '%c %o %s 2>/dev/null',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
-          \}}
+          \}})
     let g:quickrun_config.tex ={
           \ 'command' : 'latexmk',
           \ 'cmdopt' : '-pdf',
+          \}
+    let g:quickrun_config['tex/watchdogs_checker'] = {
+          \  "type" :"watchdogs_checker/jalatexdiff"
           \}
     let g:quickrun_config.sql ={
           \ 'command' : 'mysql',
@@ -759,6 +782,11 @@ hook_source = '''
           \}
     let g:quickrun_config['python'] = {
           \ 'command': 'python',
+          \ 'outputter': 'error',
+          \ 'hook/time/enable': '0',
+          \ 'outputter/error/success': 'buffer',
+          \ 'outputter/error/error': 'quickfix',
+          \ 'outputter/quickfix/errorformat': '%C%p^,%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%+Z%[%^\ ]%m',
           \}
     let g:quickrun_config['python/watchdogs_checker'] = {
           \  "type" : "watchdogs_checker/flake8",
@@ -832,7 +860,6 @@ hook_source = '''
       autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
       autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
     augroup END
-    nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
 # }}}
 
@@ -845,6 +872,7 @@ hook_source = '''
         \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
+        \   "tex" : 1,
         \}
     let g:watchdogs_check_CursorHold_enables = {
         \   "cpp"     : 1,
@@ -1029,9 +1057,9 @@ repo = 'Konfekt/FastFold'
     endfunction
 
     " SuperTab like snippets behavior.
-    imap <expr><CR>  neosnippet#expandable() ?
-        \ "\<Plug>(neosnippet_expand)" :
-        \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
+    " imap <expr><CR>  neosnippet#expandable() ?
+    "     \ "\<Plug>(neosnippet_expand)" :
+    "     \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
 
     " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " For smart TAB completion.
@@ -1182,6 +1210,7 @@ repo = 'Konfekt/FastFold'
       augroup END
 
       " SuperTab like snippets behavior.
+
       imap <expr><CR>  neosnippet#expandable() ?
             \ "\<Plug>(neosnippet_expand)" :
             \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"

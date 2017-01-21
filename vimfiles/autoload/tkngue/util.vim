@@ -147,3 +147,12 @@ endfunction
 function! tkngue#util#load_webpage(url) abort
   execute 'r !wget -O - '.a:url.' 2>/dev/null'
 endfunction
+
+function! tkngue#util#show_current_function() abort
+  let lnum = line(".")
+  let col = col(".")
+  echohl ModeMsg
+  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW'))
+  echohl None
+  call search("\\%" . lnum . "l" . "\\%" . col . "c")
+endfunction
