@@ -724,11 +724,17 @@
   repo = 'jceb/vim-hier'
 # }}}
 
+
+[[plugins]] # TKNGUE/quickrun-neovim-jobstart {{{
+  repo = 'TKNGUE/vim-quickrun-neovim-job'
+  on_cmd = 'QuickRun'
+  on_if = 1
+# }}}
+
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
   on_cmd = 'QuickRun'
   depends = ['vim-hier', 'shabadou.vim']
-  on_if = 1
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
@@ -1265,7 +1271,7 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # ujihisa/neco-look {{{
   repo = 'ujihisa/neco-look'
-on_source = ['neocomplete.vim', 'deoplete.nvim']
+  on_source = ['neocomplete.vim', 'deoplete.nvim']
 #}}}
 
 [[plugins]] # beloglazov/vim-online-thesaurus {{{
@@ -1840,9 +1846,29 @@ hook_post_source = '''
     repo = 'fatih/vim-go'
     on_ft = 'go'
   #}}}
+
 # }}}
 
-    # Other {{{
+# LUA {{{
+  [[plugins]]  # xolox/vim-lua-ftplugin {{{
+    repo = 'xolox/vim-lua-ftplugin'
+    depends = ['vim-misc']
+    on_ft = 'lua'
+  # }}}
+
+  [[plugins]]  # xolox/vim-misc {{{
+    repo = 'xolox/vim-misc'
+    on_ft = 'lua'
+  # }}}
+
+  [[plugins]] # xolox/vim-misc {{{
+    # Documents for lua 5.0 or 5.1
+    repo = 'vim-scripts/luarefvim'
+  # }}}
+
+# }}}
+
+  # Other {{{
     [[plugins]] # thinca/vim-ref {{{
       repo = 'thinca/vim-ref'
       hook_add = '''
