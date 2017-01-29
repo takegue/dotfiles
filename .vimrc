@@ -16,8 +16,10 @@ if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
   augroup VimStart
     autocmd!
-    autocmd VimEnter * let g:startuptime = reltime(g:startuptime) | redraw
-          \ | echomsg 'startuptime:' . reltimestr(g:startuptime)
+    autocmd VimEnter * 
+          \ let g:startuptime2 = reltime(g:startuptime)
+          \ | echomsg 'time:' . reltimestr(g:startuptime2)
+          \ | autocmd!  VimStart VimEnter
   augroup END
 endif
 " }}}
@@ -296,25 +298,45 @@ inoremap []<space> []
 augroup my_higlight
   autocmd!
   autocmd ColorScheme * call s:additional_highlight()
-  autocmd User VimrcReloaded call s:additional_highlight()
 augroup END
 
 function! s:additional_highlight() "{{{
-  if !has('gui_running') && &bg == 'dark'
+  if !has('gui_running')
     highlight Normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
   highlight CursorLine cterm=bold ctermfg=lightcyan ctermbg=None gui=bold
   highlight IncSearch cterm=bold ctermfg=green ctermbg=None gui=bold
   highlight Search cterm=bold ctermfg=green ctermbg=None gui=bold
+  " highlight Normal ctermbg=none
   " highlight IncSearch Search cterm=bold ctermfg=green ctermbg=None gui=bold
   " highlight Visual cterm=bold ctermfg=red ctermbg=None guibg=#403D3D
-
-
+  " echomsg 'called adiitoinal highlight'
 endfunction "}}}
 "}}}
 
 " Misc: {{{
+if has('nvim')
+  set shada=!,'500,<50,s10,h
+endif
+
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+let g:loaded_getscriptPlugin   = 1
+" let g:loaded_gzip              = 1
+" let g:loaded_man               = 1
+" let g:loaded_matchit           = 1
+" let g:loaded_matchparen        = 1
+let g:loaded_netrwFileHandlers = 1
+" let g:loaded_netrwPlugin       = 1
+" let g:loaded_netrwSettings     = 1
+" let g:loaded_rrhelper          = 1
+let g:loaded_shada_plugin      = 1
+" let g:loaded_spellfile_plugin  = 1
+let g:loaded_tarPlugin         = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimballPlugin     = 1
+" let g:loaded_zipPlugin         = 1
 
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
@@ -344,8 +366,10 @@ function! s:my_on_filetype() abort "{{{
  if execute('filetype') =~# 'OFF'
     " Lazy loading
     silent! filetype plugin indent on
-    syntax enable
     filetype detect
+    syntax enable
+    " redraw!
+    call s:additional_highlight()
   endif
 endfunction "}}}
 
@@ -466,10 +490,9 @@ endif
 " :so $VIMRUNTIME/syntax/colortest.vim
 " Check syntax
 " :so $VIMRUNTIME/syntax/hitest.vim
-"
 if has('gui_running')
     colorscheme PaperColor
-else
+elseif has('vim_starting')
     set background=light
     if &t_Co < 256
         colorscheme default
@@ -486,8 +509,8 @@ endif
 if has('vim_starting')
     set t_Co=256
     syntax sync minlines=512
-    syntax enable
-    filetype plugin indent on
+    filetype plugin indent off
+    syntax off
 else
     call dein#call_hook('on_source')
     call dein#call_hook('on_post_source')

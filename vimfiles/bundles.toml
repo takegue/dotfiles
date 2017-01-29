@@ -250,14 +250,14 @@
  # 全体オブジェクト
  # ae, ai
   repo = 'kana/vim-textobj-entire'
-  on_if = 1
+  if = 0
 #}}}
 
 [[plugins]] # kana/vim-textobj-fold {{{
 # 降りたたみオブジェクト
 # az, iz
   repo = 'kana/vim-textobj-fold'
-  on_if = 1
+  if = 0
  #}}}
 
 [[plugins]] # kana/vim-textobj-function {{{
@@ -386,8 +386,8 @@
   [[plugins]] # Shougo/denite.nvim {{{
     repo = 'Shougo/denite.nvim'
     if = "has('nvim') && has('python3')"
-    on_if = 1
     on_cmd = 'Denite'
+    on_event = 'VimEnter'
     hook_post_source = '''
       call denite#custom#alias('source', 'file_rec/git', 'file_rec')
       call denite#custom#var('file_rec/git', 'command',
@@ -1437,7 +1437,7 @@ repo = 'Konfekt/FastFold'
 [[plugins]] # lambdalisue/vim-pyenv {{{
  # Activate the versions and the virtualenvs of pyenv within a live VIM session
   repo = 'lambdalisue/vim-pyenv'
-  on_if = "executable('pyenv')"
+  if = "executable('pyenv')"
   on_source = ['deoplete-jedi', 'jedi-vim']
 
   hook_post_source = '''
@@ -1452,7 +1452,7 @@ repo = 'Konfekt/FastFold'
 [[plugins]] # klen/python-mode {{{
   repo = 'klen/python-mode'
   build ='pip install pylint rope pyflakes pep8'
-  on_if = "(has('python') || has('python3')) && executable('pyflakes') && executable('pylint')"
+  if = "(has('python') || has('python3')) && executable('pyflakes') && executable('pylint')"
   on_ft = ["python", "python3", "djangohtml"]
 
   hook_post_source ='''
