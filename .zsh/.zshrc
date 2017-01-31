@@ -391,6 +391,12 @@ function show_process_time_after_cmd(){
 
 add-zsh-hook precmd show_process_time_after_cmd
 
+function memo_cmd(){  
+    [[ -n ${TMUX_PANE} ]] && echo $1 > "${TMP:-/tmp}/tmux_pane_cmd_${TMUX_PANE}"
+}
+
+add-zsh-hook preexec memo_cmd
+
 #### Export Configurations ####
 export PYTHONSTARTUP=~/.pythonstartup
 
