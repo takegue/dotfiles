@@ -684,7 +684,9 @@
 #}}}
 
 [[plugins]] # thinca/vim-template {{{
+  # TODO: ロードが激重なので少し考える
   repo = 'thinca/vim-template'
+  on_if = 1
   hook_add = '''
     command! -nargs=0 -complete=filetype Temp call s:open_template()
 
@@ -904,11 +906,13 @@
  #}}}
 
 [[plugins]] # mhinz/vim-signify {{{
+  # TODO: ロードが激重なので少し考える
   repo = 'mhinz/vim-signify'
+  on_event = 'BufWritePost'
 
- hook_add = '''
+  hook_add = '''
     let g:signify_skip_filename_pattern = [ '.git/*', ]
- '''
+  '''
 
 #}}}
 

@@ -25,6 +25,11 @@ endif
 " }}}
 " ====================== }}}
 
+if v:version < 740 && !has('nvim') 
+  source ~/.min.vimrc
+  finish
+endif
+
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
@@ -320,24 +325,6 @@ if has('nvim')
   set shada=!,'500,<50,s10,h
 endif
 
-let g:loaded_2html_plugin      = 1
-let g:loaded_logiPat           = 1
-let g:loaded_getscriptPlugin   = 1
-" let g:loaded_gzip              = 1
-" let g:loaded_man               = 1
-" let g:loaded_matchit           = 1
-" let g:loaded_matchparen        = 1
-let g:loaded_netrwFileHandlers = 1
-" let g:loaded_netrwPlugin       = 1
-" let g:loaded_netrwSettings     = 1
-" let g:loaded_rrhelper          = 1
-let g:loaded_shada_plugin      = 1
-" let g:loaded_spellfile_plugin  = 1
-let g:loaded_tarPlugin         = 1
-let g:loaded_tutor_mode_plugin = 1
-let g:loaded_vimballPlugin     = 1
-" let g:loaded_zipPlugin         = 1
-
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
 " Open junk file
@@ -437,40 +424,62 @@ augroup END"}}}
 "
 " Plugin Settings ============== {{{
 
+" Standard Vim plugins {{{
+let g:loaded_2html_plugin      = 1
+let g:loaded_logiPat           = 1
+let g:loaded_getscriptPlugin   = 1
+" let g:loaded_gzip              = 1
+" let g:loaded_man               = 1
+" let g:loaded_matchit           = 1
+" let g:loaded_matchparen        = 1
+let g:loaded_netrwFileHandlers = 1
+" let g:loaded_netrwPlugin       = 1
+" let g:loaded_netrwSettings     = 1
+" let g:loaded_rrhelper          = 1
+let g:loaded_shada_plugin      = 1
+" let g:loaded_spellfile_plugin  = 1
+let g:loaded_tarPlugin         = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimballPlugin     = 1
+" let g:loaded_zipPlugin         = 1
+
+"}}}
+
 " dein.vim Initilization {{{
 
-let g:noplugin = 1
-
-" Load dein.
-let s:dein_dir = finddir('dein.vim', '.;')
-if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
-  let $CACHE = expand('~/.cache')
-  let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
-  if s:dein_dir == '' && &runtimepath !~ '/dein.vim'
-    let s:dein_dir = expand('$CACHE/dein')
-          \. '/repos/github.com/Shougo/dein.vim'
-    if !isdirectory(s:dein_dir)
-      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
+let g:noplugin = &compatible ? 1 : 0
+if !g:noplugin
+  " Load dein.
+  let s:dein_dir = finddir('dein.vim', '.;')
+  if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
+    let $CACHE = expand('~/.cache')
+    let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
+    if s:dein_dir == '' && &runtimepath !~ '/dein.vim'
+      let s:dein_dir = expand('$CACHE/dein')
+            \. '/repos/github.com/Shougo/dein.vim'
+      if !isdirectory(s:dein_dir)
+        execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
+      endif
     endif
+    execute ' set runtimepath^=' . substitute(
+          \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
+
   endif
-  execute ' set runtimepath^=' . substitute(
-        \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
+  let s:dein_dir = expand('$CACHE/dein')
+  if dein#load_state(s:dein_dir)
+      call dein#begin(s:dein_dir)
+      call dein#load_toml('~/.vim/bundles.toml')
+      if dein#tap('deoplete.nvim') && has('nvim')
+      call dein#disable('neocomplete.vim')
+      endif
+      call dein#end()
+      call dein#save_state()
+  endif
 
-endif
-let s:dein_dir = expand('$CACHE/dein')
-if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir)
-    call dein#load_toml('~/.vim/bundles.toml')
-    if dein#tap('deoplete.nvim') && has('nvim')
-     call dein#disable('neocomplete.vim')
-    endif
-    call dein#end()
-    call dein#save_state()
-endif
-
-if dein#check_install() && !has('vim_starting')
-    " Installation check.
-    call dein#install()
+  if dein#check_install() && !has('vim_starting')
+      " Installation check.
+      call dein#install()
+  endif
 endif
 
 " END dein}}}
