@@ -1,10 +1,7 @@
-#!/usr/bin/env sh
+#!/usr/bin/env zsh
 #新しい環境に取り込んだ時のインストール
 
 DIR=$(cd `dirname $0`; pwd)
-# if [ -e /usr/bin/zsh ]; then
-# 	chsh /usr/bin/zsh
-# fi 
 
 if [ ! -e `which git` ]; then
     echo 'not found git'
@@ -19,7 +16,7 @@ fi
 echo "$DIR/vimfiles => ~/.vim"
 ln -s $DIR/vimfiles ~/.vim
 
-for dotfile in $DIR/.*(.) ; do
+for dotfile in $DIR/.[^git]* ; do
     if [ $dotfile = ${DIR}/.git ]; then
         continue
     fi
@@ -63,6 +60,7 @@ for dotfile in $DIR/scripts/.*(x) ; do
     fi 
 done
 
+ln -sf $DIR/.zsh ${HOME}/.zsh
 ln -sf $DIR/.zsh/zshenv.home ${HOME}/.zshenv
 ln -sf $DIR/plugins/tmux-powerline ${HOME}/.local/src
  
