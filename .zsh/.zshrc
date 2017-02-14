@@ -58,10 +58,13 @@ typeset -gU ld_library_path
 # -----------------------------------------------------------------------------
 if [[ ! -d ~/.zplug ]]; then
     curl -sL zplug.sh/installer | zsh
-elif [ -f ~/.zplug/init.zsh ]; then
+fi
+
+if [ -f ~/.zplug/init.zsh ]; then
     source ~/.zplug/init.zsh
 
     # Make sure you use double quotes
+    zplug 'zplug/zplug', hook-build:'zplug --self-manage'
     zplug "zsh-users/zsh-history-substring-search"
     zplug "tcnksm/docker-alias", use:zshrc
     zplug "k4rthik/git-cal", as:command
@@ -82,12 +85,10 @@ elif [ -f ~/.zplug/init.zsh ]; then
         rename-to:jq
     zplug "b4b4r07/emoji-cli", \
         on:"stedolan/jq"
-    zplug "zsh-users/zsh-syntax-highlighting", nice:10
-    [[ ! -d ${ANYENV_ROOT} ]] && \
-        zplug "riywo/anyenv", \
+    zplug "zsh-users/zsh-syntax-highlighting", defer:3
+    zplug "riywo/anyenv", \
         hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
-    [[ ! -d ${ANYENV_ROOT}/plugins ]] && \
-        zplug "znz/anyenv-update", \
+    zplug "znz/anyenv-update", \
         on:"riywo/anyenv", \
         hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
     [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
@@ -113,7 +114,7 @@ elif [ -f ~/.zplug/init.zsh ]; then
             echo; zplug install
         fi
     fi
-    # Then, source plugins and add commands to $PATH
+
     zplug load
 fi
 
@@ -129,7 +130,9 @@ export GREP_OPTION="--color auto"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export GOPATH=$HOME/.go && [[ ! -d $GOPATH ]] && mkdir -p $GOPATH
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root)
-ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
+if [[ ! -z $ZSH_HIGHLIGHT_STYLES ]] then
+    ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
+fi
 
 bindkey -v              # キーバインドをviモードに設定
 
