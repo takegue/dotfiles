@@ -249,8 +249,8 @@
 [[plugins]] # kana/vim-textobj-entire {{{
  # 全体オブジェクト
  # ae, ai
-  repo = 'kana/vim-textobj-entire'
-  if = 0
+ repo = 'kana/vim-textobj-entire'
+ on_if = 1
 #}}}
 
 [[plugins]] # kana/vim-textobj-fold {{{
@@ -686,7 +686,7 @@
 [[plugins]] # thinca/vim-template {{{
   # TODO: ロードが激重なので少し考える
   repo = 'thinca/vim-template'
-  on_if = 1
+  if = 1 # TODO: if=1にするとなぜか読み込まれるようになる. バグ？ defaultがlazy load???
   hook_add = '''
     command! -nargs=0 -complete=filetype Temp call s:open_template()
 
@@ -694,7 +694,7 @@
     function! s:open_template()
       let l:template_name = template#search(expand('%:p'))
       if l:template_name == ''
-        let l:template_name = g:template_basedir. '/template/template.'. &ft
+        let l:template_name = globpath(g:template_basedir, '/template'). '/template.' .&ft
       endif
       let l:filename = input('Template("template" are replaced with wild card): ', l:template_name)
       if l:filename != ''

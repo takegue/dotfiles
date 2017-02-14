@@ -331,7 +331,7 @@ cmap w!! w !sudo tee > /dev/null %
 command! -nargs=? -complete=filetype Memo
             \ call tkngue#util#open_junk_file('<args>')
 " Todoコマンド
-command! Todo call s:Todo()
+command! Todo call tkngue#util#open_todofile()
 command! -bang -nargs=* PluginTest
             \ call tkngue#util#test_plugin(<bang>0, <q-args>)
 command! FollowSymlink  call tkngue#util#switch_to_actualfile()
@@ -387,6 +387,7 @@ augroup edit_vimrc "{{{
   autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/*/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost ~/.dotfiles/.vimrc nested source $MYVIMRC
 augroup END "}}}
 
 augroup My Autocmd Group "{{{
@@ -470,7 +471,7 @@ if !g:noplugin
       call dein#begin(s:dein_dir)
       call dein#load_toml('~/.vim/bundles.toml')
       if dein#tap('deoplete.nvim') && has('nvim')
-      call dein#disable('neocomplete.vim')
+        call dein#disable('neocomplete.vim')
       endif
       call dein#end()
       call dein#save_state()

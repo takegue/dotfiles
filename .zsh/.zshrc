@@ -57,64 +57,65 @@ typeset -gU ld_library_path
 #                               PLUGIN SETTINGS
 # -----------------------------------------------------------------------------
 if [[ ! -d ~/.zplug ]]; then
-    git clone https://github.com/b4b4r07/zplug ~/.zplug
-fi
-source ~/.zplug/zplug
+    curl -sL zplug.sh/installer | zsh
+elif [ -f ~/.zplug/init.zsh ]; then
+    source ~/.zplug/init.zsh
 
-# Make sure you use double quotes
-zplug "zsh-users/zsh-history-substring-search"
-zplug "tcnksm/docker-alias", use:zshrc
-zplug "k4rthik/git-cal", as:command
-zplug "b4b4r07/enhancd", use:init.sh
-zplug "junegunn/fzf-bin", \
-    from:gh-r, \
-    as:command, \
-    rename-to:fzf, \
-    use:"*$OSNAME:l*amd64*"
-zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-zplug "junegunn/fzf", use:shell/completion.zsh
-zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
-    from:gist
-zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
-zplug "stedolan/jq", \
-    from:gh-r, \
-    as:command, \
-    rename-to:jq
-zplug "b4b4r07/emoji-cli", \
-    on:"stedolan/jq"
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
-[[ ! -d ${ANYENV_ROOT} ]] && \
-    zplug "riywo/anyenv", \
-    hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
-[[ ! -d ${ANYENV_ROOT}/plugins ]] && \
-    zplug "znz/anyenv-update", \
-    on:"riywo/anyenv", \
-    hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
-[[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
-    zplug "yyuu/pyenv-virtualenv", \
-    on:"riywo/anyenv", \
-    hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
-zplug "zsh-users/zsh-completions"
-zplug "direnv/direnv", \
-    hook-build:"make", \
-     as:command, use:direnv
-zplug "carsonmcdonald/tmux-wifi-os-x", \
-    as:command, use:wifi-signal-strength, \
-    if:"[[ $OSTYPE == *darwin* ]]"
-zplug "thewtex/tmux-mem-cpu-load", \
-    as:command, use:"tmux-mem-cpu-load", \
-    hook-build:'cmake . && make'
-zplug "$HOME/.zsh/plugins/fzf-tmux-widgets", from:local
+    # Make sure you use double quotes
+    zplug "zsh-users/zsh-history-substring-search"
+    zplug "tcnksm/docker-alias", use:zshrc
+    zplug "k4rthik/git-cal", as:command
+    zplug "b4b4r07/enhancd", use:init.sh
+    zplug "junegunn/fzf-bin", \
+        from:gh-r, \
+        as:command, \
+        rename-to:fzf, \
+        use:"*$OSNAME:l*amd64*"
+    zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+    zplug "junegunn/fzf", use:shell/completion.zsh
+    zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
+        from:gist
+    zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
+    zplug "stedolan/jq", \
+        from:gh-r, \
+        as:command, \
+        rename-to:jq
+    zplug "b4b4r07/emoji-cli", \
+        on:"stedolan/jq"
+    zplug "zsh-users/zsh-syntax-highlighting", nice:10
+    [[ ! -d ${ANYENV_ROOT} ]] && \
+        zplug "riywo/anyenv", \
+        hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
+    [[ ! -d ${ANYENV_ROOT}/plugins ]] && \
+        zplug "znz/anyenv-update", \
+        on:"riywo/anyenv", \
+        hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
+    [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
+        zplug "yyuu/pyenv-virtualenv", \
+        on:"riywo/anyenv", \
+        hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+    zplug "zsh-users/zsh-completions"
+    zplug "direnv/direnv", \
+        hook-build:"make", \
+        as:command, use:direnv
+    zplug "carsonmcdonald/tmux-wifi-os-x", \
+        as:command, use:wifi-signal-strength, \
+        if:"[[ $OSTYPE == *darwin* ]]"
+    zplug "thewtex/tmux-mem-cpu-load", \
+        as:command, use:"tmux-mem-cpu-load", \
+        hook-build:'cmake . && make'
+    zplug "$HOME/.zsh/plugins/fzf-tmux-widgets", from:local
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
+    # Install plugins if there are plugins that have not been installed
+    if ! zplug check --verbose; then
+        printf "Install? [y/N]: "
+        if read -q; then
+            echo; zplug install
+        fi
     fi
+    # Then, source plugins and add commands to $PATH
+    zplug load
 fi
-# Then, source plugins and add commands to $PATH
-zplug load --verbose
 
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
