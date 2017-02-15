@@ -153,13 +153,20 @@ if has("persistent_undo")
   set undodir=$HOME/.vim/.undodir
   set undofile
   set undolevels=1000
+
+  if !isdirectory("$HOME/.vim/.undodir")
+      call tkngue#util#mkdir(expand("$HOME/.vim/.swap"), 1)
+  endif
 endif
 
 set swapfile
 set directory=$HOME/.vim/.swap
+if !isdirectory("$HOME/.vim/.swap")
+    call tkngue#util#mkdir(expand("$HOME/.vim/.swap"), 1)
+endif
 set writebackup
 set backupdir=$HOME/.vim/.backup
-set backupext='.old'
+set backupext=.old
 if !isdirectory("$HOME/.vim/.backup")
     call tkngue#util#mkdir(expand("$HOME/.vim/.backup"), 1)
 endif
