@@ -12,28 +12,13 @@
 #                                 PATH SETTINGS
 # -----------------------------------------------------------------------------
 #
-# ZSHENVで環境変数の設定を書くと ZSHRCを読み込む際に
-# 勝手に順番を書き換えられるのでここで再度更新
-path=(
-    "$lpath[@]"
-    $GOPATH/bin
-    /usr/local/bin
-    /usr/bin
-    /usr/X11/bin
-    /usr/bin/X11
-    /usr/local/X11/bin
-    /usr/local/games
-    /usr/games
-    /usr/lib/nagios/plugins
-    "$fpath[@]"
-    "$path[@]"
-    "$PATH[@]"
-    /bin
-)
+# Local settings and styles can go here and (usually) overwrite
+# things defined by me later.
+
 
 manpath=(
     "$lmanpath[@]"
-    ~/.zplug/man
+    ~/.zplug/doc/man
     /usr/share/man
     /usr/local/share/man
     "$manpath[@]"
@@ -78,14 +63,13 @@ if [ -f ~/.zplug/init.zsh ]; then
     zplug "junegunn/fzf", use:shell/completion.zsh
     zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
         from:gist
-    zplug "hchbaw/opp.zsh", if:"(( ${ZSH_VERSION%%.*} < 5 ))"
     zplug "stedolan/jq", \
         from:gh-r, \
         as:command, \
         rename-to:jq
     zplug "b4b4r07/emoji-cli", \
         on:"stedolan/jq"
-    zplug "zsh-users/zsh-syntax-highlighting", defer:3
+    zplug "zsh-users/zsh-syntax-highlighting", defer:2
     zplug "riywo/anyenv", \
         hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
     zplug "znz/anyenv-update", \
@@ -102,10 +86,10 @@ if [ -f ~/.zplug/init.zsh ]; then
     zplug "carsonmcdonald/tmux-wifi-os-x", \
         as:command, use:wifi-signal-strength, \
         if:"[[ $OSTYPE == *darwin* ]]"
+
     zplug "thewtex/tmux-mem-cpu-load", \
         as:command, use:"tmux-mem-cpu-load", \
         hook-build:'cmake . && make'
-    zplug "$HOME/.zsh/plugins/fzf-tmux-widgets", from:local
 
     # Install plugins if there are plugins that have not been installed
     if ! zplug check --verbose; then
@@ -468,4 +452,11 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
     PROMPT="\$(get_pyenv_version)
 $tmp_rprompt\$vcs_info_msg_0_
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
-;
+
+# Entirety of my startup file... then
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi
+
+[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv 
