@@ -33,7 +33,7 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog = $PYENV_ROOT . '/versions/vim_dev3/bin/python3'
+  let g:python3_host_prog =  '/Users/shunsuketakeno/.venv/vim_dev3/bin/python3'
   " if !executable(g:python3_host_prog)
   "     let g:python3_host_prog  = system('which python3')
   " endif
@@ -87,6 +87,7 @@ set softtabstop=4
 set expandtab
 set wildmenu wildmode=longest,full
 set foldmethod=marker
+set foldlevel=1
 set display=lastline
 set cmdheight=2
 set pumheight=15
@@ -473,6 +474,7 @@ if !g:noplugin
           \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 
   endif
+
   let s:dein_dir = expand('$CACHE/dein')
   if dein#load_state(s:dein_dir)
       call dein#begin(s:dein_dir)

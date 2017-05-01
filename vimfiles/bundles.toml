@@ -37,7 +37,6 @@
 [[plugins]] # itchyny/lightline.vim {{{
   repo = 'itchyny/lightline.vim'
   depends = ['vim-fugitive', 'vim-qfstatusline']
-  on_if = 1
   hook_add ='''
     function! MyModified() "{{{
       return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
@@ -408,13 +407,12 @@
             \ ['--vimgrep', '--no-heading'])
       elseif tkngue#util#executable('ag')
         call denite#custom#var('grep', 'command', ['ag'])
-        call denite#custom#var('grep', 'recursive_opts', [])
+        call denite#custom#var('grep', 'recursive_opts', ['R'])
         call denite#custom#var('grep', 'final_opts', [])
         call denite#custom#var('grep', 'separator', [])
         call denite#custom#var('grep', 'default_opts',
             \ ['--nopager', '--nocolor', '--nogroup', '--column'])
       endif
-
     '''
 
     hook_add = '''
@@ -443,7 +441,7 @@
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
       nnoremap <qsilent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
-      nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+      nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
       nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
       nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
       nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
@@ -751,7 +749,7 @@
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "hook/qfstatusline_update/enable_exit" : 1,
           \   "hook/qfstatusline_update/priority_exit" : 4,
-          \   "runner"                    : 'jobstart',
+          \   "runner"                    : '%{has("nvim")? "jobstart" : "job"}',
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
           \   "outputter/buffer/close_on_empty" : 1,
           \},

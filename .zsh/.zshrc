@@ -369,12 +369,17 @@ function ssh() {
 
 function frepo() {
     local dir
-    dir=$(ghq list > /dev/null | fzf-tmux --reverse +m) &&
+    if [ ! -z $TMUX ]; then
+        FZF=fzf-tmux
+    else
+        FZF=fzf
+    fi
+    dir=$(ghq list > /dev/null | $FZF --reverse +m) &&
         cd $(ghq root)/$dir
 }
 
 function foreground-vi() {
-    fg %vim
+    fg %$EDITOR
 }
 zle -N foreground-vi
 bindkey '^Z' foreground-vi
