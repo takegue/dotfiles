@@ -12,9 +12,6 @@ DOMAIN=${DOMAIN:-$(hostname -d 2>&-)}
 [[ -f /etc/debian_version ]] && DISTRI="Debian"
 [[ -f /etc/redhat-release ]] && DISTRI="RedHat"
 
-# Local settings and styles can go here and (usually) overwrite
-# things defined by me later.
-[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
 
 DEBUG=${DEBUG:-no}
 

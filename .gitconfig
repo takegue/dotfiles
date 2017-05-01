@@ -74,7 +74,5 @@
             fi \
     }; f"
 
-[github]
-    user = "TKNGUE"
 [commit]
-	template = /Users/alrescha/.gitmessage
+    template = ~/.gitmessage

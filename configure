@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/local/bin/zsh
 #新しい環境に取り込んだ時のインストール
 
 DIR=$(cd `dirname $0`; pwd)
@@ -13,28 +13,24 @@ if [ ! -e `which vim` ]; then
     $DIR/scripts/vim-install.sh
 fi 
 
-echo "$DIR/vimfiles => ~/.vim"
-ln -s $DIR/vimfiles ~/.vim
-
-for dotfile in $DIR/.[^git]* ; do
-    if [ $dotfile = ${DIR}/.git ]; then
+for dotfile in $DIR/.*; do
+    if [[ $dotfile =~ ".git($|module|ignore)" ]]; then
         continue
     fi
 
     dstpath="$HOME/${dotfile##*/}" 
-    if [ -L $dstpath ]; then
-        rm $dstpath
-        echo "remove $dstpath"
-    fi 
-    echo "$dotfile => $dstpath" 
-    ln -s $dotfile ~/ 
+    if [ ! -d $dstpath ]; then
+        if [ -L $dstpath ]; then
+            rm $dstpath
+            echo "remove $dstpath"
+        fi 
+        echo "$dotfile => $dstpath" 
+        ln -s $dotfile ~/ 
+    fi
 done
 
 for dotfile in $DIR/local_template/.*(.) ; do
     file_name="${dotfile##*/}" 
-    if [ $file_name = ${DIR}/local_template/.git ]; then
-        continue
-    fi
 
     dstpath="$HOME/.local$file_name"
     if [ -e $dstpath ]; then
@@ -47,9 +43,6 @@ done
 
 for dotfile in $DIR/scripts/*(x) ; do
     file_name="${dotfile##*/}" 
-    if [ $file_name = ${DIR}/local_template/.git ]; then
-        continue
-    fi
 
     dstpath="$HOME/.local/bin/${dotfile##*/}" 
     if [ -e $dstpath ]; then
@@ -60,7 +53,6 @@ for dotfile in $DIR/scripts/*(x) ; do
     fi 
 done
 
-ln -sf $DIR/.zsh ${HOME}/.zsh
 ln -sf $DIR/.zsh/zshenv.home ${HOME}/.zshenv
 ln -sf $DIR/plugins/tmux-powerline ${HOME}/.local/src
  
