@@ -53,7 +53,7 @@ if [ -f ~/.zplug/init.zsh ]; then
     zplug "zsh-users/zsh-history-substring-search"
     zplug "tcnksm/docker-alias", use:zshrc
     zplug "k4rthik/git-cal", as:command
-    zplug "b4b4r07/enhancd", use:init.sh
+    # zplug "b4b4r07/enhancd", use:init.sh
     zplug "junegunn/fzf-bin", \
         from:gh-r, \
         as:command, \
@@ -80,9 +80,12 @@ if [ -f ~/.zplug/init.zsh ]; then
         on:"riywo/anyenv", \
         hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
     zplug "zsh-users/zsh-completions"
+
     zplug "direnv/direnv", \
-        hook-build:"make", \
-        as:command, use:direnv
+        hook-build:"make", hook-load:'eval "$(direnv hook zsh)"', \
+        as:command, use:direnv, if:"[[ $OSTYPE == *darwin* ]]" \
+    || ( (( $+commands['direnv'] )) && eval "$(direnv hook zsh)")
+
     zplug "carsonmcdonald/tmux-wifi-os-x", \
         as:command, use:wifi-signal-strength, \
         if:"[[ $OSTYPE == *darwin* ]]"
@@ -90,6 +93,9 @@ if [ -f ~/.zplug/init.zsh ]; then
     zplug "thewtex/tmux-mem-cpu-load", \
         as:command, use:"tmux-mem-cpu-load", \
         hook-build:'cmake . && make'
+
+    zplug "zsh-users/zsh-autosuggestions"
+
 
     # Install plugins if there are plugins that have not been installed
     if ! zplug check --verbose; then
@@ -129,14 +135,15 @@ setopt prompt_subst      # プロンプト定義内で変数置換やコマン�
 setopt notify            # バックグラウンドジョブの状態変化を即時報告する
 setopt equals            # =commandを`which command`と同じ処理にする
 
-DIRSTACKSIZE=12
+autoload -Uz ls_abbrev
+
+DIRSTACKSIZE=200
 DIRSTACKFILE=~/.zdirs
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
 fi
 
-autoload -Uz ls_abbrev
 chpwd() {
   print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
   ls_abbrev
@@ -151,9 +158,11 @@ autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
 autoload -Uz is-at-least
 autoload -Uz replace-string
+autoload -Uz exec-oneliner
 
 if is-at-least 5.0.8; then
   autoload -Uz select-bracketed
+
   zle -N select-bracketed
   for m in visual viopp; do
       for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
@@ -200,6 +209,7 @@ if [[ -x `which fzf` ]]; then
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
   bindkey_function '^F' fzf-history-widget
+  # bindkey_function '^x^x' exec-oneliner
 else 
   bindkey -M viins '^F' history-incremental-search-backward
 fi
@@ -343,6 +353,14 @@ function man()
 function sshcd()
 {
     ssh $1 -t "cd `pwd`; zsh"
+}
+
+function cd() {
+    if [[ $1 = "-" ]]; then
+        builtin cd `dirs -p | uniq | fzf` $@
+    else
+        builtin cd $@
+    fi
 }
 
 function ssh() {
