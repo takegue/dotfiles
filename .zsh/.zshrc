@@ -357,7 +357,8 @@ function sshcd()
 
 function cd() {
     if [[ $1 = "-" ]]; then
-        builtin cd `dirs -p | uniq | fzf` $@
+        shift;
+        builtin cd `dirs -lp | uniq | fzf ` $@
     else
         builtin cd $@
     fi
