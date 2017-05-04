@@ -1,3 +1,4 @@
+#!/bin/zsh
 
 fzf_ssh(){
     cat <(cat ~/.ssh/config /etc/ssh/ssh_config 0> /dev/null | \grep -i '^host' | tr ' ' '\n' | awk 'tolower($1) !~/^host/{print "host",$1}' | \grep -v '*') \

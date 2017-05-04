@@ -749,7 +749,7 @@
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "hook/qfstatusline_update/enable_exit" : 1,
           \   "hook/qfstatusline_update/priority_exit" : 4,
-          \   "runner"                    : '%{has("nvim")? "jobstart" : "job"}',
+          \   "runner"                    : has("nvim") ? "jobstart" : "job",
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
           \   "outputter/buffer/close_on_empty" : 1,
           \},
@@ -1771,8 +1771,8 @@ hook_post_source = '''
 
       [[plugins]] # lambdalisue/vim-gista {{{
         repo = 'lambdalisue/vim-gista'
-      depends = ['unite.vim', 'open-browser.vim']
-      on_cmd = 'Gista'
+	depends = ['unite.vim', 'open-browser.vim']
+	on_cmd = 'Gista'
       #}}}
 
       [[plugins]] # tpope/vim-fugitive {{{
@@ -1787,9 +1787,9 @@ hook_post_source = '''
               return
             endif
             let root_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            if &ft != 'dirvish' && getcwd() !~# root_path
-              execute 'lcd '. root_path
-            endif
+            " if &ft != 'dirvish' && getcwd() !~# root_path
+            "   execute 'lcd '. root_path
+            " endif
 
             setl nobackup
             nnoremap <buffer> [git] <Nop>
@@ -1976,7 +1976,7 @@ hook_post_source = '''
   repo = 'justinmk/vim-dirvish'
   
   hook_add='''
-    nnoremap <silent><leader>e :e .<CR>
+    nnoremap <silent><leader>e :e ./<CR>
 
     augroup dirvish_autocmd
     autocmd!
