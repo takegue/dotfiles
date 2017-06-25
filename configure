@@ -13,6 +13,9 @@ if [ ! -e `which vim` ]; then
     $DIR/scripts/vim-install.sh
 fi 
 
+
+[[ -f $DIR/_gitignore ]] && ln -s $DIR/_gitignore ~/.gitignore
+
 for dotfile in $DIR/.*; do
     if [[ $dotfile =~ ".git($|module|ignore)" ]]; then
         continue
@@ -28,6 +31,8 @@ for dotfile in $DIR/.*; do
         ln -s $dotfile ~/ 
     fi
 done
+
+
 
 for dotfile in $DIR/local_template/.*(.) ; do
     file_name="${dotfile##*/}" 

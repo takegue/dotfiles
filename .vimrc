@@ -115,6 +115,29 @@ set smartcase
 set wrapscan
 set incsearch
 set hlsearch
+
+" Cscope: {{{
+if has("cscope")
+  if executable("gtags-cscope")
+    set cscopeprg=gtags-cscope
+  endif
+
+  set csto=0
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  " else add database pointed to by environment
+  elseif $CSCOPE_DB != ""
+      cs add $CSCOPE_DB
+  endif
+  set csverb
+  nnoremap <Leader>n  :cscope find c <C-R><C-W><CR>
+endif
+"}}}
+
+
 " }}}
 
 " Editing: {{{
@@ -326,6 +349,9 @@ function! s:additional_highlight() "{{{
   " highlight Visual cterm=bold ctermfg=red ctermbg=None guibg=#403D3D
   " echomsg 'called adiitoinal highlight'
 endfunction "}}}
+
+
+
 "}}}
 
 " Misc: {{{
