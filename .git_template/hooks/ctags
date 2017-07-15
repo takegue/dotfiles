@@ -1,5 +1,12 @@
-rm .git/tags
+#!/usr/bin/env  zsh
 
-CTAGS=`which ctags`
-
-$CTAGS --tag-relative --recurse --sort=yes --append=no  -f .git/tags 
+if [ -x `which gtags` ]
+   gtags
+elif 
+   git ls-files > cscope.files 
+   cscope -b -R
+else
+  CTAGS=`which ctags`
+  $CTAGS --tag-relative --recurse --sort=yes --append=no  -f .git/tags 
+fi
+ 

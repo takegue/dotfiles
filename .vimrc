@@ -118,7 +118,7 @@ set hlsearch
 
 " Cscope: {{{
 if has("cscope")
-  if executable("gtags-cscope")
+  if tkngue#util#executable("gtags-cscope")
     set cscopeprg=gtags-cscope
   endif
 
@@ -126,12 +126,14 @@ if has("cscope")
   set cst
   set nocsverb
   " add any database in current directory
-  if filereadable("cscope.out")
-      cs add cscope.out
-  " else add database pointed to by environment
-  elseif $CSCOPE_DB != ""
-      cs add $CSCOPE_DB
-  endif
+  " if tkngue#util#executable("gtags-cscope")
+  "   if filereadable("GTAGS")
+  "       cs add GTAGS
+  "   " else add database pointed to by environment
+  "   elseif $CSCOPE_DB != ""
+  "       cs add $CSCOPE_DB
+  "   endif
+  " endif
   set csverb
   nnoremap <Leader>n  :cscope find c <C-R><C-W><CR>
 endif
@@ -419,7 +421,7 @@ augroup edit_vimrc "{{{
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
   autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*"), '\n', ',', 'g')
   autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
-  autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/*/.git/tags"), '\n', ',', 'g')
+  autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/**/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost ~/.dotfiles/.vimrc nested source $MYVIMRC
 augroup END "}}}

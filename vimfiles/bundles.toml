@@ -386,7 +386,7 @@
     repo = 'Shougo/denite.nvim'
     if = "has('nvim') && has('python3')"
     on_cmd = 'Denite'
-    on_event = 'VimEnter'
+    on_if = 1
     hook_post_source = '''
       call denite#custom#alias('source', 'file_rec/git', 'file_rec')
       call denite#custom#var('file_rec/git', 'command',
@@ -423,6 +423,10 @@
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
       nnoremap  [denite]s  :<C-u>Denite source<CR>
+      nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
+              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'` 
+              \ file_mru <CR>
+
       nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
               \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'` 
               \ file_mru <CR>
@@ -725,7 +729,7 @@
 # }}}
 
 
-[[plugins]] # TKNGUE/quickrun-neovim-jobstart {{{
+[[plugins]] # TKNGUE/quickrun-neovim-job {{{
   repo = 'TKNGUE/vim-quickrun-neovim-job'
   on_cmd = 'QuickRun'
   on_if = 1
@@ -761,6 +765,9 @@
           \      'cmdopt' : '-r --git --force -e utf8',
           \      'exec' : '%c %o %s',
           \ },
+          \ "watchdogs_checker/php" : {
+          \      'cmdopt': '-d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
+          \ },
           \ "watchdogs_checker/latexdiff" : {
           \      'command': 'latexdiff-vc',
           \      'cmdopt' : '-r --git --force -e utf8',
@@ -771,6 +778,10 @@
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}})
     let g:quickrun_config['runner'] = has('nvim') ? 'jobstart' : has('job') ? 'job' : 'vimproc' 
+    let g:quickrun_config.jq ={
+          \ 'command' : 'jq',
+          \ 'exec' : '%c %o -f %s',
+          \}
     let g:quickrun_config.tex ={
           \ 'command' : 'latexmk',
           \ 'cmdopt' : '-pdf',
@@ -782,6 +793,12 @@
           \ 'command' : 'mysql',
           \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
           \ 'exec'    : ['%c %o < %s' ] ,
+          \}
+
+    let g:quickrun_config.php ={
+          \ 'outputter' : 'quickfix',
+          \ 'cmdopt' : '-d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d xdebug.cli_color=0',
+          \ "errorformat" : '%m\ in\ %f\ on\ line\ %l',
           \}
     let g:quickrun_config['php.unit'] = {
           \ 'command': 'testrunner',
@@ -870,15 +887,16 @@
   '''
 # }}}
 
-[[plugins]] # Kosyo-manga/vim-watchdogs {{{
+[[plugins]] # osyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
-  on_cmd = 'WatchdogsRun'
+  on_if = 1
   hook_source = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
         \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
+        \   "php" : 1,
         \   "tex" : 1,
         \}
     let g:watchdogs_check_CursorHold_enables = {
@@ -1066,7 +1084,7 @@ repo = 'Konfekt/FastFold'
     endfunction
 
     " SuperTab like snippets behavior.
-    imap <expr><CR>  neosnippet#expandable() ?
+    inoremap <expr><CR>  neosnippet#expandable() ?
          \ "\<Plug>(neosnippet_expand)" :
          \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
 
@@ -1599,10 +1617,18 @@ repo = 'Konfekt/FastFold'
   on_ft = ['json']
  #}}}
 
-[[plugins]] # vim-scripts/css_color.vim {{{
-  repo = 'vim-scripts/css_color.vim'
-on_ft = ['html','css']
- #}}}
+
+[[plugins]] # vito-c/jq.vim {{{
+  repo = 'vito-c/jq.vim'
+  on_ft = ['json','jq']
+#}}}
+
+
+
+# [[plugins]] # vim-scripts/css_color.vim {{{
+#   repo = 'vim-scripts/css_color.vim'
+# on_ft = ['html','css']
+#  #}}}
 
 [[plugins]] # hail2u/vim-css3-syntax {{{
     repo = 'hail2u/vim-css3-syntax'
@@ -1787,9 +1813,9 @@ hook_post_source = '''
               return
             endif
             let root_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            " if &ft != 'dirvish' && getcwd() !~# root_path
-            "   execute 'lcd '. root_path
-            " endif
+            if &ft != 'dirvish' && getcwd() !~# root_path
+              execute 'lcd '. root_path
+            endif
 
             setl nobackup
             nnoremap <buffer> [git] <Nop>
@@ -1870,9 +1896,31 @@ hook_post_source = '''
 
 # }}}
 
+# PHP {{{
+  [[plugins]]  # xolox/vim-lua-ftplugin {{{
+    repo = 'xolox/vim-lua-ftplugin'
+    depends = ['vim-misc']
+    on_ft = 'lua'
+  # }}}
+
+  [[plugins]]  # xolox/vim-misc {{{
+    repo = 'xolox/vim-misc'
+    on_ft = 'lua'
+  # }}}
+
+  [[plugins]] # xolox/vim-misc {{{
+    # Documents for lua 5.0 or 5.1
+    repo = 'vim-scripts/luarefvim'
+  # }}}
+
+# }}}
+    [[plugins]]
+    repo = 'vim-scripts/nginx.vim'
+
   # Other {{{
     [[plugins]] # thinca/vim-ref {{{
       repo = 'thinca/vim-ref'
+      if = 1
       hook_add = '''
         "Ref webdictでalcを使う設定
         let g:ref_no_default_key_mappings = 0
@@ -1887,6 +1935,9 @@ hook_post_source = '''
               \   }
               \ }
         let g:ref_source_webdict_sites['default'] = "weblio"
+
+        let g:ref_phpmanual_path = "$HOME/.vim/doc/phpmanual"
+
         let g:ref_detect_filetype=  {
               \ '_': ['man','webdict'],
               \ 'gitcommit': 'webdict',
@@ -1894,7 +1945,7 @@ hook_post_source = '''
               \ 'c': 'man',
               \ 'clojure': 'clojure',
               \ 'perl': 'perldoc',
-              \ 'php': 'phpmanual',
+              \ 'php': ['phpmanual', 'javascript', 'jquery'],
               \ 'ruby': 'refe',
               \ 'vim': '',
               \ 'cpp': 'man',
@@ -1908,6 +1959,7 @@ hook_post_source = '''
           autocmd FileType ref-webdict call s:initialize_ref_viewer()
           autocmd FileType ref-man call s:initialize_ref_viewer()
         augroup END
+
         function! s:initialize_ref_viewer() "{{{
           nmap <buffer> b <Plug>(ref-back)
           nmap <buffer> f <Plug>(ref-forward)

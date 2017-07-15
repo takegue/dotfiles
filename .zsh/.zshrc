@@ -14,6 +14,13 @@
 #
 # Local settings and styles can go here and (usually) overwrite
 # things defined by me later.
+PROFILE_STARTUP=false
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2>$HOME/tmp/startlog.zshrc.$$
+    setopt xtrace prompt_subst
+fi
 
 
 manpath=(
@@ -47,7 +54,7 @@ fi
 
 if [ -f ~/.zplug/init.zsh ]; then
     source ~/.zplug/init.zsh
-
+    autoload -Uz github.zsh
     # Make sure you use double quotes
     zplug 'zplug/zplug', hook-build:'zplug --self-manage'
     zplug "zsh-users/zsh-history-substring-search"
@@ -67,24 +74,25 @@ if [ -f ~/.zplug/init.zsh ]; then
         from:gh-r, \
         as:command, \
         rename-to:jq
-    zplug "b4b4r07/emoji-cli", \
-        on:"stedolan/jq"
     zplug "zsh-users/zsh-syntax-highlighting", defer:2
     zplug "riywo/anyenv", \
         hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
     zplug "znz/anyenv-update", \
         on:"riywo/anyenv", \
         hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
+
     [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
         zplug "yyuu/pyenv-virtualenv", \
         on:"riywo/anyenv", \
         hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
     zplug "zsh-users/zsh-completions"
 
-    zplug "direnv/direnv", \
-        hook-build:"make", hook-load:'eval "$(direnv hook zsh)"', \
-        as:command, use:direnv, if:"[[ $OSTYPE == *darwin* ]]" \
-    || ( (( $+commands['direnv'] )) && eval "$(direnv hook zsh)")
+    [[ -z `which direnv` ]] && \
+        zplug "direnv/direnv", \
+        hook-build:"make", \
+        hook-load:'eval "$(direnv hook zsh)"', \
+        as:command, use:direnv\
+    || eval "$(direnv hook zsh)" 
 
     zplug "carsonmcdonald/tmux-wifi-os-x", \
         as:command, use:wifi-signal-strength, \
@@ -95,7 +103,6 @@ if [ -f ~/.zplug/init.zsh ]; then
         hook-build:'cmake . && make'
 
     zplug "zsh-users/zsh-autosuggestions"
-
 
     # Install plugins if there are plugins that have not been installed
     if ! zplug check --verbose; then
@@ -126,6 +133,7 @@ fi
 
 bindkey -v              # キーバインドをviモードに設定
 
+setopt interactivecomments #
 setopt no_beep           # ビープ音を鳴らさないようにする
 setopt auto_cd           # ディレクトリ名の入力のみで移動する 
 setopt auto_pushd        # cd時にディレクトリスタックにpushdする
@@ -392,7 +400,7 @@ zman() {
 }
 
 ## Zbell configuration
-zbell_duration=50
+zbell_duration=3
 zbell_duration_email=300
 
 function show_process_time_after_cmd(){
@@ -448,11 +456,16 @@ get_rbenv_version()
 }
 get_myvcs_info()
 {
-    root=$(git rev-parse --git-dir 2> /dev/null)
-    [[ -z ${root} ]] && echo '' && return
-    cd $root >/dev/null && cd ../ > /dev/null
-    branch=$(git diff --shortstat | sed -E -e 's/, / /g' -e 's/([0-9]*) insertions?\(\+\)/+\1/' -e 's/([0-9]*) deletions?\(-\)/-\1/' -e 's/ ([0-9]+) files? changed/📚 \1/')
-    echo "${branch}"
+    if [[ $(command git rev-parse --is-inside-work-tree 2> /dev/null) != 'true' ]]; then
+        # 0以外を返すとそれ以降のフック関数は呼び出されない
+        return ''
+    fi
+    # root=$(git rev-parse --git-dir 2> /dev/null)
+
+    # [[ -z ${root} ]] && echo '' && return
+    # cd $root >/dev/null && cd ../ > /dev/null
+    # branch=$(git diff --shortstat | sed -E -e 's/, / /g' -e 's/([0-9]*) insertions?\(\+\)/+\1/' -e 's/([0-9]*) deletions?\(-\)/-\1/' -e 's/ ([0-9]+) files? changed/📚 \1/')
+    # echo "${branch}"
 }
 
 PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
@@ -473,9 +486,10 @@ $tmp_rprompt\$vcs_info_msg_0_
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 
 # Entirety of my startup file... then
+[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv 
+
+# Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
-
-[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv 
