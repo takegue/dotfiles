@@ -14,13 +14,18 @@
 #
 # Local settings and styles can go here and (usually) overwrite
 # things defined by me later.
-PROFILE_STARTUP=false
+PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
     # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
     PS4=$'%D{%M%S%.} %N:%i> '
     exec 3>&2 2>$HOME/tmp/startlog.zshrc.$$
     setopt xtrace prompt_subst
 fi
+
+path=(
+    $HOME/.local/bin
+    "$path[@]"
+)
 
 
 manpath=(
@@ -323,6 +328,7 @@ case "$OSTYPE" in
     *)
         alias ls='ls --color=auto'
 esac
+alias ztime="PROFILE_STARTUP=true zsh --login -c 'exit' && zsh_profile_decoder.py `ls -t ~/tmp/startlog* | head -n1` | sort -k2n | less"
 alias less='less -IMx4 -X -R'
 alias -g NL='>/dev/null'
 alias rm='rm -i'
