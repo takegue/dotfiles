@@ -219,6 +219,10 @@
 #}}}
 
 # Utilities {{{
+    
+    [[plugins]]
+      repo = 'AndrewRadev/linediff.vim.git'
+
 
     [[plugins]] # {{{
       on_cmd = 'Trans'
@@ -386,7 +390,7 @@
     repo = 'Shougo/denite.nvim'
     if = "has('nvim') && has('python3')"
     on_cmd = 'Denite'
-    on_if = 1
+
     hook_post_source = '''
       call denite#custom#alias('source', 'file_rec/git', 'file_rec')
       call denite#custom#var('file_rec/git', 'command',
@@ -653,6 +657,7 @@
   '''
 #}}}
 
+
 [[plugins]] # vim-precious {{{
 # Vim constext filetype
   repo = 'osyo-manga/vim-precious'
@@ -737,13 +742,13 @@
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
-  on_cmd = 'QuickRun'
+  on_if = 1
   depends = ['vim-hier', 'shabadou.vim']
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
 
-  hook_post_source = '''
+  hook_source = '''
     let g:quickrun_config = deepcopy(g:quickrun#default_config)
     call extend(g:quickrun_config, {
           \ "_": {
@@ -764,9 +769,6 @@
           \      'command': 'jlatexdiff-vc',
           \      'cmdopt' : '-r --git --force -e utf8',
           \      'exec' : '%c %o %s',
-          \ },
-          \ "watchdogs_checker/php" : {
-          \      'cmdopt': '-d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
           \ },
           \ "watchdogs_checker/latexdiff" : {
           \      'command': 'latexdiff-vc',
@@ -794,15 +796,15 @@
           \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
           \ 'exec'    : ['%c %o < %s' ] ,
           \}
-
-    let g:quickrun_config.php ={
-          \ 'outputter' : 'quickfix',
-          \ 'cmdopt' : '-d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d xdebug.cli_color=0',
-          \ "errorformat" : '%m\ in\ %f\ on\ line\ %l',
+    let g:quickrun_config['php'] = {
+          \ 'command': 'testrunner',
+          \ 'cmdopt': 'phpunit -p vendor/autoload.php',
+          \ 'exec': '%c %o %s',
           \}
     let g:quickrun_config['php.unit'] = {
-          \ 'command': 'testrunner',
-          \ 'cmdopt': 'phpunit'
+          \ 'outputter': 'phpunit',
+          \ 'command': 'phpunit',
+          \ 'exec': '%c %o %s',
           \}
     let g:quickrun_config['python'] = {
           \ 'command': 'python',
@@ -811,6 +813,10 @@
           \ 'outputter/error/success': 'buffer',
           \ 'outputter/error/error': 'quickfix',
           \ 'outputter/quickfix/errorformat': '%C%p^,%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%+Z%[%^\ ]%m',
+          \}
+    let g:quickrun_config["php/watchdogs_checker"] = {
+          \  'type' : "watchdogs_checker/phpcs",
+          \ 'cmdopt': "--standard=PHPCompatibility --extensions=php,phtml,inc --runtime-set testVersion 5.6 -d date.timezone=Asia/Tokyo --report=emacs" 
           \}
     let g:quickrun_config['python/watchdogs_checker'] = {
           \  "type" : "watchdogs_checker/flake8",
@@ -890,31 +896,28 @@
 [[plugins]] # osyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
   on_if = 1
-  hook_source = '''
+  depends = ['vim-quickrun']
+  hook_add = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
         \   "python"  : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
-        \   "php" : 1,
+        \   "php" : 0,
         \   "tex" : 1,
         \}
     let g:watchdogs_check_CursorHold_enables = {
         \   "cpp"     : 1,
         \   "python"  : 0,
+        \   "php" : 0,
         \   "ruby"    : 1,
         \   "haskell" : 1,
         \}
     let g:watchdogs_check_BufWritePost_enable_on_wq = 0
   '''
-  hook_post_source = '''
-    call watchdogs#setup(g:quickrun_config)
+  hook_source = '''
   '''
 
-# [[plugins.on_cmd]]
-# name = 'WatchdogsRun'
-# complete = 'customlist,quickrun#complete'
-# }}}
 
 [[plugins]] # KazuakiM/vim-qfstatusline {{{
   repo = 'KazuakiM/vim-qfstatusline'
@@ -1043,6 +1046,8 @@ repo = 'Konfekt/FastFold'
             \ 'vimshell' : $HOME.'/.vimshell_hist',
             \ 'scheme' : $HOME.'/.gosh_completions'
             \ }
+    let g:deoplete#ignore_sources = {}
+    let g:deoplete#ignore_sources.php = ['phpcd', 'omni']
 
     let g:deoplete#enable_multibyte_completion = 1
 
@@ -1053,18 +1058,11 @@ repo = 'Konfekt/FastFold'
     let g:deoplete#omni#input_patterns = {}
     " let g:deoplete#omni#input_patterns.python = ['\s*from\s+\w*', 'import\s+\w*', '\S{2,}\.']
              " \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import\)\w*'
-
-    let g:deoplete#omni#input_patterns = {}
-    " let g:deoplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    " let g:deoplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    " let g:deoplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-    " let g:deoplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    " let g:deoplete#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    " let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+    " let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:deoplete#omni#input_patterns.tex = '\\\w+{'
 
-
-    " if !exists('g:deoplete#keyword_patterns')
-    "   let g:deoplete#keyword_patterns = {}
-    " endif
 
     set completeopt-=preview
     " <C-h>, <BS>: close popup and delete backword char.
@@ -1471,8 +1469,7 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # klen/python-mode {{{
   repo = 'klen/python-mode'
-  build ='pip install pylint rope pyflakes pep8'
-  if = "(has('python') || has('python3')) && executable('pyflakes') && executable('pylint')"
+  build ='pip install pylint pyflakes pep8'
   on_ft = ["python", "python3", "djangohtml"]
 
   hook_post_source ='''
@@ -1703,10 +1700,21 @@ hook_post_source = '''
         \ 'specifier changed to',
       \ ]
 
-    let g:vimtex_latexmk_options = '-file-line-error'
-    if has('nvim') && tkngue#util#executable('nvr')
-      let g:vimtex_latexmk_progname = 'nvr'
-    endif
+    let g:vimtex_compiler_latexmk = {
+    \ 'backend' : has('nvim') ? 'nvim' : "jobs",
+    \ 'background' : 1,
+    \ 'build_dir' : '',
+    \ 'callback' : 0,
+    \ 'continuous' : 1,
+    \ 'executable' : 'latexmk',
+    \ 'options' : [
+    \   '-pdfdvi',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-synctex=1',
+    \   '-interaction=nonstopmode',
+    \ ],
+    \}
 
     if has('unix') && executable('okular')
       let g:vimtex_view_general_viewer = 'okular'
@@ -1735,6 +1743,11 @@ hook_post_source = '''
           call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
         endif
       endfunction
+    endif
+
+    if has('nvim') && tkngue#util#executable('nvr')
+      let g:vimtex_compiler_progname = 'nvr'
+      let g:vimtex_latexmk_callback = 0
     endif
 
   '''
@@ -1878,40 +1891,39 @@ hook_post_source = '''
 # }}}
 
 # LUA {{{
-  [[plugins]]  # xolox/vim-lua-ftplugin {{{
-    repo = 'xolox/vim-lua-ftplugin'
-    depends = ['vim-misc']
-    on_ft = 'lua'
-  # }}}
 
   [[plugins]]  # xolox/vim-misc {{{
     repo = 'xolox/vim-misc'
     on_ft = 'lua'
   # }}}
 
-  [[plugins]] # xolox/vim-misc {{{
-    # Documents for lua 5.0 or 5.1
-    repo = 'vim-scripts/luarefvim'
-  # }}}
 
 # }}}
 
 # PHP {{{
-  [[plugins]]  # xolox/vim-lua-ftplugin {{{
-    repo = 'xolox/vim-lua-ftplugin'
-    depends = ['vim-misc']
-    on_ft = 'lua'
-  # }}}
+
+  # [[plugins]]
+  #   repo = 'm2mdas/phpcomplete-extended'
+
+  # [[plugins]]
+  #   repo = 'shawncplus/phpcomplete.vim'
+  #   on_ft = 'php'
+
+  # [[plugins]]
+  #   repo = 'php-vim/phpcd.vim'
+  #   hook_post_source = '''
+  #       " autocmd BufRead *.php setl omnifunc=phpcd#CompletePHP
+  #   '''
+
+
+  [[plugins]]
+    repo = 'karakaram/vim-quickrun-phpunit'
 
   [[plugins]]  # xolox/vim-misc {{{
     repo = 'xolox/vim-misc'
     on_ft = 'lua'
   # }}}
 
-  [[plugins]] # xolox/vim-misc {{{
-    # Documents for lua 5.0 or 5.1
-    repo = 'vim-scripts/luarefvim'
-  # }}}
 
 # }}}
     [[plugins]]

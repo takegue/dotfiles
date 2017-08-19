@@ -19,13 +19,14 @@
     remote = green
 
 [push]
-    default = simple
+    default = current
 
 [init]
     templatedir = ~/.git_template
 
 [diff]
     tool = vimdiff
+    algorithm = patience
 
 [credential] 
     helper = "cache --timeout 1800"

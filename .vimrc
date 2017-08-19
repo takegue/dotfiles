@@ -33,10 +33,10 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog =  '/Users/shunsuketakeno/.venv/vim_dev3/bin/python3'
-  " if !executable(g:python3_host_prog)
-  "     let g:python3_host_prog  = system('which python3')
-  " endif
+  let g:python3_host_prog = $HOME . '/.venv/vim_dev36/bin/python'
+  if !executable(g:python3_host_prog)
+       let g:python3_host_prog  = system('which python3')
+  endif
   let g:python_host_prog = g:python3_host_prog
 elseif has('gui_macvim')
    set pythondll=
@@ -423,6 +423,7 @@ augroup edit_vimrc "{{{
   autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/**/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost bundles.toml source $MYVIMRC
   autocmd BufWritePost ~/.dotfiles/.vimrc nested source $MYVIMRC
 augroup END "}}}
 
@@ -559,9 +560,11 @@ if has('vim_starting')
     filetype plugin indent off
     syntax off
 else
-    call dein#call_hook('on_source')
-    call dein#call_hook('on_post_source')
+  " THIS IS NOT BAD HACK
+  call dein#call_hook('source')
+  call dein#call_hook('post_source')
 endif
+
 
 
 
