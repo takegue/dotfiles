@@ -16,7 +16,7 @@ fi
 
 [[ -f $DIR/_gitignore ]] && ln -s $DIR/_gitignore ~/.gitignore
 
-for dotfile in $DIR/.*; do
+for dotfile in $DIR/(.|_)*; do
     if [[ $dotfile =~ ".git($|module|ignore)" ]]; then
         continue
     fi
