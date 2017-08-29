@@ -59,7 +59,6 @@ fi
 
 if [ -f ~/.zplug/init.zsh ]; then
     source ~/.zplug/init.zsh
-    autoload -Uz github.zsh
     # Make sure you use double quotes
     zplug 'zplug/zplug', hook-build:'zplug --self-manage'
     zplug "zsh-users/zsh-history-substring-search"
@@ -80,11 +79,6 @@ if [ -f ~/.zplug/init.zsh ]; then
         as:command, \
         rename-to:jq
     zplug "zsh-users/zsh-syntax-highlighting", defer:2
-    zplug "riywo/anyenv", \
-        hook-build:"ln -Fs \`pwd\` ${ANYENV_ROOT:=$HOME/.anyenv}"
-    zplug "znz/anyenv-update", \
-        on:"riywo/anyenv", \
-        hook-build:"mkdir -p \${ANYENV_ROOT}/plugins && ln -Fs \`pwd\` \${ANYENV_ROOT}/plugins"
 
     [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
         zplug "yyuu/pyenv-virtualenv", \
@@ -221,7 +215,7 @@ if [[ -x `which fzf` ]]; then
  ' 
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
-  bindkey_function '^F' fzf-history-widget
+  bindkey_function '^R' fzf-history-widget
   # bindkey_function '^x^x' exec-oneliner
 else 
   bindkey -M viins '^F' history-incremental-search-backward
@@ -236,7 +230,7 @@ bindkey "^N" history-beginning-search-forward-end
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
 
-bindkey_function '^R' replace-string
+bindkey_function 'O' replace-string
 bindkey_function -M vicmd v edit-command-line
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 
@@ -448,18 +442,6 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-get_pyenv_version()
-{
-    name=$( pyenv version-name )
-    [[ -n $name ]] && echo "(🐍 :$name)"
-
-}
-get_rbenv_version()
-{
-    name=$( rbenv version-name )
-    [[ -n $name ]] && echo "(💎 :$name)"
-
-}
 get_myvcs_info()
 {
     if [[ $(command git rev-parse --is-inside-work-tree 2> /dev/null) != 'true' ]]; then
@@ -474,8 +456,7 @@ get_myvcs_info()
     # echo "${branch}"
 }
 
-PROMPT="\$(get_pyenv_version)\$(get_rbenv_version)
-$tmp_rprompt\$vcs_info_msg_0_(\$(get_myvcs_info))
+PROMPT="$tmp_rprompt\$vcs_info_msg_0_(\$(get_myvcs_info))
 $tmp_prompt"    # 通常のプロンプト
 
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
