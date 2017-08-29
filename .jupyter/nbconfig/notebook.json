@@ -12,6 +12,7 @@
     "usability/init_cell/main": true,
     "usability/latex_envs/latex_envs": true,
     "usability/notify/notify": true,
-    "usability/code_font_size/code_font_size": true
+    "usability/code_font_size/code_font_size": true,
+    "jupyter-js-widgets/extension": true
   }
 }

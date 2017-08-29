@@ -1,6 +1,7 @@
 [remote "origin"]
     fetch = +refs/pull/*/head:refs/remotes/pr-*
-[commit]
-    template = !touch .gitmessage && echo .gitmessage
+
+; [commit]
+;     template = .gitmessage
 
 ; vim:ft=gitconfig

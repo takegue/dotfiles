@@ -60,8 +60,8 @@
     # Credit an author on the latest commit
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
+    showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...master  | grep 'Merge pull request #' | head -n 1; }; f "
     # Merge GitHub pull request on top of the `master` branch
-    ##!/bin/sh
     mpr = "!f() { \
             if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
                     git fetch origin refs/pull/$1/head:pr/$1 && \
@@ -75,3 +75,6 @@
 
 [commit]
     template = ~/.gitmessage
+
+[rebase]
+    autosquash = true

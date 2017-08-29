@@ -1,3 +1,4 @@
+vimfiles/bundles.toml
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #        |''||''| '||'  |'  '|.   '|'  ..|'''.|  '||'  '|' '||''''|
@@ -230,7 +231,7 @@ bindkey "^N" history-beginning-search-forward-end
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
 
-bindkey_function 'O' replace-string
+bindkey_function '^O' replace-string
 bindkey_function -M vicmd v edit-command-line
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 

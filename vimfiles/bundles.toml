@@ -420,7 +420,7 @@
     '''
 
     hook_add = '''
-      cnoremap <silent><expr> h<Space>   getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h'
+      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h '
       nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file_rec/git:~/.dotfiles<CR>
 
 
@@ -448,7 +448,7 @@
             \ -buffer-name=outline <CR>
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
-      nnoremap <qsilent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
+      nnoremap <silent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
       nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
       nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
       nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
@@ -917,6 +917,18 @@
   '''
   hook_source = '''
   '''
+  # }}}
+
+[[plugins]] # w0rp/ale {{{
+  repo = 'w0rp/ale'
+  on_if = 1
+  depends = []
+
+  hook_source = '''
+    let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"] 
+  '''
+  # }}}
+
 
 
 [[plugins]] # KazuakiM/vim-qfstatusline {{{
@@ -1005,6 +1017,7 @@ repo = 'Konfekt/FastFold'
 [[plugins]] # deton/jasegment.vim {{{
   repo = 'deton/jasegment.vim'
  #}}}
+
 
 [[plugins]] # Shougo/deoplete.nvim {{{
   repo = 'Shougo/deoplete.nvim'
@@ -1452,6 +1465,11 @@ repo = 'Konfekt/FastFold'
 #}}}
 
 # Python {{{
+
+[[plugins]]
+    repo = 'Glench/Vim-Jinja2-Syntax'
+
+        
 [[plugins]] # lambdalisue/vim-pyenv {{{
  # Activate the versions and the virtualenvs of pyenv within a live VIM session
   repo = 'lambdalisue/vim-pyenv'
@@ -1510,16 +1528,14 @@ repo = 'Konfekt/FastFold'
     let g:pymode_breakpoint = 1
     let g:pymode_breakpoint_bind = '<leader>b'
 
-    let g:pymode_lint = 1
-    let g:pymode_lint_on_write = 1
-
     "Check code on every save (every)
+    let g:pymode_lint = 0
     let g:pymode_lint_unmodified = 0
     let g:pymode_lint_on_fly = 0
-    let g:pymode_lint_message = 1
+    let g:pymode_lint_message = 0
     " let g:pymode_lint_ignore = "E501,W"
     " let g:pymode_lint_select = "E501,W0011,W430"
-    let g:pymode_lint_cwindow = 1
+    let g:pymode_lint_cwindow = 0
 
     let g:pymode_rope = 0
 
@@ -1614,13 +1630,10 @@ repo = 'Konfekt/FastFold'
   on_ft = ['json']
  #}}}
 
-
 [[plugins]] # vito-c/jq.vim {{{
   repo = 'vito-c/jq.vim'
   on_ft = ['json','jq']
 #}}}
-
-
 
 # [[plugins]] # vim-scripts/css_color.vim {{{
 #   repo = 'vim-scripts/css_color.vim'
@@ -1776,18 +1789,18 @@ hook_post_source = '''
     '''
     #}}}
 
-    [[plugins]] # suan/vim-instant-markdown {{{
-      repo = 'suan/vim-instant-markdown'
-      on_ft = 'markdown'
-      build = 'npm -g install instant-markdown-d'
-      hook_source = '''
-        " vim-instant-markdown will update the display in realtime
-        let g:instant_markdown_slow = 1
+  [[plugins]] # suan/vim-instant-markdown {{{
+    repo = 'suan/vim-instant-markdown'
+    on_ft = 'markdown'
+    build = 'npm -g install instant-markdown-d'
+    hook_source = '''
+    " vim-instant-markdown will update the display in realtime
+    let g:instant_markdown_slow = 1
 
-        " you want to manually control this behavior
-        let g:instant_markdown_autostart = 0
-      '''
-    #}}}
+    " you want to manually control this behavior
+    let g:instant_markdown_autostart = 0
+    '''
+#}}}
   # }}}
 
   # RST {{{
@@ -1835,6 +1848,7 @@ hook_post_source = '''
             nmap <buffer> <Leader>g [git]
             nnoremap <buffer> [git]w :<C-u>Gwrite<CR>
             nnoremap <buffer> [git]c :<C-u>Gcommit<CR>
+            nnoremap <buffer> [git]f :<C-u>Gcommit --fixup HEAD<CR>
             nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
             nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
