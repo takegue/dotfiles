@@ -1,9 +1,18 @@
-#!/usr/bin/env sh
+#!/bin/bash
+
+if [[  -x `which circleci` ]]; then
+    eMSG=`circleci config validate -c .circleci/config.yml`
+    if [[ $? -gt 0 ]]; then
+        echo "CircleCI Configuration Failed Validation."
+        echo $eMSG
+        exit 1
+    fi
+fi
 
 GREP_RESULT=`git diff --cached | grep -e '[a-z0-9A-Z]\{40,120\}'`
 if [ -n "${GREP_RESULT}" ]; then
-    echo 'Access key might be in this index. Please check with git diff --cached'
-    echo ${GREP_RESULT}
-    exit 1
+  echo 'Access key might be in this index. Please check with git diff --cached'
+  echo ${GREP_RESULT}
+  exit 1
 fi
 

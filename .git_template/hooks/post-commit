@@ -1,2 +1,13 @@
 #!/bin/sh
+PIDFILE=.git/ctags.pid
+
+if [ -f $PIDFILE ]
+then
+  PID=`cat $PIDFILE`
+  ps -eo pid | grep $PID >/dev/null 2>&1
+  kill $PID
+fi
+
 .git/hooks/ctags >/dev/null 2>&1 &
+PID=$!
+echo $PID > $PIDFILE

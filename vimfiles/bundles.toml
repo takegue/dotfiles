@@ -921,11 +921,13 @@
 
 [[plugins]] # w0rp/ale {{{
   repo = 'w0rp/ale'
-  on_if = 1
+  on_if = 0
   depends = []
 
-  hook_source = '''
+  hook_add = '''
     let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"] 
+    let g:ale_enabled=1
+    let g:ale_lint_on_enter = 1
   '''
   # }}}
 
