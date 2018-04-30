@@ -156,3 +156,24 @@ function! tkngue#util#show_current_function() abort
   echohl None
   call search("\\%" . lnum . "l" . "\\%" . col . "c")
 endfunction
+
+function! tkngue#util#get_diff_files(rev) abort
+  let s:git_status_dictionary = {
+        \ "A": "Added",
+        \ "B": "Broken",
+        \ "C": "Copied",
+        \ "D": "Deleted",
+        \ "M": "Modified",
+        \ "R": "Renamed",
+        \ "T": "Changed",
+        \ "U": "Unmerged",
+        \ "X": "Unknown"
+        \ }
+  let list = map(split(system(
+        \ 'git diff --name-status '.a:rev), '\n'),
+        \ '{"filename":matchstr(v:val, "\\S\\+$"),"text":s:git_status_dictionary[matchstr(v:val, "^\\w")]}'
+        \ )
+  call setqflist(list)
+  copen
+endfunction
+
