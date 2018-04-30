@@ -28,6 +28,7 @@ path=(
     $HOME/bin
     "$lpath[@]"
     /usr/local/bin
+    /usr/local/sbin
     /usr/bin
     /usr/X11/bin
     /usr/bin/X11
