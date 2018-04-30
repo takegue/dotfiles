@@ -1,6 +1,0 @@
-[submodule "pyenv"]
-    path = .pyenv
-    url = https://github.com/yyuu/pyenv.git
-[submodule "plugins/tmux-powerline"]
-    path = plugins/tmux-powerline
-    url = https://github.com/TKNGUE/tmux-powerline.git

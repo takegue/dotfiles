@@ -13,11 +13,15 @@ if [ ! -e `which vim` ]; then
     $DIR/scripts/vim-install.sh
 fi 
 
+if [ ! -e `which python` ]; then
+    # Install powerline
+    pip install powerline-status powerline-mem-segment psutil netifaces
+fi 
 
 [[ -f $DIR/_gitignore ]] && ln -s $DIR/_gitignore ~/.gitignore
 
 for dotfile in $DIR/(.|_)*; do
-    if [[ $dotfile =~ ".git($|module|ignore)" ]]; then
+    if [[ $dotfile =~ ".git($|module|ignore)|.config" ]]; then
         continue
     fi
 
@@ -32,7 +36,17 @@ for dotfile in $DIR/(.|_)*; do
     fi
 done
 
+for config in $DIR/.config/*(/) ; do
+    file_name="${config##*/}" 
 
+    dstpath="$HOME/.config/$file_name"
+    if [ -e $dstpath ]; then
+        echo "Already exists: ${dstpath}"
+    else
+        echo "$config => $dstpath" 
+        ln -s $config ~/.config
+    fi 
+done
 
 for dotfile in $DIR/local_template/.*(.) ; do
     file_name="${dotfile##*/}" 
@@ -59,6 +73,3 @@ for dotfile in $DIR/scripts/*(x) ; do
 done
 
 ln -sf $DIR/.zsh/zshenv.home ${HOME}/.zshenv
-ln -sf $DIR/plugins/tmux-powerline ${HOME}/.local/src
- 
-git submodule update --init
