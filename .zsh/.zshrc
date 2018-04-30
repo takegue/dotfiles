@@ -1,4 +1,4 @@
-vimfiles/bundles.toml
+Vim vimfiles/bundles.toml
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 #        |''||''| '||'  |'  '|.   '|'  ..|'''.|  '||'  '|' '||''''|
@@ -15,16 +15,19 @@ vimfiles/bundles.toml
 #
 # Local settings and styles can go here and (usually) overwrite
 # things defined by me later.
+
 PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
+    zmodload zsh/zprof 
     # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-    PS4=$'%D{%M%S%.} %N:%i> '
-    exec 3>&2 2>$HOME/tmp/startlog.zshrc.$$
-    setopt xtrace prompt_subst
+    # PS4=$'%D{%M%S%.} %N:%i> '
+    # exec 3>&2 2>$HOME/tmp/startlog.zshrc.$$
+    # setopt xtrace prompt_subst
 fi
 
 path=(
     $HOME/.local/bin
+    $HOME/.local/sbin
     "$path[@]"
 )
 
@@ -85,6 +88,7 @@ if [ -f ~/.zplug/init.zsh ]; then
         zplug "yyuu/pyenv-virtualenv", \
         on:"riywo/anyenv", \
         hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+
     zplug "zsh-users/zsh-completions"
 
     [[ -z `which direnv` ]] && \
@@ -123,7 +127,7 @@ export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
-export GREP_OPTION="--color auto"
+# export GREP_OPTION="--color auto"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export GOPATH=$HOME/.go && [[ ! -d $GOPATH ]] && mkdir -p $GOPATH
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root)
@@ -297,7 +301,7 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export ZLS_COLORS=$LS_COLORS
 export CLICOLOR=true
-export GREP_OPTIONS='--color=auto' 
+# export GREP_OPTIONS='--color=auto' 
 
 
 # -----------------------------------------------------------------------------
@@ -323,7 +327,7 @@ case "$OSTYPE" in
     *)
         alias ls='ls --color=auto'
 esac
-alias ztime="PROFILE_STARTUP=true zsh --login -c 'exit' && zsh_profile_decoder.py `ls -t ~/tmp/startlog* | head -n1` | sort -k2n | less"
+# alias ztime="PROFILE_STARTUP=true zsh --login -c 'exit' && zsh_profile_decoder.py `ls -t ~/tmp/startlog* | head -n1` | sort -k2n | less"
 alias less='less -IMx4 -X -R'
 alias -g NL='>/dev/null'
 alias rm='rm -i'
@@ -457,11 +461,22 @@ get_myvcs_info()
     # echo "${branch}"
 }
 
+function check_last_exit_code() {
+  local LAST_EXIT_CODE=$?
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    local EXIT_CODE_PROMPT=' '
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    echo "$EXIT_CODE_PROMPT"
+  fi
+}
+
 PROMPT="$tmp_rprompt\$vcs_info_msg_0_(\$(get_myvcs_info))
 $tmp_prompt"    # 通常のプロンプト
 
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-RPROMPT=  # 右側のプロンプト
+RPROMPT="\$(check_last_exit_code)"  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # For tmux powerline, to detect current directory setting
@@ -469,7 +484,7 @@ PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -
 
 # SSHログイン時のプロンプト
 [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && \
-    PROMPT="\$(get_pyenv_version)
+    PROMPT="
 $tmp_rprompt\$vcs_info_msg_0_
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 
@@ -478,6 +493,7 @@ $tmp_rprompt\$vcs_info_msg_0_
 
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
-    unsetopt xtrace
-    exec 2>&3 3>&-
+    zprof
+    # unsetopt xtrace
+    # exec 2>&3 3>&-
 fi
