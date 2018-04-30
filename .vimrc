@@ -35,7 +35,7 @@ endif
 if has('nvim')
   let g:python3_host_prog = $HOME . '/.venv/vim_dev36/bin/python'
   if !executable(g:python3_host_prog)
-       let g:python3_host_prog  = system('which python3')
+      let g:python3_host_prog  = system('which python3')
   endif
   let g:python_host_prog = g:python3_host_prog
 elseif has('gui_macvim')
@@ -372,6 +372,7 @@ command! -bang -nargs=* PluginTest
             \ call tkngue#util#test_plugin(<bang>0, <q-args>)
 command! FollowSymlink  call tkngue#util#switch_to_actualfile()
 command! -nargs=1 Wget call tkngue#util#load_webpage(<q-args>)
+command! -nargs=1 DiffRev call tkngue#util#get_diff_files(<q-args>)
 
 " after/ftpluginの作成 User設定のfiletype plugin
 let g:ftpPath = $HOME . "/.vim/after/ftplugin/"
@@ -443,6 +444,7 @@ augroup My Autocmd Group "{{{
   autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
   autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd BufNewFile,BufRead *.gs set filetype=javascript
   " autocmd BufReadPost * call s:SwitchToActualFile()
   autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')
   autocmd BufWinEnter * call tkngue#util#restore_curosr_position()
