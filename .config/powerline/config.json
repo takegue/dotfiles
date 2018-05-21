@@ -48,7 +48,7 @@
         "wm": {
             "colorscheme": "default",
             "theme": "default",
-            "update_interval": 2
+            "update_interval": 10
         }
     }
 }

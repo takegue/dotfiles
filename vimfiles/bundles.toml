@@ -1,5 +1,5 @@
 [[plugins]] # Shougo/dein.vim {{{
-    
+
   repo = 'Shougo/dein.vim'
   hook_add = '''
     let g:dein#install_progress_type = 'title'
@@ -220,7 +220,7 @@
 #}}}
 
 # Utilities {{{
-    
+
     [[plugins]]
       repo = 'AndrewRadev/linediff.vim.git'
 
@@ -429,11 +429,11 @@
       nmap    <Leader>f  [denite]
       nnoremap  [denite]s  :<C-u>Denite source<CR>
       nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
-              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'` 
+              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'`
               \ file_mru <CR>
 
       nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
-              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'` 
+              \ buffer `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec:~/Downloads'`
               \ file_mru <CR>
 
       nnoremap <silent> [denite]r  :<C-u>Denite
@@ -445,7 +445,7 @@
             \ -buffer-name=messages <CR>
       nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
             \ -buffer-name=projects <CR>
-      nnoremap <silent> [denite]o  :<C-u>Denite unite:outline 
+      nnoremap <silent> [denite]o  :<C-u>Denite unite:outline
             \ -buffer-name=outline <CR>
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
@@ -667,7 +667,7 @@
   on_ft = ['markdown', 'rst', 'help', 'toml']
   on_cmd = ['Precious']
   depends = ['context_filetype.vim', 'vim-textobj-user']
-  
+
   hook_source = '''
      " let g:precious_enable_switchers = {
      "         \   "*" : { "setfiletype" : 0 },
@@ -675,11 +675,11 @@
      let g:precious_enable_switch_CursorMoved = {
            \   "*" : 0
            \}
-     
+
      let g:precious_enable_switch_CursorMoved_i = {
            \   "*" : 0
            \}
-     
+
      augroup precious_autocmd
        autocmd!
        autocmd FileType markdown,rst,help,toml
@@ -780,7 +780,7 @@
           \      'cmdopt' : '-r plain2 -f %{&filetype}',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}})
-    let g:quickrun_config['runner'] = has('nvim') ? 'jobstart' : has('job') ? 'job' : 'vimproc' 
+    let g:quickrun_config['runner'] = has('nvim') ? 'jobstart' : has('job') ? 'job' : 'vimproc'
     let g:quickrun_config.jq ={
           \ 'command' : 'jq',
           \ 'exec' : '%c %o -f %s',
@@ -817,7 +817,7 @@
           \}
     let g:quickrun_config["php/watchdogs_checker"] = {
           \  'type' : "watchdogs_checker/phpcs",
-          \ 'cmdopt': "--standard=PHPCompatibility --extensions=php,phtml,inc --runtime-set testVersion 5.6 -d date.timezone=Asia/Tokyo --report=emacs" 
+          \ 'cmdopt': "--standard=PHPCompatibility --extensions=php,phtml,inc --runtime-set testVersion 5.6 -d date.timezone=Asia/Tokyo --report=emacs"
           \}
     let g:quickrun_config['python/watchdogs_checker'] = {
           \  "type" : "watchdogs_checker/flake8",
@@ -919,7 +919,7 @@
   hook_source = '''
   '''
   # }}}
- 
+
 
 [[plugins]] # wakatime/vim-wakatime {{{
   repo = 'wakatime/vim-wakatime'
@@ -932,7 +932,7 @@
   depends = []
 
   hook_add = '''
-    let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"] 
+    let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"]
     let g:ale_enabled = 1
     let g:ale_lint_on_enter = 0
     let g:ale_lint_on_text_changed = 0
@@ -1036,7 +1036,7 @@ repo = 'Konfekt/FastFold'
   if = 'has("nvim")'
 
   hook_post_source = '''
-     call deoplete#custom#set('look', 'filetypes', ['tex', 'markdown', 'rst', 'txt'])
+     call deoplete#custom#source('look', 'filetypes', ['tex', 'markdown', 'rst', 'txt'])
   '''
 
 
@@ -1479,7 +1479,7 @@ repo = 'Konfekt/FastFold'
 [[plugins]]
     repo = 'Glench/Vim-Jinja2-Syntax'
 
-        
+
 [[plugins]] # lambdalisue/vim-pyenv {{{
  # Activate the versions and the virtualenvs of pyenv within a live VIM session
   repo = 'lambdalisue/vim-pyenv'
@@ -1622,7 +1622,7 @@ repo = 'Konfekt/FastFold'
       autocmd FileType python setlocal omnifunc=
       autocmd FileType python call jedi#configure_call_signatures()
       autocmd FileType python inoremap <silent> <buffer> <space> <C-R>=jedi#smart_auto_mappings()<CR>
-      autocmd BufEnter,BufRead '__doc__' nnoremap <buffer>q  <C-w>c 
+      autocmd BufEnter,BufRead '__doc__' nnoremap <buffer>q  <C-w>c
           \| set previewwindow
           \| silent set foldlevel=1
   augroup END
@@ -1833,8 +1833,8 @@ hook_post_source = '''
 
       [[plugins]] # lambdalisue/vim-gista {{{
         repo = 'lambdalisue/vim-gista'
-	depends = ['unite.vim', 'open-browser.vim']
-	on_cmd = 'Gista'
+        depends = ['unite.vim', 'tyru/open-browser.vim']
+        on_cmd = 'Gista'
       #}}}
 
       [[plugins]] # tpope/vim-fugitive {{{
@@ -1890,6 +1890,8 @@ hook_post_source = '''
         '''
       #}}}
 
+      [[plugins]]
+        repo = 'tpope/vim-rhubarb'
       #[[plugins]] # moznion/github-commit-comment.vim {{{
       #    repo = 'moznion/github-commit-comment.vim'
       #    lazy = 1
@@ -1939,7 +1941,6 @@ hook_post_source = '''
   #       " autocmd BufRead *.php setl omnifunc=phpcd#CompletePHP
   #   '''
 
-
   [[plugins]]
     repo = 'karakaram/vim-quickrun-phpunit'
 
@@ -1955,12 +1956,12 @@ hook_post_source = '''
 
     [[plugins]] # leafgarland/typescript-vim {{
         repo = 'leafgarland/typescript-vim'
-        on_if = 1 
+        on_if = 1
     # }}
 
     [[plugins]] # posva/vim-vue {{
         repo = 'posva/vim-vue'
-        on_if = 1 
+        on_if = 1
     # }}
 
     [[plugins]]

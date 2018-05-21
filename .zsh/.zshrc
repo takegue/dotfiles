@@ -346,6 +346,7 @@ alias -g W='| wc'
 [[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 (( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'
+(( $+commands[hub] )) && alias git='hub'
 
 # ------------------------------
 # Functions

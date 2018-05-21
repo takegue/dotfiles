@@ -1,0 +1,5 @@
+#!/bin/sh
+
+n_issue=`git branch | grep "*" | awk '{print $2}' | sed -e "s/i\([0-9]*\).*/\1/g"`
+sed -in "s/#xxxx/#${n_issue}/g" $1
+
