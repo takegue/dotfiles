@@ -28,6 +28,16 @@ run_segment() {
 }
 
 
+__update_git_repo() {
+   if [[ -f .git/now_fetch.pid  ]]; then
+       return
+   fi
+
+   echo $$ > .git/now_fetch.pid
+   git fetch 2>&1 > /dev/null
+   zsh -c 'sleep 20 && rm .git/now_fetch.pid' &
+}
+
 # Show git banch.
 __parse_git_branch() {
     type git >/dev/null 2>&1
@@ -35,9 +45,10 @@ __parse_git_branch() {
         return
     fi
 
-    #git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+    __update_git_repo
 
     # Quit if this is not a Git repo.
+    branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/')
     branch=$(git symbolic-ref HEAD 2> /dev/null)
     if [[ -z $branch ]] ; then
         # attempt to get short-sha-name
