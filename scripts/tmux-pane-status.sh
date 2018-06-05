@@ -40,8 +40,9 @@ __update_git_repo() {
 
 # Show git banch.
 __parse_git_branch() {
-    type git >/dev/null 2>&1
+    type git >/dev/null 2>&1 && git rev-parse --git-dir 2> /dev/null;
     if [ "$?" -ne 0 ]; then
+        echo ''
         return
     fi
 
@@ -89,4 +90,4 @@ __parse_git_branch() {
     echo  -n "#[fg=colour${git_colour}]${branch_symbol} #[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]${ret}"
 }
 
-run_segment $1
+run_segment $@
