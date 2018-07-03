@@ -1993,7 +1993,7 @@ hook_post_source = '''
               \ }
         let g:ref_source_webdict_sites['default'] = "weblio"
 
-        let g:ref_phpmanual_path = "$HOME/.vim/doc/phpmanual"
+        let g:ref_phpmanual_path = $HOME . "/.vim/doc/phpmanual"
 
         let g:ref_detect_filetype=  {
               \ '_': ['man','webdict'],
@@ -2015,8 +2015,21 @@ hook_post_source = '''
           autocmd!
           autocmd FileType ref-webdict call s:initialize_ref_viewer()
           autocmd FileType ref-man call s:initialize_ref_viewer()
+          autocmd FileType php call s:initialize_ref_phpmanual()
         augroup END
 
+        function! s:initialize_ref_phpmanual() "{{{
+          if !isdirectory(g:ref_phpmanual_path)
+            let b:confirm = input('Downlaod phpmanual(yes/no)>')
+            if b:confirm =~? '^y'
+              call tkngue#util#mkdir(fnamemodify(g:ref_phpmanual_path, ':p:h:h'), 1)
+              exec '!{cd /tmp/;
+                    \ wget -qO-  http://jp2.php.net/get/php_manual_ja.tar.gz/from/this/mirror
+                    \ | tar xvfz -}
+                    \ && mv /tmp/php-chunked-xhtml ' .  g:ref_phpmanual_path
+            endif
+          endif
+        endfunction "}}}
         function! s:initialize_ref_viewer() "{{{
           nmap <buffer> b <Plug>(ref-back)
           nmap <buffer> f <Plug>(ref-forward)

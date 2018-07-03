@@ -29,24 +29,23 @@ run_segment() {
 
 
 __update_git_repo() {
-   if [[ -f .git/now_fetch.pid  ]]; then
+   FILE=`pwd`/.git/now_fetch.pid
+   if [[ -f $FILE ]]; then
        return
    fi
 
-   echo $$ > .git/now_fetch.pid
-   git fetch 2>&1 > /dev/null
-   zsh -c 'sleep 20 && rm .git/now_fetch.pid' &
+   git fetch 2>&1 > /dev/null \
+    && sleep 10 \
+    && rm $FILE
 }
 
 # Show git banch.
 __parse_git_branch() {
     type git >/dev/null 2>&1 && git rev-parse --git-dir 2> /dev/null;
     if [ "$?" -ne 0 ]; then
-        echo ''
         return
     fi
-
-    __update_git_repo
+    __update_git_repo &
 
     # Quit if this is not a Git repo.
     branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/')
@@ -88,6 +87,7 @@ __parse_git_branch() {
     diff=$(git diff --shortstat)
     ret=`echo "${branch}${compare} ${staged} ${diff}" | sed "s/  */ /g"`
     echo  -n "#[fg=colour${git_colour}]${branch_symbol} #[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]${ret}"
+
 }
 
 run_segment $@
