@@ -16,7 +16,7 @@ if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
   augroup VimStart
     autocmd!
-    autocmd VimEnter * 
+    autocmd VimEnter *
           \ let g:startuptime2 = reltime(g:startuptime)
           \ | echomsg 'time:' . reltimestr(g:startuptime2)
           \ | autocmd!  VimStart VimEnter
@@ -25,7 +25,7 @@ endif
 " }}}
 " ====================== }}}
 
-if v:version < 740 && !has('nvim') 
+if v:version < 740 && !has('nvim')
   source ~/.min.vimrc
   finish
 endif

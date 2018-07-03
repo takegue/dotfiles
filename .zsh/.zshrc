@@ -206,6 +206,11 @@ fi
 
 autoload -Uz bindkey_function
 
+# kubectl
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
   export FZF_COMPLETION_OPTS='+c -x'
