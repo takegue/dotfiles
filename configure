@@ -4,72 +4,71 @@
 DIR=$(cd `dirname $0`; pwd)
 
 if [ ! -e `which git` ]; then
-    echo 'not found git'
+  echo 'not found git'
 fi 
 
 if [ ! -e `which vim` ]; then
-    echo 'not found vim.'
-    echo 'Start installing ...'
-    $DIR/scripts/vim-install.sh
+  echo 'not found vim.'
+  echo 'Start installing ...'
+  $DIR/scripts/vim-install.sh
 fi 
 
 if [ ! -e `which python` ]; then
-    # Install powerline
-    pip install powerline-status powerline-mem-segment psutil netifaces
+  # Install powerline
+  pip install powerline-status powerline-mem-segment psutil netifaces
 fi 
 
-[[ -f $DIR/_gitignore ]] && ln -s $DIR/_gitignore ~/.gitignore
 
-for dotfile in $DIR/(.|_)*; do
-    if [[ $dotfile =~ ".git($|module|ignore)|.config" ]]; then
-        continue
-    fi
+setup_link()
+{
+  from=$1
+  to=$2
 
-    dstpath="$HOME/${dotfile##*/}" 
-    if [ ! -d $dstpath ]; then
-        if [ -L $dstpath ]; then
-            rm $dstpath
-            echo "remove $dstpath"
-        fi 
-        echo "$dotfile => $dstpath" 
-        ln -s $dotfile ~/ 
-    fi
-done
-
-for config in $DIR/.config/*(/) ; do
-    file_name="${config##*/}" 
-
-    dstpath="$HOME/.config/$file_name"
-    if [ -e $dstpath ]; then
-        echo "Already exists: ${dstpath}"
+  if [ -e $to ]; then
+    if [ -L $to ]; then
+    elif [ -d $to ]; then
+      echo 'Linked:' $from/*(:a) 'into' $to
+      ln -sf $from/*(:a) $to
+      return
     else
-        echo "$config => $dstpath" 
-        ln -s $config ~/.config
+      echo "aborted: Already ${dstpath} exists"
+      return
     fi 
+  else
+  fi
+
+  ln -sf $from(:A) $to
+  echo 'Linked:' $from '=>' $to
+}
+
+for dotfile in `git ls-tree --name-only HEAD | grep '^[._]'`; do
+  if [[ $dotfile =~ ".git($|module|ignore)" ]]; then
+      continue
+  fi
+  # ex) ./_gitignore -> .gitignore
+  dstpath="${HOME}/${${dotfile##*/}:s:_:.:}"
+  setup_link $dotfile $dstpath
 done
+
 
 for dotfile in $DIR/local_template/.*(.) ; do
-    file_name="${dotfile##*/}" 
+  file_name="${dotfile##*/}" 
 
-    dstpath="$HOME/.local$file_name"
-    if [ -e $dstpath ]; then
-        echo "Already exists: ${dstpath}"
-    else
-        echo "$dotfile => $dstpath" 
-        cp $dotfile $dstpath
-    fi 
+  dstpath="$HOME/.local$file_name"
+  if [ -e $dstpath ]; then
+    echo "Already exists: ${dstpath}"
+  else
+    echo "$dotfile => $dstpath" 
+    cp $dotfile $dstpath
+  fi 
 done
 
 for dotfile in $DIR/scripts/*(x) ; do
-    file_name="${dotfile##*/}" 
-
-    dstpath="$HOME/.local/bin/${dotfile##*/}" 
-    if [ -e $dstpath ]; then
-        echo "Already exists: ${dstpath}"
-    else
-        echo "$dotfile => $dstpath" 
-        ln -s $dotfile(:A) $dstpath 
-    fi 
+  file_name="${dotfile##*/}" 
+  dstpath="$HOME/.local/bin/${dotfile##*/}" 
+  setup_link $dotfile $dstpath
 done
 
 ln -sf $DIR/.zsh/zshenv.home ${HOME}/.zshenv
+
+# vim:sw=2

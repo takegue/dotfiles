@@ -1,0 +1,8 @@
+.vimrc
+*.swp
+.envrc
+
+vimfiles/spell
+vimfiles/.*
+
+.DS_Store
