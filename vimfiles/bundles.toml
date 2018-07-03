@@ -1956,12 +1956,17 @@ hook_post_source = '''
 
     [[plugins]] # leafgarland/typescript-vim {{
         repo = 'leafgarland/typescript-vim'
-        on_if = 1
+        on_ft = 'typescript'
     # }}
+    [[plugins]]
+        repo = 'mhartington/nvim-typescript'
+        on_ft = 'typescript'
+        build = './install.sh'
 
     [[plugins]] # posva/vim-vue {{
         repo = 'posva/vim-vue'
         on_if = 1
+        build = 'make'
     # }}
 
     [[plugins]]
