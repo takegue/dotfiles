@@ -33,7 +33,7 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog = $HOME . '/.venv/vim_dev36/bin/python'
+  let g:python3_host_prog = $HOME . '/.venv/vim_dev36/bin/python3'
   if !executable(g:python3_host_prog)
       let g:python3_host_prog  = system('which python3')
   endif
@@ -126,14 +126,14 @@ if has("cscope")
   set cst
   set nocsverb
   " add any database in current directory
-  " if tkngue#util#executable("gtags-cscope")
-  "   if filereadable("GTAGS")
-  "       cs add GTAGS
-  "   " else add database pointed to by environment
-  "   elseif $CSCOPE_DB != ""
-  "       cs add $CSCOPE_DB
-  "   endif
-  " endif
+  if tkngue#util#executable("gtags-cscope")
+    if filereadable("GTAGS")
+        cs add GTAGS
+    " else add database pointed to by environment
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+  endif
   set csverb
   nnoremap <Leader>n  :cscope find c <C-R><C-W><CR>
 endif
@@ -407,6 +407,12 @@ if tkngue#util#executable('tika')
   augroup END "}}}
 endif
 
+augroup terminal "{{{
+  autocmd!
+  autocmd TermOpen *
+        \ set nonumber
+augroup END "}}}
+
 augroup vimrc_change_cursorline_color "{{{
   autocmd!
   " " インサートモードに入った時にカーソル行の色をブルーグリーンにする
@@ -421,7 +427,7 @@ augroup edit_vimrc "{{{
   autocmd!
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
   autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*"), '\n', ',', 'g')
-  autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
+  " autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/**/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost bundles.toml source $MYVIMRC
@@ -561,13 +567,12 @@ if has('vim_starting')
     syntax sync minlines=512
     filetype plugin indent off
     syntax off
+
 else
   " THIS IS NOT BAD HACK
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
-
-
 
 
 "}}}

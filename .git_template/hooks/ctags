@@ -1,8 +1,8 @@
-#!/usr/bin/env  zsh
+#!/usr/bin/env zsh
 
-if [ -x `which gtags` ]
+if [ -x `which gtags` ]; then
    gtags
-elif 
+elif [ -x `which cscope` ]; then
    git ls-files > cscope.files 
    cscope -b -R
 else
