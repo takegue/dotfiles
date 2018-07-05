@@ -77,21 +77,6 @@
       return b:lightline_filename
     endfunction "}}}
 
-    function! MyPyenv() "{{{
-      if !exists('*pyenv#activate')
-        return ''
-      endif
-      if &ft =~ 'python'
-        if !exists('b:pyenv_version')
-          let statusline = pyenv#info#format('%av')
-          let b:pyenv_version = statusline
-        endif
-        return b:pyenv_version
-      else
-        return ''
-      endif
-    endfunction "}}}
-
     function! MyFugitive() "{{{
       if exists('b:git_dir')
         if !exists('b:fugitive_branch')
@@ -132,7 +117,7 @@
             \ 'colorscheme': 'solarized',
             \ 'mode_map': {'c': 'COMMAND'},
             \ 'active': {
-            \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'pyenv', 'rubyenv'], ['filename'] ],
+            \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'rubyenv'], ['filename'] ],
             \   'right': [ [ 'lineinfo' ],
             \              [ 'percent' ],
             \              [ 'fileformat', 'fileencoding', 'filetype' ],
@@ -153,7 +138,6 @@
             \   'readonly': 'MyReadonly',
             \   'fugitive': 'MyFugitive',
             \   'count': 'MyCount',
-            \   'pyenv': 'MyPyenv',
             \   'filename': 'MyFilename',
             \   'fileformat': 'MyFileformat',
             \   'filetype': 'MyFiletype',
@@ -196,7 +180,6 @@
     augroup LightLineStatus
       autocmd!
       autocmd BufRead * if exists('fugitive_branch') | :unlet b:fugitive_branch | endif
-      autocmd User vim-pyenv-activate-post if exists('b:pyenv_version') | :unlet b:pyenv_version | endif
     augroup END
   '''
 
@@ -735,8 +718,8 @@
 # }}}
 
 
-[[plugins]] # TKNGUE/quickrun-neovim-job {{{
-  repo = 'TKNGUE/vim-quickrun-neovim-job'
+[[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
+  repo = 'tamy0612/quickrun-job-runner.nvim'
   on_cmd = 'QuickRun'
   on_if = 1
 # }}}
@@ -759,7 +742,7 @@
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "hook/qfstatusline_update/enable_exit" : 1,
           \   "hook/qfstatusline_update/priority_exit" : 4,
-          \   "runner"                    : has("nvim") ? "jobstart" : "job",
+          \   "runner"                    : has("nvim") ? "nvim_job" : "job",
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
           \   "outputter/buffer/close_on_empty" : 1,
           \},
@@ -780,7 +763,7 @@
           \      'cmdopt' : '-r plain2 -f %{&filetype}',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}})
-    let g:quickrun_config['runner'] = has('nvim') ? 'jobstart' : has('job') ? 'job' : 'vimproc'
+    let g:quickrun_config['runner'] = has('nvim') ? 'nvim_job' : has('job') ? 'job' : 'vimproc'
     let g:quickrun_config.jq ={
           \ 'command' : 'jq',
           \ 'exec' : '%c %o -f %s',
@@ -1479,21 +1462,6 @@ repo = 'Konfekt/FastFold'
 [[plugins]]
     repo = 'Glench/Vim-Jinja2-Syntax'
 
-
-[[plugins]] # lambdalisue/vim-pyenv {{{
- # Activate the versions and the virtualenvs of pyenv within a live VIM session
-  repo = 'lambdalisue/vim-pyenv'
-  if = "executable('pyenv')"
-  on_source = ['deoplete-jedi', 'jedi-vim']
-
-  hook_post_source = '''
-  augroup vim-pyenv-custom-augroup
-    autocmd!
-    autocmd User vim-pyenv-activate-post   call s:jedi_auto_force_py_version()
-    autocmd User vim-pyenv-deactivate-post call s:jedi_auto_force_py_version()
-  augroup END
-  '''
- #}}}
 
 [[plugins]] # klen/python-mode {{{
   repo = 'klen/python-mode'
