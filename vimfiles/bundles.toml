@@ -1630,6 +1630,21 @@ on_ft = ['html', 'svg', 'rdf']
 
 #}}}
 
+# Rust: {{{
+    
+  [[plugins]] # sebastianmarkow/deoplete-rust {{{
+    on_ft = 'rust'
+    repo = 'sebastianmarkow/deoplete-rust'
+    build = 'cargo install racer && rustup component add rust-src'
+    hook_add = '''
+    let g:deoplete#sources#rust#racer_binary = $HOME . "/.cargo/bin/racer"
+    let g:deoplete#sources#rust#rust_source_path = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+    '''
+
+  # }}}
+
+# }}}
+#
 # Writing {{{
 [[plugins]] # rhysd/vim-grammarous {{{
     repo = 'rhysd/vim-grammarous'
