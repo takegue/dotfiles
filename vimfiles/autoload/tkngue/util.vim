@@ -47,6 +47,8 @@ function! tkngue#util#open_junk_file(type) abort
   if l:filename != ''
     execute 'edit ' . l:filename
   endif
+
+  lcd %:p:h
 endfunction
 
 function! tkngue#util#open_todofile() abort
