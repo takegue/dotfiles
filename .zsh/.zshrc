@@ -82,11 +82,8 @@ if [ -f ~/.zplug/init.zsh ]; then
         as:command, \
         rename-to:jq
     zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
-    [[ -d ${ANYENV_ROOT}/envs/pyenv ]] && \
-        zplug "yyuu/pyenv-virtualenv", \
-        on:"riywo/anyenv", \
-        hook-build:"mkdir -p \$ANYENV_ROOT/envs/pyenv/plugins && ln -fs \`pwd\` \$ANYENV_ROOT/envs/pyenv/plugins/pyenv-virtualenv" 
+    zplug "ahmetb/kubectx", \
+        use:completion/kubectx.zsh
 
     zplug "zsh-users/zsh-completions"
 
@@ -494,7 +491,7 @@ $tmp_rprompt\$vcs_info_msg_0_
 %{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 
 # Entirety of my startup file... then
-[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv 
+[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
 
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
