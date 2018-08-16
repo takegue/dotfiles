@@ -428,7 +428,7 @@
             \ -buffer-name=messages <CR>
       nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
             \ -buffer-name=projects <CR>
-      nnoremap <silent> [denite]o  :<C-u>Denite unite:outline
+      nnoremap <silent> [denite]o  :<C-u>Denite outline
             \ -buffer-name=outline <CR>
 
       nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
@@ -1638,7 +1638,6 @@ on_ft = ['html', 'svg', 'rdf']
 #}}}
 
 # Rust: {{{
-    
   [[plugins]] # sebastianmarkow/deoplete-rust {{{
     on_ft = 'rust'
     repo = 'sebastianmarkow/deoplete-rust'
