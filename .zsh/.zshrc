@@ -19,9 +19,9 @@ PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zmodload zsh/zprof 
     # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-    # PS4=$'%D{%M%S%.} %N:%i> '
-    # exec 3>&2 2>$HOME/tmp/startlog.zshrc.$$
-    # setopt xtrace prompt_subst
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2>/tmp/startlog.zshrc.$$
+    setopt xtrace prompt_subst
 fi
 
 path=(
@@ -29,7 +29,6 @@ path=(
     $HOME/.local/sbin
     "$path[@]"
 )
-
 
 manpath=(
     "$lmanpath[@]"
@@ -56,64 +55,21 @@ typeset -gU ld_library_path
 # -----------------------------------------------------------------------------
 #                               PLUGIN SETTINGS
 # -----------------------------------------------------------------------------
-if [[ ! -d ~/.zplug ]]; then
-    curl -sL zplug.sh/installer | zsh
+if [[ ! -d ~/.zgen ]]; then
+    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
-if [ -f ~/.zplug/init.zsh ]; then
-    source ~/.zplug/init.zsh
-    # Make sure you use double quotes
-    zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-    zplug "zsh-users/zsh-history-substring-search"
-    zplug "zsh-users/zsh-history-substring-search"
-    zplug "tcnksm/docker-alias", use:zshrc
-    zplug "k4rthik/git-cal", as:command
-    # zplug "b4b4r07/enhancd", use:init.sh
-    zplug "junegunn/fzf-bin", \
-        from:gh-r, \
-        as:command, \
-        rename-to:fzf, \
-        use:"*$OSNAME:l*amd64*"
-    zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-    zplug "junegunn/fzf", use:shell/completion.zsh
-    zplug "TKNGUE/aaeb57123ac97c649b34dfdc5f278b89", \
-        from:gist
-    zplug "stedolan/jq", \
-        from:gh-r, \
-        as:command, \
-        rename-to:jq
-    zplug "zsh-users/zsh-syntax-highlighting", defer:2
-    zplug "ahmetb/kubectx", \
-        use:completion/kubectx.zsh
+source "${HOME}/.zgen/zgen.zsh"
+if ! zgen saved; then
+  zgen load zsh-users/zsh-history-substring-search
+  zgen load k4rthik/git-cal
+  zgen load zsh-users/zsh-completions src
+  zgen load zsh-users/zsh-autosuggestions
+  zgen load junegunn/fzf shell/completion.zsh
+  zgen load zsh-users/zsh-syntax-eighlighting
 
-    zplug "zsh-users/zsh-completions"
-
-    [[ -z `which direnv` ]] && \
-        zplug "direnv/direnv", \
-        hook-build:"make", \
-        hook-load:'eval "$(direnv hook zsh)"', \
-        as:command, use:direnv\
-    || eval "$(direnv hook zsh)" 
-
-    zplug "carsonmcdonald/tmux-wifi-os-x", \
-        as:command, use:wifi-signal-strength, \
-        if:"[[ $OSTYPE == *darwin* ]]"
-
-    zplug "thewtex/tmux-mem-cpu-load", \
-        as:command, use:"tmux-mem-cpu-load", \
-        hook-build:'cmake . && make'
-
-    zplug "zsh-users/zsh-autosuggestions"
-
-    # Install plugins if there are plugins that have not been installed
-    if ! zplug check --verbose; then
-        printf "Install? [y/N]: "
-        if read -q; then
-            echo; zplug install
-        fi
-    fi
-
-    zplug load
+  # generate the init script from plugins above
+  zgen save
 fi
 
 # -----------------------------------------------------------------------------
@@ -158,16 +114,21 @@ chpwd() {
   ls_abbrev
 }
 
-
 ### Autoloads ###
 autoload -Uz add-zsh-hook
 autoload -U colors; colors
-autoload -U compinit   # 補完機能を有効にする
 autoload -Uz history-search-end
 autoload -Uz vcs_info          # VCSの情報を表示する
 autoload -Uz is-at-least
 autoload -Uz replace-string
 autoload -Uz exec-oneliner
+
+autoload -U compinit
+if [[ $(date +'%j') != $(stat -f '%Sm' -t '%j' $ZDOTDIR/.zcompdump) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 if is-at-least 5.0.8; then
   autoload -Uz select-bracketed
@@ -204,10 +165,8 @@ fi
 
 autoload -Uz bindkey_function
 
-# kubectl
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+(( $+commands[kubectl] )) && source <(kubectl completion zsh)
 
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
@@ -417,9 +376,9 @@ zbell_duration=3
 zbell_duration_email=300
 
 function show_process_time_after_cmd(){
-    local zbell_cmd_duration
-    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
-    [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
+    # local zbell_cmd_duration
+    # zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+    # [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
 }
 
 add-zsh-hook precmd show_process_time_after_cmd
@@ -502,6 +461,6 @@ $tmp_rprompt\$vcs_info_msg_0_
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zprof
-    # unsetopt xtrace
-    # exec 2>&3 3>&-
+    unsetopt xtrace
+    exec 2>&3 3>&-
 fi
