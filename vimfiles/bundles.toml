@@ -1867,7 +1867,7 @@ hook_post_source = '''
               echomsg error
             endfor
             " echohl None
-            execute 'call fugitive#cwindow()'
+            execute 'call fugitive#Cwindow()'
           endfunction "}}}
 
           command! Make call FugitiveMyMake()
