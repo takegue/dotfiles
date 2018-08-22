@@ -65,6 +65,7 @@ if [ -f ~/.zplug/init.zsh ]; then
     # Make sure you use double quotes
     zplug 'zplug/zplug', hook-build:'zplug --self-manage'
     zplug "zsh-users/zsh-history-substring-search"
+    zplug "zsh-users/zsh-history-substring-search"
     zplug "tcnksm/docker-alias", use:zshrc
     zplug "k4rthik/git-cal", as:command
     # zplug "b4b4r07/enhancd", use:init.sh
@@ -218,17 +219,22 @@ if [[ -x `which fzf` ]]; then
     --bind ctrl-f:page-down,ctrl-b:page-up
     --color fg:188,bg:233,hl:103,fg+:222,bg+:234,hl+:104
     --color info:183,prompt:110,spinner:107,pointer:167,marker:215
- ' 
+ '
   bindkey_function '^T' fzf-file-widget
   bindkey_function '^G' fzf-cd-widget
   bindkey_function '^R' fzf-history-widget
-  # bindkey_function '^x^x' exec-oneliner
+  bindkey_function '^X' exec-oneliner
+
+  autoload -Uz fdr
+  zle -N fdr
 else 
   bindkey -M viins '^F' history-incremental-search-backward
 fi
 
+
 # # マッチしたコマンドのヒストリを表示できるようにする
 zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end

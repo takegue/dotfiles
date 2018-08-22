@@ -6,4 +6,4 @@ function! s:detect_project_type_for_rust() abort
   endif
 endfunction
 
-call s:detect_project_type_for_rust()
+" call s:detect_project_type_for_rust()

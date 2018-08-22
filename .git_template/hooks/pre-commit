@@ -1,12 +1,15 @@
 #!/bin/bash
 
-if [[  -x `which circleci` ]]; then
-    eMSG=`circleci config validate -c .circleci/config.yml`
-    if [[ $? -gt 0 ]]; then
-        echo "CircleCI Configuration Failed Validation."
-        echo $eMSG
-        exit 1
-    fi
+if [[ -x `which circleci` ]] && [[ -e $ROOT/.circleci/config.yml ]]; then
+    (
+      cd $ROOT
+      eMSG=`circleci config validate -c .circleci/config.yml`
+      if [[ $? -gt 0 ]]; then
+          echo "CircleCI Configuration Failed Validation."
+          echo $eMSG
+          exit 1
+      fi
+    )
 fi
 
 GREP_RESULT=`git diff --cached | grep -e '[a-z0-9A-Z]\{40,120\}'`
