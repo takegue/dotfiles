@@ -376,9 +376,9 @@ zbell_duration=3
 zbell_duration_email=300
 
 function show_process_time_after_cmd(){
-    # local zbell_cmd_duration
-    # zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
-    # [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
+    local zbell_cmd_duration
+    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
+    [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
 }
 
 add-zsh-hook precmd show_process_time_after_cmd
