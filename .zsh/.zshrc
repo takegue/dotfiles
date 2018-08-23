@@ -65,8 +65,9 @@ if ! zgen saved; then
   zgen load k4rthik/git-cal
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
+  zgen load zsh-users/zsh-syntax-highlighting
   zgen load junegunn/fzf shell/completion.zsh
-  zgen load zsh-users/zsh-syntax-eighlighting
+  zgen load https://gist.github.com/aaeb57123ac97c649b34dfdc5f278b89.git
 
   # generate the init script from plugins above
   zgen save
