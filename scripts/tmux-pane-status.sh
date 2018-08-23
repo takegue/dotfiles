@@ -29,13 +29,14 @@ run_segment() {
 
 
 __update_git_repo() {
-   FILE=`pwd`/.git/now_fetch.pid
+   FILE=`git rev-parse --absolute-git-dir`/now_fetch.pid
    if [[ -f $FILE ]]; then
        return
    fi
 
-   git fetch 2>&1 > /dev/null \
-    && sleep 10 \
+   touch $FILE
+   git fetch \
+    && sleep 300 \
     && rm $FILE
 }
 
@@ -45,7 +46,7 @@ __parse_git_branch() {
     if [ "$?" -ne 0 ]; then
         return
     fi
-    __update_git_repo &
+    __update_git_repo >/dev/null 2>&1 &
 
     # Quit if this is not a Git repo.
     branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/')
