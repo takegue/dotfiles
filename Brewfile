@@ -4,10 +4,7 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "homebrew/fuse"
-tap "homebrew/science"
 tap "homebrew/services"
-tap "homebrew/versions"
 tap "neovim/neovim"
 
 # Development
