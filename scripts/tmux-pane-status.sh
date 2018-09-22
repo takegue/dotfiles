@@ -37,7 +37,7 @@ __update_git_repo() {
      return
    fi
 
-   echo $$ > $FILE
+   date +%s > $FILE
    git fetch \
     && sleep 300
 
