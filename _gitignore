@@ -6,3 +6,11 @@ vimfiles/spell
 vimfiles/.*
 
 .DS_Store
+
+GPATH
+GTAGS
+GRTAGS
+
+.envrc
+
+cscope*
