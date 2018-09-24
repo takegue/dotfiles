@@ -126,7 +126,8 @@ autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
 autoload -Uz compinit
-if [[ $(date +'%j') != $(stat -f '%Sm' -t '%j' $ZDOTDIR/.zcompdump) ]]; then
+# NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
+if [[ $(date +'%j') != $(stat +mtime -F '%j' $ZDOTDIR/.zcompdump) ]]; then
   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
   compinit
 else
@@ -459,6 +460,8 @@ $tmp_rprompt\$vcs_info_msg_0_
 
 # Entirety of my startup file... then
 [[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
+
+export PROMPT RPROMPT2
 
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then

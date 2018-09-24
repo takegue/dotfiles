@@ -24,5 +24,7 @@ layout_python-venv() {
 }
 
 use_k8s() {
-    export PROMPT=$(kube_ps1)$PROMPT
+  PROMPT="\$(kube_ps1)
+$PROMPT"
+  export PROMPT
 }
