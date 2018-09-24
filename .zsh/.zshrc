@@ -68,6 +68,7 @@ if ! zgen saved; then
   zgen load zsh-users/zsh-syntax-highlighting
   zgen load junegunn/fzf shell/completion.zsh
   zgen load https://gist.github.com/aaeb57123ac97c649b34dfdc5f278b89.git
+  zgen load jonmosco/kube-ps1 kube-ps1.sh
 
   # generate the init script from plugins above
   zgen save
