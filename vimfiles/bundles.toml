@@ -12,23 +12,17 @@
   rtp = ''
 #}}}
 
-[[plugins]] # Shougo/vimproc.vim {{{
- # Enable asynchronous processing in vim
-  repo = 'Shougo/vimproc.vim'
-  build = 'make'
- #}}}
-
 # Appearence Plugins {{{
 [[plugins]] # vim-indent {{{
-  on_idle = 1
+  on_if = 1
   repo = 'nathanaelkane/vim-indent-guides'
   hook_post_source= '''
+    let g:indent_guides_auto_colors = 0
     hi IndentGuidesOdd  ctermbg=237
     hi IndentGuidesEven ctermbg=None
   '''
   hook_source = '''
       let g:indent_guides_enable_on_vim_startup = 1
-      let g:indent_guides_auto_colors = 0
       let g:indent_guides_start_level = 2
       let g:indent_guides_guide_size = 1
       let g:indent_guides_default_mapping = 1
@@ -1866,7 +1860,7 @@ hook_post_source = '''
               echomsg error
             endfor
             " echohl None
-            execute 'call fugitive#cwindow()'
+            execute 'call fugitive#Cwindow()'
           endfunction "}}}
 
           command! Make call FugitiveMyMake()
@@ -1968,6 +1962,10 @@ hook_post_source = '''
 
     [[plugins]]
       repo = 'vim-scripts/nginx.vim'
+
+    [[plugins]]
+      on_ft = ['yaml']
+      repo = 'digitalrounin/vim-yaml-folds'
 
     [[plugins]] # thinca/vim-ref {{{
       repo = 'thinca/vim-ref'
@@ -2106,5 +2104,11 @@ hook_post_source = '''
       autocmd FileType dirvish nnoremap <buffer> K :call tkngue#util#intaractive_mkdir(expand('%:p'))<CR>
     augroup END
 
+  '''
+
+[[plugins]]
+  repo = 'chrisbra/vim-diff-enhanced'
+
+  hook_add='''
   '''
 #}}}

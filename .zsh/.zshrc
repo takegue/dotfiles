@@ -125,8 +125,9 @@ autoload -Uz is-at-least
 autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
-autoload -U compinit
+autoload -Uz compinit
 if [[ $(date +'%j') != $(stat -f '%Sm' -t '%j' $ZDOTDIR/.zcompdump) ]]; then
+  (( $+commands[kubectl] )) && source <(kubectl completion zsh)
   compinit
 else
   compinit -C
@@ -168,7 +169,6 @@ fi
 autoload -Uz bindkey_function
 
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-(( $+commands[kubectl] )) && source <(kubectl completion zsh)
 
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then

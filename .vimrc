@@ -33,7 +33,7 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog = $HOME . '/.venv/vim_dev36/bin/python3'
+  let g:python3_host_prog = $HOME . '/.venv/vim_dev37/bin/python3'
   if !executable(g:python3_host_prog)
       let g:python3_host_prog  = system('which python3')
   endif
