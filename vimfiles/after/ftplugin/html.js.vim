@@ -1,0 +1,2 @@
+
+set ft=html.js

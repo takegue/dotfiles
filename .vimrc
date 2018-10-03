@@ -33,9 +33,10 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let g:python3_host_prog = $HOME . '/.venv/vim_dev37/bin/python3'
+  let b:venv = system("python3 -c 'import sys; print(\"vim_dev{v.major}{v.minor}\".format(v=sys.version_info), end=\"\")'")
+  let g:python3_host_prog = $HOME . '/.venv/' . b:venv . '/bin/python'
   if !executable(g:python3_host_prog)
-      let g:python3_host_prog  = system('which python3')
+      let g:python3_host_prog  = substitute(system('which python3'), '\v(\n|\s)+$', '', 'g')
   endif
   let g:python_host_prog = g:python3_host_prog
 elseif has('gui_macvim')
