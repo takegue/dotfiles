@@ -127,7 +127,7 @@ autoload -Uz is-at-least
 autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
-autoload -Uz compinit && compinit -C
+autoload -Uz compinit
 # NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
 if [[ $(date +'%j') != $(stat +mtime -F '%j' $ZDOTDIR/.zcompdump) ]]; then
   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
