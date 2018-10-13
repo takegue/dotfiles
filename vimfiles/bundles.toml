@@ -897,12 +897,6 @@
   '''
   # }}}
 
-
-[[plugins]] # wakatime/vim-wakatime {{{
-  repo = 'wakatime/vim-wakatime'
-  on_if = 0
-  # }}}
-
 [[plugins]] # w0rp/ale {{{
   repo = 'w0rp/ale'
   on_if = 1
@@ -911,7 +905,7 @@
   hook_add = '''
     let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"]
     let g:ale_enabled = 1
-    let g:ale_lint_on_enter = 0
+    let g:ale_lint_on_enzer = 0
     let g:ale_lint_on_text_changed = 0
     let g:ale_fix_on_save = 0
     let g:ale_fixers = {
@@ -920,9 +914,15 @@
         \    'trim_whitespace'
         \  ]
         \ }
+
+    " FileTypes BlackList of ALE Linters
+    let g:ale_linters = {}
+    let g:ale_linters['python'] = []
+    let g:ale_linters['javascript'] = []
+    let g:ale_linters['rust'] = []
+
   '''
   # }}}
-
 
 
 [[plugins]] # KazuakiM/vim-qfstatusline {{{
@@ -1014,20 +1014,29 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # autozimu/LanguageClient-neovim {{{
   repo = 'autozimu/LanguageClient-neovim'
-  on_event = 'VimEnter'
-  hook_source = '''
+  on_event = [
+    'BufRead',
+    'BufNewfile'
+  ]
+  hook_add = '''
+    let g:LanguageClient_autoStart         = 1 " NeoVim起動時にLSPを自動スタート
     let g:LanguageClient_serverCommands = {
+        \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
         \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
         \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+        \ 'python': [ fnamemodify(g:python3_host_prog, ':h') . '/pyls']
         \ }
-  '''
-  hook_add = '''
-    function LC_maps()
+    let g:LanguageClient_loggingLevel = 'INFO'
+    " let g:LanguageClient_loggingFile = stdpath('data') . '/LanguageClient.log'
+    " let g:LanguageClient_serverStderr = stdpath('data') . '/LanguageServer.log'
+
+    function! LC_maps()
       if has_key(g:LanguageClient_serverCommands, &filetype)
         nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
         nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
         nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
       endif
+    endfunction
     autocmd FileType * call LC_maps()
   '''
   hook_post_update = '''
@@ -1035,6 +1044,21 @@ repo = 'Konfekt/FastFold'
 
     if !tkngue#util#executable('javascript-typescript-stdio')
         !npm i -g javascript-typescript-langserver-fast
+    endif
+
+    if !tkngue#util#executable('pyls')
+        call system(
+            \  fnamemodify(g:python3_host_prog, ':h') . "/pip install -U "
+            \  . join([
+            \      "'python-language-server[all]'",
+            \      'pyls-mypy',
+            \      'pyls-isort',
+            \  ], ' ')
+            \)
+    endif
+
+    if !tkngue#util#executable('rls')
+        !cargo install rls
     endif
   '''
 # }}}
@@ -1296,10 +1320,10 @@ repo = 'Konfekt/FastFold'
   on_ft = ['c', 'cpp']
  #}}}
 
-[[plugins]] # zchee/deoplete-jedi {{{
-  repo = 'zchee/deoplete-jedi'
-  on_ft = 'python'
- #}}}
+#[[plugins]] # zchee/deoplete-jedi {{{
+#  repo = 'zchee/deoplete-jedi'
+#  on_ft = 'python'
+# #}}}
 
 [[plugins]] # zchee/deoplete-go {{{
   repo = 'zchee/deoplete-go'
@@ -1486,145 +1510,7 @@ repo = 'Konfekt/FastFold'
 # Python {{{
 
 [[plugins]]
-    repo = 'Glench/Vim-Jinja2-Syntax'
-
-
-[[plugins]] # klen/python-mode {{{
-  repo = 'klen/python-mode'
-  build ='pip install pylint pyflakes pep8'
-  on_ft = ["python", "python3", "djangohtml"]
-
-  hook_post_source ='''
-    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
-  '''
-
-  hook_source = '''
-    if has('python')
-      let g:pymode_python = 'python'
-    elseif has('python3')
-      let g:pymode_python = 'python3'
-    else
-    endif
-
-    let g:pymode = 1
-    let g:pymode_warnings = 1
-    " let g:pymode_paths = ['shutil', 'datetime', 'time',
-    "       \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-    let g:pymode_trim_whitespaces = 1
-    let g:pymode_options = 1
-    let g:pymode_options_colorcolumn = 1
-    let g:pymode_quickfix_minheight = 3
-    let g:pymode_quickfix_maxheight = 6
-    " let g:pymode_indent = []
-    let g:pymode_folding = 1
-    let g:pymode_motion = 1
-
-    let g:pymode_doc = 1
-    let g:pymode_doc_bind = 'K'
-    let g:jedi#goto_command = 'gd'
-    let g:pymode_virtualenv = 0
-    let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
-
-    let g:pymode_run = 0            "QuickRunの方が優秀(asyncじゃない)
-    " let g:pymode_run_bind = '<leader>R'
-
-    let g:pymode_breakpoint = 1
-    let g:pymode_breakpoint_bind = '<leader>b'
-
-    "Check code on every save (every)
-    let g:pymode_lint = 1
-    let g:pymode_lint_unmodified = 0
-    let g:pymode_lint_on_fly = 0
-    let g:pymode_lint_message = 0
-    " let g:pymode_lint_ignore = "E501,W"
-    " let g:pymode_lint_select = "E501,W0011,W430"
-    let g:pymode_lint_cwindow = 0
-
-    let g:pymode_rope = 0
-
-    let g:pymode_syntax_slow_sync = 0
-    let g:pymode_syntax_all = 1
-    let g:pymode_syntax_print_as_function = 0
-    let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
-    let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
-    " Highlight 'self' keyword
-    let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
-    " Highlight indent's errors
-    let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
-    " Highlight space's errors
-    let g:pymode_syntax_space_errors             = g:pymode_syntax_all
-    " Highlight string formatting
-    let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
-    let g:pymode_syntax_string_format            = g:pymode_syntax_all
-    let g:pymode_syntax_string_templates         = g:pymode_syntax_all
-    let g:pymode_syntax_doctests                 = g:pymode_syntax_all
-    " Highlight builtin objects (True, False, ...)
-    let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
-    " Highlight builtin types (str, list, ...)
-    let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
-    " Highlight exceptions (TypeError, ValueError, ...)
-    let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
-    " Highlight docstrings as pythonDocstring (otherwise as pythonString)
-    let g:pymode_syntax_docstrings               = g:pymode_syntax_all
-  '''
-
- #}}}
-
-[[plugins]] # davidhalter/jedi-vim {{{
- # python plugin for vim
-  repo = 'davidhalter/jedi-vim'
-  # on_if = "!has('nvim')"
-  on_ft = ['python', 'python3', 'djangohtml']
-  # on_source = ['python-mode']
-
-  hook_source = '''
-  set noshowmode
-  let g:jedi#auto_initialization  = 0
-  let g:jedi#auto_vim_configuration = 0
-  let g:jedi#popup_on_dot = 0
-  let g:jedi#auto_close_doc = 0
-  let g:jedi#show_call_signatures = 1
-  let g:jedi#show_call_signatures_delay = 0
-
-  let g:jedi#smart_auto_mappings = 1
-
-  "quickrunと被るため大文字に変更
-  " let g:jedi#rename_command = 'R'
-  let g:jedi#max_doc_height = 20
-  " let g:jedi#use_tabs_not_buffers = 1
-  if has('nvim')
-    let g:jedi#completions_enabled = 0
-  endif
-
-  "
-  " Configuration necocomplete, because of conflicts to one {{{
-  if !exists('g:neocomplete#sources#omni#functions')
-    let g:neocomplete#sources#omni#functions = {}
-  else
-    let g:neocomplete#sources#omni#functions.python = 'jedi#completions'
-  endif
-
-  augroup jedi_myautocmd
-      autocmd!
-      autocmd FileType python nnoremap <silent> <buffer> R :call jedi#rename()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> <LocalLeader>n :call jedi#usages()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> gf :call jedi#goto_assignments()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> gd :call jedi#goto()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> K :call jedi#show_documentation()<cr>
-      autocmd FileType python nnoremap <silent> <buffer> <leader>n :call jedi#usages()<cr>
-      autocmd FileType python setlocal omnifunc=
-      autocmd FileType python call jedi#configure_call_signatures()
-      autocmd FileType python inoremap <silent> <buffer> <space> <C-R>=jedi#smart_auto_mappings()<CR>
-      autocmd BufEnter,BufRead '__doc__' nnoremap <buffer>q  <C-w>c
-          \| set previewwindow
-          \| silent set foldlevel=1
-  augroup END
-  '''
-
-# }}}
-
- #}}}
+  repo = 'Glench/Vim-Jinja2-Syntax'
 # }}}
 
 # WEB Programming {{{
@@ -1979,6 +1865,7 @@ hook_post_source = '''
 
     [[plugins]] # moll/vim-node {{
         repo = 'moll/vim-node'
+        on_ft = 'javascript'
     # }}
 
 # }}}

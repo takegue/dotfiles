@@ -24,7 +24,6 @@ if has('vim_starting') && has('reltime')
 endif
 " }}}
 " ====================== }}}
-
 if v:version < 740 && !has('nvim')
   source ~/.min.vimrc
   finish
@@ -521,6 +520,7 @@ if !g:noplugin
         call dein#disable('neocomplete.vim')
       endif
       call dein#end()
+      call dein#call_hook('source')
       call dein#save_state()
   endif
 
@@ -568,7 +568,6 @@ if has('vim_starting')
     syntax sync minlines=512
     filetype plugin indent off
     syntax off
-
 else
   " THIS IS NOT BAD HACK
   call dein#call_hook('source')
