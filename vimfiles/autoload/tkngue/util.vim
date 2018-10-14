@@ -24,6 +24,21 @@ function! tkngue#util#toggle_windowsize() abort
   endif
 endfunction
 
+function! tkngue#util#system(cmd) abort
+  " let l:h = sha256(a:cmd)
+  let l:h = shellescape(substitute(a:cmd, ' ', '', 'g'))
+  " let l:path = stdpath('cache') . '/' . l:h
+  let l:path = '/tmp/rdisk/' . l:h
+  if !filereadable(l:path)
+    let l:output = system(a:cmd)
+    call writefile(split(l:output, '\n'), l:path)
+  else
+    let l:output = join(readfile(l:path), '\n')
+  endif
+  return l:output
+endfunction
+
+
 function! tkngue#util#open_folder_of_currentfile() abort
   let l:path = escape(expand("%:p:h"),' ()')
   if has('unix') && tkngue#util#executable('xdg-open')

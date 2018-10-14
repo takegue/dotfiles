@@ -288,7 +288,7 @@ today(){ echo `date +%Y%m%d` }
 # ------------------------------
 alias tmux='tmux -2'
 # alias vi='vim -u NONE'
-alias vtime="nvim  --startuptime $HOME/.vim/.log -c '1,$delete' -c 'e! $HOME/.vim/.log' "
+alias vtime="$EDITOR --startuptime /tmp/vim_startup.log +q && $EDITOR /tmp/vim_startup.log"
 case "$OSTYPE" in
     darwin*)
         alias ls='ls -G'

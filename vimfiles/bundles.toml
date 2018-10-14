@@ -439,8 +439,7 @@
   [[plugins]] # Shougo/unite.vim {{{
     repo = 'Shougo/unite.vim'
     on_cmd = "Unite"
-    on_source = "denite.nvim"
-    # on_if = "has('nvim') && has('python3')"
+    on_if = "has('nvim') && has('python3')"
     # on_map = "{ 'n' : [denite]}"
     # on_func = "denite"
     hook_add = '''
@@ -577,6 +576,11 @@
 
 [[plugins]] # Shougo/neomru.vim {{{
   repo = 'Shougo/neomru.vim'
+  on_if = 1
+  on_source = [
+    'unite',
+    'denite',
+  ]
  #}}}
 
 [[plugins]] # Shougo/neossh.vim {{{
@@ -721,6 +725,7 @@
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
   on_if = 1
+  on_event = 'BufReadPost'
   depends = ['vim-hier', 'shabadou.vim']
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
@@ -1415,8 +1420,9 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # haya14busa/incsearch.vim {{{
   repo = 'haya14busa/incsearch.vim'
+  on_if = 1
 
-  hook_source = '''
+  hook_add = '''
     " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
     " noremap <silent><expr> ? incsearch#go({'command':'?','keymap':{'?':{'key':'\?','noremap':1}} })
     " map /  <Plug>(incsearch-forward)
@@ -1501,7 +1507,7 @@ repo = 'Konfekt/FastFold'
   #}}}
 
   [[plugins]] # vim-jp/vital.vim {{{
-  on_ft = 'vim'
+    on_ft = 'vim'
     repo = 'vim-jp/vital.vim'
 #}}}
 
@@ -1549,7 +1555,7 @@ on_ft = ['html', 'svg', 'rdf']
     build = 'cargo install racer && rustup component add rust-src'
     hook_add = '''
     let g:deoplete#sources#rust#racer_binary = $HOME . "/.cargo/bin/racer"
-    let g:deoplete#sources#rust#rust_source_path = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+    let g:deoplete#sources#rust#rust_source_path = tkngue#util#system('echo -n $(rustc --print sysroot)') . "/lib/rustlib/src/rust/src"
     '''
 
   # }}}
@@ -1569,6 +1575,7 @@ on_ft = ['html', 'svg', 'rdf']
 
 [[plugins]] # mattn/ginger-vim {{{
   repo = 'mattn/ginger-vim'
+  on_cmd = 'Lingr'
  #}}}
 
 [[plugins]] # itchyny/dictionary.vim {{{

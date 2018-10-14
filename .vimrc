@@ -19,7 +19,7 @@ if has('vim_starting') && has('reltime')
     autocmd VimEnter *
           \ let g:startuptime2 = reltime(g:startuptime)
           \ | echomsg 'time:' . reltimestr(g:startuptime2)
-          \ | autocmd!  VimStart VimEnter
+          \ | autocmd! VimStart VimEnter
   augroup END
 endif
 " }}}
@@ -32,7 +32,7 @@ endif
 " Vim Setup ===================== {{{
 "System Settings: {{{
 if has('nvim')
-  let b:venv = system("python3 -c 'import sys; print(\"vim_dev{v.major}{v.minor}\".format(v=sys.version_info), end=\"\")'")
+  let b:venv = tkngue#util#system("python3 -c 'import sys; print(\"vim_dev{v.major}{v.minor}\".format(v=sys.version_info), end=\"\")'")
   let g:python3_host_prog = $HOME . '/.venv/' . b:venv . '/bin/python'
   if !executable(g:python3_host_prog)
       let g:python3_host_prog  = substitute(system('which python3'), '\v(\n|\s)+$', '', 'g')
@@ -167,6 +167,12 @@ endif
 
 if has('nvim')
   set clipboard=unnamed
+  " NOTE: Performance issue and only for MacOS Settings
+  let g:clipboard = {
+    \ 'name': 'pbcopy',
+    \ 'copy': { '+': 'pbcopy', '*': 'pbcopy'},
+    \ 'paste': { '+': 'pbpaste', '*': 'pbpaste'}
+    \ }
 else
   if has('unnamedplus')
     set clipboard=unnamedplus,exclude:cons\|linux
@@ -358,7 +364,13 @@ endfunction "}}}
 
 " Misc: {{{
 if has('nvim')
-  set shada=!,'500,<50,s10,h
+  set shada=
+  " set shada=!,'50,<50,s10,h,:100,n/tmp/rdisk/nvim.shda,/20,
+  augroup user_shada
+      autocmd!
+      autocmd VimEnter * rshada ~/.local/share/nvim/shada/main.shada
+      autocmd VimEnter * set shada=!,'500,<50,s10,h
+  augroup END
 endif
 
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
@@ -478,8 +490,8 @@ let g:loaded_getscriptPlugin   = 1
 " let g:loaded_man               = 1
 " let g:loaded_matchit           = 1
 " let g:loaded_matchparen        = 1
-let g:loaded_netrwFileHandlers = 1
-" let g:loaded_netrwPlugin       = 1
+let g:loaded_netrwFileHandlers = 0
+let g:loaded_netrwPlugin       = 0
 " let g:loaded_netrwSettings     = 1
 " let g:loaded_rrhelper          = 1
 let g:loaded_shada_plugin      = 1
@@ -524,7 +536,7 @@ if !g:noplugin
       call dein#save_state()
   endif
 
-  if dein#check_install() && !has('vim_starting')
+  if !has('vim_starting') && dein#check_install()
       " Installation check.
       call dein#install()
   endif
