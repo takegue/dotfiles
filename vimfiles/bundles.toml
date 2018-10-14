@@ -182,16 +182,19 @@
 # Colorschemes : {{{
 [[plugins]] # tomasr/molokai {{{
   repo = 'tomasr/molokai'
+  script_type = 'colors'
 #}}}
 
 [[plugins]] # NLKNguyen/papercolor-theme {{{
 # colorscheme paperolor
   repo = 'NLKNguyen/papercolor-theme'
+  script_type = 'colors'
 #}}}
 
 [[plugins]] # flazz/vim-colorschemes {{{
 # one colorscheme pack to rule them all!
   repo = 'flazz/vim-colorschemes'
+  script_type = 'colors'
 #}}}
 #}}}
 #}}}
@@ -1325,16 +1328,6 @@ repo = 'Konfekt/FastFold'
   on_ft = ['c', 'cpp']
  #}}}
 
-#[[plugins]] # zchee/deoplete-jedi {{{
-#  repo = 'zchee/deoplete-jedi'
-#  on_ft = 'python'
-# #}}}
-
-[[plugins]] # zchee/deoplete-go {{{
-  repo = 'zchee/deoplete-go'
-  on_ft = 'go'
- #}}}
-
 [[plugins]] # Shougo/neosnippet-snippets {{{
   repo = 'Shougo/neosnippet-snippets'
 
@@ -1812,6 +1805,11 @@ hook_post_source = '''
 # GO {{{
   [[plugins]] # fatih/vim-go {{{
     repo = 'fatih/vim-go'
+    on_ft = 'go'
+  #}}}
+
+  [[plugins]] # zchee/deoplete-go {{{
+    repo = 'zchee/deoplete-go'
     on_ft = 'go'
   #}}}
 

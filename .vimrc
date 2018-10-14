@@ -39,14 +39,6 @@ if has('nvim')
   endif
   let g:python_host_prog = g:python3_host_prog
 elseif has('gui_macvim')
-   set pythondll=
-   set pythonthreedll=/Users/alrescha/.zplug/repos/riywo/anyenv/envs/pyenv/versions/3.5.1/Python.framework/Versions/3.5/Python
-   let s:python_path = split(system('pyenv prefix vim_dev3'), '\n')[0] .  '/lib/python3.5/site-packages'
-python <<EOM
-python_path = vim.eval('s:python_path')
-sys.path.insert(0, python_path)
-sys.path.insert(0, "/Users/alrescha/.zplug/repos/riywo/anyenv/envs/pyenv/versions/3.5.1/Python.framework/Versions/3.5/Python")
-EOM
 endif
 "}}}
 
