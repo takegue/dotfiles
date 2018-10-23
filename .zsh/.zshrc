@@ -355,16 +355,10 @@ function ssh() {
     tmux rename-window $window_name
 }
 
-function frepo() {
-    local dir
-    if [ ! -z $TMUX ]; then
-        FZF=fzf-tmux
-    else
-        FZF=fzf
-    fi
-    dir=$(ghq list > /dev/null | $FZF --reverse +m) &&
-        cd $(ghq root)/$dir
+function f() {
+    tmux new-window ghq-finder-by-fzf
 }
+
 
 function foreground-vi() {
     fg %$EDITOR

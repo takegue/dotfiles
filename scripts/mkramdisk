@@ -1,5 +1,5 @@
 #!/bin/sh
-ramfs_size_mb=2100
+ramfs_size_mb=128
 mount_point=/tmp/rdisk
 
 mkramdisk() {
