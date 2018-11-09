@@ -3,7 +3,7 @@
 autoload -Uz ghq-finder-by-fzf
 
 ghq-finder-by-fzf() {
-   local dir repository session current_session
+    local dir repository session current_session
     FZF=fzf
     dir=$(ghq root)/$(ghq list | $FZF --reverse +m --prompt='Project >')
 
@@ -17,9 +17,9 @@ ghq-finder-by-fzf() {
                 cd $dir
                 tmux rename-session $session
             else
-                tmux list-sessions | cut -d":" -f1 | grep $session > /dev/null
+                tmux list-sessions | cut -d":" -f1 | grep $session$ > /dev/null
                 if [[ $? != 0 ]]; then
-                tmux new-session -d -c $dir -s $session
+                    tmux new-session -d -c $dir -s $session
                 fi
                 tmux switch-client -t $session
             fi
