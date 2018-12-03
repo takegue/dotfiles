@@ -14,7 +14,7 @@ ghq-finder-by-fzf() {
             current_session=$(tmux list-sessions | grep 'attached' | cut -d":" -f1)
 
             if [[ $current_session =~ ^[0-9]+$ ]]; then
-                cd $dir
+                tmux send-key -t $current_session "cd $dir" Enter
                 tmux rename-session $session
             else
                 tmux list-sessions | cut -d":" -f1 | grep $session$ > /dev/null
@@ -29,4 +29,4 @@ ghq-finder-by-fzf() {
   fi
 }
 
-ghq-finder-by-fzf $@
+ghq-finder-by-fzf $@ 
