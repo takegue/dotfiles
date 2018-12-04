@@ -31,7 +31,7 @@ run_segment() {
 __update_git_repo() {
    FILE=`git rev-parse --absolute-git-dir`/now_fetch.pid
    if [[ -f $FILE ]]; then
-     if [[ $(( `date +%s` - `cat $FILE` )) -gt 300 ]]; then
+     if [[ $(( `date +%s` - `/usr/bin/stat -f '%m' $FILE` )) -gt 300 ]]; then
         rm $FILE
      fi
      return

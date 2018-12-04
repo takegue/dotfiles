@@ -213,6 +213,8 @@ bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する(
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 
+bindkey_function '^Y' f
+
 ### Hooks ###
 add-zsh-hook precmd vcs_info
 
@@ -359,10 +361,10 @@ function f() {
     tmux new-window ghq-finder-by-fzf
 }
 
-
 function foreground-vi() {
     fg %$EDITOR
 }
+
 zle -N foreground-vi
 bindkey '^Z' foreground-vi
 
