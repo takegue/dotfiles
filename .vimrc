@@ -67,6 +67,7 @@ set ambiwidth=double               " 全角文字で幅が崩れないように�
 set laststatus=2
 
 set number nornu
+set noshowmode
 set nowrap
 set colorcolumn=80
 set cursorline

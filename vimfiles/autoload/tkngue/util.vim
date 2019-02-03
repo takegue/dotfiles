@@ -28,8 +28,9 @@ function! tkngue#util#system(cmd) abort
   " let l:h = sha256(a:cmd)
   let l:h = shellescape(substitute(a:cmd, ' ', '', 'g'))
   " let l:path = stdpath('cache') . '/' . l:h
+  let l:cache_path = '/tmp/rdisk'
   let l:path = '/tmp/rdisk/' . l:h
-  if !filereadable(l:path)
+  if isdirectory(l:cache_path) && !filereadable(l:path)
     let l:output = system(a:cmd)
     call writefile(split(l:output, '\n'), l:path)
   else
@@ -55,10 +56,12 @@ function! tkngue#util#open_junk_file(type) abort
     call mkdir(l:junk_dir, 'p')
   endif
   if a:type == ''
-    let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+    let l:filename = input('Junk Code: ', l:junk_dir . strftime('/%Y-%m-%d-%H%M%S__'))
   else
     let l:filename = l:junk_dir . strftime('/%Y-%m-%d-%H%M%S.') . a:type
   endif
+
+  let l:filename = substitute(l:filename, '__\/', '/', 'g')
   if l:filename != ''
     execute 'edit ' . l:filename
   endif

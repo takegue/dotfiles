@@ -337,6 +337,7 @@
 
     let g:switch_custom_definitions = [
           \   ['TRUE', 'FALSE'], ['True', 'False'], ['true', 'false'],
+          \   ['dev', 'stg', 'prod'],
           \   ['ENABLE', 'DISABLE'], ['Enable', 'Disable'], ['enable', 'disable'],
           \   ['!=', '=='],
           \   {
@@ -928,6 +929,7 @@
     let g:ale_linters['python'] = []
     let g:ale_linters['javascript'] = []
     let g:ale_linters['rust'] = []
+    let g:ale_linters['markdown'] = []
 
   '''
   # }}}
@@ -1074,6 +1076,7 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]]
   repo = 'zxqfl/tabnine-vim'
+  on_if = 0
 
 [[plugins]] # Shougo/neocomplete.vim {{{
   repo = 'Shougo/neocomplete.vim'
@@ -1948,13 +1951,14 @@ hook_post_source = '''
 # GO {{{
   [[plugins]] # fatih/vim-go {{{
     repo = 'fatih/vim-go'
-    on_ft = 'go'
+    # on_ft = 'go'
     on_if = 0
   #}}}
 
   [[plugins]] # zchee/deoplete-go {{{
     repo = 'zchee/deoplete-go'
     on_ft = 'go'
+    on_if = 0
   #}}}
 
 # }}}
