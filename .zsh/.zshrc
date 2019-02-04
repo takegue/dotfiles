@@ -357,10 +357,6 @@ function ssh() {
     tmux rename-window $window_name
 }
 
-function f() {
-    tmux new-window ghq-finder-by-fzf
-}
-
 function foreground-vi() {
     fg %$EDITOR
 }
