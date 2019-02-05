@@ -213,8 +213,6 @@ bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する(
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 
-bindkey_function '^Y' f
-
 ### Hooks ###
 add-zsh-hook precmd vcs_info
 
