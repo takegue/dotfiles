@@ -448,7 +448,9 @@ augroup My Autocmd Group "{{{
         \ if &diff | diffupdate | echo 'diff updated' | endif
   " large_file_config_for_smooth
   autocmd BufNewFile,BufRead * if line('$') > 2000 |
-        \   set nonumber norelativenumber nocursorline |
+        \   setl nonumber norelativenumber nocursorline|
+        \   filetype plugin indent off |
+        \   setl syntax=off |
         \ endif
 
   autocmd BufWritePre * call tkngue#util#mkdir(expand('<afile>:p:h'), v:cmdbang)

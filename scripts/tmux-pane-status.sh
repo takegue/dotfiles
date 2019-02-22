@@ -44,13 +44,32 @@ __update_git_repo() {
    rm $FILE
 }
 
+__push_git_repo() {
+   FILE=`git rev-parse --absolute-git-dir`/now_push.pid
+   if [[ -f $FILE ]]; then
+     if [[ $(( `date +%s` - `/usr/bin/stat -f '%m' $FILE` )) -gt 500 ]]; then
+        rm $FILE
+     fi
+     return
+   fi
+
+   date +%s > $FILE
+   git push --dry-run \
+    || sleep 1200
+   #  && git push \
+
+   rm $FILE
+}
+
 # Show git banch.
 __parse_git_branch() {
     type git >/dev/null 2>&1 && git rev-parse --git-dir 2> /dev/null;
     if [ "$?" -ne 0 ]; then
         return
     fi
+
     __update_git_repo >/dev/null 2>&1 &
+    # __push_git_repo >/dev/null 2>&1 &
 
     # Quit if this is not a Git repo.
     branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/')
