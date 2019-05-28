@@ -282,6 +282,7 @@ export CLICOLOR=true
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
 today(){ echo `date +%Y%m%d` } 
+now(){ echo `date +%Y%m%d%H%M` } 
 
 # ------------------------------
 # Aliases
