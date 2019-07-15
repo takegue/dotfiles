@@ -877,7 +877,7 @@
 [[plugins]] # osyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
   on_if = 1
-  # depends = ['vim-quickrun']
+  on_event = ['BufWritePost']
   hook_add = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
