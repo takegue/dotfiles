@@ -1647,6 +1647,22 @@ repo = 'Konfekt/FastFold'
 
 # }}}
 
+# PlantUML {{{
+
+[[plugins]] # scrooloose/vim-slumlord {{{
+  repo = 'scrooloose/vim-slumlord'
+  if = 1
+# }}}
+
+[[plugins]] # aklt/plantuml-syntax {{{
+  repo = 'aklt/plantuml-syntax'
+  if = 1
+
+# }}}
+
+
+# }}}
+
 # WEB Programming {{{
 
 [[plugins]] # elzr/vim-json {{{
