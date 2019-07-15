@@ -70,7 +70,6 @@ set number nornu
 set noshowmode
 set nowrap
 set colorcolumn=80
-set cursorline
 set noequalalways
 set winheight=8
 
@@ -395,7 +394,7 @@ function! s:my_on_filetype() abort "{{{
  if execute('filetype') =~# 'OFF'
     " Lazy loading
     silent! filetype plugin indent on
-    filetype detect
+    " filetype detect
     syntax enable
     " redraw!
     call s:additional_highlight()
@@ -439,7 +438,7 @@ augroup edit_vimrc "{{{
   autocmd BufWritePost ~/.dotfiles/.vimrc nested source $MYVIMRC
 augroup END "}}}
 
-augroup My Autocmd Group "{{{
+augroup MyAutocmdGroup "{{{
   autocmd!
   autocmd BufNewFile,BufRead *.todo
         \ set nonumber norelativenumber filetype=markdown
@@ -580,7 +579,6 @@ else
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
-
 
 "}}}
 
