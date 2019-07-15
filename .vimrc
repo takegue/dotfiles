@@ -394,7 +394,7 @@ function! s:my_on_filetype() abort "{{{
  if execute('filetype') =~# 'OFF'
     " Lazy loading
     silent! filetype plugin indent on
-    " filetype detect
+    filetype detect
     syntax enable
     " redraw!
     call s:additional_highlight()
