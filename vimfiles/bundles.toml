@@ -725,8 +725,7 @@
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
-  on_if = 1
-  on_event = 'BufReadPost'
+  on_event = ['BufWritePost']
   depends = ['vim-hier', 'shabadou.vim']
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
