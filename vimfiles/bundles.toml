@@ -1884,17 +1884,18 @@ hook_post_source = '''
 
       [[plugins]] # tpope/vim-fugitive {{{
         repo = 'tpope/vim-fugitive'
+        # on_if = 'finddir(".git", "./;/") != ""'
+        if = 1
         augroup = 'fugitive'
-        # lazy = 1
-        # if = 0
-        on_if = 'finddir( getcwd()."/.git") != ""'
         hook_add = '''
           function! ConfigOnGitRepository() "{{{
-            if !exists('b:git_dir')
+            let l:root_path = FugitiveGitDir()
+            if l:root_path == ''
               return
             endif
-            let root_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            if &ft != 'dirvish' && getcwd() !~# root_path
+            let l:root_path = escape(fnamemodify(l:root_path, ':p:h:h'), ' ()')
+
+            if &ft != 'dirvish' && getcwd() !~# l:root_path
               execute 'lcd '. root_path
             endif
 
@@ -1909,7 +1910,7 @@ hook_post_source = '''
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
             nnoremap <buffer> [git]p :<C-u>Gpush<CR>
             " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-            if &l:path !~# root_path
+            if &l:path !~# l:root_path
               let &l:path = join([&g:path, root_path], ',')
             endif
           endfunction "}}}
@@ -1937,6 +1938,7 @@ hook_post_source = '''
 
       [[plugins]]
         repo = 'tpope/vim-rhubarb'
+
       #[[plugins]] # moznion/github-commit-comment.vim {{{
       #    repo = 'moznion/github-commit-comment.vim'
       #    lazy = 1
