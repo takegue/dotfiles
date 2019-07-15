@@ -902,8 +902,7 @@
 
 [[plugins]] # w0rp/ale {{{
   repo = 'w0rp/ale'
-  on_if = 1
-  depends = []
+  on_event = 'InsertEnter'
 
   hook_add = '''
     let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"]
@@ -962,7 +961,7 @@
   repo = 'mbbill/undotree'
   on_cmd = ['UndotreeToggle']
   hook_source = '''
-    let g:undotree_WindowLayout=4
+    let g:undotree_WindowLayout=1
     let g:undotree_SplitWidth=40
     let g:undotree_SetFocusWhenToggle=1
   '''
@@ -2017,16 +2016,16 @@ hook_post_source = '''
         on_ft = 'typescript'
         build = './install.sh'
 
-    [[plugins]] # posva/vim-vue {{
-        repo = 'posva/vim-vue'
-        on_ft = 'javascript'
-        build = 'make'
-    # }}
+    # [[plugins]] # posva/vim-vue {{
+    #     repo = 'posva/vim-vue'
+    #     on_ft = 'javascript'
+    #     build = 'make'
+    # # }}
 
-    [[plugins]] # moll/vim-node {{
-        repo = 'moll/vim-node'
-        on_ft = 'javascript'
-    # }}
+    # [[plugins]] # moll/vim-node {{
+    #     repo = 'moll/vim-node'
+    #     on_ft = 'javascript'
+    # # }}
 
 # }}}
 
