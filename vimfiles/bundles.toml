@@ -31,7 +31,7 @@
 
 [[plugins]] # itchyny/lightline.vim {{{
   repo = 'itchyny/lightline.vim'
-  depends = ['vim-fugitive', 'vim-qfstatusline']
+  depends = ['vim-fugitive']
   hook_add ='''
     function! MyModified() "{{{
       return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
@@ -119,9 +119,6 @@
             \ },
             \ 'component': {
             \   'lineinfo': '%3l:%-2v',
-            \ },
-            \ 'component_expand': {
-            \   'syntaxcheck': 'qfstatusline#Update',
             \ },
             \ 'component_type': {
             \   'syntaxcheck': 'error',
@@ -743,8 +740,6 @@
           \   "hook/my_anime/wait" : 2,
           \   "hook/qfsigns_update/enable_exit":   1,
           \   "hook/qfsigns_update/priority_exit": 3,
-          \   "hook/qfstatusline_update/enable_exit" : 1,
-          \   "hook/qfstatusline_update/priority_exit" : 4,
           \   "runner"                    : has("nvim") ? "nvim_job" : "job",
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
           \   "outputter/buffer/close_on_empty" : 1,
@@ -883,7 +878,7 @@
 [[plugins]] # osyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
   on_if = 1
-  depends = ['vim-quickrun']
+  # depends = ['vim-quickrun']
   hook_add = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
@@ -929,16 +924,11 @@
     let g:ale_linters['python'] = []
     let g:ale_linters['javascript'] = []
     let g:ale_linters['rust'] = []
-    let g:ale_linters['markdown'] = []
+    let g:ale_linters['markdown'] = ['textlint']
 
   '''
   # }}}
 
-
-[[plugins]] # KazuakiM/vim-qfstatusline {{{
-  repo = 'KazuakiM/vim-qfstatusline'
-  on_if = 1
- #}}}
 
 [[plugins]] # mhinz/vim-signify {{{
   # TODO: ロードが激重なので少し考える
@@ -2177,3 +2167,5 @@ hook_post_source = '''
   hook_add='''
   '''
 #}}}
+
+# vim: sw=2
