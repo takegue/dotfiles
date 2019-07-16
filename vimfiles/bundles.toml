@@ -31,7 +31,7 @@
 
 [[plugins]] # itchyny/lightline.vim {{{
   repo = 'itchyny/lightline.vim'
-  depends = ['vim-fugitive', 'vim-qfstatusline']
+  depends = ['vim-fugitive']
   hook_add ='''
     function! MyModified() "{{{
       return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
@@ -119,9 +119,6 @@
             \ },
             \ 'component': {
             \   'lineinfo': '%3l:%-2v',
-            \ },
-            \ 'component_expand': {
-            \   'syntaxcheck': 'qfstatusline#Update',
             \ },
             \ 'component_type': {
             \   'syntaxcheck': 'error',
@@ -728,8 +725,7 @@
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
-  on_if = 1
-  on_event = 'BufReadPost'
+  on_event = ['BufWritePost']
   depends = ['vim-hier', 'shabadou.vim']
   hook_add = '''
     nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
@@ -743,8 +739,6 @@
           \   "hook/my_anime/wait" : 2,
           \   "hook/qfsigns_update/enable_exit":   1,
           \   "hook/qfsigns_update/priority_exit": 3,
-          \   "hook/qfstatusline_update/enable_exit" : 1,
-          \   "hook/qfstatusline_update/priority_exit" : 4,
           \   "runner"                    : has("nvim") ? "nvim_job" : "job",
           \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
           \   "outputter/buffer/close_on_empty" : 1,
@@ -883,7 +877,7 @@
 [[plugins]] # osyo-manga/vim-watchdogs {{{
   repo = 'osyo-manga/vim-watchdogs'
   on_if = 1
-  depends = ['vim-quickrun']
+  on_event = ['BufWritePost']
   hook_add = '''
     let g:watchdogs_check_BufWritePost_enables = {
         \   "cpp"     : 1,
@@ -908,8 +902,7 @@
 
 [[plugins]] # w0rp/ale {{{
   repo = 'w0rp/ale'
-  on_if = 1
-  depends = []
+  on_event = 'InsertEnter'
 
   hook_add = '''
     let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"]
@@ -929,16 +922,11 @@
     let g:ale_linters['python'] = []
     let g:ale_linters['javascript'] = []
     let g:ale_linters['rust'] = []
-    let g:ale_linters['markdown'] = []
+    let g:ale_linters['markdown'] = ['textlint']
 
   '''
   # }}}
 
-
-[[plugins]] # KazuakiM/vim-qfstatusline {{{
-  repo = 'KazuakiM/vim-qfstatusline'
-  on_if = 1
- #}}}
 
 [[plugins]] # mhinz/vim-signify {{{
   # TODO: ロードが激重なので少し考える
@@ -973,7 +961,7 @@
   repo = 'mbbill/undotree'
   on_cmd = ['UndotreeToggle']
   hook_source = '''
-    let g:undotree_WindowLayout=4
+    let g:undotree_WindowLayout=1
     let g:undotree_SplitWidth=40
     let g:undotree_SetFocusWhenToggle=1
   '''
@@ -1658,6 +1646,22 @@ repo = 'Konfekt/FastFold'
 
 # }}}
 
+# PlantUML {{{
+
+[[plugins]] # scrooloose/vim-slumlord {{{
+  repo = 'scrooloose/vim-slumlord'
+  if = 1
+# }}}
+
+[[plugins]] # aklt/plantuml-syntax {{{
+  repo = 'aklt/plantuml-syntax'
+  if = 1
+
+# }}}
+
+
+# }}}
+
 # WEB Programming {{{
 
 [[plugins]] # elzr/vim-json {{{
@@ -1879,17 +1883,18 @@ hook_post_source = '''
 
       [[plugins]] # tpope/vim-fugitive {{{
         repo = 'tpope/vim-fugitive'
+        # on_if = 'finddir(".git", "./;/") != ""'
+        if = 1
         augroup = 'fugitive'
-        # lazy = 1
-        # if = 0
-        on_if = 'finddir( getcwd()."/.git") != ""'
         hook_add = '''
           function! ConfigOnGitRepository() "{{{
-            if !exists('b:git_dir')
+            let l:root_path = FugitiveGitDir()
+            if l:root_path == ''
               return
             endif
-            let root_path = escape(fnamemodify(b:git_dir, ':p:h:h'), ' ()')
-            if &ft != 'dirvish' && getcwd() !~# root_path
+            let l:root_path = escape(fnamemodify(l:root_path, ':p:h:h'), ' ()')
+
+            if &ft != 'dirvish' && getcwd() !~# l:root_path
               execute 'lcd '. root_path
             endif
 
@@ -1904,7 +1909,7 @@ hook_post_source = '''
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
             nnoremap <buffer> [git]p :<C-u>Gpush<CR>
             " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
-            if &l:path !~# root_path
+            if &l:path !~# l:root_path
               let &l:path = join([&g:path, root_path], ',')
             endif
           endfunction "}}}
@@ -1932,6 +1937,7 @@ hook_post_source = '''
 
       [[plugins]]
         repo = 'tpope/vim-rhubarb'
+
       #[[plugins]] # moznion/github-commit-comment.vim {{{
       #    repo = 'moznion/github-commit-comment.vim'
       #    lazy = 1
@@ -2010,16 +2016,16 @@ hook_post_source = '''
         on_ft = 'typescript'
         build = './install.sh'
 
-    [[plugins]] # posva/vim-vue {{
-        repo = 'posva/vim-vue'
-        on_ft = 'javascript'
-        build = 'make'
-    # }}
+    # [[plugins]] # posva/vim-vue {{
+    #     repo = 'posva/vim-vue'
+    #     on_ft = 'javascript'
+    #     build = 'make'
+    # # }}
 
-    [[plugins]] # moll/vim-node {{
-        repo = 'moll/vim-node'
-        on_ft = 'javascript'
-    # }}
+    # [[plugins]] # moll/vim-node {{
+    #     repo = 'moll/vim-node'
+    #     on_ft = 'javascript'
+    # # }}
 
 # }}}
 
@@ -2177,3 +2183,5 @@ hook_post_source = '''
   hook_add='''
   '''
 #}}}
+
+# vim: sw=2

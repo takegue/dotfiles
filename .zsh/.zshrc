@@ -282,14 +282,13 @@ export CLICOLOR=true
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
 today(){ echo `date +%Y%m%d` } 
-now(){ echo `date +%Y%m%d%H%M` } 
+now(){ echo `date +%Y%m%d%H%M%S` } 
 
 # ------------------------------
 # Aliases
 # ------------------------------
 alias tmux='tmux -2'
 # alias vi='vim -u NONE'
-alias vtime="$EDITOR --startuptime /tmp/vim_startup.log +q && $EDITOR /tmp/vim_startup.log"
 case "$OSTYPE" in
     darwin*)
         alias ls='ls -G'
@@ -324,6 +323,12 @@ alias -g W='| wc'
 # ------------------------------
 # Functions
 # ------------------------------
+function vtime() {
+  FILE=/tmp/vim_startup.$RANDOM.log
+  $EDITOR --startuptime $FILE $@ +q
+  $EDITOR $FILE
+}
+
 function man()
 {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
