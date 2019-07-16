@@ -38,10 +38,7 @@ __update_git_repo() {
    fi
 
    date +%s > $FILE
-   git fetch \
-    && sleep 300
-
-   rm $FILE
+   git fetch
 }
 
 __push_git_repo() {
@@ -54,11 +51,8 @@ __push_git_repo() {
    fi
 
    date +%s > $FILE
-   git push --dry-run \
-    || sleep 1200
+   git push --dry-run
    #  && git push \
-
-   rm $FILE
 }
 
 # Show git banch.
