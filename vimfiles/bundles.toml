@@ -1,5 +1,4 @@
 [[plugins]] # Shougo/dein.vim {{{
-
   repo = 'Shougo/dein.vim'
   hook_add = '''
     let g:dein#install_progress_type = 'title'
@@ -922,11 +921,11 @@
     let g:ale_linters['python'] = []
     let g:ale_linters['javascript'] = []
     let g:ale_linters['rust'] = []
+    let g:ale_linters['golang'] = []
     let g:ale_linters['markdown'] = ['textlint']
 
   '''
   # }}}
-
 
 [[plugins]] # mhinz/vim-signify {{{
   # TODO: ロードが激重なので少し考える
@@ -1061,6 +1060,30 @@ repo = 'Konfekt/FastFold'
     endif
   '''
 # }}}
+
+  [[plugins]] # {{{
+    repo = 'prabirshrestha/async.vim'
+  # }}}
+
+  [[plugins]] # {{{
+    repo = 'https://github.com/prabirshrestha/vim-lsp.git' 
+    hook_source = '''
+        " go get -u golang.org/x/tools/cmd/gopls
+        if executable('gopls')
+            au User lsp_setup call lsp#register_server({
+                \ 'name': 'gopls',
+                \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+                \ 'whitelist': ['go'],
+                \ })
+            autocmd BufWritePre *.go silient! LspDocumentFormatSync
+        endif
+    '''
+  # }}}
+
+  [[plugins]] # {{{
+    repo = 'https://github.com/lighttiger2505/deoplete-vim-lsp' 
+  # }}}
+
 
 [[plugins]]
   repo = 'zxqfl/tabnine-vim'
@@ -1958,14 +1981,8 @@ hook_post_source = '''
   [[plugins]] # fatih/vim-go {{{
     repo = 'fatih/vim-go'
     on_ft = 'go'
-    on_if = 1
   #}}}
 
-  [[plugins]] # zchee/deoplete-go {{{
-    repo = 'zchee/deoplete-go'
-    on_ft = 'go'
-    on_if = 0
-  #}}}
 
 # }}}
 
