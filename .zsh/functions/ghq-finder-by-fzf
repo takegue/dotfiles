@@ -24,7 +24,7 @@ ghq-finder-by-fzf() {
                 tmux switch-client -t $session
             fi
         else
-            cd $dir
+            # cd $dir
         fi
   fi
 }

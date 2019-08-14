@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+fzf-ssh-multi_sync() {
+  fzf-ssh -m | tmux-sync_ssh
+}
+
