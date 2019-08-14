@@ -8,7 +8,7 @@ tmux-sync_ssh() {
     done
     tmux select-layout main-vertical
     tmux set synchronize-panes on
-    ssh $hosts[1]
+    ssh $hosts[1] <> /dev/tty
 }
 
 tmux-sync_ssh $@
