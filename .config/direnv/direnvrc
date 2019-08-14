@@ -30,8 +30,8 @@ $PROMPT"
 }
 
 use_terraform() {
-  PROMPT="(🏗️ TF|:\$(terraform workspace show))
+  PROMPT="
+(🏗️  TF|:\$(terraform workspace show))
 $PROMPT"
   export PROMPT
 }
-
