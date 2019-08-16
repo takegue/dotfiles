@@ -1,14 +1,14 @@
 #!/bin/zsh
 
 tmux-sync_ssh() {
-
     hosts=${(Z+n+)$(cat -)}
     for host in $hosts[2,-1]; do
         tmux splitw -p $(( 100 / (${#hosts} - 1))) ssh $host
+        tmux select-layout main-vertical
     done
-    tmux select-layout main-vertical
     tmux set synchronize-panes on
     ssh $hosts[1] <> /dev/tty
+    tmux set synchronize-panes off
 }
 
 tmux-sync_ssh $@
