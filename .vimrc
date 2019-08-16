@@ -417,6 +417,18 @@ augroup terminal "{{{
         \ set nonumber
 augroup END "}}}
 
+
+augroup binaryfile "{{{
+  autocmd!
+  au BufRead * if tkngue#util#is_binary() | set binary | %!xxd
+  au BufRead * set ft=xxd | endif
+  au BufWritePre * if &bin | %!xxd -r
+  au BufWritePre * endif
+  au BufWritePost * if &bin | %!xxd
+  au BufWritePost * set nomod | endif
+augroup END "}}}
+
+
 augroup vimrc_change_cursorline_color "{{{
   autocmd!
   " " インサートモードに入った時にカーソル行の色をブルーグリーンにする
@@ -583,3 +595,4 @@ endif
 "}}}
 
 " vim: expandtab softtabstop=2 shiftwidth=2 foldmethod=marker number nornu
+"
