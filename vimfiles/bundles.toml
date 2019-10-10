@@ -197,6 +197,7 @@
 
 # Utilities {{{
 
+
     [[plugins]]
       repo = 'AndrewRadev/linediff.vim.git'
 
@@ -398,19 +399,16 @@
     '''
 
     hook_add = '''
-      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h '
-      nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file/rec/git:~/.dotfiles<CR>
+      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite -start-filter help<CR>' : 'h '
+      nnoremap <silent> <Space>. :<C-u>Denite -start-filter -buffer-name=dotfiles file/rec/git:~/.dotfiles<CR>
 
 
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
-      nnoremap  [denite]s  :<C-u>Denite source<CR>
-      nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
-              \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file_rec:~/Downloads'`
-              \ file_mru <CR>
+      nnoremap  [denite]s  :<C-u>Denite -start-filter source<CR>
 
-      nnoremap <silent>  [denite]f  :<C-u>Denite -buffer-name=anything
-              \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file_rec:~/Downloads'`
+      nnoremap <silent>  [denite]f  :<C-u>Denite -start-filter -buffer-name=anything
+              \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec:~/Downloads'`
               \ file_mru <CR>
 
       nnoremap <silent> [denite]r  :<C-u>Denite
@@ -418,21 +416,39 @@
       nnoremap <silent> [denite]s  :<C-u>Denite
             \ -buffer-name=snippets
             \ unite:neosnippet <CR>
-      nnoremap <silent> [denite]me :<C-u>Denite output:message
+      nnoremap <silent> [denite]me :<C-u>Denite -start-filter output:message
             \ -buffer-name=messages <CR>
-      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
+      nnoremap <silent> [denite]p :<C-u>Denite -start-filter directory_rec:~/.ghq
             \ -buffer-name=projects <CR>
-      nnoremap <silent> [denite]o  :<C-u>Denite outline
+      nnoremap <silent> [denite]o  :<C-u>Denite -start-filter outline
             \ -buffer-name=outline <CR>
 
-      nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
-      nnoremap <silent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
-      nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
-      nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
-      nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
-      nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
+      nnoremap <silent> [denite]l :<C-u>Denite -start-filter  -buffer-name=search-lines line<CR>
+      nnoremap <silent> [denite]gf :<C-u>Denite -start-filter -buffer-name=search-buffers grep:$buffers<CR>
+      nnoremap <silent> [denite]gj :<C-u>Denite -start-filter -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
+      nnoremap <silent> [denite]gg :<C-u>Denite -start-filter -buffer-name=search-grep grep<CR>
+      nnoremap <silent> [denite]gc :<C-u>Denite -start-filter -buffer-name=search-grep grep <CR><C-R><C-W><CR>
+      nnoremap <silent> [denite]z :<C-u>Denite -start-filter -silent fold -vertical -winwidth=40 -no-start-insert<CR>
       nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -buffer-name=help help<CR>
 
+      " Define mappings
+      autocmd FileType denite call s:denite_my_settings()
+      function! s:denite_my_settings() abort
+        nnoremap <silent><buffer><expr> <TAB>
+        \ denite#do_map('choose_action')
+        nnoremap <silent><buffer><expr> <CR>
+        \ denite#do_map('do_action')
+        nnoremap <silent><buffer><expr> d
+        \ denite#do_map('do_action', 'delete')
+        nnoremap <silent><buffer><expr> p
+        \ denite#do_map('do_action', 'preview')
+        nnoremap <silent><buffer><expr> q
+        \ denite#do_map('quit')
+        nnoremap <silent><buffer><expr> i
+        \ denite#do_map('open_filter_buffer')
+        nnoremap <silent><buffer><expr> <Space>
+        \ denite#do_map('toggle_select').'j'
+      endfunction
     '''
   # }}}
 
@@ -1215,7 +1231,7 @@ repo = 'Konfekt/FastFold'
 #
 [[plugins]] # Shougo/deoplete.nvim {{{
   repo = 'Shougo/deoplete.nvim'
-  on_i = 1
+  # on_i = 1
   depends = 'context_filetype.vim'
   if = 'has("nvim")'
 
