@@ -398,14 +398,14 @@
     '''
 
     hook_add = '''
-      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite help<CR>' : 'h '
-      nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles file/rec/git:~/.dotfiles<CR>
+      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite -start-filter help <CR>' : 'h '
+      nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles -start-filter  file/rec/git:~/.dotfiles<CR>
 
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
       nnoremap  [denite]s  :<C-u>Denite source<CR>
       nnoremap <silent>  [denite]f  :<C-u>Denite -start-filter -buffer-name=anything
-              \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file_rec:~/Downloads'`
+              \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec:~/Downloads'`
               \ file_mru <CR>
 
       nnoremap <silent> [denite]r  :<C-u>Denite
@@ -415,24 +415,24 @@
             \ unite:neosnippet <CR>
       nnoremap <silent> [denite]me :<C-u>Denite output:message
             \ -buffer-name=messages <CR>
-      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq
+      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq -start-filter 
             \ -buffer-name=projects <CR>
       nnoremap <silent> [denite]o  :<C-u>Denite outline
             \ -buffer-name=outline <CR>
 
-      nnoremap <silent> [denite]l :<C-u>Denite  -buffer-name=search-lines line<CR>
-      nnoremap <silent> [denite]gf :<C-u>Denite -buffer-name=search-buffers grep:$buffers<CR>
-      nnoremap <silent> [denite]gj :<C-u>Denite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
-      nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
-      nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
+      nnoremap <silent> [denite]l :<C-u>Denite  -start-filter -buffer-name=search-lines line<CR>
+      nnoremap <silent> [denite]gf :<C-u>Denite -start-filter -buffer-name=search-buffers grep:$buffers<CR>
+      nnoremap <silent> [denite]gj :<C-u>Denite -start-filter -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
+      nnoremap <silent> [denite]gg :<C-u>Denite buffer-name=search-grep grep<CR>
+      nnoremap <silent> [denite]gc :<C-u>Denite buffer-name=search-grep grep <CR><C-R><C-W><CR>
       nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
-      nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -buffer-name=help help<CR>
+      nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -start-filter -buffer-name=help help<CR>
 
       " Define mappings
       autocmd FileType denite call s:denite_my_settings()
       function! s:denite_my_settings() abort
-        nnoremap <silent><buffer><expr> <CR>
-        \ denite#do_map('do_action')
+        nnoremap <silent><buffer><expr> <TAB> denite#do_map('choose_action')
+        nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
         nnoremap <silent><buffer><expr> d
         \ denite#do_map('do_action', 'delete')
         nnoremap <silent><buffer><expr> p
@@ -745,7 +745,6 @@
   on_event = ['BufWritePost']
   depends = ['vim-hier', 'shabadou.vim']
   hook_add = '''
-    nnoremap <silent> <leader>r :<C-u>QuickRun<CR>
   '''
 
   hook_source = '''
@@ -786,6 +785,10 @@
           \ 'command' : 'latexmk',
           \ 'cmdopt' : '-pdf',
           \}
+    let g:quickrun_config['rust/cargo/test'] = {
+          \   'command': 'cargo',
+          \   'exec': '%c run %o',
+          \ }
     let g:quickrun_config['tex/watchdogs_checker'] = {
           \  "type" :"watchdogs_checker/jalatexdiff"
           \}
