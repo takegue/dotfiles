@@ -17,7 +17,7 @@ function! tkngue#util#detect_project() abort
           \   "files": [],
           \   "directories": [".git"],
           \ },
-          \ "rust": {
+          \ "rust/cargo": {
           \   "priority" : 10,
           \   "files": ["Cargo.toml", "Cargo.lock"],
           \ },
@@ -28,6 +28,10 @@ function! tkngue#util#detect_project() abort
           \ "node": {
           \   "priority" : 10,
           \   "files": ["package-lock.json", "package.json"],
+          \ },
+          \ "php": {
+          \   "priority" : 10,
+          \   "files": ["composer.json","composer.lock"],
           \ },
           \ }
 
@@ -63,7 +67,6 @@ function! tkngue#util#detect_project() abort
     endfor
 
     return ['', '', '']
-
 endfunction
 
 function! tkngue#util#toggle_windowsize() abort
