@@ -42,9 +42,11 @@ function! tkngue#util#detect_project() abort
     endfor
 
     let l:searching = sort(items(l:file2lang), {lhs, rhs -> lhs[1].priority < rhs[1].priority})
+
+    let l:search_path = expand('%:p:h') . ';'
     for [l:lang, l:config] in l:searching
       for l:file in get(l:config, "files", [])
-        let l:result = findfile(l:file, ';')
+        let l:result = findfile(l:file, l:search_path)
         if l:result == ''
           continue
         endif
@@ -57,7 +59,7 @@ function! tkngue#util#detect_project() abort
       endfor
 
       for l:dir in get(l:config, "directories", [])
-        let l:result = finddir(l:dir, ';')
+        let l:result = finddir(l:dir, l:search_path)
         return [
               \ fnamemodify(l:result, ":p:h"), 
               \ l:lang, 
