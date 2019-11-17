@@ -198,8 +198,7 @@
 # Utilities {{{
 
     [[plugins]]
-      repo = 'AndrewRadev/linediff.vim.git'
-
+      repo = 'AndrewRadev/linediff.vim'
 
     [[plugins]] # {{{
       on_cmd = 'Trans'
@@ -254,7 +253,6 @@
 
 [[plugins]] # sgur/vim-textobj-parameter {{{
   repo = 'sgur/vim-textobj-parameter'
-  on_if = 1
 #}}}
 
 # }}}
@@ -454,147 +452,10 @@
     '''
   # }}}
 
-  [[plugins]] # Shougo/unite.vim {{{
-    repo = 'Shougo/unite.vim'
-    on_cmd = "Unite"
-    on_if = "has('nvim') && has('python3')"
-    # on_map = "{ 'n' : [denite]}"
-    # on_func = "denite"
-    hook_add = '''
-      if !has('nvim')
-        nnoremap [unite]    <Nop>
-        nmap    <Leader>f  [unite]
-        nnoremap  [unite]s  :<C-u>Unite source<CR>
-        nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
-              \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
-              \ file/new directory/new <CR>
-        nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
-              \ file_rec/neovim
-              \ file/new directory/new <CR>
-        nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
-              \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
-        nnoremap <silent> [unite]r  :<C-u>Unite
-              \ -buffer-name=register register<CR>
-        nnoremap <silent> [unite]o  :<C-u>Unite outline tag
-              \ -buffer-name=outline <CR>
-        " nnoremap <silent> [unite]n  :<C-u>Unite
-        "      \ -buffer-name=bundles
-        "      \ neobundle/search <CR>
-        nnoremap <silent> [unite]s  :<C-u>Unite
-              \ -buffer-name=snippets
-              \ neosnippet <CR>
-        nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
-              \ -buffer-name=mapping -hide-source-names<CR>
-        nnoremap <silent> [unite]me :<C-u>Unite output:message
-              \ -buffer-name=messages <CR>
-        " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
-        nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
-
-        nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
-        nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
-        nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
-        nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
-        nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
-        nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
-        nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
-        nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
-        nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
-        nnoremap <silent> [\ :UniteNext<CR>
-        nnoremap <silent> ]\ :UnitePrevious<CR>
-        nnoremap <silent> ]\ :UniteFirst<CR>
-        nnoremap <silent> [\ :UniteLast<CR>
-      endif
-    '''
-
-    hook_source = '''
-      call unite#custom#profile('default', 'context', {
-            \   'start_insert': 1,
-            \   'direction': 'dynamictop',
-            \   'prompt': '» ',
-            \ })
-      function! s:unite_my_settings() "{{{
-        " Overwrite settings.
-        imap <buffer> jj      <Plug>(unite_insert_leave)
-        imap <buffer> kk      <Plug>(unite_insert_leave)
-        "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-
-        imap <buffer><expr> j unite#smart_map('j', '')
-        imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-        imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
-        imap <buffer> '     <Plug>(unite_quick_match_default_action)
-        nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-        imap <buffer><expr> x
-              \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-        nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
-        imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
-        nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
-        " nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
-        imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
-        nnoremap <silent><buffer><expr> l
-              \ unite#smart_map('l', unite#do_action('default'))
-
-        let unite = unite#get_current_unite()
-        if unite.profile_name ==# 'search'
-          nnoremap <silent><buffer><expr> r     unite#do_action('replace')
-        else
-          nnoremap <silent><buffer><expr> r     unite#do_action('rename')
-        endif
-
-        nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
-        nnoremap <buffer><expr>S      unite#mappings#set_current_sorters(
-              \ empty(unite#mappings#get_current_sorters()) ?
-              \ ['sorter_reverse'] : [])
-        nnoremap <buffer><expr>M    unite#mappings#set_current_matchers(
-              \ empty(unite#mappings#get_current_matchers()) ?
-              \ ['matcher_migemo'] : [])
-        nnoremap <buffer><expr>R    unite#mappings#set_current_matchers(
-              \ empty(unite#mappings#get_current_matchers()) ?
-              \ ['matcher_regexp'] : [])
-
-        " Runs "split" action by <C-s>.
-        imap <silent><buffer><expr> <C-s>     unite#do_action('split')
-
-        setl nofoldenable
-      endfunction "}}}
-
-      autocmd FileType unite call s:unite_my_settings()
-
-      " mappingが競合するためデフォルトマッピング無効
-      " let g:unite_no_default_keymappings = 1
-      " nnoremap <silent> <Plug>(unite_exit)
-
-      let g:unite_source_history_yank_save_clipboard = 0
-      let g:unite_redraw_hold_candidates = 50000
-      let g:unite_source_file_rec_max_cache_files = 50000
-
-      " unite grep に ag(The Silver Searcher) を使う
-      if executable('ag')
-        let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-        let g:unite_source_grep_recursive_opt = ''
-        let g:unite_source_rec_async_command =split('ag --follow --nocolor --nogroup --hidden -g ""')
-      endif
-    '''
-
-# [[plugins.on_cmd]]
-# name = 'Unite'
-# complete = 'customlist,unite#complete_source'
-
-# [[plugins.on_cmd]]
-# name = 'Unite'
-# complete = 'customlist,unite#complete_source'
-
-# [[plugins.on_cmd]]
-# name = 'UniteWithCursorWord'
-
-# [[plugins.on_cmd]]
-# name = 'UniteWithInput'
-
 #}}}
 
 [[plugins]] # Shougo/neomru.vim {{{
   repo = 'Shougo/neomru.vim'
-  on_if = 1
   on_source = [
     'unite',
     'denite.nvim',
@@ -661,7 +522,6 @@
 [[plugins]] # vim-precious {{{
 # Vim constext filetype
   repo = 'osyo-manga/vim-precious'
-  lazy = 1
   augroup = 'vim-precious'
   on_ft = ['markdown', 'rst', 'help', 'toml']
   on_cmd = ['Precious']
@@ -736,7 +596,6 @@
 
 [[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
   repo = 'tamy0612/quickrun-job-runner.nvim'
-  on_cmd = 'QuickRun'
   on_if = 1
 # }}}
 
@@ -1004,13 +863,52 @@ repo = 'Konfekt/FastFold'
   #}}}
 
 
-  [[plugins]] #  'prabirshrestha/async.vim' {{{
+  [[plugins]] #  prabirshrestha/async.vim {{{
     repo = 'prabirshrestha/async.vim'
+    if = 1
+  # }}}
+
+    [[plugins]] #  prabirshrestha/asyncomplete.vim {{{
+      repo = 'prabirshrestha/asyncomplete.vim'
+      if = 1
+
+      hook_add = '''
+        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+        inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<cr>"
+
+        function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~ '\s'
+        endfunction
+        imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+            \ "\<Plug>(neosnippet_jump_or_expand)" :
+            \ pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" :
+            \ asyncomplete#force_refresh()
+
+        snoremap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
+        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+        " Plugin key-mappings.
+        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        xmap <C-k>     <Plug>(neosnippet_expand_target)
+        xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
+
+        " Plugin key-mappings.
+        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+
+      '''
+    # }}}
+#
+  [[plugins]] #  prabirshrestha/asyncomplete-lsp.vim {{{
+    repo = 'prabirshrestha/asyncomplete-lsp.vim'
+    if = 1
   # }}}
 
   [[plugins]] # prabirshrestha/vim-lsp {{{
     repo = 'prabirshrestha/vim-lsp.git' 
-    depends = ['async.vim']
+    if = 1
     hook_add = '''
         " go get -u golang.org/x/tools/cmd/gopls
         if executable('gopls')
@@ -1022,7 +920,7 @@ repo = 'Konfekt/FastFold'
             autocmd BufWritePre *.go silent! LspDocumentFormatSync
         endif
 
-        if executable('rls')
+        if tkngue#util#executable('rls')
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'rls',
                 \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
@@ -1033,68 +931,9 @@ repo = 'Konfekt/FastFold'
     '''
   # }}}
 
-  [[plugins]] # roxma/nvim-yarp  {{{
-    repo = 'roxma/nvim-yarp' 
-  # }}}
-
-  [[plugins]] # roxma/vim-hug-neovim-rpc  {{{
-    repo = 'roxma/vim-hug-neovim-rpc' 
-  # }}}
-  
-  [[plugins]] # lighttiger2505/deoplete-vim-lsp {{{
-    repo = 'lighttiger2505/deoplete-vim-lsp' 
-    depends = ['deoplete.nvim']
-  # }}}
-
-  [[plugins]] # zchee/deoplete-clang {{{
-    repo = 'zchee/deoplete-clang'
-    on_ft = ['c', 'cpp']
- #}}}
-
-[[plugins]] # Shougo/deoplete.nvim {{{
-  repo = 'Shougo/deoplete.nvim'
-  depends = ['context_filetype.vim']
-
-  hook_add = '''
-    let g:deoplete#enable_at_startup = 1
-  '''
-
-  hook_source = '''
-    set completeopt-=preview
-    call deoplete#custom#option('smart_case', v:true)
-
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-    xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
-
-    " SuperTab like snippets behavior.
-    imap <expr><CR>  neosnippet#expandable() ?
-          \ "\<Plug>(neosnippet_expand)" :
-          \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
-
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-    " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#jumpable() ?
-            \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
-            \ pumvisible() ? "\<C-n>" : "\<TAB>"
-      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-
-    " For conceal markers.
-    if has('conceal')
-      set conceallevel=2 concealcursor=niv
-    endif
-  '''
-
-# }}}
-
-
 [[plugins]] # Shougo/neosnippet-snippets {{{
   repo = 'Shougo/neosnippet-snippets'
+  if = 1
 
 [[plugins]] # Shougo/neosnippet.vim {{{
   repo = 'Shougo/neosnippet.vim'
@@ -1108,7 +947,6 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # ujihisa/neco-look {{{
   repo = 'ujihisa/neco-look'
-  on_source = ['neocomplete.vim', 'deoplete.nvim']
 #}}}
 
 [[plugins]] # beloglazov/vim-online-thesaurus {{{
@@ -1162,11 +1000,6 @@ repo = 'Konfekt/FastFold'
 
  #}}}
 
-[[plugins]] # benmills/vimux {{{
-  on_if = 1
-  repo = 'benmills/vimux'
- #}}}
-
 [[plugins]] # majutsushi/tagbar {{{
   on_cmd = 'Tagbar'
   repo = 'majutsushi/tagbar'
@@ -1178,7 +1011,6 @@ repo = 'Konfekt/FastFold'
 
 [[plugins]] # haya14busa/incsearch.vim {{{
   repo = 'haya14busa/incsearch.vim'
-  on_if = 1
 
   hook_add = '''
     " noremap <silent><expr> / incsearch#go({'command':'/','keymap':{'/':{'key':'\/','noremap':1}, ';' : {'key':'/;/', 'noremap':1}} })
@@ -1443,19 +1275,9 @@ on_ft = ['html', 'svg', 'rdf']
   on_cmd = 'GrammarousCheck'
  #}}}
 
-[[plugins]] # koron/codic-vim {{{
-  repo = 'koron/codic-vim'
-  on_if = '1'
-#}}}
-
-[[plugins]] # mattn/ginger-vim {{{
-  repo = 'mattn/ginger-vim'
-  on_cmd = 'Lingr'
- #}}}
-
 [[plugins]] # itchyny/dictionary.vim {{{
   repo = 'itchyny/dictionary.vim'
-on_if = "has('mac')"
+  if = "has('mac')"
 hook_post_source = '''
   nnoremap <Leader>w :<C-u>Dictionary -cursor-word -no-duplicate<CR>
   autocmd FileType dicitonary  nnoremap <buffer><Leader>w :<C-u>Dictionary -cursor-word -no-duplicate<CR>
