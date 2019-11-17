@@ -920,33 +920,6 @@
   '''
   # }}}
 
-[[plugins]] # w0rp/ale {{{
-  repo = 'w0rp/ale'
-  on_event = 'InsertEnter'
-
-  hook_add = '''
-    let g:ale_virtualenv_dir_names = [".venv/vim_dev36", ".venv"]
-    let g:ale_enabled = 1
-    let g:ale_lint_on_enzer = 0
-    let g:ale_lint_on_text_changed = 0
-    let g:ale_fix_on_save = 0
-    let g:ale_fixers = {
-        \  'rust': [
-        \    'rustfmt',
-        \    'trim_whitespace'
-        \  ]
-        \ }
-
-    " FileTypes BlackList of ALE Linters
-    let g:ale_linters = {}
-    let g:ale_linters['python'] = []
-    let g:ale_linters['javascript'] = []
-    let g:ale_linters['rust'] = []
-    let g:ale_linters['golang'] = []
-    let g:ale_linters['markdown'] = ['textlint']
-
-  '''
-  # }}}
 
 [[plugins]] # mhinz/vim-signify {{{
   # TODO: ロードが激重なので少し考える
@@ -1026,69 +999,19 @@ repo = 'Konfekt/FastFold'
 
 # Editor {{{
 
-[[plugins]] # deton/jasegment.vim {{{
-  repo = 'deton/jasegment.vim'
- #}}}
+  [[plugins]] # deton/jasegment.vim {{{
+    repo = 'deton/jasegment.vim'
+  #}}}
 
-[[plugins]] # autozimu/LanguageClient-neovim {{{
-  repo = 'autozimu/LanguageClient-neovim'
-  on_if = 0
-  on_event = [
-    'BufRead',
-    'BufNewfile'
-  ]
-  hook_add = '''
-    let g:LanguageClient_autoStart         = 1 " NeoVim起動時にLSPを自動スタート
-    let g:LanguageClient_serverCommands = {
-        \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-        \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-        \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-        \ 'python': [ fnamemodify(g:python3_host_prog, ':h') . '/pyls']
-        \ }
-    let g:LanguageClient_loggingLevel = 'INFO'
-    " let g:LanguageClient_loggingFile = stdpath('data') . '/LanguageClient.log'
-    " let g:LanguageClient_serverStderr = stdpath('data') . '/LanguageServer.log'
 
-    function! LC_maps()
-      if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
-        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-      endif
-    endfunction
-    autocmd FileType * call LC_maps()
-  '''
-  hook_post_update = '''
-    !bash install.sh
-
-    if !tkngue#util#executable('javascript-typescript-stdio')
-        !npm i -g javascript-typescript-langserver-fast
-    endif
-
-    if !tkngue#util#executable('pyls')
-        call system(
-            \  fnamemodify(g:python3_host_prog, ':h') . "/pip install -U "
-            \  . join([
-            \      "'python-language-server[all]'",
-            \      'pyls-mypy',
-            \      'pyls-isort',
-            \  ], ' ')
-            \)
-    endif
-
-    if !tkngue#util#executable('rls')
-        !cargo install rls
-    endif
-  '''
-# }}}
-
-  [[plugins]] # {{{
+  [[plugins]] #  'prabirshrestha/async.vim' {{{
     repo = 'prabirshrestha/async.vim'
   # }}}
 
-  [[plugins]] # {{{
-    repo = 'https://github.com/prabirshrestha/vim-lsp.git' 
-    hook_source = '''
+  [[plugins]] # prabirshrestha/vim-lsp {{{
+    repo = 'prabirshrestha/vim-lsp.git' 
+    depends = ['async.vim']
+    hook_add = '''
         " go get -u golang.org/x/tools/cmd/gopls
         if executable('gopls')
             au User lsp_setup call lsp#register_server({
@@ -1096,278 +1019,79 @@ repo = 'Konfekt/FastFold'
                 \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
                 \ 'whitelist': ['go'],
                 \ })
-            autocmd BufWritePre *.go silient! LspDocumentFormatSync
+            autocmd BufWritePre *.go silent! LspDocumentFormatSync
+        endif
+
+        if executable('rls')
+            au User lsp_setup call lsp#register_server({
+                \ 'name': 'rls',
+                \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+                \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+                \ 'whitelist': ['rust'],
+                \ })
         endif
     '''
   # }}}
 
-  [[plugins]] # {{{
-    repo = 'https://github.com/lighttiger2505/deoplete-vim-lsp' 
-    on_i = 1
-    depends = 'deoplete.nvim'
+  [[plugins]] # roxma/nvim-yarp  {{{
+    repo = 'roxma/nvim-yarp' 
   # }}}
 
+  [[plugins]] # roxma/vim-hug-neovim-rpc  {{{
+    repo = 'roxma/vim-hug-neovim-rpc' 
+  # }}}
+  
+  [[plugins]] # lighttiger2505/deoplete-vim-lsp {{{
+    repo = 'lighttiger2505/deoplete-vim-lsp' 
+    depends = ['deoplete.nvim']
+  # }}}
 
-[[plugins]]
-  repo = 'zxqfl/tabnine-vim'
-  on_if = 0
+  [[plugins]] # zchee/deoplete-clang {{{
+    repo = 'zchee/deoplete-clang'
+    on_ft = ['c', 'cpp']
+ #}}}
 
-[[plugins]] # Shougo/neocomplete.vim {{{
-  repo = 'Shougo/neocomplete.vim'
-  depends = 'context_filetype.vim'
-  if = "has('lua') && !has('nvim')"
-  on_event = 'InsertEnter'
-  hook_source = '''
-    let g:neocomplete#enable_at_startup = 1
-    let g:acp_enableAtStartup = 0
-    " Use neocomplete.
-    let g:neocomplete#text_mode_filetypes = {
-              \ 'rst': 1,
-              \ 'markdown': 1,
-              \ 'gitrebase': 1,
-              \ 'gitcommit': 1,
-              \ 'vcs-commit': 1,
-              \ 'hybrid': 1,
-              \ 'text': 1,
-              \ 'help': 1,
-              \ 'tex': 1,
-              \ }
-    if !has('nvim')
-      let g:neocomplete#enable_at_startup = 1
-    endif
-    " Use smartcase.
-    let g:neocomplete#enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
-    let g:neocomplete#max_keyword_width = 50
-    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-    let g:neocomplete#enable_auto_delimiter = 0
-    let g:neocomplete#enable_auto_close_preview = 0
-    let g:neocomplete#auto_completion_start_length  = 3
-    let g:neocomplete#skip_auto_completion_time  = "0.2"
-    " Define dictionary.
-    let g:neocomplete#sources#dictionary#dictionaries = {
-          \ 'default' : '',
-          \ 'vimshell' : $HOME.'/.vimshell_hist',
-          \ 'scheme' : $HOME.'/.gosh_completions'
-          \ }
+[[plugins]] # Shougo/deoplete.nvim {{{
+  repo = 'Shougo/deoplete.nvim'
+  depends = ['context_filetype.vim']
 
-
-    let g:neocomplete#enable_multibyte_completion = 1
-
-    " make Vim call omni function when below patterns matchs
-    " let g:neocomplete#sources#omni#functions = {}
-
-    let g:neocomplete#force_omni_input_patterns = {}
-    let g:neocomplete#force_omni_input_patterns.python =
-          \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
-    " let g:neocomplete#sources#omni#input_patterns = {}
-    " let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    " let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    " let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-    " let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-    " if !exists('g:neocomplete#keyword_patterns')
-    "   let g:neocomplete#keyword_patterns = {}
-    " endif
-
+  hook_add = '''
+    let g:deoplete#enable_at_startup = 1
   '''
-  hook_post_source = '''
+
+  hook_source = '''
+    set completeopt-=preview
+    call deoplete#custom#option('smart_case', v:true)
+
     " Plugin key-mappings.
-    " inoremap <expr><C-g>     neocomplete#undo_completion()
-    " inoremap <expr><C-l>     neocomplete#complete_common_string()
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+    xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
 
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    function! s:my_cr_function()
-      " return neocomplete#close_popup() . "\<CR>"
-      "For no inserting <CR> key.
-      return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-    endfunction
-    " <TAB>: completion.
-    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    " For smart TAB completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ neocomplete#start_manual_complete()
+    " SuperTab like snippets behavior.
+    imap <expr><CR>  neosnippet#expandable() ?
+          \ "\<Plug>(neosnippet_expand)" :
+          \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
 
-    function! s:check_back_space() "{{{
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~ '\s'
-    endfunction "}}}
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
-    " <C-h>, <BS>: close popup and delete backword char.
-    if dein#is_sourced('neosnippet.vim') "{{{
-      inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-      " For cursor moving in insert mode(Not recommended)
-      inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-      inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-      inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-      inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-      " make neocomplcache use jedi#completions omini function for python scripts
-
-      augroup tex_complete
-        autocmd!
-        autocmd FileType *.tex inoremap <expr>$$ $$<left>
-      augroup END
-
-      " SuperTab like snippets behavior.
-
-      imap <expr><CR>  neosnippet#expandable() ?
-            \ "\<Plug>(neosnippet_expand)" :
-            \ pumvisible() ?  "\<C-Y>".neocomplete#close_popup(): "\<CR>"
-
-      " <TAB>: completion.
-      " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-      " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-      " Plugin key-mappings.
-      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-      " SuperTab like snippets behavior.
-      imap <expr><TAB> neosnippet#jumpable() ?
+    " SuperTab like snippets behavior.
+    imap <expr><TAB> neosnippet#jumpable() ?
             \ pumvisible() ? "\<C-n>" : "\<Plug>(neosnippet_jump_or_expand)" :
             \ pumvisible() ? "\<C-n>" : "\<TAB>"
       smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
+
+    " For conceal markers.
+    if has('conceal')
+      set conceallevel=2 concealcursor=niv
     endif
-    "}}}
-'''
-# }}}}
-#
-[[plugins]] # Shougo/deoplete.nvim {{{
-  repo = 'Shougo/deoplete.nvim'
-  # on_i = 1
-  depends = 'context_filetype.vim'
-  if = 'has("nvim")'
-
-  hook_post_source = '''
-     call deoplete#custom#source('look', 'filetypes', ['tex', 'markdown', 'rst', 'txt'])
-  '''
-
-
-  hook_source = '''
-    let g:deoplete#enable_at_startup = 1
-    " Use smartcase.
-    let g:deoplete#enable_smart_case = 1
-
-    "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-    let g:acp_enableAtStartup = 0
-    " Use neocomplete.
-    let g:deoplete#text_mode_filetypes= {
-            \ 'tex' : 1,
-            \ 'plaintex' : 1,
-            \ 'gitcommit' : 1
-            \}
-    " Use smartcase.
-    let g:deoplete#enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:deoplete#sources#syntax#min_keyword_length = 3
-    let g:deoplete#max_keyword_width = 50
-    let g:deoplete#lock_buffer_name_pattern = '\*ku\*'
-    let g:deoplete#enable_auto_delimiter = 0
-    let g:deoplete#enable_auto_close_preview = 0
-    let g:deoplete#auto_completion_start_length  = 3
-    let g:deoplete#skip_auto_completion_time  = "0.2"
-    " Define dictionary.
-    let g:deoplete#sources#dictionary#dictionaries = {
-            \ 'default' : '',
-            \ 'vimshell' : $HOME.'/.vimshell_hist',
-            \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
-    let g:deoplete#ignore_sources = {}
-    let g:deoplete#ignore_sources.php = ['phpcd', 'omni']
-
-    let g:deoplete#enable_multibyte_completion = 1
-
-    " make Vim call omni function when below patterns matchs
-    let g:deoplete#omni#functions = {}
-    let g:deoplete#omni#functions.tex = 'vimtex#complete#omnifunc'
-
-    let g:deoplete#omni#input_patterns = {}
-    " let g:deoplete#omni#input_patterns.python = ['\s*from\s+\w*', 'import\s+\w*', '\S{2,}\.']
-             " \ '\%([^. \t]\{1,}\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import\)\w*'
-    " let g:deoplete#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    " let g:deoplete#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-    " let g:deoplete#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-    let g:deoplete#omni#input_patterns.tex = '\\\w+{'
-
-
-    set completeopt-=preview
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> deoplete#mappings#smart_close_popup(). "\<C-h>"
-    inoremap <expr><BS>  deoplete#mappings#smart_close_popup(). "\<C-h>"
-
-    " Plugin key-mappings.
-    " inoremap <expr><C-g>     deoplete#undo_completion()
-    " inoremap <expr><C-l>     deoplete#complete_common_string()
-
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    function! s:my_cr_function()
-      " return deoplete#close_popup() . "\<CR>"
-      "For no inserting <CR> key.
-      return pumvisible() ? deoplete#mappings#smart_close_popup() : "\<CR>"
-    endfunction
-
-    " SuperTab like snippets behavior.
-    inoremap <expr><CR>  neosnippet#expandable() ?
-         \ "\<Plug>(neosnippet_expand)" :
-         \ pumvisible() ?  "\<C-Y>".deoplete#close_popup(): "\<CR>"
-
-    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    " For smart TAB completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ deoplete#start_manual_complete()
-
-    function! s:check_back_space() "{{{
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~ '\s'
-    endfunction "}}}
-
-    " <C-h>, <BS>: close popup and delete backword char.
-    if dein#tap('neosnippet.vim') "{{{
-      augroup tex_complete
-        autocmd!
-        autocmd FileType *.tex inoremap <expr>$$ $$<left>
-      augroup END
-
-
-      " Plugin key-mappings.
-      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      xmap <C-k>     <Plug>(neosnippet_expand_target)
-      xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
-
-      " SuperTab like snippets behavior.
-      imap <expr><CR>  neosnippet#expandable() ?
-            \ "\<Plug>(neosnippet_expand)" :
-            \ pumvisible() ?  "\<C-Y>".deoplete#mappings#close_popup(): "\<CR>"
-
-      " <TAB>: completion.
-      " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-      " inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-      " Plugin key-mappings.
-      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-      " SuperTab like snippets behavior.
-      imap <expr><TAB> pumvisible() ? "\<C-n>" : neosnippet#jumpable() ?
-        \ "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-      smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
-    endif
-    " }}}
   '''
 
 # }}}
 
-[[plugins]] # zchee/deoplete-clang {{{
-  repo = 'zchee/deoplete-clang'
-  on_ft = ['c', 'cpp']
- #}}}
 
 [[plugins]] # Shougo/neosnippet-snippets {{{
   repo = 'Shougo/neosnippet-snippets'
@@ -1473,50 +1197,6 @@ repo = 'Konfekt/FastFold'
     " map g# <Plug>(incsearch-nohl-g#)zz
   '''
  #}}}
-
-[[plugins]] # tsukkee/lingr-vim {{{
-  repo = 'tsukkee/lingr-vim'
-  on_cmd = 'Lingr'
-  hook_source = '''
-    let g:lingr_vim_user = 'mnct.tkn3011@gmail.com'
-    let g:lingr_vim_sidebar_width = 25
-    let g:lingr_vim_rooms_buffer_height = 10
-    let g:lingr_vim_say_buffer_height = 3
-    let g:lingr_vim_remain_height_to_auto_scroll = 5
-    let g:lingr_vim_time_format     = '%c'
-    let g:lingr_vim_command_to_open_url = 'firefox %s'
-
-    function! s:notify(title, message)
-      if has('unix') && executable('notify-send')
-        let notify_cmd = 'notify-send %s %s'
-      elseif has('windows')
-        let notify_cmd = 'notify-send %s %s'
-      elseif has('mac')
-        let notify_cmd = 'growlnotify -t %s -m %s'
-      else
-      endif
-      execute printf('silent !'. notify_cmd, shellescape(a:title, 1), shellescape(a:message, 1))
-    endfunction
-
-    augroup lingr-vim
-      autocmd!
-      " autocmd User WinEnter
-      autocmd User plugin-lingr-message
-            \   let s:temp = lingr#get_last_message()
-            \|  if !empty(s:temp)
-              \|      call s:notify(s:temp.nickname, s:temp.text)
-              \|  endif
-              \|  unlet s:temp
-
-      autocmd User plugin-lingr-presence
-            \   let s:temp = lingr#get_last_member()
-            \|  if !empty(s:temp)
-              \|      call s:notify(s:temp.name, (s:temp.presence ? 'online' : 'offline'))
-              \|  endif
-              \|  unlet s:temp
-    augroup END
-'''
-#}}}
 
  #}}}
 
@@ -1738,13 +1418,19 @@ on_ft = ['html', 'svg', 'rdf']
 #}}}
 
 # Rust: {{{
-  [[plugins]] # sebastianmarkow/deoplete-rust {{{
+  [[plugins]] # rhysd/rust-doc.vim {{{
+    repo = 'rhysd/rust-doc.vim'
     on_ft = 'rust'
-    repo = 'sebastianmarkow/deoplete-rust'
-    build = 'cargo install racer && rustup component add rust-src'
     hook_add = '''
-    let g:deoplete#sources#rust#racer_binary = $HOME . "/.cargo/bin/racer"
-    let g:deoplete#sources#rust#rust_source_path = tkngue#util#system('echo -n $(rustc --print sysroot)') . "/lib/rustlib/src/rust/src"
+      let g:rust_doc#define_map_K = 0
+    '''
+
+    hook_add = '''
+      let g:rust_doc#downloaded_rust_doc_dir = tkngue#util#system('echo -n $(rustc --print sysroot)')
+      augroup vimrc-rust
+          autocmd!
+          autocmd FileType rust nnoremap <buffer><silent>K :<C-u>DeniteCursorWord rust/doc<CR>
+      augroup END
     '''
 
   # }}}
