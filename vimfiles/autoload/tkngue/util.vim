@@ -61,7 +61,7 @@ function! tkngue#util#detect_project() abort
       for l:dir in get(l:config, "directories", [])
         let l:result = finddir(l:dir, l:search_path)
         return [
-              \ fnamemodify(l:result, ":p:h"), 
+              \ fnamemodify(l:result, ":p:h:h"), 
               \ l:lang, 
               \ l:lang, 
               \ ]
