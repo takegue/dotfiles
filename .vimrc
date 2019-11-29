@@ -96,7 +96,7 @@ if v:version > 704 || v:version == 704 && has("patch786")
 endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
+set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:~
 set fillchars=vert:\|
 set belloff=cursor,error,insertmode
 set t_vb=
