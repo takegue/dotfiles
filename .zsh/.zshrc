@@ -92,7 +92,7 @@ if [[ ! -z $ZSH_HIGHLIGHT_STYLES ]] then
     ZSH_HIGHLIGHT_STYLES[globbing]='fg=45'
 fi
 
-bindkey -v              # キーバインドをviモードに設定
+bindkey -v               # キーバインドをviモードに設定
 
 setopt interactivecomments #
 setopt no_beep           # ビープ音を鳴らさないようにする
@@ -129,7 +129,7 @@ autoload -Uz exec-oneliner
 
 autoload -Uz compinit
 # NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
-if [[ $(date +'%j') != $(stat +mtime -F '%j' $ZDOTDIR/.zcompdump) ]]; then
+if [[ $(date +'%j') != $(stat -f '%m' -t '%j' $ZDOTDIR/.zcompdump  | date +%j) ]]; then
   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
   compinit
 else
@@ -198,7 +198,6 @@ fi
 
 # # マッチしたコマンドのヒストリを表示できるようにする
 zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end

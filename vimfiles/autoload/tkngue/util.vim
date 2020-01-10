@@ -10,6 +10,67 @@ function! tkngue#util#executable(expr) abort
   return s:_executable[a:expr]
 endfunction
 
+function! tkngue#util#detect_project() abort
+    let l:language_cues = {
+          \ "git": {
+          \   "priority" : 0,
+          \   "files": [],
+          \   "directories": [".git"],
+          \ },
+          \ "rust/cargo": {
+          \   "priority" : 10,
+          \   "files": ["Cargo.toml", "Cargo.lock"],
+          \ },
+          \ "python": {
+          \   "priority" : 10,
+          \   "files": ["Pipfile", "requiments.txt"],
+          \ },
+          \ "node": {
+          \   "priority" : 10,
+          \   "files": ["package-lock.json", "package.json"],
+          \ },
+          \ "php": {
+          \   "priority" : 10,
+          \   "files": ["composer.json","composer.lock"],
+          \ },
+          \ }
+
+    let file2lang = {}
+    for [l:lang, l:config] in items(l:language_cues)
+      let l:file2lang[lang] = config
+
+    endfor
+
+    let l:searching = sort(items(l:file2lang), {lhs, rhs -> lhs[1].priority < rhs[1].priority})
+
+    let l:search_path = expand('%:p:h') . ';'
+    for [l:lang, l:config] in l:searching
+      for l:file in get(l:config, "files", [])
+        let l:result = findfile(l:file, l:search_path)
+        if l:result == ''
+          continue
+        endif
+
+        return [
+              \ fnamemodify(l:result, ":p:h"), 
+              \ l:lang, 
+              \ fnamemodify(l:result, ":p:t")
+              \ ]
+      endfor
+
+      for l:dir in get(l:config, "directories", [])
+        let l:result = finddir(l:dir, l:search_path)
+        return [
+              \ fnamemodify(l:result, ":p:h:h"), 
+              \ l:lang, 
+              \ l:lang, 
+              \ ]
+      endfor
+    endfor
+
+    return ['', '', '']
+endfunction
+
 function! tkngue#util#toggle_windowsize() abort
   if !exists('t:restcmd')
     let t:restcmd = ''
@@ -48,6 +109,11 @@ function! tkngue#util#open_folder_of_currentfile() abort
     call system('open '. path)
   endif
 endfunction
+
+function! tkngue#util#is_binary() abort
+  return !!search('\%u0000', 'wn')
+endfunction
+
 
 function! tkngue#util#open_junk_file(type) abort
   " execute "%d a"

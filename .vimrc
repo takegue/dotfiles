@@ -96,7 +96,7 @@ if v:version > 704 || v:version == 704 && has("patch786")
 endif
 
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:⏎
+set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:~
 set fillchars=vert:\|
 set belloff=cursor,error,insertmode
 set t_vb=
@@ -386,6 +386,15 @@ function! s:openFTPluginFile()
   execute 'botright vsplit ' . l:ftpFileName
 endfunction
 
+
+function! s:cd_project_dir() abort
+  let [l:path, l:lang, _] = tkngue#util#detect_project()
+  if isdirectory(l:path)
+    echomsg "AutoCD: " . l:path 
+    exec "lcd " . l:path
+  endif
+endfunction
+
 function! s:my_on_filetype() abort "{{{
   if &l:filetype == '' && bufname('%') == ''
     return
@@ -420,23 +429,12 @@ augroup END "}}}
 
 augroup binaryfile "{{{
   autocmd!
-  au BufRead * if tkngue#util#is_binary() | set binary | %!xxd
+  au BufRead * if tkngue#util#is_binary() | setl binary | %!xxd
   au BufRead * set ft=xxd | endif
   au BufWritePre * if &bin | %!xxd -r
   au BufWritePre * endif
   au BufWritePost * if &bin | %!xxd
   au BufWritePost * set nomod | endif
-augroup END "}}}
-
-
-augroup vimrc_change_cursorline_color "{{{
-  autocmd!
-  " " インサートモードに入った時にカーソル行の色をブルーグリーンにする
-  " autocmd InsertEnter * highlight CursorLine ctermbg=23 guibg=yellow
-  " autocmd InsertEnter * highlight CursorColumn ctermbg=24 guibg=#005f87
-  " " インサートモードを抜けた時にカーソル行の色を黒に近いダークグレーにする
-  " autocmd InsertLeave * highlight CursorLine ctermbg=236 guibg=#303030
-  " autocmd InsertLeave * highlight CursorColumn ctermbg=236 guibg=#303030
 augroup END "}}}
 
 augroup edit_vimrc "{{{
@@ -478,9 +476,18 @@ augroup MyAutocmdGroup "{{{
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
 
+  autocmd BufRead * call s:cd_project_dir()
+  autocmd VimEnter * if filereadable(expand("./.vimrc.local"))
+      \ | execute 'source ' . expand("./.vimrc.local")
+      \ | endif
+  autocmd DirChanged * if filereadable(expand("<afile>/.vimrc.local"))
+        \ | execute 'source ' . expand("<afile>/.vimrc.local")
+        \ | endif
+
   autocmd FileType,Syntax,BufNewFile,BufNew,BufRead  *
         \ call s:my_on_filetype()
-augroup END"}}}
+augroup END
+"}}}
 
 "}}}
 
@@ -534,9 +541,6 @@ if !g:noplugin
   if dein#load_state(s:dein_dir)
       call dein#begin(s:dein_dir)
       call dein#load_toml('~/.vim/bundles.toml')
-      if dein#tap('deoplete.nvim') && has('nvim')
-        call dein#disable('neocomplete.vim')
-      endif
       call dein#end()
       call dein#call_hook('source')
       call dein#save_state()
