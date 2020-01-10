@@ -1,6 +1,6 @@
-[#xxxx][COMMIT_TYPE] Subject line
+[COMMIT_TYPE] Resolve #xxxx: 
 
-WHAT happened and how/why
+Show your reason why you have changed
 
 #### COMMTID TYPES for 1st lines
 # FIX     : Fixed the bugs
