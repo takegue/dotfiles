@@ -263,6 +263,10 @@
  # コメント切り替えオペレータ
   repo = 'tpope/vim-commentary'
   on_if = 1
+  hook_add = '''
+      autocmd FileType markdown let b:commentary_format = "<!-- %s -->"
+  '''
+
  #}}}
 
 [[plugins]] # tpope/vim-endwise {{{
@@ -421,8 +425,8 @@
       nnoremap <silent> [denite]l :<C-u>Denite  -start-filter -buffer-name=search-lines line<CR>
       nnoremap <silent> [denite]gf :<C-u>Denite -start-filter -buffer-name=search-buffers grep:$buffers<CR>
       nnoremap <silent> [denite]gj :<C-u>Denite -start-filter -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
-      nnoremap <silent> [denite]gg :<C-u>Denite buffer-name=search-grep grep<CR>
-      nnoremap <silent> [denite]gc :<C-u>Denite buffer-name=search-grep grep <CR><C-R><C-W><CR>
+      nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
+      nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
       nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
       nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -start-filter -buffer-name=help help<CR>
 
