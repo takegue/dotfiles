@@ -197,10 +197,11 @@
 
 # Utilities {{{
 
-    [[plugins]]
+    [[plugins]] # AndrewRadev/linediff.vim {{{
       repo = 'AndrewRadev/linediff.vim'
+    # }}}
 
-    [[plugins]] # {{{
+    [[plugins]] # daisuzu/translategoogle.vim {{{
       on_cmd = 'Trans'
       repo = 'daisuzu/translategoogle.vim'
     #}}}
@@ -854,8 +855,29 @@
   # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
 #}}}
 
-[[plugins]] # Konfekt/FastFold {{{
-repo = 'Konfekt/FastFold'
+  [[plugins]] # Konfekt/FastFold {{{
+    repo = 'Konfekt/FastFold'
+  # }}}
+
+  [[plugins]] # justinmk/vim-dirvish {{{
+    repo = 'justinmk/vim-dirvish'
+
+    hook_add='''
+      nnoremap <silent><leader>e :e %:p:h<CR>
+
+      augroup dirvish_autocmd
+      autocmd!
+        autocmd FileType dirvish lcd %
+        autocmd FileType dirvish autocmd BufEnter <silent><buffer> * execute ":Dirvish %<CR>"
+        autocmd FileType dirvish nmap <silent><buffer> <BS> <Plug>(dirvish_up)
+        autocmd FileType dirvish nnoremap <silent><buffer> O  :!open <C-R><C-F><CR>
+        autocmd FileType dirvish nnoremap <silent><buffer>
+          \ gh :silent keeppatterns g@\v/\.[^\/]+/?$@d<cr>
+        autocmd FileType dirvish nnoremap <buffer> N :e <C-R>=expand('%')<CR>
+        autocmd FileType dirvish nnoremap <buffer> K :call tkngue#util#intaractive_mkdir(expand('%:p'))<CR>
+      augroup END
+
+  '''
 # }}}
 
 # }}}
@@ -1581,6 +1603,15 @@ hook_post_source = '''
 
 # }}}
 
+# CSV {{{
+
+    [[plugins]] # leafgarland/typescript-vim {{
+        repo = 'chrisbra/csv.vim'
+        on_ft = 'csv'
+    # }}
+
+# }}}
+
   # Other {{{
 
     [[plugins]]
@@ -1709,25 +1740,6 @@ hook_post_source = '''
   #}}}
 #}}}
 
-[[plugins]]
-  repo = 'justinmk/vim-dirvish'
-
-  hook_add='''
-    nnoremap <silent><leader>e :e %:p:h<CR>
-
-    augroup dirvish_autocmd
-    autocmd!
-      " autocmd FileType dirvish lcd %
-      autocmd FileType dirvish autocmd BufEnter <silent><buffer> * execute ":Dirvish %<CR>"
-      autocmd FileType dirvish nmap <silent><buffer> <BS> <Plug>(dirvish_up)
-      autocmd FileType dirvish nnoremap <silent><buffer> O  :!open <C-R><C-F><CR>
-      autocmd FileType dirvish nnoremap <silent><buffer>
-        \ gh :silent keeppatterns g@\v/\.[^\/]+/?$@d<cr>
-      autocmd FileType dirvish nnoremap <buffer> N :e <C-R>=expand('%')<CR>
-      autocmd FileType dirvish nnoremap <buffer> K :call tkngue#util#intaractive_mkdir(expand('%:p'))<CR>
-    augroup END
-
-  '''
 
 [[plugins]]
   repo = 'chrisbra/vim-diff-enhanced'

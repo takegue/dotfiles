@@ -3,9 +3,9 @@
 tmux-sync_cmd() {
     while read cmd; do 
         tmux split-window -h "echo $cmd; $cmd;"
-        tmux set-option remain-on-exit on
         tmux select-layout main-horizontal
     done
+    tmux set-window-option remain-on-exit on
 }
 
 tmux-sync_cmd $@
