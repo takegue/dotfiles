@@ -401,12 +401,14 @@
     '''
 
     hook_add = '''
-      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite -start-filter help <CR>' : 'h '
-      nnoremap <silent> <Space>. :<C-u>Denite -buffer-name=dotfiles -start-filter  file/rec/git:~/.dotfiles<CR>
+      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite -start-filter help<CR>' : 'h '
+      nnoremap <silent> <Space>. :<C-u>Denite -start-filter -buffer-name=dotfiles file/rec/git:~/.dotfiles<CR>
+
 
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
-      nnoremap  [denite]s  :<C-u>Denite source<CR>
+      nnoremap  [denite]s  :<C-u>Denite -start-filter source<CR>
+
       nnoremap <silent>  [denite]f  :<C-u>Denite -start-filter -buffer-name=anything
               \ buffer `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec:~/Downloads'`
               \ file_mru <CR>
@@ -416,26 +418,28 @@
       nnoremap <silent> [denite]s  :<C-u>Denite
             \ -buffer-name=snippets
             \ unite:neosnippet <CR>
-      nnoremap <silent> [denite]me :<C-u>Denite output:message
+      nnoremap <silent> [denite]me :<C-u>Denite -start-filter output:message
             \ -buffer-name=messages <CR>
       nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq -start-filter 
             \ -buffer-name=projects <CR>
-      nnoremap <silent> [denite]o  :<C-u>Denite outline
+      nnoremap <silent> [denite]o  :<C-u>Denite -start-filter outline
             \ -buffer-name=outline <CR>
 
-      nnoremap <silent> [denite]l :<C-u>Denite  -start-filter -buffer-name=search-lines line<CR>
+      nnoremap <silent> [denite]l :<C-u>Denite -start-filter  -buffer-name=search-lines line<CR>
       nnoremap <silent> [denite]gf :<C-u>Denite -start-filter -buffer-name=search-buffers grep:$buffers<CR>
       nnoremap <silent> [denite]gj :<C-u>Denite -start-filter -buffer-name=search-junks grep:$HOME/Dropbox/junks:-i<CR>
-      nnoremap <silent> [denite]gg :<C-u>Denite -buffer-name=search-grep grep<CR>
-      nnoremap <silent> [denite]gc :<C-u>Denite -buffer-name=search-grep grep <CR><C-R><C-W><CR>
+      nnoremap <silent> [denite]gg :<C-u>Denite -start-filter -buffer-name=search-grep grep<CR>
+      nnoremap <silent> [denite]gc :<C-u>Denite -start-filter -buffer-name=search-grep grep <CR><C-R><C-W><CR>
       nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
       nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -start-filter -buffer-name=help help<CR>
 
       " Define mappings
       autocmd FileType denite call s:denite_my_settings()
       function! s:denite_my_settings() abort
-        nnoremap <silent><buffer><expr> <TAB> denite#do_map('choose_action')
-        nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+        nnoremap <silent><buffer><expr> <TAB>
+        \ denite#do_map('choose_action')
+        nnoremap <silent><buffer><expr> <CR>
+        \ denite#do_map('do_action')
         nnoremap <silent><buffer><expr> d
         \ denite#do_map('do_action', 'delete')
         nnoremap <silent><buffer><expr> p
@@ -447,7 +451,113 @@
         nnoremap <silent><buffer><expr> <Space>
         \ denite#do_map('toggle_select').'j'
       endfunction
+    '''
+  # }}}
 
+  [[plugins]] # Shougo/unite.vim {{{
+    repo = 'Shougo/unite.vim'
+    on_cmd = "Unite"
+    on_if = "has('nvim') && has('python3')"
+    # on_map = "{ 'n' : [denite]}"
+    # on_func = "denite"
+    hook_add = '''
+      if !has('nvim')
+        nnoremap [unite]    <Nop>
+        nmap    <Leader>f  [unite]
+        nnoremap  [unite]s  :<C-u>Unite source<CR>
+        nnoremap  [unite]f  :<C-u>Unite -buffer-name=files -no-split
+              \ bookmark buffer file file_rec/git file_mru file_rec:~/Downloads
+              \ file/new directory/new <CR>
+        nnoremap <silent> [unite]F  :<C-u>UniteWithCurrentDir -buffer-name=files
+              \ file_rec/neovim
+              \ file/new directory/new <CR>
+        nnoremap <silent> [unite]b  :<C-u>UniteWithBufferDir
+              \ -buffer-name=files -prompt=%\  buffer bookmark file<CR>
+        nnoremap <silent> [unite]r  :<C-u>Unite
+              \ -buffer-name=register register<CR>
+        nnoremap <silent> [unite]o  :<C-u>Unite outline tag
+              \ -buffer-name=outline <CR>
+        " nnoremap <silent> [unite]n  :<C-u>Unite
+        "      \ -buffer-name=bundles
+        "      \ neobundle/search <CR>
+        nnoremap <silent> [unite]s  :<C-u>Unite
+              \ -buffer-name=snippets
+              \ neosnippet <CR>
+        nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
+              \ -buffer-name=mapping -hide-source-names<CR>
+        nnoremap <silent> [unite]me :<C-u>Unite output:message
+              \ -buffer-name=messages <CR>
+        " nnoremap <silent> [unite]b  :<C-u>Unite<Space>bookmark<CR>
+        nnoremap <silent> [unite]a  :<C-u>UniteBookmarkAdd<CR>
+
+        nnoremap <silent> [unite]l :<C-u>Unite  -buffer-name=search-lines line<CR>
+        nnoremap <qsilent> [unite]gf :<C-u>Unite -buffer-name=search-buffers grep:$buffers<CR>
+        nnoremap <silent> [unite]gj :<C-u>Unite -buffer-name=search-junks grep:$HOME/Dropbox/junks:-iR<CR>
+        nnoremap <silent> [unite]gg :<C-u>Unite -buffer-name=search-cd grep:./:-iR<CR>
+        nnoremap <silent> [unite]gc :<C-u>Unite -buffer-name=search-current-word grep:$buffers:<C-R><C-W><CR>
+        nnoremap <silent> [unite]R  :<C-u>Unite -buffer-name=resume resume<CR>
+        nnoremap <silent> [unite]h  :<C-u>Unite -buffer-name=help help<CR>
+        nnoremap <silent> [unite]z :<C-u>Unite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
+        nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord -buffer-name=help help<CR>
+        nnoremap <silent> [\ :UniteNext<CR>
+        nnoremap <silent> ]\ :UnitePrevious<CR>
+        nnoremap <silent> ]\ :UniteFirst<CR>
+        nnoremap <silent> [\ :UniteLast<CR>
+      endif
+    '''
+
+    hook_source = '''
+      call unite#custom#profile('default', 'context', {
+            \   'start_insert': 1,
+            \   'direction': 'dynamictop',
+            \   'prompt': '» ',
+            \ })
+      function! s:unite_my_settings() "{{{
+        " Overwrite settings.
+        imap <buffer> jj      <Plug>(unite_insert_leave)
+        imap <buffer> kk      <Plug>(unite_insert_leave)
+        "imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+
+        imap <buffer><expr> j unite#smart_map('j', '')
+        imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+        imap <buffer> <C-w>     <Plug>(unite_delete_backward_path)
+        imap <buffer> '     <Plug>(unite_quick_match_default_action)
+        nmap <buffer> '     <Plug>(unite_quick_match_default_action)
+        imap <buffer><expr> x
+              \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+        nmap <buffer> x     <Plug>(unite_quick_match_choose_action)
+        imap <buffer> <C-z>     <Plug>(unite_toggle_transpose_window)
+        nmap <buffer> <C-y>     <Plug>(unite_narrowing_path)
+        " nmap <buffer> <C-j>     <Plug>(unite_toggle_auto_preview)
+        imap <buffer> <C-r>     <Plug>(unite_narrowing_input_history)
+        nnoremap <silent><buffer><expr> l
+              \ unite#smart_map('l', unite#do_action('default'))
+
+        let unite = unite#get_current_unite()
+        if unite.profile_name ==# 'search'
+          nnoremap <silent><buffer><expr> r     unite#do_action('replace')
+        else
+          nnoremap <silent><buffer><expr> r     unite#do_action('rename')
+        endif
+
+        nnoremap <silent><buffer><expr> cd     unite#do_action('lcd')
+        nnoremap <buffer><expr>S      unite#mappings#set_current_sorters(
+              \ empty(unite#mappings#get_current_sorters()) ?
+              \ ['sorter_reverse'] : [])
+        nnoremap <buffer><expr>M    unite#mappings#set_current_matchers(
+              \ empty(unite#mappings#get_current_matchers()) ?
+              \ ['matcher_migemo'] : [])
+        nnoremap <buffer><expr>R    unite#mappings#set_current_matchers(
+              \ empty(unite#mappings#get_current_matchers()) ?
+              \ ['matcher_regexp'] : [])
+
+        " Runs "split" action by <C-s>.
+        imap <silent><buffer><expr> <C-s>     unite#do_action('split')
+
+        setl nofoldenable
+      endfunction "}}}
+
+      autocmd FileType unite call s:unite_my_settings()
       autocmd FileType denite-filter call s:denite_filter_my_settings()
       function! s:denite_filter_my_settings() abort
         imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)

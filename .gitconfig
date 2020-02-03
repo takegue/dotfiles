@@ -85,3 +85,6 @@
 
 [rebase]
     autosquash = true
+
+[ghq]
+    root = "~/.ghq"
