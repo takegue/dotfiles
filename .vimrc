@@ -476,7 +476,8 @@ augroup MyAutocmdGroup "{{{
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
 
-  autocmd BufRead * call s:cd_project_dir()
+  " MEMO: Shdo するさいに lcdしてしまうのがうざいのでdisabled
+  " autocmd BufRead * call s:cd_project_dir()
   autocmd VimEnter * if filereadable(expand("./.vimrc.local"))
       \ | execute 'source ' . expand("./.vimrc.local")
       \ | endif

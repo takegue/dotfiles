@@ -707,7 +707,8 @@
 [[plugins]] # jceb/vim-hier  {{{
   repo = 'jceb/vim-hier'
 # }}}
-
+#
+#
 
 [[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
   repo = 'tamy0612/quickrun-job-runner.nvim'
@@ -1584,9 +1585,9 @@ hook_post_source = '''
             endif
             let l:root_path = escape(fnamemodify(l:root_path, ':p:h:h'), ' ()')
 
-            if &ft != 'dirvish' && getcwd() !~# l:root_path
-              execute 'lcd '. root_path
-            endif
+            " if &ft != 'dirvish' && getcwd() !~# l:root_path
+            "   execute 'lcd '. root_path
+            " endif
 
             setl nobackup
             nnoremap <buffer> [git] <Nop>
@@ -1620,7 +1621,7 @@ hook_post_source = '''
           augroup FUGITIVE
               autocmd!
               autocmd User Fugitive call ConfigOnGitRepository()
-              autocmd FileType dirvish call fugitive#detect(@%)
+              " autocmd FileType dirvish call fugitive#detect(@%)
           augroup END
         '''
       #}}}
@@ -1641,6 +1642,8 @@ hook_post_source = '''
 
     #}}}
 
+    [[plugins]]
+      repo = 'moro/vim-review'
 
 # }}}
 
