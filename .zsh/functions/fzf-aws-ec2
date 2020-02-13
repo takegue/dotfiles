@@ -1,0 +1,26 @@
+#!/bin/zsh
+
+fzf_aws_ec2(){
+    FZF_OPTS=${(z)@}
+    (( $+commands[aws] )) && aws ec2 describe-instances | jq -r '
+            .Reservations[].Instances[] 
+            | { 
+                Name: ([.Tags[]?] | from_entries | .Name),
+                Address: (.PublicIpAddress),
+              } 
+            | to_entries | [ .[]? | "\(.key)=\"\(.value[:30])\""]
+            | join(",")
+        ' | column -t -s,\
+        | fzf $FZF_OPTS \
+        | jq -Rs '
+            rtrimstr("\n") | split(",") | [ 
+                .[]? | split("=") | { 
+                    key: .[0], 
+                    value: .[1] | ltrimstr("\"") | rtrimstr("\"") 
+                }] 
+            | from_entries
+            | "ssh \(.Address)"
+        '
+}
+
+fzf_aws_ec2 $@
