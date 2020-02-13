@@ -8,13 +8,14 @@ fzf_aws_ec2(){
                 Name: ([.Tags[]?] | from_entries | .Name),
                 Address: (.PublicIpAddress),
               } 
-            | to_entries | [ .[]? | "\(.key)=\"\(.value[:30])\""]
+            | to_entries | [ .[]? | "\(.key):\"\(.value[:30])\""]
             | join(",")
         ' | column -t -s,\
         | fzf $FZF_OPTS \
-        | jq -Rs '
+        | sed 's/"  */",/' \
+        | jq -Rr '
             rtrimstr("\n") | split(",") | [ 
-                .[]? | split("=") | { 
+                .[]? | split(":") | { 
                     key: .[0], 
                     value: .[1] | ltrimstr("\"") | rtrimstr("\"") 
                 }] 
