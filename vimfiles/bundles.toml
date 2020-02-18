@@ -1717,6 +1717,13 @@ hook_post_source = '''
 
 # }}}
 
+# Kotlin {{{
+
+    [[plugins]] # udalov/kotlin-vim {{
+        repo = 'udalov/kotlin-vim'
+    # }}
+
+# }}}
 # Javascripts {{{
 
     [[plugins]] # leafgarland/typescript-vim {{
