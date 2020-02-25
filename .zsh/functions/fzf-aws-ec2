@@ -2,7 +2,16 @@
 
 fzf_aws_ec2(){
     FZF_OPTS=${(z)@}
-    (( $+commands[aws] )) && aws ec2 describe-instances | jq -r '
+    {
+        CACHE_PATH=/tmp/_cache_aws_ec2_instances.json
+        if [[ ! -f $CACHE_PATH ]]; then
+            (( $+commands[aws] )) && aws ec2 describe-instances > $CACHE_PATH
+        elif [[ $(date +'%j') != $(stat -f '%m' -t '%j' $CACHE_PATH  | date +%j) ]]; then
+            # NOTE: Daily Cache
+            (( $+commands[aws] )) && aws ec2 describe-instances > $CACHE_PATH
+        fi
+        cat $CACHE_PATH
+    } | jq -r '
             .Reservations[].Instances[] 
             | { 
                 Name: ([.Tags[]?] | from_entries | .Name),
