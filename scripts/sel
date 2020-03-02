@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Usecase:
+#   $ echo 'a b c' | sel 1
+#   a
+
+awk -v selector=$1 '{print $selector}'
