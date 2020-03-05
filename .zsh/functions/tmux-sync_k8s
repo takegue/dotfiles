@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+fzf_k8s_pod(){
+    FZF_OPTS=${(z)@}
+    kubectl get pods -o json | jq -r ".items[].metadata.name" | fzf -m $FZF_OPTS
+}
+
+tmux-sync_k8s() {
+    hosts=${(Z+n+)$(cat -)}
+    for host in $hosts[2,-1]; do
+        tmux splitw -p $(( 100 / (${#hosts} - 1))) kubectl exec -it $host /bin/bash
+        tmux select-layout main-vertical
+    done
+    tmux set synchronize-panes on
+    { kubectl exec -it $hosts[1] /bin/bash <> /dev/tty }
+    tmux set synchronize-panes off
+}
+
+fzf_k8s_pod $@ | tmux-sync_k8s
