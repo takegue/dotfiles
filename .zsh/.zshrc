@@ -414,20 +414,6 @@ if [ ${UID} -eq 0 ]; then
     tmp_sprompt="%B%U${tmp_sprompt}%u%b"
 fi
 
-get_myvcs_info()
-{
-    if [[ $(command git rev-parse --is-inside-work-tree 2> /dev/null) != 'true' ]]; then
-        # 0以外を返すとそれ以降のフック関数は呼び出されない
-        return ''
-    fi
-    # root=$(git rev-parse --git-dir 2> /dev/null)
-
-    # [[ -z ${root} ]] && echo '' && return
-    # cd $root >/dev/null && cd ../ > /dev/null
-    # branch=$(git diff --shortstat | sed -E -e 's/, / /g' -e 's/([0-9]*) insertions?\(\+\)/+\1/' -e 's/([0-9]*) deletions?\(-\)/-\1/' -e 's/ ([0-9]+) files? changed/📚 \1/')
-    # echo "${branch}"
-}
-
 get_ruby_info()
 {
     if [[ -z $RBENV_SHELL ]]; then
@@ -445,8 +431,11 @@ get_ruby_info()
 }
 
 
+function save_last_exit_code() { 
+    PROMPT_LAST_EXIT_CODE=$?
+}
 function check_last_exit_code() {
-  local LAST_EXIT_CODE=$?
+  local LAST_EXIT_CODE=$PROMPT_LAST_EXIT_CODE
   if [[ $LAST_EXIT_CODE -ne 0 ]]; then
     local EXIT_CODE_PROMPT=' '
     EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
@@ -455,12 +444,15 @@ function check_last_exit_code() {
     echo "$EXIT_CODE_PROMPT"
   fi
 }
+add-zsh-hook precmd save_last_exit_code
 
-PROMPT="\$(get_ruby_info)$tmp_rprompt\$vcs_info_msg_0_(\$(get_myvcs_info))
+
+PROMPT="
+\$(get_ruby_info) $tmp_rprompt\${vcs_info_msg_0_}\$(check_last_exit_code)
 $tmp_prompt"    # 通常のプロンプト
 
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-RPROMPT="\$(check_last_exit_code)"  # 右側のプロンプト
+# RPROMPT="\$(check_last_exit_code)"  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # For tmux powerline, to detect current directory setting
