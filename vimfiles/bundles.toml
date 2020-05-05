@@ -1237,10 +1237,10 @@
   '''
 
   hook_source = '''
-    if has('python')
-      let g:pymode_python = 'python'
-    elseif has('python3')
+    if has('python3')
       let g:pymode_python = 'python3'
+    elseif has('python')
+      let g:pymode_python = 'python'
     else
     endif
 
@@ -1726,14 +1726,14 @@ hook_post_source = '''
 # }}}
 # Javascripts {{{
 
-    [[plugins]] # leafgarland/typescript-vim {{
-        repo = 'leafgarland/typescript-vim'
-        on_ft = 'typescript'
-    # }}
-    [[plugins]]
-        repo = 'mhartington/nvim-typescript'
-        on_ft = 'typescript'
-        build = './install.sh'
+    # [[plugins]] # leafgarland/typescript-vim {{
+    #     repo = 'leafgarland/typescript-vim'
+    #     on_ft = 'typescript'
+    # # }}
+    # [[plugins]]
+    #     repo = 'mhartington/nvim-typescript'
+    #     on_ft = 'typescript'
+    #     build = './install.sh'
 
     # [[plugins]] # posva/vim-vue {{
     #     repo = 'posva/vim-vue'
