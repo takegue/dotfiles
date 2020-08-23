@@ -420,10 +420,11 @@ if tkngue#util#executable('tika')
   augroup END "}}}
 endif
 
-augroup terminal "{{{
+augroup TerminalSetting "{{{
   autocmd!
   autocmd TermOpen *
-        \ set nonumber
+        \ setl nonumber
+  autocmd TermOpen term://* startinsert
 augroup END "}}}
 
 

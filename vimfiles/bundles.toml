@@ -1439,10 +1439,11 @@ on_ft = ['html', 'svg', 'rdf']
 
   [[plugins]] # rust-lang/rust.vim {{{
     repo = 'rust-lang/rust.vim'
-    if = 0
+    if = 1
     on_ft = 'rust'
     hook_add = '''
       let g:rustfmt_autosave = 1
+      let g:cargo_shell_command_runner='botright vsplit term://'
     '''
 
   # }}}
