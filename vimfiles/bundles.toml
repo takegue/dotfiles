@@ -1015,8 +1015,9 @@
 
       hook_add = '''
         inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-        imap <expr><cr> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)"
-                    \ : pumvisible() ? "\<c-y>" : "\<cr>"
+        imap <expr><cr> neosnippet#expandable_or_jumpable() ? 
+            \ "\<Plug>(neosnippet_expand_or_jump)" : 
+            \ pumvisible() ? "\<c-y>" : "\<cr>"
 
         function! Smart_TabComplete()
             if pumvisible()
