@@ -448,7 +448,7 @@ add-zsh-hook precmd save_last_exit_code
 
 
 PROMPT="
-\$(get_ruby_info) $tmp_rprompt\${vcs_info_msg_0_}\$(check_last_exit_code)
+\$(get_ruby_info)$tmp_rprompt\${vcs_info_msg_0_}\$(check_last_exit_code)
 $tmp_prompt"    # 通常のプロンプト
 
 PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)

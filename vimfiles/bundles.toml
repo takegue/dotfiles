@@ -1015,41 +1015,40 @@
 
       hook_add = '''
         inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-        imap <expr><cr> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<c-y>" : "\<cr>"
+        imap <expr><cr> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)"
+                    \ : pumvisible() ? "\<c-y>" : "\<cr>"
 
         function! Smart_TabComplete()
-          if neosnippet#expandable_or_jumpable()
-            return "\<Plug>(neosnippet_jump_or_expand)" 
-          endif
+            if pumvisible()
+                return "\<C-n>" 
+            endif
 
-          if pumvisible()
-            return "\<C-n>" 
-          endif
+            let line = getline('.')                         " current line
 
-          let line = getline('.')                         " current line
+            let substr = strpart(line, -1, col('.')+1)      " from the start of the current
+            " line to one character right
+            " of the cursor
+            let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
+            if (strlen(substr)==0)                          " nothing to match on empty string
+                return "\<tab>"
+            endif
 
-          let substr = strpart(line, -1, col('.')+1)      " from the start of the current
-                                                          " line to one character right
-                                                          " of the cursor
-          let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
-          if (strlen(substr)==0)                          " nothing to match on empty string
-            return "\<tab>"
-          endif
-
-          let has_period = match(substr, '\.') != -1      " position of period, if any
-          let has_slash = match(substr, '\/') != -1       " position of slash, if any
-          if (!has_period && !has_slash)
-            return "\<tab>"
-            "return "\<C-X>\<C-P>"                         " existing text matching
-          elseif ( has_slash )
-            return "\<C-X>\<C-F>"                         " file matching
-          else
-            "return asyncomplete#force_refresh()
-            return "\<C-X>\<C-O>"                        " plugin matching
-          endif
+            let has_period = match(substr, '\.') != -1      " position of period, if any
+            let has_slash = match(substr, '\/') != -1       " position of slash, if any
+            if (!has_period && !has_slash)
+                return "\<tab>"
+                "return "\<C-X>\<C-P>"                         " existing text matching
+            elseif ( has_slash )
+                return "\<C-X>\<C-F>"                         " file matching
+            else
+                "return asyncomplete#force_refresh()
+                return "\<C-X>\<C-O>"                        " plugin matching
+            endif
         endfunction
 
-        inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+        imap <expr><tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : Smart_TabComplete()
+        smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
+
 
         snoremap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<TAB>"
         inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
@@ -1059,10 +1058,6 @@
         smap <C-k>     <Plug>(neosnippet_expand_or_jump)
         xmap <C-k>     <Plug>(neosnippet_expand_target)
         xmap <C-l>     <Plug>(neosnippet_start_unite_snippet_target)
-
-        " Plugin key-mappings.
-        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
       '''
     # }}}
