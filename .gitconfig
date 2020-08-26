@@ -49,7 +49,7 @@
     loga = log --graph --oneline --decorate=full --date=short --format='%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)'
     ignore = !"f() { local s=$1; shift; \
         while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
-        curl \"https://www.gitignore.io/api/$s\"; }; f"
+        curl \"https://www.toptal.com/developers/gitignore/api/$s\"; }; f"
     ldiff = difftool -t latex
     # List contributors with number of commits
     contributors = shortlog --summary --numbered

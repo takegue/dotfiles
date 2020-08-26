@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 import argparse
 
-pd.set_option('display.line_width',200)
+pd.set_option('display.max_rows',200)
 
 
 def main():
