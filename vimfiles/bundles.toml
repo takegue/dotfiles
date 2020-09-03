@@ -178,19 +178,16 @@
 # Colorschemes : {{{
 [[plugins]] # tomasr/molokai {{{
   repo = 'tomasr/molokai'
-  script_type = 'colors'
 #}}}
 
 [[plugins]] # NLKNguyen/papercolor-theme {{{
 # colorscheme paperolor
   repo = 'NLKNguyen/papercolor-theme'
-  script_type = 'colors'
 #}}}
 
 [[plugins]] # flazz/vim-colorschemes {{{
 # one colorscheme pack to rule them all!
   repo = 'flazz/vim-colorschemes'
-  script_type = 'colors'
 #}}}
 #}}}
 #}}}
