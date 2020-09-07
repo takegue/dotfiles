@@ -159,12 +159,28 @@ endif
 
 if has('nvim')
   set clipboard=unnamed
-  " NOTE: Performance issue and only for MacOS Settings
-  let g:clipboard = {
-    \ 'name': 'pbcopy',
-    \ 'copy': { '+': 'pbcopy', '*': 'pbcopy'},
-    \ 'paste': { '+': 'pbpaste', '*': 'pbpaste'}
-    \ }
+
+    if has('mac')
+      " NOTE: Performance issue and only for MacOS Settings
+      let g:clipboard = {
+        \ 'name': 'pbcopy',
+        \ 'copy': { '+': 'pbcopy', '*': 'pbcopy'},
+        \ 'paste': { '+': 'pbpaste', '*': 'pbpaste'}
+        \ }
+    elseif has('windows') && tkngue#util#executable('win32yank.exe')
+      let g:clipboard = {
+            \   'name': 'win32yank',
+            \   'copy': {
+            \      '+': 'win32yank.exe -i',
+            \      '*': 'win32yank.exe -i',
+            \    },
+            \   'paste': {
+            \      '+': 'win32yank.exe -o --lf',
+            \      '*': 'win32yank.exe -o --lf',
+            \   },
+            \   'cache_enabled': 1,
+            \ }
+    endif
 else
   if has('unnamedplus')
     set clipboard=unnamedplus,exclude:cons\|linux
@@ -544,7 +560,7 @@ if !g:noplugin
       call dein#begin(s:dein_dir)
       call dein#load_toml('~/.vim/bundles.toml')
       call dein#end()
-      call dein#call_hook('source')
+      " call dein#call_hook('source')
       call dein#save_state()
   endif
 
@@ -574,7 +590,7 @@ endif
 if has('gui_running')
     colorscheme PaperColor
 elseif has('vim_starting')
-    set background=light
+    set background=dark
     if &t_Co < 256
         colorscheme default
     else
