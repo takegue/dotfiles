@@ -168,6 +168,7 @@ if has('nvim')
         \ 'paste': { '+': 'pbpaste', '*': 'pbpaste'}
         \ }
     elseif has('windows') && tkngue#util#executable('win32yank.exe')
+      " See https://github.com/equalsraf/win32yank
       let g:clipboard = {
             \   'name': 'win32yank',
             \   'copy': {
