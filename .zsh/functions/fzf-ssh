@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-set -x 
 fzf_ssh(){
     FZF_OPTS=${@}
     cat <(cat ~/.ssh/config /etc/ssh/ssh_config 0> /dev/null | \grep -i '^host' | tr ' ' '\n' | awk 'tolower($1) !~/^host/{print "host",$1}' | \grep -v '*') \
