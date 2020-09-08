@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 fzf-ssh-multi_sync() {
-    fzf-ssh --bind=ctrl-a:toggle-all -m ${(z)@} | tmux-sync_ssh
+    tmux new-window "fzf-ssh --bind=ctrl-a:toggle-all -m ${(z)@} | tmux-sync_ssh"
 }
 
 fzf-ssh-multi_sync $@
