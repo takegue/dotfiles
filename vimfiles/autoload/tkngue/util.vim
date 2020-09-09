@@ -89,9 +89,14 @@ function! tkngue#util#system(cmd) abort
   " let l:h = sha256(a:cmd)
   let l:h = shellescape(substitute(a:cmd, ' ', '', 'g'))
   " let l:path = stdpath('cache') . '/' . l:h
-  let l:cache_path = '/tmp/rdisk'
-  let l:path = '/tmp/rdisk/' . l:h
-  if isdirectory(l:cache_path) && !filereadable(l:path)
+  let l:cache_path = '/tmp/vim/'
+  let l:path = '/tmp/vim/' . l:h
+
+  if isdirectory(l:cache_path)
+    mkdir(l:cache_path)
+  endif
+
+  if !filereadable(l:path)
     let l:output = system(a:cmd)
     call writefile(split(l:output, '\n'), l:path)
   else

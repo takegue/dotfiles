@@ -70,7 +70,7 @@ if ! zgen saved; then
   zgen load https://gist.github.com/aaeb57123ac97c649b34dfdc5f278b89.git
 
   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
-  zgen load jonmosco/kube-ps1 kube-ps1.sh
+  # zgen load jonmosco/kube-ps1 kube-ps1.sh
 
   # generate the init script from plugins above
   zgen save
@@ -128,13 +128,15 @@ autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
 autoload -Uz compinit
+
 # NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
-if [[ $(date +'%j') != $(stat -f '%m' -t '%j' $ZDOTDIR/.zcompdump  | date +%j) ]]; then
-  (( $+commands[kubectl] )) && source <(kubectl completion zsh)
-  compinit
-else
-  compinit -C
-fi
+# if [[ $(date +'%j') != $(stat -f '%m' -t '%j' $ZDOTDIR/.zcompdump  | date +%j) ]]; then
+#   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
+#   compinit
+# else
+#   compinit -C
+# fi
+compinit -C
 
 if is-at-least 5.0.8; then
   autoload -Uz select-bracketed
@@ -323,9 +325,16 @@ alias -g W='| wc'
 # Functions
 # ------------------------------
 function vtime() {
-  FILE=/tmp/vim_startup.$RANDOM.log
-  $EDITOR --startuptime $FILE $@ +q
-  $EDITOR $FILE
+  FILE1=/tmp/vim_startup1.$RANDOM.log
+  FILE2=/tmp/vim_profile_vimrc.$RANDOM.log
+  $EDITOR \
+    --startuptime $FILE1 \
+    --cmd "profile start ${FILE2}" \
+    --cmd "profile file ~/.config/nvim/init.vim" \
+    -c "profile stop" \
+    +q
+
+  $EDITOR $FILE1 $FILE2
 }
 
 function man()

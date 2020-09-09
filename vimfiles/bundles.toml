@@ -1671,6 +1671,8 @@ hook_post_source = '''
 
       [[plugins]]
         repo = 'tpope/vim-rhubarb'
+        on_ft = 'fugitive'
+        on_cmd = 'G'
 
       #[[plugins]] # moznion/github-commit-comment.vim {{{
       #    repo = 'moznion/github-commit-comment.vim'
