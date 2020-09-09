@@ -458,8 +458,8 @@ augroup END "}}}
 augroup edit_vimrc "{{{
   autocmd!
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
-  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob("$CACHE/dein/repos/*"), '\n', ',', 'g')
-  " autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob("$CACHE/dein/repos/**/.git/tags"), '\n', ',', 'g')
+  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob(s:cache_home . "/repos/*"), '\n', ',', 'g')
+  " autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob(s:cache_home . "/repos/*"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/**/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost bundles.toml source $MYVIMRC
@@ -539,29 +539,23 @@ let g:loaded_vimballPlugin     = 1
 
 let g:noplugin = &compatible ? 1 : 0
 if !g:noplugin
+  let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
+  let s:cache_home = s:cache_home . '/dein'
+
   " Load dein.
   let s:dein_dir = finddir('dein.vim', '.;')
-  if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
-    let $CACHE = expand('~/.cache')
-    let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
-    if s:dein_dir == '' && &runtimepath !~ '/dein.vim'
-      let s:dein_dir = expand('$CACHE/dein')
-            \. '/repos/github.com/Shougo/dein.vim'
-      if !isdirectory(s:dein_dir)
-        execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
-      endif
+  let s:dein_repo = expand(s:cache_home) . '/repos/github.com/Shougo/dein.vim'
+  if s:dein_dir == '' && &runtimepath !~ '/dein.vim'
+    if !isdirectory(s:dein_repo)
+      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo
     endif
-    execute ' set runtimepath^=' . substitute(
-          \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
-
   endif
+  execute 'set runtimepath^=' . substitute(fnamemodify(s:dein_repo, ':p') , '/$', '', '')
 
-  let s:dein_dir = expand('$CACHE/dein')
-  if dein#load_state(s:dein_dir)
-      call dein#begin(s:dein_dir)
+  if dein#load_state(s:cache_home)
+      call dein#begin(s:cache_home)
       call dein#load_toml('~/.vim/bundles.toml')
       call dein#end()
-      " call dein#call_hook('source')
       call dein#save_state()
   endif
 

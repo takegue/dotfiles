@@ -3,8 +3,9 @@
   hook_add = '''
     let g:dein#install_progress_type = 'title'
     let g:dein#install_message_type = 'none'
+    let g:dein#auto_recache = 1
   '''
-#}}}
+#}vimrc}}
 
 [[plugins]] # tpope/vim-sensible {{{
   repo = 'tpope/vim-sensible'
@@ -74,7 +75,7 @@
       if exists('b:git_dir')
         if !exists('b:fugitive_branch')
           let statusline = fugitive#statusline()
-          let b:fugitive_branch = substitute(statusline, '\[Git(\(.\+\))\]', '⭠ \1', '')
+          let b:fugitive_branch = substitute(statusline, '\[Git(\(.\+\))\]', ' \1', '')
         endif
         return b:fugitive_branch
       else
@@ -138,8 +139,8 @@
             \   'modified': '&modified||!&modifiable',
             \   'readonly': '&readonly'
             \ },
-            \ 'separator': { 'left': '⮀', 'right': '⮂' },
-            \ 'subseparator': { 'left': '⮁', 'right': '⮃' }}
+            \ 'separator': { 'left': '', 'right':'' },
+            \ 'subseparator': { 'left': '', 'right' : ''}}
 
     " :WatchdogsRun後にlightline.vimを更新
     let g:Qfstatusline#UpdateCmd = function('lightline#update')
@@ -219,7 +220,6 @@
 
 [[plugins]] # kana/vim-textobj-datetime {{{
  # 日付オブジェクト#ada, add, adt
-  on_idle = 1
   repo = 'kana/vim-textobj-datetime'
 #}}}
 
@@ -227,14 +227,12 @@
  # 全体オブジェクト
  # ae, ai
  repo = 'kana/vim-textobj-entire'
- on_if = 1
 #}}}
 
 [[plugins]] # kana/vim-textobj-fold {{{
 # 降りたたみオブジェクト
 # az, iz
   repo = 'kana/vim-textobj-fold'
-  if = 0
  #}}}
 
 [[plugins]] # kana/vim-textobj-function {{{
@@ -246,7 +244,6 @@
 # URLオブジェクト
 # au, iu
   repo = 'mattn/vim-textobj-url'
-  on_if = 1
 #}}}
 
 [[plugins]] # sgur/vim-textobj-parameter {{{
@@ -596,18 +593,6 @@
   repo = 'Shougo/unite-outline'
 # }}}
  #}}}
-
-[[plugins]] # Shougo/vimfiler.vim {{{
-  repo = 'Shougo/vimfiler.vim'
-  depends = ['unite.vim']
-  on_cmd = 'VimFiler'
-
-  hook_post_source = '''
-    call vimfiler#custom#profile('default', 'context', {
-          \ 'safe' : 0,
-          \ })
-  '''
-#}}}
 
 [[plugins]] # Shougo/context_filetype.vim {{{
   repo = 'Shougo/context_filetype.vim'
