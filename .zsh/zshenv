@@ -12,6 +12,8 @@ DOMAIN=${DOMAIN:-$(hostname -d 2>&-)}
 [[ -f /etc/debian_version ]] && DISTRI="Debian"
 [[ -f /etc/redhat-release ]] && DISTRI="RedHat"
 
+# For Ubuntu, Disable compinit for sake of startup performance
+skip_global_compinit=1
 
 DEBUG=${DEBUG:-no}
 
