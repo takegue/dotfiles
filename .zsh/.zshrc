@@ -274,13 +274,6 @@ function cd() {
     fi
 }
 
-function foreground-vi() {
-    fg %$EDITOR
-}
-
-zle -N foreground-vi
-bindkey '^Z' foreground-vi
-
 zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }

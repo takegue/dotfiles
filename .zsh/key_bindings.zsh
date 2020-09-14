@@ -74,3 +74,10 @@ fi
 zle -N foreground-vi
 bindkey '^Z' foreground-vi
 
+function foreground-vi() {
+    fg %$EDITOR
+}
+
+zle -N foreground-vi
+bindkey '^Z' foreground-vi
+
