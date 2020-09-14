@@ -101,12 +101,6 @@ zinit light zsh-users/zsh-completions
 # Load OMZ Git library
 zinit snippet OMZL::git.zsh
 
-# Load Git plugin from OMZ
-zinit snippet OMZP::git
-zinit cdclear -q # <- forget completions provided up to this moment
-
-setopt promptsubst
-
 # Load the pure theme, with zsh-async library that's bundled with it.
 zinit ice pick"async.zsh" src"pure.zsh"
 zinit light sindresorhus/pure
@@ -248,7 +242,6 @@ else
   bindkey -M viins '^F' history-incremental-search-backward
 fi
 
-
 # # マッチしたコマンドのヒストリを表示できるようにする
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
@@ -308,7 +301,6 @@ function history-all { history -E -D 1  }
 # -----------------------------------------------------------------------------
 #                                     OTHERS
 # -----------------------------------------------------------------------------
-
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
 today(){ echo `date +%Y%m%d` } 
@@ -333,7 +325,7 @@ alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 
-(( $+commands[nvim] )) && alias vim='nvim' && export EDITOR
+(( $+commands[nvim] )) && alias vim='nvim' && export EDITOR=nvim
 (( $+commands[htop] )) && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 (( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'
@@ -342,22 +334,6 @@ alias uniq="LC_ALL=C uniq"
 # ------------------------------
 # Functions
 # ------------------------------
-function vtime() {
-  FILE1=/tmp/vim_startup1.$RANDOM.log
-  FILE2=/tmp/vim_profile_vimrc.$RANDOM.log
-  $EDITOR \
-    --startuptime $FILE1 \
-    --cmd "profile start ${FILE2}" \
-    --cmd "profile file ~/.config/nvim/init.vim" \
-    -c "profile stop" \
-    +q
-
-  $EDITOR $FILE1 $FILE2
-}
-function ztime() { 
-    repeat 10 time zsh -i -c "exit"
-}
-
 function man()
 {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
