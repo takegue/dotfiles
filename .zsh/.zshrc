@@ -55,26 +55,55 @@ typeset -gU ld_library_path
 # -----------------------------------------------------------------------------
 #                               PLUGIN SETTINGS
 # -----------------------------------------------------------------------------
-if [[ ! -d ~/.zgen ]]; then
-    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
-source "${HOME}/.zgen/zgen.zsh"
-if ! zgen saved; then
-  zgen load zsh-users/zsh-history-substring-search
-  zgen load k4rthik/git-cal
-  zgen load zsh-users/zsh-completions src
-  zgen load zsh-users/zsh-autosuggestions
-  zgen load zsh-users/zsh-syntax-highlighting
-  zgen load junegunn/fzf shell/completion.zsh
-  zgen load https://gist.github.com/aaeb57123ac97c649b34dfdc5f278b89.git
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-  [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
-  # zgen load jonmosco/kube-ps1 kube-ps1.sh
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-rust \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
 
-  # generate the init script from plugins above
-  zgen save
-fi
+zinit wait lucid for \
+    zsh-users/zsh-autosuggestions \
+    zdharma/fast-syntax-highlighting \
+    zsh-users/zsh-history-substring-search
+    # k4rthik/git-cal \
+    # zsh-users/zsh-completions src 
+  # zsh-users/zsh-syntax-highlighting
+
+# make'!...' -> run make before atclone & atpull
+zinit as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
+    atpull'%atclone' pick"direnv" src"zhook.zsh" for \
+        direnv/direnv
+
+zinit as"program" make'!' src"shell/completion.zsh" \
+    pick"fzf" for \
+    junegunn/fzf 
+
+zinit ice blockf
+zinit light zsh-users/zsh-completions
+
+# Zbell
+zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/210120e8ac4794a792ab7477549c1bc314fa759e/zbell.zsh
+
+# FIXME: Impl 
+#   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
+#   # zgen load jonmosco/kube-ps1 kube-ps1.sh
+
 
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
@@ -127,53 +156,49 @@ autoload -Uz is-at-least
 autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
-autoload -Uz compinit
-
-# NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
-# if [[ $(date +'%j') != $(stat -f '%m' -t '%j' $ZDOTDIR/.zcompdump  | date +%j) ]]; then
+# autoload -Uz compinit
+# # # NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
+# if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
 #   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
 #   compinit
 # else
 #   compinit -C
 # fi
-compinit -C
 
-if is-at-least 5.0.8; then
-  autoload -Uz select-bracketed
+# if is-at-least 5.0.8; then
+#   autoload -Uz select-bracketed
 
-  zle -N select-bracketed
-  for m in visual viopp; do
-      for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-      bindkey -M $m $c select-bracketed
-      done
-  done
+#   zle -N select-bracketed
+#   for m in visual viopp; do
+#       for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+#       bindkey -M $m $c select-bracketed
+#       done
+#   done
 
-  autoload -Uz select-quoted
-  zle -N select-quoted
-  for m in visual viopp; do
-    for c in {a,i}{\',\",\`}; do
-      bindkey -M $m $c select-quoted
-    done
-  done
+#   autoload -Uz select-quoted
+#   zle -N select-quoted
+#   for m in visual viopp; do
+#     for c in {a,i}{\',\",\`}; do
+#       bindkey -M $m $c select-quoted
+#     done
+#   done
 
-  autoload -Uz surround
-  zle -N delete-surround surround
-  zle -N change-surround surround
-  zle -N add-surround surround
+#   autoload -Uz surround
+#   zle -N delete-surround surround
+#   zle -N change-surround surround
+#   zle -N add-surround surround
 
-  bindkey -a cs change-surround
-  bindkey -a ds delete-surround
-  bindkey -a ys add-surround
-  bindkey -M visual S add-surround
-fi
+#   bindkey -a cs change-surround
+#   bindkey -a ds delete-surround
+#   bindkey -a ys add-surround
+#   bindkey -M visual S add-surround
+# fi
 
 # -----------------------------------------------------------------------------
 #                               KEY BINDINGS
 # -----------------------------------------------------------------------------
 
 autoload -Uz bindkey_function
-
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
 # CTRL-T - Paste the selected file path(s) into the command line
 if [[ -x `which fzf` ]]; then
@@ -209,7 +234,6 @@ bindkey -M vicmd '/' history-incremental-search-forward
 
 bindkey_function '^O' replace-string
 bindkey_function -M vicmd v edit-command-line
-bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
@@ -466,12 +490,6 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 # For tmux powerline, to detect current directory setting
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
-# SSHログイン時のプロンプト
-[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && \
-    PROMPT="
-$tmp_rprompt\$vcs_info_msg_0_
-%{${fg[yellow]}%}${HOST%%.*} $tmp_prompt"
 
 # Entirety of my startup file... then
 [[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
