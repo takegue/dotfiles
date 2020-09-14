@@ -100,6 +100,8 @@ zinit light zsh-users/zsh-completions
 
 # Load OMZ Git library
 zinit snippet OMZL::git.zsh
+zinit wait lucid for \
+      OMZP::colored-man-pages
 
 # Load the pure theme, with zsh-async library that's bundled with it.
 zinit ice pick"async.zsh" src"pure.zsh"
@@ -334,18 +336,6 @@ alias uniq="LC_ALL=C uniq"
 # ------------------------------
 # Functions
 # ------------------------------
-function man()
-{
-    env LESS_TERMCAP_mb=$'\E[01;31m' \
-        LESS_TERMCAP_md=$'\E[01;38;5;74m' \
-        LESS_TERMCAP_me=$'\E[0m' \
-        LESS_TERMCAP_se=$'\E[0m' \
-        LESS_TERMCAP_so=$'\E[30;43m' \
-        LESS_TERMCAP_ue=$'\E[0m' \
-        LESS_TERMCAP_us=$'\E[04;38;5;146m' \
-        man "$@"
-}
-
 function cd() {
     if [[ $1 = "-" ]]; then
         shift;
