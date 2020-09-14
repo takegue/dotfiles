@@ -87,7 +87,7 @@ zinit wait lucid for \
   # zsh-users/zsh-syntax-highlighting
 
 # make'!...' -> run make before atclone & atpull
-zinit as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
+zinit wait lucid as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh" for \
         direnv/direnv
 
