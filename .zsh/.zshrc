@@ -27,6 +27,7 @@ fi
 path=(
     $HOME/.local/bin
     $HOME/.local/sbin
+    $HOME/.cargo/bin
     "$path[@]"
 )
 
@@ -97,13 +98,47 @@ zinit as"program" make'!' src"shell/completion.zsh" \
 zinit ice blockf
 zinit light zsh-users/zsh-completions
 
+# Load OMZ Git library
+zinit snippet OMZL::git.zsh
+
+# Load Git plugin from OMZ
+zinit snippet OMZP::git
+zinit cdclear -q # <- forget completions provided up to this moment
+
+setopt promptsubst
+
+# Load the pure theme, with zsh-async library that's bundled with it.
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
+
 # Zbell
 zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/210120e8ac4794a792ab7477549c1bc314fa759e/zbell.zsh
+
+zinit ice cargo"!vivid" 
+zinit load zdharma/null
 
 # FIXME: Impl 
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
 #   # zgen load jonmosco/kube-ps1 kube-ps1.sh
 
+# # Installs rust and then the `lsd' crate and creates
+# # the `lsd' shim exposing the binary
+# zinit ice rustup cargo'!lsd'
+# zinit load zdharma/null
+
+# # Installs rust and then the `exa' crate and creates
+# # the `ls' shim exposing the `exa' binary
+# zinit ice rustup cargo'!exa -> ls'
+# zinit load zdharma/null
+
+# # Installs rust and then the `exa' and `lsd' crates
+# zinit ice rustup cargo'exa;lsd'
+# zinit load zdharma/null
+
+autoload -Uz compinit
+compinit; zinit cdreplay
+
+(( $+commands[vivid] )) && export LS_COLORS="$(vivid generate molokai)"
 
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
@@ -113,7 +148,7 @@ export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
-# export GREP_OPTION="--color auto"
+export GREP_OPTION="--color auto"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export GOPATH=$HOME/.go && [[ ! -d $GOPATH ]] && mkdir -p $GOPATH
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root)
@@ -156,43 +191,34 @@ autoload -Uz is-at-least
 autoload -Uz replace-string
 autoload -Uz exec-oneliner
 
-# autoload -Uz compinit
-# # # NOTE: stat depends on zsh/stat modules (loaded by kube-ps1)
-# if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-#   (( $+commands[kubectl] )) && source <(kubectl completion zsh)
-#   compinit
-# else
-#   compinit -C
-# fi
+if is-at-least 5.0.8; then
+  autoload -Uz select-bracketed
 
-# if is-at-least 5.0.8; then
-#   autoload -Uz select-bracketed
+  zle -N select-bracketed
+  for m in visual viopp; do
+      for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+      bindkey -M $m $c select-bracketed
+      done
+  done
 
-#   zle -N select-bracketed
-#   for m in visual viopp; do
-#       for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-#       bindkey -M $m $c select-bracketed
-#       done
-#   done
+  autoload -Uz select-quoted
+  zle -N select-quoted
+  for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+      bindkey -M $m $c select-quoted
+    done
+  done
 
-#   autoload -Uz select-quoted
-#   zle -N select-quoted
-#   for m in visual viopp; do
-#     for c in {a,i}{\',\",\`}; do
-#       bindkey -M $m $c select-quoted
-#     done
-#   done
+  autoload -Uz surround
+  zle -N delete-surround surround
+  zle -N change-surround surround
+  zle -N add-surround surround
 
-#   autoload -Uz surround
-#   zle -N delete-surround surround
-#   zle -N change-surround surround
-#   zle -N add-surround surround
-
-#   bindkey -a cs change-surround
-#   bindkey -a ds delete-surround
-#   bindkey -a ys add-surround
-#   bindkey -M visual S add-surround
-# fi
+  bindkey -a cs change-surround
+  bindkey -a ds delete-surround
+  bindkey -a ys add-surround
+  bindkey -M visual S add-surround
+fi
 
 # -----------------------------------------------------------------------------
 #                               KEY BINDINGS
@@ -201,7 +227,7 @@ autoload -Uz exec-oneliner
 autoload -Uz bindkey_function
 
 # CTRL-T - Paste the selected file path(s) into the command line
-if [[ -x `which fzf` ]]; then
+if (( $+commands[fzf] )) ; then
   export FZF_COMPLETION_OPTS='+c -x'
   (( $+commands[ag] )) \
     && export FZF_DEFAULT_COMMAND='ag -g ""' \
@@ -247,19 +273,10 @@ setopt auto_menu               # 補完キー連打で補完候補を順に表�
 setopt list_packed             # 補完候補をできるだけ詰めて表示する
 setopt list_types              # 補完候補にファイルの種類も表示する
 
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
 zstyle ':completion:*' menu select
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' format '%B%d%b'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*' group-name ''
 
-# 補完候補に色を付ける
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
-zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
-zstyle ':completion:*:warnings' format '%F{RED}No matches for:'%F{YELLOW} %d'$DEFAULT'
-zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
 
@@ -291,13 +308,13 @@ function history-all { history -E -D 1  }
 # -----------------------------------------------------------------------------
 #                             LOOK AND FEEL SETTINGS
 # -----------------------------------------------------------------------------
-### Ls Color ###
-# 色の設定
-export LSCOLORS=Exfxcxdxbxegedabagacad
-export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-export ZLS_COLORS=$LS_COLORS
-export CLICOLOR=true
-# export GREP_OPTIONS='--color=auto' 
+# ### Ls Color ###
+# # 色の設定
+# export LSCOLORS=Exfxcxdxbxegedabagacad
+# export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# export ZLS_COLORS=$LS_COLORS
+# export CLICOLOR=true
+# # export GREP_OPTIONS='--color=auto' 
 
 
 # -----------------------------------------------------------------------------
@@ -323,24 +340,13 @@ case "$OSTYPE" in
     *)
         alias ls='ls --color=auto'
 esac
-# alias ztime="PROFILE_STARTUP=true zsh --login -c 'exit' && zsh_profile_decoder.py `ls -t ~/tmp/startlog* | head -n1` | sort -k2n | less"
 alias less='less -IMx4 -X -R'
-alias -g NL='>/dev/null'
 alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
-# alias -s py=python
-alias -g L='| less'
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep'
-alias -g W='| wc'
-alias -g S='| sed'
-alias -g A='| awk'
-alias -g W='| wc'
 
-[[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim' && export EDITOR=nvim
-[[ -x `which htop 2>/dev/null` ]]  && alias top='htop'
+(( $+commands[nvim] )) && alias vim='nvim' && export EDITOR
+(( $+commands[htop] )) && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 (( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'
 (( $+commands[hub] )) && alias git='hub'
@@ -360,6 +366,9 @@ function vtime() {
 
   $EDITOR $FILE1 $FILE2
 }
+function ztime() { 
+    repeat 10 time zsh -i -c "exit"
+}
 
 function man()
 {
@@ -373,11 +382,6 @@ function man()
         man "$@"
 }
 
-function sshcd()
-{
-    ssh $1 -t "cd `pwd`; zsh"
-}
-
 function cd() {
     if [[ $1 = "-" ]]; then
         shift;
@@ -385,12 +389,6 @@ function cd() {
     else
         builtin cd $@
     fi
-}
-
-function ssh() {
-    local window_name=$(tmux display -p '#{window_name}')
-    command ssh $@
-    tmux rename-window $window_name
 }
 
 function foreground-vi() {
@@ -404,22 +402,11 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
-## Zbell configuration
-zbell_duration=3
-zbell_duration_email=300
-
-function show_process_time_after_cmd(){
-    local zbell_cmd_duration
-    zbell_cmd_duration=$(( $EPOCHSECONDS - $zbell_timestamp ))
-    [[ ${zbell_cmd_duration} -gt $zbell_duration ]] && echo "$zbell_cmd_duration s Elapsed"
-}
-
-add-zsh-hook precmd show_process_time_after_cmd
-
 function memo_cmd(){  
     [[ -n ${TMUX_PANE} ]] && echo $1 > "${TMP:-/tmp}/tmux_pane_cmd_${TMUX_PANE}"
 }
-
+# For tmux powerline, to detect current directory setting
+PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 add-zsh-hook preexec memo_cmd
 
 #### Export Configurations ####
@@ -434,67 +421,9 @@ fi
 # ------------------------------
 # Prompt Settings
 # ------------------------------
-tmp_prompt="%{${fg[cyan]}%}%n%# %{${reset_color}%}"
-tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
-tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
-tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
-
-# rootユーザ時(太字にし、アンダーバーをつける)
-if [ ${UID} -eq 0 ]; then
-    tmp_prompt="%B%U${tmp_prompt}%u%b"
-    tmp_prompt2="%B%U${tmp_prompt2}%u%b"
-    tmp_rprompt="%B%U${tmp_rprompt}%u%b"
-    tmp_sprompt="%B%U${tmp_sprompt}%u%b"
-fi
-
-get_ruby_info()
-{
-    if [[ -z $RBENV_SHELL ]]; then
-        # 0以外を返すとそれ以降のフック関数は呼び出されない
-        return
-    fi
-
-    echo "(💎:$(rbenv version | cut -d' ' -f1))\n'"
-    # root=$(git rev-parse --git-dir 2> /dev/null)
-
-    # [[ -z ${root} ]] && echo '' && return
-    # cd $root >/dev/null && cd ../ > /dev/null
-    # branch=$(git diff --shortstat | sed -E -e 's/, / /g' -e 's/([0-9]*) insertions?\(\+\)/+\1/' -e 's/([0-9]*) deletions?\(-\)/-\1/' -e 's/ ([0-9]+) files? changed/📚 \1/')
-    # echo "${branch}"
-}
-
-
-function save_last_exit_code() { 
-    PROMPT_LAST_EXIT_CODE=$?
-}
-function check_last_exit_code() {
-  local LAST_EXIT_CODE=$PROMPT_LAST_EXIT_CODE
-  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
-    local EXIT_CODE_PROMPT=' '
-    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
-    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
-    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
-    echo "$EXIT_CODE_PROMPT"
-  fi
-}
-add-zsh-hook precmd save_last_exit_code
-
-
-PROMPT="
-\$(get_ruby_info)$tmp_rprompt\${vcs_info_msg_0_}\$(check_last_exit_code)
-$tmp_prompt"    # 通常のプロンプト
-
-PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-# RPROMPT="\$(check_last_exit_code)"  # 右側のプロンプト
-SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
-
-# For tmux powerline, to detect current directory setting
-PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 # Entirety of my startup file... then
 [[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
-
-export PROMPT RPROMPT2
 
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
