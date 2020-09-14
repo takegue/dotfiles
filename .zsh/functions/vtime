@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+function vtime() {
+  FILE1=/tmp/vim_startup1.$RANDOM.log
+  FILE2=/tmp/vim_profile_vimrc.$RANDOM.log
+  $EDITOR \
+    --startuptime $FILE1 \
+    --cmd "profile start ${FILE2}" \
+    --cmd "profile file ~/.config/nvim/init.vim" \
+    -c "profile stop" \
+    +q
+
+  $EDITOR $FILE1 $FILE2
+}
+
+vtime $@

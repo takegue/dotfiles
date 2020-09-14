@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+function ztime() { 
+    repeat 10 time zsh -i -c "exit"
+}
+
+ztime $@
