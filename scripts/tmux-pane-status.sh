@@ -12,7 +12,6 @@ hg_colour="45"
 run_segment() {
     tmux_path=$1
     cd "$tmux_path"
-
     __update_git_repo >/dev/null 2>&1
     # __push_git_repo >/dev/null 2>&1 &
 
@@ -25,6 +24,10 @@ run_segment() {
     # elif [ -n "${hg_branch=$(__parse_hg_branch)}" ]; then
     #     branch="$hg_branch"
     # fi
+    branch=""
+    if [ -n "${git_branch=$(__parse_git_branch)}" ]; then
+        branch="$git_branch"
+    fi
 
     if [ -n "$branch" ]; then
         echo "${branch}"
@@ -46,7 +49,6 @@ __update_git_repo() {
    git fetch
 }
 
-__push_git_repo() {
    FILE=`git rev-parse --absolute-git-dir`/now_push.pid
    if [[ -f $FILE ]]; then
      if [[ $(( `date +%s` - `/usr/bin/stat -f '%m' $FILE` )) -gt 500 ]]; then
