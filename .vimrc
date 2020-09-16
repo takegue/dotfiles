@@ -923,6 +923,8 @@ nnoremap <silent> [toggle]e :if(&colorcolumn > 0)<CR>
 " The prefix key.
 nnoremap    [Tab]   <Nop>
 nmap    <Leader>t   [Tab]
+nmap    ]t :<C-u>tabnext<CR>
+nmap    [t :<C-u>tabprevious<CR>
 
 for n in range(1, 9)
   execute 'nnoremap <silent> [Tab]'.n  ':<C-u>tabnext'.n.'<CR>'

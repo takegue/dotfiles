@@ -8,22 +8,11 @@ git_colour="5"
 svn_colour="220"
 hg_colour="45"
 
-
 run_segment() {
     tmux_path=$1
     cd "$tmux_path"
-    __update_git_repo >/dev/null 2>&1
-    # __push_git_repo >/dev/null 2>&1 &
+    __update_git_repo >/dev/null 2>&1 &
 
-    # branch=""
-    # if [ -n "${git_branch=$(__parse_git_branch)}" ]; then
-    #     branch="$git_branch"
-    # fi
-    # elif [ -n "${svn_branch=$(__parse_svn_branch)}" ]; then
-    #     branch="$svn_branch"
-    # elif [ -n "${hg_branch=$(__parse_hg_branch)}" ]; then
-    #     branch="$hg_branch"
-    # fi
     branch=""
     if [ -n "${git_branch=$(__parse_git_branch)}" ]; then
         branch="$git_branch"
@@ -49,19 +38,6 @@ __update_git_repo() {
    git fetch
 }
 
-   FILE=`git rev-parse --absolute-git-dir`/now_push.pid
-   if [[ -f $FILE ]]; then
-     if [[ $(( `date +%s` - `/usr/bin/stat -f '%m' $FILE` )) -gt 500 ]]; then
-        rm $FILE
-     fi
-     return
-   fi
-
-   date +%s > $FILE
-   git push --dry-run
-   #  && git push \
-}
-
 # Show git banch.
 __parse_git_branch() {
     type git >/dev/null 2>&1 && git rev-parse --git-dir 2> /dev/null;
@@ -80,34 +56,34 @@ __parse_git_branch() {
         return
     fi
 
-    # staged=$(git diff --staged --name-status | grep -c '')
-    # if [[ -n $staged ]] ; then
-    #     local staged="$staged files staged"
-    # fi
+    staged=$(git diff --staged --name-status | grep -c '')
+    if [[ -n $staged ]] ; then
+        local staged="$staged files staged"
+    fi
 
-    # # creates global variables $1 and $2 based on left vs. right tracking
-    # tracking_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
-    # set -- $(git rev-list --left-right --count $tracking_branch...HEAD)
+    # creates global variables $1 and $2 based on left vs. right tracking
+    tracking_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    set -- $(git rev-list --left-right --count $tracking_branch...HEAD)
 
-    # behind=$1
-    # ahead=$2
+    behind=$1
+    ahead=$2
 
-    # # print out the information
-    # if [[ $behind -gt 0 ]] ; then
-    #     local compare="↓ $behind"
-    # fi
-    # if [[ $ahead -gt 0 ]] ; then
-    #     local compare="${compare}↑ $ahead"
-    # fi
-    # if [[ -n $compare ]] ; then
-    #     local compare="(${compare})"
-    # fi
+    # print out the information
+    if [[ $behind -gt 0 ]] ; then
+        local compare="↓ $behind"
+    fi
+    if [[ $ahead -gt 0 ]] ; then
+        local compare="${compare}↑ $ahead"
+    fi
+    if [[ -n $compare ]] ; then
+        local compare="(${compare})"
+    fi
 
-    # # Clean off unnecessary information.
-    # branch=${branch##*/}
-    # diff=$(git diff --shortstat)
-    # ret=`echo "${branch}${compare} ${staged} ${diff}" | sed "s/  */ /g"`
-    # echo  -n "#[fg=colour${git_colour}]${branch_symbol} #[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]${ret}"
+    # Clean off unnecessary information.
+    branch=${branch##*/}
+    diff=$(git diff --shortstat)
+    ret=`echo "${branch}${compare} ${staged} ${diff}" | sed "s/  */ /g"`
+    echo  -n "#[fg=colour${git_colour}]${branch_symbol} #[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]${ret}"
 
 }
 

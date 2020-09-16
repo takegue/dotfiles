@@ -1065,7 +1065,14 @@
         endif
 
         " rustup component add rls
-        if tkngue#util#executable('rls')
+        if tkngue#util#executable('rust-analyzer')
+            au User lsp_setup call lsp#register_server({
+                \ 'name': 'rust-analyzer',
+                \ 'cmd': {server_info->['rust-analyzer']},
+                \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+                \ 'whitelist': ['rust'],
+                \ })
+        elseif tkngue#util#executable('rls')
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'rls',
                 \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
