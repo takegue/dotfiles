@@ -93,7 +93,7 @@ function! tkngue#util#system(cmd) abort
   let l:path = '/tmp/vim/' . l:h
 
   if !isdirectory(l:cache_path)
-    mkdir(l:cache_path)
+    call mkdir(l:cache_path)
   endif
 
   if !filereadable(l:path)
