@@ -1,15 +1,15 @@
 {
     "dividers": {
         "left": {
-            "hard": "⮀",
-            "soft": "⮁ "
+            "hard": "",
+            "soft": " "
         },
         "right": {
-            "hard": " ⮂",
-            "soft": " ⮃"
+            "hard": "",
+            "soft": "  "
         }
     },
-    "spaces": 1,
+    "spaces": 0,
     "segment_data": {
         "powerline.segments.common.bat.battery": {
             "args": {
