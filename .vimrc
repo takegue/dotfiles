@@ -451,13 +451,18 @@ augroup END "}}}
 augroup edit_vimrc "{{{
   autocmd!
   " autocmd BufReadPost $MYVIMRC setlocal path+=$HOME/.vim/bundle
-  autocmd BufReadPost bundles.toml execute "setlocal path+=" . substitute(glob(s:cache_home . "/repos/*"), '\n', ',', 'g')
+  autocmd BufRead bundles.toml execute "setlocal path+=" . substitute(glob(s:cache_home . "/repos/*"), '\n', ',', 'g')
   " autocmd BufReadPost bundles.toml execute "setlocal tags+=" . substitute(glob(s:cache_home . "/repos/*"), '\n', ',', 'g')
   autocmd BufReadPost $MYVIMRC execute "setlocal tags+=" . substitute(glob("$HOME/.vim/bundle/**/.git/tags"), '\n', ',', 'g')
   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
   autocmd BufWritePost bundles.toml source $MYVIMRC
   autocmd BufWritePost ~/.dotfiles/.vimrc nested source $MYVIMRC
 augroup END "}}}
+
+if tkngue#util#executable("ghq")
+    let s:ghq_path = tkngue#util#system("ghq root")
+    execute "set path+=" . substitute(glob(s:ghq_path . "/*"), '\n', ',', 'g')
+endif
 
 augroup MyAutocmdGroup "{{{
   autocmd!
@@ -529,7 +534,6 @@ let g:loaded_vimballPlugin     = 1
 "}}}
 
 " dein.vim Initilization {{{
-
 let g:noplugin = &compatible ? 1 : 0
 if !g:noplugin
   let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
@@ -559,6 +563,8 @@ if !g:noplugin
 endif
 
 " END dein}}}
+
+
 "}}}
 
 " Local settings ================ {{{
