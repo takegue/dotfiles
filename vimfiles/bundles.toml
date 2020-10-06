@@ -371,14 +371,15 @@
     on_cmd = 'Denite'
 
     hook_post_source = '''
-
-       call denite#custom#alias('source', 'file/rec/git', 'file/rec')
-       call denite#custom#var('file/rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
+      call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+      call denite#custom#var('file/rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
 
       call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
       call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
       call denite#custom#map('insert', '<C-f>', '<denite:scroll_page_forwards>')
       call denite#custom#map('insert', '<C-b>', '<denite:scroll_page_backwards>')
+
+      call denite#custom#source('help', 'matchers', ['matcher/regexp'])
 
       " unite grep に ag(The Silver Searcher) を使う
       if tkngue#util#executable('rg')
@@ -577,10 +578,6 @@
 
 [[plugins]] # Shougo/neossh.vim {{{
   repo = 'Shougo/neossh.vim'
- #}}}
-
-[[plugins]] # tsukkee/unite-help {{{
-  repo = 'tsukkee/unite-help'
  #}}}
 
 [[plugins]] # rhysd/unite-redpen.vim {{{
