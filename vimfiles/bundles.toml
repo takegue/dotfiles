@@ -5,7 +5,7 @@
     let g:dein#install_message_type = 'none'
     let g:dein#auto_recache = 1
   '''
-#}vimrc}}
+#}}}
 
 [[plugins]] # tpope/vim-sensible {{{
   repo = 'tpope/vim-sensible'
@@ -221,6 +221,7 @@
 [[plugins]] # kana/vim-textobj-datetime {{{
  # 日付オブジェクト#ada, add, adt
   repo = 'kana/vim-textobj-datetime'
+  on_if = 1
 #}}}
 
 [[plugins]] # kana/vim-textobj-entire {{{
@@ -244,10 +245,12 @@
 # URLオブジェクト
 # au, iu
   repo = 'mattn/vim-textobj-url'
+  on_if = 1
 #}}}
 
 [[plugins]] # sgur/vim-textobj-parameter {{{
   repo = 'sgur/vim-textobj-parameter'
+  on_if = 1
 #}}}
 
 # }}}
@@ -283,6 +286,7 @@
 [[plugins]] # tpope/vim-unimpaired {{{
  # バッファ移動用等
   repo = 'tpope/vim-unimpaired'
+  on_if = 1
  #}}}
 
 [[plugins]] # emonkak/vim-operator-sort {{{
@@ -575,8 +579,8 @@
   repo = 'Shougo/neossh.vim'
  #}}}
 
-[[plugins]] # Shougo/unite-help {{{
-  repo = 'Shougo/unite-help'
+[[plugins]] # tsukkee/unite-help {{{
+  repo = 'tsukkee/unite-help'
  #}}}
 
 [[plugins]] # rhysd/unite-redpen.vim {{{
