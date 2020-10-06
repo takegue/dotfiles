@@ -283,7 +283,6 @@
 [[plugins]] # tpope/vim-unimpaired {{{
  # バッファ移動用等
   repo = 'tpope/vim-unimpaired'
-  on_if = 1
  #}}}
 
 [[plugins]] # emonkak/vim-operator-sort {{{
@@ -309,6 +308,7 @@
  #}}}
 
  #}}}
+
 
 [[plugins]] # AndrewRadev/switch.vim {{{
   repo = 'AndrewRadev/switch.vim'
@@ -879,10 +879,7 @@
 
 
 [[plugins]] # mhinz/vim-signify {{{
-  # TODO: ロードが激重なので少し考える
   repo = 'mhinz/vim-signify'
-  on_event = 'BufWritePost'
-
   hook_add = '''
     let g:signify_skip_filename_pattern = []
   '''
