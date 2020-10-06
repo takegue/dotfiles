@@ -1053,7 +1053,7 @@
     if = 1
     hook_add = '''
         " go get -u golang.org/x/tools/cmd/gopls
-        if executable('gopls')
+        if tkngue#util#executable('gopls')
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'gopls',
                 \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
@@ -1062,7 +1062,16 @@
             autocmd BufWritePre *.go silent! LspDocumentFormatSync
         endif
 
-        " rustup component add rls
+        " npm install -g vim-language-server
+        if tkngue#util#executable('vim-language-server')
+            au User lsp_setup call lsp#register_server({
+                \ 'name': 'vim-language-server',
+                \ 'cmd': {server_info->['vim-language-server', '--stdio']},
+                \ 'whitelist': ['vim'],
+                \ })
+            autocmd BufWritePre *.vim silent! LspDocumentFormatSync
+        endif
+
         if tkngue#util#executable('rust-analyzer')
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'rust-analyzer',
@@ -1071,6 +1080,7 @@
                 \ 'whitelist': ['rust'],
                 \ })
         elseif tkngue#util#executable('rls')
+            " rustup component add rls
             au User lsp_setup call lsp#register_server({
                 \ 'name': 'rls',
                 \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
