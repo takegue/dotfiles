@@ -1,19 +1,19 @@
 #!/usr/local/bin/zsh
 #新しい環境に取り込んだ時のインストール
 
-DIR=$(cd `dirname $0`; pwd)
+DIR=$(cd $(dirname $0); pwd)
 
-if [ ! -e `which git` ]; then
+if [ ! -e $(which git) ]; then
   echo 'not found git'
 fi 
 
-if [ ! -e `which vim` ]; then
+if [ ! -e $(which vim) ]; then
   echo 'not found vim.'
   echo 'Start installing ...'
   $DIR/scripts/vim-install.sh
 fi 
 
-if [ ! -e `which python` ]; then
+if [ ! -e $(which python) ]; then
   # Install powerline
   pip install powerline-status powerline-mem-segment psutil netifaces
 fi 

@@ -27,7 +27,6 @@ fi
 path=(
     $HOME/.local/bin
     $HOME/.local/sbin
-    $HOME/.cargo/bin
     "$path[@]"
 )
 
@@ -274,6 +273,13 @@ function cd() {
     fi
 }
 
+function foreground-vi() {
+    fg %$EDITOR
+}
+
+zle -N foreground-vi
+bindkey '^Z' foreground-vi
+
 zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
@@ -297,9 +303,6 @@ fi
 # ------------------------------
 # Prompt Settings
 # ------------------------------
-
-# Entirety of my startup file... then
-[[ -f ${HOME}/.local.zshenv ]] && source ${HOME}/.local.zshenv
 
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
