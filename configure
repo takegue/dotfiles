@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/usr/bin/env zsh
 #新しい環境に取り込んだ時のインストール
 
 DIR=$(cd $(dirname $0); pwd)
