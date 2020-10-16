@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/bin/zsh
 # To setup, run the command on powershell (See https://github.com/microsoft/WSL/issues/2466)
 # $ Install-Module -Name BurntToast 
 
-powershell.exe -executionpolicy bypass -command New-BurntToastNotification $@
+powershell.exe -executionpolicy bypass -command New-BurntToastNotification "-text \"$@\""
