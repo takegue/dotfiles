@@ -107,7 +107,7 @@ zinit ice pick"async.zsh" src"pure.zsh"
 zinit light sindresorhus/pure
 
 # Zbell
-zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/210120e8ac4794a792ab7477549c1bc314fa759e/zbell.zsh
+zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
 zinit ice cargo"!vivid" 
 zinit load zdharma/null
