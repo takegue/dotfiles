@@ -1059,7 +1059,7 @@
   # }}}
 
   [[plugins]] # prabirshrestha/vim-lsp {{{
-    repo = 'prabirshrestha/vim-lsp.git' 
+    repo = 'prabirshrestha/vim-lsp' 
     if = 1
     hook_add = '''
         " go get -u golang.org/x/tools/cmd/gopls

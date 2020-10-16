@@ -121,14 +121,14 @@ zinit load zdharma/null
 # zinit ice rustup cargo'!lsd'
 # zinit load zdharma/null
 
-# # Installs rust and then the `exa' crate and creates
-# # the `ls' shim exposing the `exa' binary
-# zinit ice rustup cargo'!exa -> ls'
-# zinit load zdharma/null
+# Installs rust and then the `exa' crate and creates
+# the `ls' shim exposing the `exa' binary
+zinit ice wait"2" lucid from"gh-r" as"program" mv"exa* -> exa"
+zinit light ogham/exa
 
-# # Installs rust and then the `exa' and `lsd' crates
-# zinit ice rustup cargo'exa;lsd'
-# zinit load zdharma/null
+# All of the above using the for-syntax and also z-a-bin-gem-node annex
+zinit wait"1" lucid from"gh-r" as"null" for \
+     sbin"exa* -> exa"  ogham/exa
 
 autoload -Uz compinit
 compinit; zinit cdreplay
@@ -255,6 +255,7 @@ alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 
+(( $+commands[exa] )) && alias ls='exa'
 (( $+commands[nvim] )) && alias vim='nvim' && export EDITOR=nvim
 (( $+commands[htop] )) && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
