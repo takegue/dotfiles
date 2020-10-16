@@ -57,8 +57,10 @@ __parse_git_branch() {
     fi
 
     staged=$(git diff --staged --name-status | grep -c '')
-    if [[ -n $staged ]] ; then
+    if [[ $staged -gt 0 ]] ; then
         local staged="$staged files staged"
+    else
+        local staged = ""
     fi
 
     # creates global variables $1 and $2 based on left vs. right tracking
