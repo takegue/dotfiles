@@ -82,17 +82,18 @@ zinit wait lucid for \
     zdharma/fast-syntax-highlighting \
     zsh-users/zsh-history-substring-search
     # k4rthik/git-cal \
-    # zsh-users/zsh-completions src 
-  # zsh-users/zsh-syntax-highlighting
 
 # make'!...' -> run make before atclone & atpull
 zinit wait lucid as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh" for \
         direnv/direnv
 
-zinit as"program" make'!' src"shell/completion.zsh" \
+zinit wait lucid as"program" make'!' src"shell/completion.zsh" \
     pick"fzf" for \
     junegunn/fzf 
+
+# All of the above using the for-syntax and also z-a-bin-gem-node annex
+zinit wait"1" lucid from"gh-r" as"null" sbin"exa* -> exa" for ogham/exa 
 
 zinit ice blockf
 zinit light zsh-users/zsh-completions
@@ -115,20 +116,6 @@ zinit load zdharma/null
 # FIXME: Impl 
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
 #   # zgen load jonmosco/kube-ps1 kube-ps1.sh
-
-# # Installs rust and then the `lsd' crate and creates
-# # the `lsd' shim exposing the binary
-# zinit ice rustup cargo'!lsd'
-# zinit load zdharma/null
-
-# Installs rust and then the `exa' crate and creates
-# the `ls' shim exposing the `exa' binary
-zinit ice wait"2" lucid from"gh-r" as"program" mv"exa* -> exa"
-zinit light ogham/exa
-
-# All of the above using the for-syntax and also z-a-bin-gem-node annex
-zinit wait"1" lucid from"gh-r" as"null" for \
-     sbin"exa* -> exa"  ogham/exa
 
 autoload -Uz compinit
 compinit; zinit cdreplay
@@ -199,7 +186,7 @@ setopt list_types              # 補完候補にファイルの種類も表示�
 zstyle ':completion:*' menu select
 
 zstyle ':completion:*' verbose yes
-zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _gnu_generic _history
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
 
