@@ -1274,6 +1274,7 @@
       let g:pymode_python = 'python'
     else
     endif
+    let g:pymode_lint_signs = 0
 
     let g:pymode = 1
     let g:pymode_warnings = 1
@@ -1343,7 +1344,7 @@
  # python plugin for vim
   repo = 'davidhalter/jedi-vim'
   # on_if = "!has('nvim')"
-  on_if = 0
+  if = 0
   on_ft = ['python', 'python3', 'djangohtml']
   # on_source = ['python-mode']
 

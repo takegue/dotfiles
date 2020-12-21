@@ -108,6 +108,8 @@ zinit ice pick"async.zsh" src"pure.zsh"
 zinit light sindresorhus/pure
 
 # Zbell
+zbell_duration=5
+zbell_duration_email=600
 zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
 zinit ice cargo"!vivid" 
