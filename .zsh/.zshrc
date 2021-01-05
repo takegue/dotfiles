@@ -83,6 +83,10 @@ zinit wait lucid for \
     zsh-users/zsh-history-substring-search
     # k4rthik/git-cal \
 
+
+zinit wait lucid as"program" atpull'%atclone' make"!" pick"ghq" \
+    for x-motemen/ghq        
+
 # make'!...' -> run make before atclone & atpull
 zinit wait lucid as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh" for \
