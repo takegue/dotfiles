@@ -39,6 +39,7 @@ manpath=(
 )
 
 ld_library_path=(
+    $HOME/.local/lib
     "${(z)path:gs/bin/lib/}[@]"
     "${(z)path:gs/bin/lib64/}[@]"
 )
@@ -85,7 +86,7 @@ zinit wait lucid for \
 
 
 zinit wait lucid as"program" atpull'%atclone' make"!" pick"ghq" \
-    for x-motemen/ghq        
+    for x-motemen/ghq
 
 # make'!...' -> run make before atclone & atpull
 zinit wait lucid as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
@@ -101,6 +102,10 @@ zinit wait"1" lucid from"gh-r" as"null" sbin"exa* -> exa" for ogham/exa
 
 zinit ice blockf
 zinit light zsh-users/zsh-completions
+
+# For WSL2 
+zinit wait"1" lucid from"gh-r" as"null" sbin"win32yank* -> win32yank" for equalsraf/win32yank
+
 
 # Load OMZ Git library
 zinit snippet OMZL::git.zsh

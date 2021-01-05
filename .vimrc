@@ -167,17 +167,17 @@ if has('nvim')
         \ 'copy': { '+': 'pbcopy', '*': 'pbcopy'},
         \ 'paste': { '+': 'pbpaste', '*': 'pbpaste'}
         \ }
-    elseif has('windows') && tkngue#util#executable('win32yank.exe')
+    elseif has('windows') && tkngue#util#executable('win32yank')
       " See https://github.com/equalsraf/win32yank
       let g:clipboard = {
             \   'name': 'win32yank',
             \   'copy': {
-            \      '+': 'win32yank.exe -i',
-            \      '*': 'win32yank.exe -i',
+            \      '+': 'win32yank -i',
+            \      '*': 'win32yank -i',
             \    },
             \   'paste': {
-            \      '+': 'win32yank.exe -o --lf',
-            \      '*': 'win32yank.exe -o --lf',
+            \      '+': 'win32yank -o --lf',
+            \      '*': 'win32yank -o --lf',
             \   },
             \   'cache_enabled': 1,
             \ }
