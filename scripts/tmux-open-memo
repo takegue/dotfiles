@@ -1,4 +1,4 @@
 #!/bin/bash
 set -x
-path=${JUNKS:-/tmp}/tmux_pane_$(tmux display -p "#S").md
+path=${JUNK:-/tmp}/tmux_pane_$(tmux display -p "#S").md
 $EDITOR +/---- +'au VimEnter tmux* if !exists("t") | let t=1 | execute "r!date"| endif' +"normal zt"  $path
