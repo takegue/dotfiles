@@ -122,7 +122,13 @@ endfunction
 
 function! tkngue#util#open_junk_file(type) abort
   " execute "%d a"
-  let l:junk_dir = $HOME . '/Dropbox/junks'. strftime('/%Y/%m')
+  "
+  let l:junk_basedir = $HOME . '/Dropbox/junks'
+  if exists("$JUNK")
+      let l:junk_basedir = $JUNK
+  endif
+  let l:junk_dir = l:junk_basedir . strftime('/%Y/%m')
+
   if !isdirectory(l:junk_dir)
     call mkdir(l:junk_dir, 'p')
   endif
