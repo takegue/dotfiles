@@ -295,12 +295,19 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
+function render_test(){  
+    kubectx -c
+    echo "☁️  $(gctx current)"
+}
+
 function memo_cmd(){  
     [[ -n ${TMUX_PANE} ]] && echo $1 > "${TMP:-/tmp}/tmux_pane_cmd_${TMUX_PANE}"
 }
 # For tmux powerline, to detect current directory setting
-PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+PS1="$PS1"
 add-zsh-hook preexec memo_cmd
+add-zsh-hook precmd render_test
+
 
 #### Export Configurations ####
 export PYTHONSTARTUP=~/.pythonstartup
