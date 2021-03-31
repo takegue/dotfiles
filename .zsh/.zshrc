@@ -32,7 +32,6 @@ path=(
 
 manpath=(
     "$lmanpath[@]"
-    ~/.zplug/doc/man
     /usr/share/man
     /usr/local/share/man
     "$manpath[@]"
@@ -100,9 +99,23 @@ zinit wait lucid as"program" make'!' src"shell/completion.zsh" \
 # All of the above using the for-syntax and also z-a-bin-gem-node annex
 zinit wait"1" lucid from"gh-r" as"null" sbin"exa* -> exa" for ogham/exa 
 
+zinit wait"1" lucid from"gh-r" as"null" sbin"gctx* -> gctx" for adamrodger/gcloud-ctx
+
 zinit ice blockf
 zinit light zsh-users/zsh-completions
 
+# For k8s
+zi wait'0a' lucid has'kubectl' from'gh-r' for \
+ bpick'*kubectx*' \
+ id-as'kubectx' \
+    sbin'kubectx' ahmetb/kubectx \
+ bpick'*kubens*' \
+ id-as'kubens' \
+    sbin'kubens' ahmetb/kubectx \
+
+# zinit wait"2a" lucid has'gcloud' as"program" pick"gcloudctx" for  ogerbron/gcloudctx
+# zinit ice has'gcloud' as"completion" src"completion/gcloudctx.zsh" for  ogerbron/gcloudctx
+ 
 # For WSL2 
 zinit wait"1" lucid from"gh-r" as"null" sbin"win32yank* -> win32yank" for equalsraf/win32yank
 
@@ -123,7 +136,6 @@ zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc
 
 zinit ice cargo"!vivid" 
 zinit load zdharma/null
-
 # FIXME: Impl 
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
 #   # zgen load jonmosco/kube-ps1 kube-ps1.sh
