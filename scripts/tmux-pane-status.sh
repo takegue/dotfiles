@@ -11,7 +11,7 @@ hg_colour="45"
 run_segment() {
     tmux_path=$1
     cd "$tmux_path"
-    __update_git_repo >/dev/null 2>&1 &
+    # __update_git_repo >/dev/null 2>&1 &
 
     branch=""
     if [ -n "${git_branch=$(__parse_git_branch)}" ]; then
@@ -82,7 +82,6 @@ __parse_git_branch() {
     fi
 
     # Clean off unnecessary information.
-    branch=${branch##*/}
     diff=$(git diff --shortstat)
     ret=`echo "${branch}${compare} ${staged} ${diff}" | sed "s/  */ /g"`
     echo  -n "#[fg=colour${git_colour}]${branch_symbol} #[fg=colour${TMUX_POWERLINE_CUR_SEGMENT_FG}]${ret}"
