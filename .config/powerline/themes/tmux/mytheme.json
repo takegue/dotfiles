@@ -10,17 +10,6 @@
         }
     },
     "spaces": 0,
-    "segment_data": {
-        "powerline.segments.common.bat.battery": {
-            "args": {
-                "full_heart": "♥",
-                "empty_heart": "♡",
-                "online": "B",
-                "offline": " "
-            }
-        }
-    },
- 
     "segments": {
         "left": [
             {
@@ -28,6 +17,12 @@
             }
         ],
         "right": [
+            {
+                "function": "powerline.segments.common.net.external_ip",
+                "args": {
+                    "query_url": "http://icanhazip.com/"
+                }
+            },
             {
                 "function": "powerline.segments.common.net.internal_ip"
             },

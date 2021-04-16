@@ -159,7 +159,6 @@ endif
 
 if has('nvim')
   set clipboard=unnamed
-
     if has('mac')
       " NOTE: Performance issue and only for MacOS Settings
       let g:clipboard = {

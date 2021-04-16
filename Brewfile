@@ -2,7 +2,6 @@
 # Taps
 
 tap "homebrew/bundle"
-tap "homebrew/cask"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "neovim/neovim"
@@ -25,7 +24,6 @@ brew "jq"
 brew "kubectx"
 cask "keycastr"
 cask "osxfuse"
-cask "docker"
 
 brew "docker-compose", link: false
 

@@ -44,9 +44,6 @@ layout_python-venv() {
 }
 
 use_k8s() {
-  PROMPT="\$(kube_ps1)
-$PROMPT"
-  export PROMPT
 }
 
 use_terraform() {

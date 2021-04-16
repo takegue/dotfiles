@@ -1694,10 +1694,18 @@ hook_post_source = '''
           augroup END
         '''
       #}}}
+#
+      [[plugins]]
+        repo = 'tommcdo/vim-fubitive'
+        depends = ['vim-fugitive']
+        hook_add = '''
+        let g:fubitive_domain_pattern = 'monotaro\.rickcloud\.jp'
+        '''
+
 
       [[plugins]]
         repo = 'tpope/vim-rhubarb'
-        on_ft = ['gitcommit', 'fugitive']
+        depends = ['vim-fugitive']
 
       #[[plugins]] # moznion/github-commit-comment.vim {{{
       #    repo = 'moznion/github-commit-comment.vim'
@@ -1722,16 +1730,6 @@ hook_post_source = '''
     repo = 'fatih/vim-go'
     on_ft = 'go'
   #}}}
-
-
-# }}}
-
-# LUA {{{
-
-  [[plugins]]  # xolox/vim-misc {{{
-    repo = 'xolox/vim-misc'
-    on_ft = 'lua'
-  # }}}
 
 
 # }}}
