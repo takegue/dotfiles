@@ -232,8 +232,6 @@ inoremap <C-W> <C-g>u<C-w>
 inoremap <C-U> <C-g>u<C-U>
 
 nnoremap Y y$
-nnoremap & g&
-nnoremap g& &
 vnoremap v $h
 
 " カーソル下の単語を * で検索
