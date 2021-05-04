@@ -100,7 +100,12 @@ zinit wait lucid for \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     as'program' pick"gcloudctx" atclone"cp completion/gcloudctx.zsh _gcloudctx_completion" ogerbron/gcloudctx
 
-zinit pack"bgn" for fzf
+zinit lucid as'program' pick"$ZPFX/bin/(fzf|fzf-tmux)" \
+    atclone"cp shell/completion.zsh _fzf_completion; \
+      cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
+    src="shell/completion.zsh" \
+    make"PREFIX=$ZPFX install" for \
+        junegunn/fzf
 
 # Load OMZ Git library
 zinit snippet OMZL::git.zsh
@@ -116,12 +121,9 @@ zbell_duration=5
 zbell_duration_email=12000
 zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
-zinit ice cargo"!vivid" 
-zinit load zdharma/null
-
 # A little more complex rustup configuration that uses Bin-Gem-Node annex
 # and installs the cargo completion provided with rustup, using for-syntax
-zinit id-as=rust wait=1 as=null sbin="bin/*" lucid rustup \
+zinit id-as=rust wait=1 as='program' pick="bin/*" lucid rustup \
     atload="[[ ! -f ${ZINIT[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall rust; \
     export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
         zdharma/null
