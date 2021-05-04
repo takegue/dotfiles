@@ -750,10 +750,15 @@
     let g:quickrun_config['tex/watchdogs_checker'] = {
           \  "type" :"watchdogs_checker/jalatexdiff"
           \}
+    " let g:quickrun_config.sql ={
+    "       \ 'command' : 'mysql',
+    "       \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
+    "       \ 'exec'    : ['%c %o < %s' ] ,
+    "       \}
     let g:quickrun_config.sql ={
-          \ 'command' : 'mysql',
-          \ 'cmdopt'  : '%{MakeMySQLCommandOptions()}',
-          \ 'exec'    : ['%c %o < %s' ] ,
+          \ 'command' : 'bq',
+          \ 'cmdopt'  : '--nouse_legacy_sql --dry_run',
+          \ 'exec'    : ['%c query --nouse_legacy_sql --dry_run < %s ' ] ,
           \}
     let g:quickrun_config['php'] = {
           \ 'command': 'testrunner',

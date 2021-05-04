@@ -78,47 +78,29 @@ zinit light-mode for \
     zinit-zsh/z-a-bin-gem-node
 
 zinit wait lucid for \
-    zsh-users/zsh-autosuggestions \
-    zdharma/fast-syntax-highlighting \
-    zsh-users/zsh-history-substring-search
-    # k4rthik/git-cal \
+    atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
+    atinit"zicompinit; zicdreplay" zdharma/fast-syntax-highlighting \
+    zsh-users/zsh-history-substring-search \
+    blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
 
+# Install Google Cloud SDK
+zinit ice as'null' id-as"google-cloud-sdk.tar.gz" \
+    atclone'tar zxfa *.tar.gz && ./google-cloud-sdk/install.sh -q --path-update false --usage-reporting false' \
+    src'google-cloud-sdk/path.zsh.inc' atpull'%atclone' 
+zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz?hl=ja"
 
-zinit wait lucid as"program" atpull'%atclone' make"!" pick"ghq" \
-    for x-motemen/ghq
+zinit wait lucid for \
+    sbin'' k4rthik/git-cal \
+    make"!build" sbin'' x-motemen/ghq \
+    make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' sbin'' src"zhook.zsh" direnv/direnv \
+    from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
+    from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
+    from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
+    from'gh-r' has'kubectl' bpick'kubectx*' id-as'kubectx' ahmetb/kubectx \
+    from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
+    as'program' pick"gcloudctx" atclone"cp completion/gcloudctx.zsh _gcloudctx_completion" ogerbron/gcloudctx
 
-# make'!...' -> run make before atclone & atpull
-zinit wait lucid as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
-    atpull'%atclone' pick"direnv" src"zhook.zsh" for \
-        direnv/direnv
-
-zinit wait lucid as"program" make'!' src"shell/completion.zsh" \
-    pick"fzf" for \
-    junegunn/fzf 
-
-# All of the above using the for-syntax and also z-a-bin-gem-node annex
-zinit wait"1" lucid from"gh-r" as"null" sbin"exa* -> exa" for ogham/exa 
-
-zinit wait"1" lucid from"gh-r" as"null" sbin"gctx* -> gctx" for adamrodger/gcloud-ctx
-
-zinit ice blockf
-zinit light zsh-users/zsh-completions
-
-# For k8s
-zi wait'0a' lucid has'kubectl' from'gh-r' for \
- bpick'*kubectx*' \
- id-as'kubectx' \
-    sbin'kubectx' ahmetb/kubectx \
- bpick'*kubens*' \
- id-as'kubens' \
-    sbin'kubens' ahmetb/kubectx \
-
-# zinit wait"2a" lucid has'gcloud' as"program" pick"gcloudctx" for  ogerbron/gcloudctx
-# zinit ice has'gcloud' as"completion" src"completion/gcloudctx.zsh" for  ogerbron/gcloudctx
- 
-# For WSL2 
-zinit wait"1" lucid from"gh-r" as"null" sbin"win32yank* -> win32yank" for equalsraf/win32yank
-
+zinit pack"bgn" for fzf
 
 # Load OMZ Git library
 zinit snippet OMZL::git.zsh
@@ -131,11 +113,19 @@ zinit light sindresorhus/pure
 
 # Zbell
 zbell_duration=5
-zbell_duration_email=600
+zbell_duration_email=12000
 zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
 zinit ice cargo"!vivid" 
 zinit load zdharma/null
+
+# A little more complex rustup configuration that uses Bin-Gem-Node annex
+# and installs the cargo completion provided with rustup, using for-syntax
+zinit id-as=rust wait=1 as=null sbin="bin/*" lucid rustup \
+    atload="[[ ! -f ${ZINIT[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall rust; \
+    export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
+        zdharma/null
+
 # FIXME: Impl 
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
 #   # zgen load jonmosco/kube-ps1 kube-ps1.sh
@@ -296,8 +286,8 @@ zman() {
 }
 
 function render_test(){  
-    kubectx -c
-    echo "☁️  $(gctx current)"
+    # kubectx -c
+    # echo "☁️  $(gctx current)"
 }
 
 function memo_cmd(){  
