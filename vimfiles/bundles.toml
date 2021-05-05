@@ -267,12 +267,6 @@
 
  #}}}
 
-[[plugins]] # tpope/vim-endwise {{{
- # endwise.vim: wisely add 'end'
-  repo = 'tpope/vim-endwise'
-  on_idle = 1
- #}}}
-
 [[plugins]] # tpope/vim-repeat {{{
   repo = 'tpope/vim-repeat'
  #}}}
