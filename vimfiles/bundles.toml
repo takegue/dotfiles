@@ -1666,7 +1666,7 @@ hook_post_source = '''
             nnoremap <buffer> [git]C :<C-u>Gcommit --amend<CR>
             nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
-            nnoremap <buffer> [git]p :<C-u>Gpush<CR>
+            nnoremap <buffer> [git]p :<C-u>Git push<CR>
             " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>
             if &l:path !~# l:root_path
               let &l:path = join([&g:path, root_path], ',')
