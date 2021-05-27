@@ -97,6 +97,7 @@ zinit wait lucid for \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kubectx*' id-as'kubectx' ahmetb/kubectx \
+    from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     as'program' pick"gcloudctx" atclone"cp completion/gcloudctx.zsh _gcloudctx_completion" ogerbron/gcloudctx
 
@@ -119,6 +120,7 @@ zinit light sindresorhus/pure
 # Zbell
 zbell_duration=5
 zbell_duration_email=12000
+# zinit ice id-as"zbell"
 zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
 # A little more complex rustup configuration that uses Bin-Gem-Node annex
@@ -288,8 +290,8 @@ zman() {
 }
 
 function render_test(){  
-    # kubectx -c
-    # echo "☁️  $(gctx current)"
+    kubectx -c
+    echo "☁️  $(gctx current)"
 }
 
 function memo_cmd(){  
@@ -299,6 +301,14 @@ function memo_cmd(){
 PS1="$PS1"
 add-zsh-hook preexec memo_cmd
 add-zsh-hook precmd render_test
+
+function env_hook(){
+    # echo '1:' "$1,$2,$2"
+    # awesome_env="$1"
+}
+
+add-zsh-hook preexec env_hook
+add-zsh-hook precmd env_hook
 
 
 #### Export Configurations ####
