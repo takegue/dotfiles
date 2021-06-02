@@ -733,6 +733,11 @@
           \ 'command' : 'jq',
           \ 'exec' : '%c %o -f %s',
           \}
+    let g:quickrun_config.json ={
+          \ 'command' : 'jq',
+          \ 'cmdopt' : ".",
+          \ 'exec' : '%c \'%o\' %s',
+          \}
     let g:quickrun_config.tex ={
           \ 'command' : 'latexmk',
           \ 'cmdopt' : '-pdf',
