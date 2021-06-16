@@ -291,7 +291,7 @@ zman() {
 
 function render_test(){  
     kubectx -c
-    echo "☁️  $(gctx current)"
+    echo "☁️  ${CLOUDSDK_ACTIVE_CONFIG_NAME:-$(gctx current)}"
 }
 
 function memo_cmd(){  

@@ -43,7 +43,40 @@ layout_python-venv() {
     PATH_add "$VIRTUAL_ENV/bin"
 }
 
-use_k8s() {
+use_gke() {
+  # Usage: use gke monotaro-ml-platform-dev ml-platform
+
+  # Styling
+  bold=$(tput bold)
+  normal=$(tput sgr0)
+  red=$(tput setaf 1)
+
+  local gcp_project=${1}
+  local kubernetes_cluster=${2}
+  if [[ -z ${kubernetes_cluster} ]]; then
+    return
+  fi
+
+  config_direnv="$(pwd)/.direnv"
+  # Kubernetes Configuration
+  if [ -n "$kubernetes_cluster" ]; then
+      config_k8s=$config_direnv/kube
+      if [ ! -d "$config_k8s" ]; then
+        mkdir -p $config_k8s
+      fi
+      export KUBECONFIG="$config_k8s/config"
+      if [ ! -f $KUBECONFIG ]; then
+          local arg_gcp_project=
+          if [[ -n $gcp_project ]]; then
+            arg_gcp_project="--project $gcp_project"
+          fi
+          echo "Creating Kubernetes cluster config for ${bold}$kubernetes_cluster${normal}"
+          gcloud --no-user-output-enabled beta container clusters get-credentials ${kubernetes_cluster} $arg_gcp_project
+      else
+          echo "Changing active Kubernetes cluster to ${bold}$kubernetes_cluster${normal}"
+      fi
+
+  fi
 }
 
 use_terraform() {
