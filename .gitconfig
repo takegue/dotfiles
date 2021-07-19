@@ -53,6 +53,8 @@
     ldiff = difftool -t latex
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
+    mainline = "!f() { git switch -C $(git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2) origin/HEAD; }; f"
+
 
     tags = tag -l
     branches = branch -a
@@ -64,7 +66,7 @@
     # Credit an author on the latest commit
     credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-    showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...master  | grep 'Merge pull request #' | head -n 1; }; f "
+    showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...origin/HEAD  | grep 'Merge pull request #' | head -n 1; }; f "
     # Merge GitHub pull request on top of the `master` branch
     mpr = "!f() { \
             if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
