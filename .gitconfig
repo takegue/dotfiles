@@ -51,6 +51,7 @@
         while [ $# -gt 0 ]; do s=\"$s,$1\"; shift; done;\
         curl \"https://www.toptal.com/developers/gitignore/api/$s\"; }; f"
     ldiff = difftool -t latex
+    pushf = push --force-with-lease
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
     mainline = "!f() { git switch -C $(git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2) origin/HEAD; }; f"
