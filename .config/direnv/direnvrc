@@ -44,7 +44,7 @@ layout_python-venv() {
 }
 
 use_gke() {
-  # Usage: use gke monotaro-ml-platform-dev ml-platform
+  # Usage: use gke <gcp_project> <context_name> 
 
   # Styling
   bold=$(tput bold)
