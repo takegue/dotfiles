@@ -263,6 +263,7 @@
   on_if = 1
   hook_add = '''
       autocmd FileType markdown let b:commentary_format = "<!-- %s -->"
+      autocmd FileType sql let b:commentary_format = "-- %s "
   '''
 
  #}}}
@@ -684,20 +685,16 @@
 [[plugins]] # jceb/vim-hier  {{{
   repo = 'jceb/vim-hier'
 # }}}
-#
-#
 
 [[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
   repo = 'tamy0612/quickrun-job-runner.nvim'
-  on_if = 1
 # }}}
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
   on_event = ['BufWritePost']
   depends = ['vim-hier', 'shabadou.vim']
-  hook_add = '''
-  '''
+
 
   hook_source = '''
     let g:quickrun_config = deepcopy(g:quickrun#default_config)
@@ -708,8 +705,9 @@
           \   "hook/qfsigns_update/enable_exit":   1,
           \   "hook/qfsigns_update/priority_exit": 3,
           \   "runner"                    : has("nvim") ? "nvim_job" : "job",
-          \   "outputter/buffer/split"    : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "bot vertical"}',
-          \   "outputter/buffer/close_on_empty" : 1,
+          \   "outputter"                 : 'buffer_legacy',
+          \   "outputter/buffer_legacy/split"   : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "vertical"} new',
+          \   "outputter/buffer_legacy/close_on_empty" : 1,
           \},
           \ "watchdogs_checker/_" : {
           \      'outputter/quickfix/open_cmd' : '',
@@ -853,7 +851,28 @@
       autocmd BufWinEnter,BufNewFile *.t setlocal filetype=perl.unit
       autocmd BufWinEnter,BufNewFile *_spec.rb setlocal filetype=ruby.rspec
     augroup END
+
+    function! SmartQuickRun(argline, use_range, line1, line2) abort "{{{
+      if !exists("b:smarter_quickrun_argline")
+        let b:smarter_quickrun_argline = ""
+      endif
+
+      let l:argline = a:argline
+      if empty(l:argline)
+        let l:argline = b:smarter_quickrun_argline
+      else
+        let l:argline = a:argline
+        let b:smarter_quickrun_argline = a:argline
+      endif
+
+      call quickrun#command#execute(l:argline, a:use_range, a:line1, a:line2)
+    endfunction "}}}
+
+    command! -nargs=* -range=0 -complete=customlist,quickrun#command#complete
+        \ SmartQuickRun call SmartQuickRun(<q-args>, <count>, <line1>, <line2>)
+    map <Leader>r :<C-u>SmartQuickRun<CR>
   '''
+
 # }}}
 
 [[plugins]] # osyo-manga/vim-watchdogs {{{
@@ -1669,7 +1688,7 @@ hook_post_source = '''
             nnoremap <buffer> [git]c :<C-u>Git commit<CR>
             nnoremap <buffer> [git]f :<C-u>Git commit --fixup HEAD<CR>
             nnoremap <buffer> [git]C :<C-u>Git commit --amend<CR>
-            nnoremap <buffer> [git]s :<C-u>Gstatus<CR>
+            nnoremap <buffer> [git]s :<C-u>Git<CR>
             nnoremap <buffer> [git]d :<C-u>Gdiff<CR>
             nnoremap <buffer> [git]p :<C-u>Git push<CR>
             " nnoremap <buffer> [git]P :<C-u>call MyGitPull()<CR>

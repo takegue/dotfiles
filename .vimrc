@@ -199,11 +199,11 @@ if has("persistent_undo")
   endif
 endif
 
-set swapfile
-set directory=$HOME/.vim/.swap
-if !isdirectory("$HOME/.vim/.swap")
-    call tkngue#util#mkdir(expand("$HOME/.vim/.swap"), 1)
-endif
+set noswapfile
+" set directory=$HOME/.vim/.swap
+" if !isdirectory("$HOME/.vim/.swap")
+"     call tkngue#util#mkdir(expand("$HOME/.vim/.swap"), 1)
+" endif
 set writebackup
 set backupdir=$HOME/.vim/.backup
 set backupext=.old
@@ -336,7 +336,7 @@ inoremap []<space> []
 
 "}}}
 "}}}
-"
+;
 "Highlight: {{{
 augroup my_higlight
   autocmd!
@@ -461,6 +461,7 @@ if tkngue#util#executable("ghq")
     execute "set path+=" . substitute(glob(s:ghq_path . "/*"), '\n', ',', 'g')
 endif
 
+echomsg 'loaded'
 augroup MyAutocmdGroup "{{{
   autocmd!
   autocmd BufNewFile,BufRead *.todo
@@ -479,6 +480,7 @@ augroup MyAutocmdGroup "{{{
   autocmd QuickfixCmdPost make,diff,grep,grepadd,vimgrep,vimdiff copen
   autocmd CmdwinEnter * nnoremap <buffer>q  <C-w>c
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd BufNewFile,BufRead *.ipynb set filetype=json
   autocmd BufNewFile,BufRead *.gs set filetype=javascript
   " autocmd BufReadPost * call s:SwitchToActualFile()
   autocmd FileType sh,zsh,csh,tcsh let &l:path = substitute($PATH, ':', ',', 'g')

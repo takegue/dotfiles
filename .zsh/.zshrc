@@ -96,7 +96,7 @@ zinit wait lucid for \
     from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
-    from'gh-r' has'kubectl' bpick'kubectx*' id-as'kubectx' ahmetb/kubectx \
+    from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubens' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     as'program' pick"gcloudctx" atclone"cp completion/gcloudctx.zsh _gcloudctx_completion" ogerbron/gcloudctx
