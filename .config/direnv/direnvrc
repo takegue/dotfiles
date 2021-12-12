@@ -86,11 +86,10 @@ layout_python-poetry() {
   fi
 
   # create venv if it doesn't exist
-  poetry run true
-
-  export VIRTUAL_ENV=$(poetry env info --path)
+  local VENV=$(dirname $(poetry run which python))
+  export VIRTUAL_ENV=$(echo "$VENV" | rev | cut -d'/' -f2- | rev)
   export POETRY_ACTIVE=1
-  PATH_add "$VIRTUAL_ENV/bin"
+  PATH_add "$VENV"
 }
 
 use_terraform() {
