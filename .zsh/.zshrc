@@ -58,9 +58,9 @@ typeset -gU ld_library_path
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -72,14 +72,13 @@ autoload -Uz _zinit
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
+    zdharma-continuum/zinit-annex-rust \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-bin-gem-node
 
 zinit wait lucid for \
-    atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions \
-    atinit"zicompinit; zicdreplay" zdharma/fast-syntax-highlighting \
+    atinit"zicompinit; zicdreplay" zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-history-substring-search \
     blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
 
@@ -96,10 +95,10 @@ zinit wait lucid for \
     from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
-    from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubens' id-as'kubectx' ahmetb/kubectx \
+    from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
-    as'program' pick"gcloudctx" atclone"cp completion/gcloudctx.zsh _gcloudctx_completion" ogerbron/gcloudctx
+    from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx
 
 zinit lucid as'program' pick"$ZPFX/bin/(fzf|fzf-tmux)" \
     atclone"cp shell/completion.zsh _fzf_completion; \
@@ -128,7 +127,7 @@ zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc
 zinit id-as=rust wait=1 as='program' pick="bin/*" lucid rustup \
     atload="[[ ! -f ${ZINIT[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall rust; \
     export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
-        zdharma/null
+        zdharma-continuum/null
 
 # FIXME: Impl 
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
