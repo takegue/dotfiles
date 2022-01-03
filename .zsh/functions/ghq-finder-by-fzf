@@ -3,18 +3,18 @@
 autoload -Uz ghq-finder-by-fzf
 
 _GHQ_ROOT=$(ghq root)
-
 _AWK_GROUP_BY_MIN='
-{if(min[$1] == "") min[$1]="inf"
-if(min[$1]>$2) min[$1]=$2
-if(max[$1]<$3) max[$1]=$3}
-END{for(key in min) print key, min[key], max[key]}
+{
+    if(min[$1] == "") min[$1]="inf"
+    if(min[$1]>$2) min[$1]=$2
+}
+END{for(key in min) print key, min[key]}
 '
 
 ghq-list-historical-ordered() {
     join -a 1 -e 1000 -o 0 2.2 \
         <(ghq list | sort) \
-        <(dirs -pl | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk $_AWK_GROUP_BY_MIN | sort -u) \
+        <(cat ~/.zdirs | tee /tmp/hoge | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk "$_AWK_GROUP_BY_MIN" | sort) \
     | sort -k2n \
     | awk '{print $1}'
 }
@@ -23,7 +23,7 @@ ghq-finder-by-fzf() {
     local dir repository session current_session
     FZF=fzf
 
-    dir="$_GHQ_ROOT/$(ghq-list-historical-ordered | $FZF --reverse +m --prompt='Project >')"
+    dir="$_GHQ_ROOT/$(ghq-list-historical-ordered | $FZF --reverse +s +m --prompt='Project >')"
 
     if [[ $dir != "$(ghq root)/" ]]; then
         if [[ ! -z ${TMUX} ]]; then
