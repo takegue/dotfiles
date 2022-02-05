@@ -13,7 +13,7 @@ if [ ! -e $(which vim) ]; then
   $DIR/scripts/vim-install.sh
 fi 
 
-if [ ! -e $(which python) ]; then
+if [[ -e $(which python) ]]; then
   # Install powerline
   pip install powerline-status powerline-mem-segment psutil netifaces
 fi 
@@ -24,11 +24,12 @@ setup_link()
   from=$1
   to=$2
 
-  if [ -e $to ]; then
-    if [ -L $to ]; then
-    elif [ -d $to ]; then
-      echo 'Linked:' $from/*(:a) 'into' $to
-      ln -sf $from/*(:a) $to
+  if [[ -e $to ]]; then
+    if [[ -L $to ]]; then
+      return
+    elif [[ -d $to ]]; then
+      echo 'Linked:' $from.(:a) 'into' $to
+      ln -sfv $from(:a) $to
       return
     else
       echo "aborted: Already ${dstpath} exists"
@@ -46,7 +47,7 @@ for dotfile in `git ls-tree --name-only HEAD | grep '^[._]'`; do
       continue
   fi
   # ex) ./_gitignore -> .gitignore
-  dstpath="${HOME}/${${dotfile##*/}:s:_:.:}"
+  dstpath="${HOME}/${${dotfile##*/}:s:_git:.git:}"
   setup_link $dotfile $dstpath
 done
 
