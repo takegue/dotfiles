@@ -100,11 +100,10 @@ zinit wait lucid for \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx
 
-zinit lucid as'program' pick"$ZPFX/bin/(fzf|fzf-tmux)" \
-    atclone"cp shell/completion.zsh _fzf_completion; \
+zinit lucid as'null' sbin="bin/*" \
+    atclone="cp shell/completion.zsh _fzf_completion; \
       cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
-    src="shell/completion.zsh" \
-    make"PREFIX=$ZPFX install" for \
+    make"install" for \
         junegunn/fzf
 
 # Load OMZ Git library
@@ -288,9 +287,9 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
-function render_test(){  
-    kubectx -c
-    echo "☁️  ${CLOUDSDK_ACTIVE_CONFIG_NAME:-$(gctx current)}"
+function render_info(){  
+    (( $+commands[kubectl] )) &&  kubectx -c
+    (( $+commands[gctx] )) &&  echo "☁️  ${CLOUDSDK_ACTIVE_CONFIG_NAME:-$(gctx current)}"
 }
 
 function memo_cmd(){  
@@ -299,16 +298,7 @@ function memo_cmd(){
 # For tmux powerline, to detect current directory setting
 PS1="$PS1"
 add-zsh-hook preexec memo_cmd
-add-zsh-hook precmd render_test
-
-function env_hook(){
-    # echo '1:' "$1,$2,$2"
-    # awesome_env="$1"
-}
-
-add-zsh-hook preexec env_hook
-add-zsh-hook precmd env_hook
-
+add-zsh-hook precmd render_info
 
 #### Export Configurations ####
 export PYTHONSTARTUP=~/.pythonstartup
