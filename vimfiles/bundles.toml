@@ -1146,6 +1146,10 @@
     '''
   # }}}
 
+  [[plugins]] # mattn/vim-lsp-settings {{{
+    repo = 'mattn/vim-lsp-settings'
+
+
 [[plugins]] # Shougo/neosnippet-snippets {{{
   repo = 'Shougo/neosnippet-snippets'
   if = 1
