@@ -470,7 +470,7 @@ augroup MyAutocmdGroup "{{{
   autocmd  InsertLeave *
         \ if &diff | diffupdate | echo 'diff updated' | endif
   " large_file_config_for_smooth
-  autocmd BufNewFile,BufRead * if &filetype != 'help' && line('$') > 2000 |
+  autocmd BufNewFile,BufRead * if &filetype != 'help' && line('$') > 10000 |
         \   setl nonumber norelativenumber nocursorline|
         \   filetype plugin indent off |
         \   setl syntax=off |
