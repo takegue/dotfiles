@@ -648,7 +648,7 @@
   repo = 'thinca/vim-template'
   if = 1 # TODO: if=1にするとなぜか読み込まれるようになる. バグ？ defaultがlazy load???
   hook_add = '''
-    command! -nargs=0 -complete=filetype Temp call s:open_template()
+    " command! -nargs=0 -complete=filetype Temp call s:open_template()
 
     nmap <Space>/ :<C-u>call <SID>open_template()<CR>
     function! s:open_template()
@@ -1793,10 +1793,11 @@ hook_post_source = '''
 #
 # Javascripts {{{
 
-    # [[plugins]] # leafgarland/typescript-vim {{
-    #     repo = 'leafgarland/typescript-vim'
-    #     on_ft = 'typescript'
-    # # }}
+    [[plugins]] # leafgarland/typescript-vim {{
+        repo = 'leafgarland/typescript-vim'
+        on_ft = ['typescript', 'typescriptreact']
+    # }}
+
     # [[plugins]]
     #     repo = 'mhartington/nvim-typescript'
     #     on_ft = 'typescript'
