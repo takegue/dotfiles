@@ -14,7 +14,7 @@
 #
 # Local settings and styles can go here and (usually) overwrite
 # things defined by me later.
-
+#
 PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zmodload zsh/zprof 
@@ -103,6 +103,7 @@ zinit wait lucid for \
 zinit lucid as'null' sbin="bin/*" \
     atclone="cp shell/completion.zsh _fzf_completion; \
       cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
+    src="shell/completion.zsh" \
     make"install" for \
         junegunn/fzf
 
@@ -288,7 +289,7 @@ zman() {
 }
 
 function render_info(){  
-    (( $+commands[kubectl] )) &&  kubectx -c
+    (( $+commands[kubectl] )) &&  kubectx -c 2>/dev/null
     (( $+commands[gctx] )) &&  echo "☁️  ${CLOUDSDK_ACTIVE_CONFIG_NAME:-$(gctx current)}"
 }
 
