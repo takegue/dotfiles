@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 #新しい環境に取り込んだ時のインストール
 
+set -x
 DIR=$(cd $(dirname $0); pwd)
 
 if [ ! -e $(which git) ]; then

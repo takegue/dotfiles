@@ -1,6 +1,10 @@
- {
-    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
+{
+    "editor.fontFamily": "'HackGen Nerd', 'Courier New', monospace",
+    "terminal.integrated.allowMnemonics": true,
+    "terminal.integrated.fontFamily": "'HackGenNerd'",
+    "git.ignoreMissingGitWarning": true,
+    "jupyter.askForKernelRestart": false,
+    "files.autoSave": "afterDelay",
     "configurations": [
         {
             "type": "python",

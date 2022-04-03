@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+find "$(wslpath "$(wslvar USERPROFILE)")/AppData/Roaming/Code/User/" \
+  -maxdepth 1 -type f \
+  -exec cp -v {} ~/.config/Code/User/ \;
