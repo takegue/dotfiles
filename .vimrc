@@ -461,7 +461,6 @@ if tkngue#util#executable("ghq")
     execute "set path+=" . substitute(glob(s:ghq_path . "/*"), '\n', ',', 'g')
 endif
 
-echomsg 'loaded'
 augroup MyAutocmdGroup "{{{
   autocmd!
   autocmd BufNewFile,BufRead *.todo
@@ -500,8 +499,9 @@ augroup MyAutocmdGroup "{{{
         \ | execute 'source ' . expand("<afile>/.vimrc.local")
         \ | endif
 
-  autocmd FileType,Syntax,BufNewFile,BufNew,BufRead  *
+  autocmd FileType,Syntax,BufNewFile,BufNew,BufRead *
         \ call s:my_on_filetype()
+
 augroup END
 "}}}
 
