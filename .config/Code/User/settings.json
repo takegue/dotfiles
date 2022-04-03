@@ -7,6 +7,12 @@
     "files.autoSave": "afterDelay",
     "terminal.integrated.defaultLocation": "editor",
     "terminal.integrated.fontSize": 10,
-    "terminal.integrated.sendKeybindingsToShell": true,
-    "window.zoomLevel": 3
+    "window.zoomLevel": 3,
+    "terminal.integrated.commandsToSkipShell": [
+        "-workbench.action.quickOpen",
+        "workbench.action.focusLeftGroup",
+        "workbench.action.focusRightGroup",
+        "workbench.action.focusAvobeGroup",
+        "workbench.action.focusBelowGroup",
+    ]
 }
