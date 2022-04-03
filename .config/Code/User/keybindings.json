@@ -26,17 +26,29 @@
         "when": "terminalFocus"
     },
     {
-        "key": "ctrl+s v",
-        "command": "workbench.action.splitEditorRight",
-        "when": "editorFocus"
-    },
-    {
         "key": "ctrl+6",
         "command": "-workbench.action.focusSixthEditorGroup"
     },
     {
+        "key": "ctrl+s c",
+        "command": "workbench.action.createTerminalEditor"
+    },
+    {
         "key": "ctrl+s v",
         "command": "workbench.action.createTerminalEditorSide"
+    },
+    {
+        "key": "ctrl+s s",
+        "command": "extension.multiCommand.execute",
+        "args": {
+            "sequence": [
+                "workbench.action.createTerminalEditor",
+                {
+                    "command": "workbench.action.terminal.sendSequence",
+                    "args": { "text": "ssh $(fzf-ssh)\u000D" }
+                }
+            ]
+        }
     },
     {
         "key": "ctrl+s shift+oem_7",
@@ -51,5 +63,13 @@
     {
         "key": "ctrl+k ctrl+oem_5",
         "command": "-workbench.action.splitEditorOrthogonal"
+    },
+    {
+        "key": "alt+i",
+        "command": "workbench.action.togglePanel"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "-workbench.action.togglePanel"
     }
 ]

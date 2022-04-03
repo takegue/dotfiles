@@ -5,7 +5,8 @@
     "git.ignoreMissingGitWarning": true,
     "jupyter.askForKernelRestart": false,
     "files.autoSave": "afterDelay",
-    "window.zoomLevel": 2,
     "terminal.integrated.defaultLocation": "editor",
-    "terminal.integrated.fontSize": 12
+    "terminal.integrated.fontSize": 10,
+    "terminal.integrated.sendKeybindingsToShell": true,
+    "window.zoomLevel": 3
 }
