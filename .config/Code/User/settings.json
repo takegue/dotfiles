@@ -5,12 +5,7 @@
     "git.ignoreMissingGitWarning": true,
     "jupyter.askForKernelRestart": false,
     "files.autoSave": "afterDelay",
-    "configurations": [
-        {
-            "type": "python",
-            "request": "attach",
-            "name": "Launch Python against localhost",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+    "window.zoomLevel": 2,
+    "terminal.integrated.defaultLocation": "editor",
+    "terminal.integrated.fontSize": 12
 }

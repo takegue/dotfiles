@@ -14,14 +14,7 @@
         "command": "-workbench.action.closeGroup",
         "when": "activeEditorGroupEmpty && multipleEditorGroups"
     },
-    {
-        "key": "ctrl+s shift+oem_7",
-        "command": "workbench.action.splitEditorDown"
-    },
-    {
-        "key": "ctrl+s v",
-        "command": "workbench.action.splitEditorRight"
-    },
+
     {
         "key": "alt+enter",
         "command": "workbench.action.terminal.focus",
@@ -33,7 +26,30 @@
         "when": "terminalFocus"
     },
     {
+        "key": "ctrl+s v",
+        "command": "workbench.action.splitEditorRight",
+        "when": "editorFocus"
+    },
+    {
         "key": "ctrl+6",
         "command": "-workbench.action.focusSixthEditorGroup"
+    },
+    {
+        "key": "ctrl+s v",
+        "command": "workbench.action.createTerminalEditorSide"
+    },
+    {
+        "key": "ctrl+s shift+oem_7",
+        "command": "extension.multiCommand.execute",
+        "args": {
+            "sequence": [
+                "workbench.action.splitEditorOrthogonal",
+                "workbench.action.terminal.new"
+            ]
+        }
+    },
+    {
+        "key": "ctrl+k ctrl+oem_5",
+        "command": "-workbench.action.splitEditorOrthogonal"
     }
 ]
