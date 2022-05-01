@@ -17,7 +17,7 @@
 #
 PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
-    zmodload zsh/zprof 
+    zmodload zsh/zprof
     # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
     PS4=$'%D{%M%S%.} %N:%i> '
     exec 3>&2 2>/tmp/startlog.zshrc.$$
@@ -85,7 +85,7 @@ zinit wait lucid for \
 # Install Google Cloud SDK
 zinit ice as'null' id-as"google-cloud-sdk.tar.gz" \
     atclone'tar zxfa *.tar.gz && ./google-cloud-sdk/install.sh -q --path-update false --usage-reporting false' \
-    src'google-cloud-sdk/path.zsh.inc' atpull'%atclone' 
+    src'google-cloud-sdk/path.zsh.inc' atpull'%atclone'
 zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz?hl=ja"
 
 zinit wait lucid for \
@@ -129,7 +129,7 @@ zinit id-as=rust wait=1 as='program' pick="bin/*" lucid rustup \
     export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
         zdharma-continuum/null
 
-# FIXME: Impl 
+# FIXME: Impl
 #   [[ $OSNAME == 'Darwin' ]] && zgen load https://gist.github.com/5535a140f8de7c5b1ca616e36568a720.git
 #   # zgen load jonmosco/kube-ps1 kube-ps1.sh
 
@@ -139,7 +139,7 @@ compinit; zinit cdreplay
 # -----------------------------------------------------------------------------
 #                               GENERAL SETTINGS
 # -----------------------------------------------------------------------------
-export EDITOR=vim 
+export EDITOR=vim
 export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
 export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
@@ -154,7 +154,7 @@ fi
 
 setopt interactivecomments #
 setopt no_beep           # ビープ音を鳴らさないようにする
-setopt auto_cd           # ディレクトリ名の入力のみで移動する 
+setopt auto_cd           # ディレクトリ名の入力のみで移動する
 setopt auto_pushd        # cd時にディレクトリスタックにpushdする
 setopt correct           # コマンドのスペルを訂正する
 setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
@@ -236,8 +236,8 @@ function history-all { history -E -D 1  }
 # -----------------------------------------------------------------------------
 [[ -z $LD_LIBRARY_PATH ]] && export LD_LIBRARY_PATH=${PATH:gs/bin/lib}
 
-today(){ echo `date +%Y%m%d` } 
-now(){ echo `date +%Y%m%d%H%M%S` } 
+today(){ echo `date +%Y%m%d` }
+now(){ echo `date +%Y%m%d%H%M%S` }
 
 # ------------------------------
 # Aliases
@@ -288,12 +288,12 @@ zman() {
     PAGER="less -g -s '+/^       "$1"'" man zshall
 }
 
-function render_info(){  
+function render_info(){
     (( $+commands[kubectl] )) &&  kubectx -c 2>/dev/null
     (( $+commands[gctx] )) &&  echo "☁️  ${CLOUDSDK_ACTIVE_CONFIG_NAME:-$(gctx current)}"
 }
 
-function memo_cmd(){  
+function memo_cmd(){
     [[ -n ${TMUX_PANE} ]] && echo $1 > "${TMP:-/tmp}/tmux_pane_cmd_${TMUX_PANE}"
 }
 # For tmux powerline, to detect current directory setting
