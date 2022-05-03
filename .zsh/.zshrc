@@ -82,11 +82,18 @@ zinit wait lucid for \
     zsh-users/zsh-history-substring-search \
     blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
 
+
+# Install Deno
+zinit ice as"program" id-as"deno" pick"bin/deno"\
+    atclone"DENO_INSTALL=\$(pwd) sh deno; rm -f deno" atpull'%atclone' 
+zinit snippet "https://deno.land/install.sh"
+
 # Install Google Cloud SDK
 zinit ice as'null' id-as"google-cloud-sdk.tar.gz" \
     atclone'tar zxfa *.tar.gz && ./google-cloud-sdk/install.sh -q --path-update false --usage-reporting false' \
     src'google-cloud-sdk/path.zsh.inc' atpull'%atclone'
 zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz?hl=ja"
+
 
 zinit wait lucid for \
     sbin'' k4rthik/git-cal \
