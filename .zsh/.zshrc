@@ -94,7 +94,6 @@ zinit ice as'null' id-as"google-cloud-sdk.tar.gz" \
     src'google-cloud-sdk/path.zsh.inc' atpull'%atclone'
 zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz?hl=ja"
 
-
 zinit wait lucid for \
     sbin'' k4rthik/git-cal \
     make"!build" sbin'' x-motemen/ghq \
@@ -105,7 +104,8 @@ zinit wait lucid for \
     from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
-    from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx
+    from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
+    from'gh-r' has'luajit' bpick'*.gz' as'program' sbin'**/bin/*' neovim/neovim
 
 zinit lucid as'null' sbin="bin/*" \
     atclone="cp shell/completion.zsh _fzf_completion; \
