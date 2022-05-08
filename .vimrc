@@ -336,7 +336,7 @@ inoremap []<space> []
 
 "}}}
 "}}}
-;
+
 "Highlight: {{{
 augroup my_higlight
   autocmd!

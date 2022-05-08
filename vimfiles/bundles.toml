@@ -7,6 +7,24 @@
   '''
 #}}}
 
+# Appearence Plugins {{{
+[[plugins]] # vim-indent {{{
+  on_if = 1
+  repo = 'nathanaelkane/vim-indent-guides'
+  hook_post_source= '''
+    let g:indent_guides_auto_colors = 0
+    hi IndentGuidesOdd  ctermbg=237
+    hi IndentGuidesEven ctermbg=None
+  '''
+  hook_source = '''
+      let g:indent_guides_enable_on_vim_startup = 1
+      let g:indent_guides_start_level = 2
+      let g:indent_guides_guide_size = 1
+      let g:indent_guides_default_mapping = 1
+  '''
+#}}}
+
+
 [[plugins]] # nvim-lua/plenary.nvim {{{
   repo = 'nvim-lua/plenary.nvim'
 # }}}
@@ -18,7 +36,6 @@
 [[plugins]] # rcarriga/nvim-notify {{{
   repo = 'rcarriga/nvim-notify'
 # }}}
-
 
 [[plugins]] # nvim-tresitter/nvim-treesitter {{{
   repo = 'nvim-treesitter/nvim-treesitter'
@@ -50,7 +67,7 @@
     }
 EOF
   '''
-
+# }}}
 
 [[plugins]] # nvim-treesitter/nvim-treesitter-textobjects {{{
   repo = 'nvim-treesitter/nvim-treesitter-textobjects'
@@ -79,7 +96,7 @@ EOF
 # }}}
 
 [[plugins]] # RRethy/nvim-treesitter-textsubjects {{{
-  repo = 'RRethy/nvim-treenvim-treesitter-textsubjects'
+  repo = 'RRethy/nvim-treesitter-textsubjects'
   hook_post_source = '''lua <<EOF
   require('nvim-treesitter.configs').setup {
       textsubjects = {
@@ -96,6 +113,16 @@ EOF
   '''
 # }}}
 
+[[plugins]] # David-Kunz/treesitter-unit {{{
+  repo = 'David-Kunz/treesitter-unit'
+  hook_post_source = '''
+    xnoremap iu :lua require"treesitter-unit".select()<CR>
+    xnoremap au :lua require"treesitter-unit".select(true)<CR>
+    onoremap iu :<c-u>lua require"treesitter-unit".select()<CR>
+    onoremap au :<c-u>lua require"treesitter-unit".select(true)<CR>
+  '''
+# }}}
+
 [[plugins]] # mfussenegger/nvim-treehopper {{{
   repo = 'mfussenegger/nvim-treehopper'
   
@@ -106,28 +133,9 @@ EOF
   
 # }}}
 
-# Appearence Plugins {{{
-[[plugins]] # vim-indent {{{
-  on_if = 1
-  repo = 'nathanaelkane/vim-indent-guides'
-  hook_post_source= '''
-    let g:indent_guides_auto_colors = 0
-    hi IndentGuidesOdd  ctermbg=237
-    hi IndentGuidesEven ctermbg=None
-  '''
-  hook_source = '''
-      let g:indent_guides_enable_on_vim_startup = 1
-      let g:indent_guides_start_level = 2
-      let g:indent_guides_guide_size = 1
-      let g:indent_guides_default_mapping = 1
-  '''
-#}}}
-
-
 [[plugins]] # kyazdani42/nvim-web-devicons {{{
   repo = 'kyazdani42/nvim-web-devicons'
 # }}}
-
 
 [[plugins]] # nvim-lualine/lualine.nvim {{{
   on_if = 1
@@ -452,7 +460,7 @@ EOF
         " nnoremap <silent> [unite]n  :<C-u>Unite
         "      \ -buffer-name=tundles
         "      \ neobundle/search <CR>
-        nnoremap <silent> [unite]s  :<C-u>Unite
+        nnoremap <silent> [unite]s  :<c-u>unite
               \ -buffer-name=snippets
               \ neosnippet <CR>
         nnoremap <silent> [unite]ma :<C-u>Unite output:map output:map!
@@ -588,7 +596,6 @@ EOF
     let g:context_filetype#search_offset = 30
   '''
 #}}}
-
 
 [[plugins]] # vim-precious {{{
 # Vim constext filetype
@@ -879,7 +886,6 @@ EOF
   '''
   # }}}
 
-
 [[plugins]] # mhinz/vim-signify {{{
   repo = 'mhinz/vim-signify'
   hook_add = '''
@@ -980,6 +986,18 @@ EOF
     repo = 'deton/jasegment.vim'
   #}}}
 
+  [[plugins]] # andymass/vim-matchup {{{
+    repo = 'andymass/vim-matchup'
+    hook_source = '''lua <<EOF
+        require'nvim-treesitter.configs'.setup {
+            matchup = {
+                enable = true,              -- mandatory, false will disable the whole extension
+            },
+        }
+EOF
+'''
+
+#}}}
 
   [[plugins]] #  prabirshrestha/async.vim {{{
     repo = 'prabirshrestha/async.vim'
@@ -988,6 +1006,7 @@ EOF
     [[plugins]] #  prabirshrestha/asyncomplete-omni.vim {{{
       repo = 'prabirshrestha/asyncomplete-omni.vim'
       if = 1
+    # }}}
 
 
     [[plugins]] #  prabirshrestha/asyncomplete.vim {{{
