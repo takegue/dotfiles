@@ -7,10 +7,18 @@
   '''
 #}}}
 
-[[plugins]] # tpope/vim-sensible {{{
-  repo = 'tpope/vim-sensible'
-  rtp = ''
-#}}}
+[[plugins]] # nvim-lua/plenary.nvim {{{
+  repo = 'nvim-lua/plenary.nvim'
+# }}}
+
+[[plugins]] # nvim-lua/popup.nvim {{{
+  repo = 'nvim-lua/popup.nvim'
+# }}}
+
+[[plugins]] # rcarriga/nvim-notify {{{
+  repo = 'rcarriga/nvim-notify'
+# }}}
+
 
 [[plugins]] # nvim-tresitter/nvim-treesitter {{{
   repo = 'nvim-treesitter/nvim-treesitter'
@@ -43,48 +51,60 @@
 EOF
   '''
 
-[[plugins]] # 'nvim-treesitter/nvim-treesitter-textobjects' {{{
+
+[[plugins]] # nvim-treesitter/nvim-treesitter-textobjects {{{
   repo = 'nvim-treesitter/nvim-treesitter-textobjects'
+  
   hook_source = '''lua <<EOF
-    require'nvim-treesitter.configs'.setup {
-      textobjects = {
+    require('nvim-treesitter.configs').setup {
+    textobjects = {
         select = {
-          enable = true,
-          -- Automatically jump forward to textobj, similar to targets.vim
-          lookahead = true,
-          keymaps = {
+        enable = true,
+
+        -- Automatically jump forward to textobj, similar to targets.vim
+        lookahead = true,
+
+        keymaps = {
             -- You can use the capture groups defined in textobjects.scm
             ["af"] = "@function.outer",
             ["if"] = "@function.inner",
             ["ac"] = "@class.outer",
             ["ic"] = "@class.inner",
-            },
-          },
-        move = {
-          enable = true,
-          set_jumps = true, -- whether to set jumps in the jumplist
-          goto_next_start = {
-            ["]m"] = "@function.outer",
-            ["]]"] = "@class.outer",
-            },
-          goto_next_end = {
-            ["]M"] = "@function.outer",
-            ["]["] = "@class.outer",
-            },
-          goto_previous_start = {
-            ["[m"] = "@function.outer",
-            ["[["] = "@class.outer",
-            },
-          goto_previous_end = {
-            ["[M"] = "@function.outer",
-            ["[]"] = "@class.outer",
-            },
-          },
         },
+        },
+    },
     }
 EOF
   '''
-#}}}
+# }}}
+
+[[plugins]] # RRethy/nvim-treesitter-textsubjects {{{
+  repo = 'RRethy/nvim-treenvim-treesitter-textsubjects'
+  hook_post_source = '''lua <<EOF
+  require('nvim-treesitter.configs').setup {
+      textsubjects = {
+          enable = true,
+          prev_selection = ',', -- (Optional) keymap to select the previous selection
+              keymaps = {
+                  ['.'] = 'textsubjects-smart',
+                  [';'] = 'textsubjects-container-outer',
+                  ['i;'] = 'textsubjects-container-inner',
+              },
+      },
+  }
+EOF
+  '''
+# }}}
+
+[[plugins]] # mfussenegger/nvim-treehopper {{{
+  repo = 'mfussenegger/nvim-treehopper'
+  
+  hook_add = '''
+    omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
+    vnoremap <silent> m :lua require('tsht').nodes()<CR>
+  '''
+  
+# }}}
 
 # Appearence Plugins {{{
 [[plugins]] # vim-indent {{{
@@ -103,167 +123,51 @@ EOF
   '''
 #}}}
 
-[[plugins]] # itchyny/lightline.vim {{{
-  repo = 'itchyny/lightline.vim'
-  depends = ['vim-fugitive']
-  hook_add ='''
-    function! MyModified() "{{{
-      return &ft =~ 'help\|vimfiler\|gundo' || &bt == 'nofile' || &previewwindow ?
-            \ '' : &modified ? '+' : &modifiable ? '' : '-'
-    endfunction "}}}
 
-    function! MyReadonly() "{{{
-      return &ft !~? 'help\|vimfiler\|gundo' && &readonly ?  '⭤' : ''
-    endfunction "}}}
+[[plugins]] # kyazdani42/nvim-web-devicons {{{
+  repo = 'kyazdani42/nvim-web-devicons'
+# }}}
 
-    function! MyFilename() "{{{
 
-      if !exists('b:git_dir')
-        let fname = expand('%:t')
-      else
-        let fname = expand('%')
-      endif
+[[plugins]] # nvim-lualine/lualine.nvim {{{
+  on_if = 1
+  repo = 'nvim-lualine/lualine.nvim'
+  depends = ['nvim-web-devicons']
+  hook_source = '''lua <<EOF
+    require('lualine').setup {
+        options = {
+            icons_enabled = true,
+            theme = 'ayu_mirage',
+            disabled_filetypes = {},
+            always_divide_middle = true,
+            globalstatus = false,
+        },
+    }
+EOF
+'''
 
-      if fname =~ '^lingr-'
-        let fname = '['. fname . ']'
-      elseif &ft == 'dirvish'
-        let fname = @%
-      elseif fname == ''
-        let fname = '[No Name]'
-      endif
-      let b:lightline_filename = ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-            \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-            \  &ft == 'unite'    ? unite#get_status_string()    :
-            \  &ft == 'vimshell' ? vimshell#get_status_string() :
-            \  &previewwindow    ? '[Preview]':
-            \  &bt == 'quickfix' ? '[Quick Fix]'                :
-            \  &bt == 'help'     ? '[Help]'                     :
-            \  fname =~ '^['     ?  fname                       :
-            \  &bt == 'nofile' && &bh =='hide'  ? '[Scratch]'   :
-            \  fname . " #" . bufnr('%') ) .
-            \ ('' != MyModified() ? ' ' . MyModified() : '')
-      return b:lightline_filename
-    endfunction "}}}
 
-    function! MyFugitive() "{{{
-      if exists('b:git_dir')
-        if !exists('b:fugitive_branch')
-          let statusline = fugitive#statusline()
-          let b:fugitive_branch = substitute(statusline, '\[Git(\(.\+\))\]', ' \1', '')
-        endif
-        return b:fugitive_branch
-      else
-        return ''
-      endif
-    endfunction "}}}
+[[plugins]] # akinsho/bufferline.nvim' {{{
+  repo = 'akinsho/bufferline.nvim'
+  rev = 'v2.*'
+  depends = ['nvim-web-devicons']
+  hook_source = '''lua <<EOF
+    vim.opt.termguicolors = true
+    require("bufferline").setup{}
+EOF
+'''
 
-    function! MyFileformat() "{{{
-      return winwidth(0) > 70 ? &fileformat : ''
-    endfunction"}}}
-
-    function! MyFiletype() "{{{
-      return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-    endfunction "}}}
-
-    function! MyFileencoding() "{{{
-      return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-    endfunction"}}}
-
-    function! MyCount() "{{{
-      if dein#is_sourced('sum-it') && mode() =~ '[vV]\|CTRL-V\|'
-        return sumit#count_selected_text()
-      else
-        return ''
-      endif
-    endfunction "}}}
-
-    function! MyMode() "{{{
-      return winwidth(0) > 80 ? lightline#mode() :lightline#mode()[00]
-    endfunction"}}}
-
-    let g:lightline = {
-            \ 'colorscheme': 'solarized',
-            \ 'mode_map': {'c': 'COMMAND'},
-            \ 'active': {
-            \   'left':  [ [ 'mode', 'paste' ], ['fugitive', 'rubyenv'], ['filename'] ],
-            \   'right': [ [ 'lineinfo' ],
-            \              [ 'percent' ],
-            \              [ 'fileformat', 'fileencoding', 'filetype' ],
-            \              [ 'count'], ],
-            \ },
-            \ 'component': {
-            \   'lineinfo': '%3l:%-2v',
-            \ },
-            \ 'component_type': {
-            \   'syntaxcheck': 'error',
-            \ },
-            \ 'component_function': {
-            \   'syntaxcheck': 'qfstatusline#Update',
-            \   'modified': 'MyModified',
-            \   'readonly': 'MyReadonly',
-            \   'fugitive': 'MyFugitive',
-            \   'count': 'MyCount',
-            \   'filename': 'MyFilename',
-            \   'fileformat': 'MyFileformat',
-            \   'filetype': 'MyFiletype',
-            \   'fileencoding': 'MyFileencoding',
-            \   'mode': 'MyMode'
-            \ },
-            \ 'component_visible_condition' :{
-            \   'modified': '&modified||!&modifiable',
-            \   'readonly': '&readonly'
-            \ },
-            \ 'separator': { 'left': '', 'right':'' },
-            \ 'subseparator': { 'left': '', 'right' : ''}}
-
-    " :WatchdogsRun後にlightline.vimを更新
-    let g:Qfstatusline#UpdateCmd = function('lightline#update')
-    let g:Qfstatusline#Text      = 0
-
-    function! s:lightline_update() "{{{
-      if !exists('g:loaded_lightline')
-        return
-      endif
-      try
-        if g:colors_name =~# 'wombat\|solarized\|landscape\|jellybeans\|Tomorrow\|PaperColor'
-          let g:lightline.colorscheme =
-                \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '') .
-                \ (g:colors_name ==# 'solarized\|PaperColor' ? '_' . &background : '')
-          call lightline#init()
-          call lightline#colorscheme()
-          call lightline#update()
-        endif
-      catch
-      endtry
-    endfunction "}}}
-
-    augroup LightLineColorscheme
-      autocmd!
-      autocmd ColorScheme * call s:lightline_update()
-    augroup END
-
-    augroup LightLineStatus
-      autocmd!
-      autocmd BufRead * if exists('fugitive_branch') | :unlet b:fugitive_branch | endif
-    augroup END
-  '''
-
-#}}}
+# }}}
 
 # Colorschemes : {{{
-[[plugins]] # tomasr/molokai {{{
+[[plugins]]
   repo = 'tomasr/molokai'
-#}}}
 
-[[plugins]] # NLKNguyen/papercolor-theme {{{
-# colorscheme paperolor
+[[plugins]] 
   repo = 'NLKNguyen/papercolor-theme'
-#}}}
 
-[[plugins]] # flazz/vim-colorschemes {{{
-# one colorscheme pack to rule them all!
+[[plugins]] 
   repo = 'flazz/vim-colorschemes'
-#}}}
 #}}}
 #}}}
 
@@ -546,7 +450,7 @@ EOF
         nnoremap <silent> [unite]o  :<C-u>Unite outline tag
               \ -buffer-name=outline <CR>
         " nnoremap <silent> [unite]n  :<C-u>Unite
-        "      \ -buffer-name=bundles
+        "      \ -buffer-name=tundles
         "      \ neobundle/search <CR>
         nnoremap <silent> [unite]s  :<C-u>Unite
               \ -buffer-name=snippets
@@ -1525,11 +1429,6 @@ EOF
   on_ft = ['json','jq']
 #}}}
 
-# [[plugins]] # vim-scripts/css_color.vim {{{
-#   repo = 'vim-scripts/css_color.vim'
-# on_ft = ['html','css']
-#  #}}}
-
 [[plugins]] # hail2u/vim-css3-syntax {{{
     repo = 'hail2u/vim-css3-syntax'
   on_ft = ['css']
@@ -1591,9 +1490,9 @@ hook_post_source = '''
 '''
  #}}}
 
-[[plugins]] # vim-scripts/Align {{{
-  on_cmd = 'Align'
-  repo = 'vim-scripts/Align'
+[[plugins]] # junegunn/vim-easy-align {{{
+  on_cmd = 'EasyAlign'
+  repo = 'junegunn/vim-easy-align'
  #}}}
 
   # Latex {{{
@@ -1902,9 +1801,6 @@ hook_post_source = '''
 # }}}
 
   # Other {{{
-
-    [[plugins]]
-      repo = 'vim-scripts/nginx.vim'
 
     [[plugins]]
       on_ft = ['yaml']

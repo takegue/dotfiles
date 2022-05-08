@@ -14,7 +14,6 @@
 #
 # Local settings and styles can go here and (usually) overwrite
 # things defined by me later.
-#
 PROFILE_STARTUP=${PROFILE_STARTUP:-false}
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zmodload zsh/zprof
@@ -31,7 +30,6 @@ path=(
 )
 
 manpath=(
-    "$lmanpath[@]"
     /usr/share/man
     /usr/local/share/man
     "$manpath[@]"
@@ -105,7 +103,7 @@ zinit wait lucid for \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
-    from'gh-r' has'luajit' bpick'*.gz' as'program' sbin'**/bin/*' neovim/neovim
+    from'gh-r' has'luajit' bpick'*.tar.gz' as'command' atclone='cp -av */share/man/ $ZPFX/man/' atpull'%atclone' sbin'*/bin/*' neovim/neovim
 
 zinit lucid as'null' sbin="bin/*" \
     atclone="cp shell/completion.zsh _fzf_completion; \
