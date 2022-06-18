@@ -1,7 +1,7 @@
-" Author: TKNGUE
+" Author: takegue
 " URL: https://github.com/TKNGUE/dotfiles
 " Description:
-"   This is TKNGUE's vimrc
+"   This is 's vimrc
 scriptencoding utf-8
 
 " Startup {{{ =======================
@@ -57,8 +57,10 @@ if exists('&ambiwidth')
   "   /bin/sh -c "VTE_CJK_WIDTH=1 gnome-terminal --disable-factory"
   "   /bin/sh -c "VTE_CJK_WIDTH=1 guake"
   "   https://gist.github.com/sgk/5991138
-  set ambiwidth=double "Use twice the width of ASCII characters for Multibyte
+  set ambiwidth=single "Use twice the width of ASCII characters for Multibyte
 endif
+
+
 
 set helplang=ja,en
 set spelllang+=cjk
@@ -98,7 +100,7 @@ endif
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:~
 set fillchars=vert:\|
-set belloff=cursor,error,insertmode
+" set belloff=cursor,error,insertmode
 set t_vb=
 " }}}
 
@@ -345,7 +347,7 @@ augroup END
 
 function! s:additional_highlight() "{{{
   if !has('gui_running')
-    highlight Normal ctermbg=none
+    highlight normal ctermbg=none
   endif
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
   highlight CursorLine cterm=bold ctermfg=lightcyan ctermbg=None gui=bold
@@ -554,6 +556,7 @@ if !g:noplugin
       call dein#end()
       call dein#save_state()
   endif
+  autocmd VimEnter * call dein#call_hook('post_source')
 
   if !has('vim_starting') && dein#check_install()
       " Installation check.
@@ -567,6 +570,7 @@ endif
 "}}}
 
 " Local settings ================ {{{
+
 let s:local_vimrc = expand('~/.local.vimrc')
 if filereadable(s:local_vimrc)
     execute 'source ' . s:local_vimrc
@@ -574,7 +578,6 @@ endif
 " }}}
 
 " Finally ======================={{{
-"
 " Colorscheme: {{{
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
@@ -606,6 +609,7 @@ else
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
+
 
 "}}}
 

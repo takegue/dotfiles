@@ -159,7 +159,7 @@ fi
 
 setopt interactivecomments #
 setopt no_beep           # ビープ音を鳴らさないようにする
-setopt auto_cd           # ディレクトリ名の入力のみで移動する
+# setopt auto_cd           # ディレクトリ名の入力のみで移動する
 setopt auto_pushd        # cd時にディレクトリスタックにpushdする
 setopt correct           # コマンドのスペルを訂正する
 setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
@@ -170,7 +170,7 @@ setopt equals            # =commandを`which command`と同じ処理にする
 autoload -Uz ls_abbrev
 
 DIRSTACKSIZE=200
-DIRSTACKFILE=~/.zdirs
+DIRSTACKFILE=~/.zsh/.zdirs
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD

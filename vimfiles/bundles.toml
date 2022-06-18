@@ -3,7 +3,7 @@
   hook_add = '''
     let g:dein#install_progress_type = 'title'
     let g:dein#install_message_type = 'none'
-    let g:dein#auto_recache = 1
+    let g:dein#auto_recache = 0
   '''
 #}}}
 
@@ -45,19 +45,13 @@
   hook_source = '''lua <<EOF
     require'nvim-treesitter.configs'.setup {
       -- A list of parser names, or "all"
-      ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript" },
+      ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript", "javascript"},
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
-      -- List of parsers to ignore installing (for "all")
-      ignore_install = { "javascript" },
       highlight = {
         -- `false` will disable the whole extension
         enable = true,
-        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-        -- the name of the parser)
-        -- list of language that will be disabled
-        disable = { "c", "rust" },
+        disable = {},
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -97,7 +91,7 @@ EOF
 
 [[plugins]] # RRethy/nvim-treesitter-textsubjects {{{
   repo = 'RRethy/nvim-treesitter-textsubjects'
-  hook_post_source = '''lua <<EOF
+  hook_source = '''lua <<EOF
   require('nvim-treesitter.configs').setup {
       textsubjects = {
           enable = true,
@@ -159,7 +153,7 @@ EOF
   repo = 'akinsho/bufferline.nvim'
   rev = 'v2.*'
   depends = ['nvim-web-devicons']
-  hook_source = '''lua <<EOF
+  hook_add = '''lua <<EOF
     vim.opt.termguicolors = true
     require("bufferline").setup{}
 EOF
@@ -555,16 +549,6 @@ EOF
     'unite',
     'denite.nvim',
   ]
- #}}}
-
-[[plugins]] # Shougo/neossh.vim {{{
-  repo = 'Shougo/neossh.vim'
- #}}}
-
-[[plugins]] # rhysd/unite-redpen.vim {{{
-  repo = 'rhysd/unite-redpen.vim'
-  hook_add = '''
-  '''
  #}}}
 
 [[plugins]] # tsukkee/unite-tag {{{
@@ -991,7 +975,7 @@ EOF
     hook_source = '''lua <<EOF
         require'nvim-treesitter.configs'.setup {
             matchup = {
-                enable = true,              -- mandatory, false will disable the whole extension
+                enable = true,
             },
         }
 EOF
@@ -1001,17 +985,17 @@ EOF
 
   [[plugins]] #  prabirshrestha/async.vim {{{
     repo = 'prabirshrestha/async.vim'
+    if = '!has("nvim")'
   # }}}
 
     [[plugins]] #  prabirshrestha/asyncomplete-omni.vim {{{
       repo = 'prabirshrestha/asyncomplete-omni.vim'
-      if = 1
+      if = '!has("nvim")'
     # }}}
-
 
     [[plugins]] #  prabirshrestha/asyncomplete.vim {{{
       repo = 'prabirshrestha/asyncomplete.vim'
-      if = 1
+      if = '!has("nvim")'
 
       hook_add = '''
         inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -1072,99 +1056,104 @@ EOF
 
       '''
     # }}}
-#
+
   [[plugins]] #  prabirshrestha/asyncomplete-lsp.vim {{{
     repo = 'prabirshrestha/asyncomplete-lsp.vim'
-    if = 1
+    if = '!has("nvim")'
   # }}}
 
-  [[plugins]] # prabirshrestha/vim-lsp {{{
-    repo = 'prabirshrestha/vim-lsp' 
-    if = 1
-    hook_add = '''
-        " go get -u golang.org/x/tools/cmd/gopls
-        if tkngue#util#executable('gopls')
-            au User lsp_setup call lsp#register_server({
-                \ 'name': 'gopls',
-                \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-                \ 'whitelist': ['go'],
-                \ })
-            autocmd BufWritePre *.go silent! LspDocumentFormatSync
-        endif
 
-        " npm install -g vim-language-server
-        if tkngue#util#executable('vim-language-server')
-            au User lsp_setup call lsp#register_server({
-                \ 'name': 'vim-language-server',
-                \ 'cmd': {server_info->['vim-language-server', '--stdio']},
-                \ 'whitelist': ['vim'],
-                \ })
-            autocmd BufWritePre *.vim silent! LspDocumentFormatSync
-        endif
+  [[plugins]] # neovim/nvim-lspconfig {{{
+    repo = 'neovim/nvim-lspconfig'
+  # }}}
 
-        if tkngue#util#executable('rust-analyzer')
-            au User lsp_setup call lsp#register_server({
-                \ 'name': 'rust-analyzer',
-                \ 'cmd': {server_info->['rust-analyzer']},
-                \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-                \ 'whitelist': ['rust'],
-                \ })
-        elseif tkngue#util#executable('rls')
-            " rustup component add rls
-            au User lsp_setup call lsp#register_server({
-                \ 'name': 'rls',
-                \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-                \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-                \ 'whitelist': ['rust'],
-                \ })
-        endif
+  [[plugins]] # williamboman/nvim-lsp-installer {{{
+    repo = 'williamboman/nvim-lsp-installer'
+    if = 'has("nvim")'
+    hook_post_source = '''lua <<EOF
+      local lsp_installer = require"nvim-lsp-installer"
+      lsp_installer.setup{}
 
-        function! s:on_lsp_buffer_enabled() abort
-            setlocal omnifunc=lsp#complete
-            setlocal signcolumn=yes
-            if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-            nmap <buffer> gD <plug>(lsp-type-definition)
-            nmap <buffer> gd <plug>(lsp-definition)
-            nmap <buffer> gr <plug>(lsp-references)
-            nmap <buffer> gi <plug>(lsp-implementation)
-            nmap <buffer> <leader>rn <plug>(lsp-rename)
-            nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
-            nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
-            nmap <buffer> K <plug>(lsp-hover)
-            
-            " refer to doc to add more commands
-        endfunction
-
-        augroup lsp_install
-            au!
-            " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-            autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-        augroup END
+      local lspconfig = require"lspconfig"
+      for _, server in ipairs(lsp_installer.get_installed_servers()) do
+        lspconfig[server.name].setup{}
+      end
+EOF
     '''
   # }}}
 
-  [[plugins]] # mattn/vim-lsp-settings {{{
-    repo = 'mattn/vim-lsp-settings'
+  [[plugins]] # hrsh7th/cmp-nvim-lsp {{{
+    repo = 'hrsh7th/cmp-nvim-lsp'
+  # }}}
 
+  [[plugins]] 
+    repo = 'hrsh7th/cmp-buffer'
 
-[[plugins]] # Shougo/neosnippet-snippets {{{
-  repo = 'Shougo/neosnippet-snippets'
-  if = 1
+  [[plugins]] 
+    repo = 'hrsh7th/cmp-path'
 
-[[plugins]] # Shougo/neosnippet.vim {{{
-  repo = 'Shougo/neosnippet.vim'
-  if = 1
+  [[plugins]] 
+    repo = 'hrsh7th/cmp-cmdline'
 
-# }}}
- #}}}
+  [[plugins]] # hrsh7th/nvim-cmp {{{
+    repo = 'hrsh7th/nvim-cmp'
+    if = 'has("nvim")'
+    hook_source = '''lua <<EOF
+
+    -- Setup nvim-cmp.
+    local cmp = require'cmp'
+
+    cmp.setup({
+        window = {
+            completion = cmp.config.window.bordered(),
+            documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert({
+            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<C-e>'] = cmp.mapping.abort(),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            }),
+        sources = cmp.config.sources({{ name = 'nvim_lsp' }})
+    })
+
+    -- Set configuration for specific filetype.
+    cmp.setup.filetype('gitcommit', {
+        sources = cmp.config.sources({
+        { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+        }, {
+        { name = 'buffer' },
+        })
+    })
+
+    -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+    cmp.setup.cmdline('/', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+            { name = 'buffer' }
+            }
+        })
+
+    -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+    -- cmp.setup.cmdline(':', {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = cmp.config.sources({
+    --     { name = 'path' }
+    --     }, {
+    --     { name = 'cmdline' }
+    --     })
+    -- })
+
+    -- Setup lspconfig.
+    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+EOF
+    '''
+  # }}}
 
 [[plugins]] # vim-jp/vimdoc-ja {{{
   repo = 'vim-jp/vimdoc-ja'
  #}}}
-
-[[plugins]] # ujihisa/neco-look {{{
-  repo = 'ujihisa/neco-look'
-#}}}
 
 [[plugins]] # beloglazov/vim-online-thesaurus {{{
 # A Vim plugin for looking up words in an online thesaurus
@@ -1208,7 +1197,7 @@ EOF
 
 [[plugins]] # Shougo/neosnippet-snippets {{{
     repo = 'Shougo/neosnippet-snippets'
-    on_source = 'neosnippet.vim'
+    # on_source = 'neosnippet.vim'
  #}}}
 
 [[plugins]] # honza/vim-snippets {{{
@@ -1491,7 +1480,7 @@ on_ft = ['html', 'svg', 'rdf']
   # }}}
 
 # }}}
-#
+
 # Writing {{{
 [[plugins]] # rhysd/vim-grammarous {{{
     repo = 'rhysd/vim-grammarous'
@@ -1784,7 +1773,7 @@ hook_post_source = '''
     # }}
 
 # }}}
-#
+
 # Javascripts {{{
 
     [[plugins]] # leafgarland/typescript-vim {{
@@ -1909,7 +1898,7 @@ hook_post_source = '''
               \       'alc': 'http://eow.alc.co.jp/{query}/UTF-8/',
               \       'askubuntu': 'http://askubuntu.com/search?q={query}',
               \       'baidu': 'http://www.baidu.com/s?wd={query}&rsv_bp=0&rsv_spt=3&inputT=2478',
-              \       'blekko': 'http://blekko.com/ws/+{query}',
+             \       'blekko': 'http://blekko.com/ws/+{query}',
               \       'cpan': 'http://search.cpan.org/search?query={query}',
               \       'devdocs': 'http://devdocs.io/#q={query}',
               \       'duckduckgo': 'http://duckduckgo.com/?q={query}',

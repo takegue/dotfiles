@@ -41,8 +41,9 @@ ghq-finder-by-fzf() {
                 fi
                 tmux switch-client -t $session
             fi
+        elif [[ ! -z ${VSCODE_IPC_HOOK_CLI} ]]; then
+            code $dir
         else
-            # cd $dir
         fi
   fi
 }
