@@ -132,10 +132,10 @@ EOF
 # }}}
 
 [[plugins]] # nvim-lualine/lualine.nvim {{{
-  on_if = 1
   repo = 'nvim-lualine/lualine.nvim'
+  on_event = "BufEnter"
   depends = ['nvim-web-devicons']
-  hook_source = '''lua <<EOF
+  hook_post_source  = '''lua <<EOF
     require('lualine').setup {
         options = {
             icons_enabled = true,
@@ -149,7 +149,7 @@ EOF
 '''
 
 
-[[plugins]] # akinsho/bufferline.nvim' {{{
+[[plugins]] # akinsho/bufferline.nvi' {{{
   repo = 'akinsho/bufferline.nvim'
   rev = 'v2.*'
   depends = ['nvim-web-devicons']
@@ -1115,7 +1115,13 @@ EOF
             ['<C-e>'] = cmp.mapping.abort(),
             ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
             }),
-        sources = cmp.config.sources({{ name = 'nvim_lsp' }})
+        sources = cmp.config.sources(
+        {
+            { name = 'nvim_lsp' }
+        },
+        {
+            { name = 'buffer' }
+        })
     })
 
     -- Set configuration for specific filetype.
@@ -1649,13 +1655,13 @@ hook_post_source = '''
 
       [[plugins]] # tpope/vim-fugitive {{{
         repo = 'tpope/vim-fugitive'
-        # on_if = 'finddir(".git", "./;/") != ""'
-        if = 1
+        on_if = 'finddir(".git", "./;/") != ""'
+        # if = 1
         augroup = 'fugitive'
         hook_add = '''
           function! ConfigOnGitRepository() "{{{
             let l:root_path = FugitiveGitDir()
-            if l:root_path == ''
+            if empty(l:root_path)
               return
             endif
             let l:root_path = escape(fnamemodify(l:root_path, ':p:h:h'), ' ()')
@@ -1695,7 +1701,7 @@ hook_post_source = '''
 
           augroup FUGITIVE
               autocmd!
-              autocmd User Fugitive call ConfigOnGitRepository()
+              autocmd BufEnter * call ConfigOnGitRepository()
               " autocmd FileType dirvish call fugitive#detect(@%)
           augroup END
         '''
