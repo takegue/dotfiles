@@ -647,14 +647,6 @@ EOF
 '''
 # }}}
 
-[[plugins]] # osyo-manga/shabadou.vim  {{{
-  repo = 'osyo-manga/shabadou.vim'
-#}}}
-
-[[plugins]] # jceb/vim-hier  {{{
-  repo = 'jceb/vim-hier'
-# }}}
-
 [[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
   repo = 'tamy0612/quickrun-job-runner.nvim'
 # }}}
@@ -1711,7 +1703,6 @@ hook_post_source = '''
         repo = 'tommcdo/vim-fubitive'
         depends = ['vim-fugitive']
         hook_add = '''
-        let g:fubitive_domain_pattern = 'monotaro\.rickcloud\.jp'
         '''
 
 
@@ -1746,62 +1737,12 @@ hook_post_source = '''
 
 # }}}
 
-# PHP {{{
-
-  # [[plugins]]
-  #   repo = 'm2mdas/phpcomplete-extended'
-
-  # [[plugins]]
-  #   repo = 'shawncplus/phpcomplete.vim'
-  #   on_ft = 'php'
-
-  # [[plugins]]
-  #   repo = 'php-vim/phpcd.vim'
-  #   hook_post_source = '''
-  #       " autocmd BufRead *.php setl omnifunc=phpcd#CompletePHP
-  #   '''
-
-  [[plugins]]
-    repo = 'karakaram/vim-quickrun-phpunit'
-
-  [[plugins]]  # xolox/vim-misc {{{
-    repo = 'xolox/vim-misc'
-    on_ft = 'lua'
-  # }}}
-
-
-# }}}
-
-# Kotlin {{{
-
-    [[plugins]] # udalov/kotlin-vim {{
-        repo = 'udalov/kotlin-vim'
-    # }}
-
-# }}}
-
 # Javascripts {{{
 
     [[plugins]] # leafgarland/typescript-vim {{
         repo = 'leafgarland/typescript-vim'
         on_ft = ['typescript', 'typescriptreact']
     # }}
-
-    # [[plugins]]
-    #     repo = 'mhartington/nvim-typescript'
-    #     on_ft = 'typescript'
-    #     build = './install.sh'
-
-    # [[plugins]] # posva/vim-vue {{
-    #     repo = 'posva/vim-vue'
-    #     on_ft = 'javascript'
-    #     build = 'make'
-    # # }}
-
-    # [[plugins]] # moll/vim-node {{
-    #     repo = 'moll/vim-node'
-    #     on_ft = 'javascript'
-    # # }}
 
 # }}}
 
