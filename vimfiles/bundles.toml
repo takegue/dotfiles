@@ -131,6 +131,7 @@ EOF
 
 [[plugins]] # SmiteshP/nvim-gps {{{
   repo = 'SmiteshP/nvim-gps'
+  on_if = 1
 # }}}
 
 [[plugins]] # nvim-lualine/lualine.nvim {{{
@@ -963,6 +964,7 @@ EOF
 
   [[plugins]] # neovim/nvim-lspconfig {{{
     repo = 'neovim/nvim-lspconfig'
+    on_if = 'has("nvim")'
   # }}}
 
   [[plugins]] # williamboman/nvim-lsp-installer {{{
@@ -984,7 +986,8 @@ EOF
 
   [[plugins]] # hrsh7th/cmp-nvim-lsp {{{
     repo = 'hrsh7th/cmp-nvim-lsp'
-    depends = ['nvim-cmp']
+    depends = ['nvim-lspconfig']
+
   # }}}
 
   [[plugins]] 
@@ -1001,7 +1004,7 @@ EOF
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
-    if = 'has("nvim")'
+    on_event = 'VimEnter'
     hook_post_source = '''lua <<EOF
 
     -- Setup nvim-cmp.
@@ -1079,7 +1082,7 @@ EOF
     })
 
     -- Setup lspconfig.
-    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 EOF
     '''
   # }}}
@@ -1542,12 +1545,6 @@ hook_post_source = '''
 #}}}
 
     # VCS {{{
-
-      [[plugins]] # lambdalisue/vim-gista {{{
-        repo = 'lambdalisue/vim-gista'
-        depends = ['unite.vim', 'tyru/open-browser.vim']
-        on_cmd = 'Gista'
-      #}}}
 
       [[plugins]] # tpope/vim-fugitive {{{
         repo = 'tpope/vim-fugitive'
