@@ -57,10 +57,8 @@ if exists('&ambiwidth')
   "   /bin/sh -c "VTE_CJK_WIDTH=1 gnome-terminal --disable-factory"
   "   /bin/sh -c "VTE_CJK_WIDTH=1 guake"
   "   https://gist.github.com/sgk/5991138
-  set ambiwidth=single "Use twice the width of ASCII characters for Multibyte
+  set ambiwidth=single
 endif
-
-
 
 set helplang=ja,en
 set spelllang+=cjk
@@ -488,7 +486,7 @@ augroup MyAutocmdGroup "{{{
   autocmd BufWinEnter * call tkngue#util#restore_curosr_position()
 
   " help, quickfix settings
-  autocmd FileType nofile,help,qf nnoremap <buffer> q <C-w>c
+  autocmd FileType lspinfo,help,qf nnoremap <buffer> q <C-w>c
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
 
@@ -599,7 +597,7 @@ elseif has('vim_starting')
     endif
 endif
 "}}}
-
+ 
 if has('vim_starting')
     set t_Co=256
     syntax sync minlines=512
@@ -610,7 +608,6 @@ else
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
-
 
 "}}}
 

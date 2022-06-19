@@ -387,9 +387,6 @@ EOF
 
       nnoremap <silent> [denite]r  :<C-u>Denite
             \ -buffer-name=register unite:register<CR>
-      nnoremap <silent> [denite]s  :<C-u>Denite
-            \ -buffer-name=snippets
-            \ unite:neosnippet <CR>
       nnoremap <silent> [denite]me :<C-u>Denite -start-filter output:message
             \ -buffer-name=messages <CR>
       nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq -start-filter 
@@ -972,30 +969,53 @@ EOF
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
     if = 'has("nvim")'
-    hook_source = '''lua <<EOF
+    hook_post_source = '''lua <<EOF
 
     -- Setup nvim-cmp.
     local cmp = require'cmp'
+
+    local has_words_before = function()
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+    end
+    local feedkey = function(key, mode)
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+    end
 
     cmp.setup({
         window = {
             completion = cmp.config.window.bordered(),
             documentation = cmp.config.window.bordered(),
         },
-        mapping = cmp.mapping.preset.insert({
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-            }),
-        sources = cmp.config.sources(
-        {
-            { name = 'nvim_lsp' }
+        mapping = {
+            ["<Tab>"] = cmp.mapping(function(fallback)
+
+            if vim.fn["neosnippet#expandable_or_jumpable"]() == 1 then
+              feedkey("<Plug>(neosnippet_jump_or_expand)", "")
+            elseif cmp.visible() then
+              cmp.select_next_item()
+            elseif has_words_before() then
+              cmp.complete()
+            else
+              fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+            end
+              end, { "i", "s" }),
+
+            ["<S-Tab>"] = cmp.mapping(function()
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                end
+            end, { "i", "s" }),
+
         },
-        {
-            { name = 'buffer' }
-        })
+        sources = cmp.config.sources(
+          {
+              { name = 'nvim_lsp' }
+          },
+          {
+              { name = 'buffer' }
+          }
+        )
     })
 
     -- Set configuration for specific filetype.
@@ -1016,14 +1036,14 @@ EOF
         })
 
     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-    -- cmp.setup.cmdline(':', {
-    --     mapping = cmp.mapping.preset.cmdline(),
-    --     sources = cmp.config.sources({
-    --     { name = 'path' }
-    --     }, {
-    --     { name = 'cmdline' }
-    --     })
-    -- })
+    cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+        { name = 'path' }
+        }, {
+        { name = 'cmdline' }
+        })
+    })
 
     -- Setup lspconfig.
     local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -1052,21 +1072,12 @@ EOF
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory = ['~/.vim/bundle/vim-snippets/snippets','~/.vim/snippets']
     let g:neosnippet#enable_preview = 0
-
-    " inoremap <expr>{} "{}\<\`0\`><C-O>F}"
-    " inoremap <expr>() "()\<\`0\`><C-O>F)"
-    " inoremap <expr>[] "[]\<\`0\`><C-O>F]"
-    " inoremap <expr><> "<>\<\`0\`><C-O>F>"
-    " inoremap <expr>'' "''\<\`0\`><C-O>F'"
-    " inoremap <expr>`` "``\<\`0\`><C-O>3F`"
-    " inoremap <expr>"" "\"\"\<\`0\`><C-O>F\""
   '''
   hook_post_source = '''
     augroup neosnippet_setting
       autocmd!
       " autocmd InsertLeave * NeoSnippetClearMarkers
     augroup END
-
 
     " For snippet_complete marker.
     if has('conceal')
@@ -1077,7 +1088,6 @@ EOF
 
 [[plugins]] # Shougo/neosnippet-snippets {{{
     repo = 'Shougo/neosnippet-snippets'
-    # on_source = 'neosnippet.vim'
  #}}}
 
 [[plugins]] # honza/vim-snippets {{{
