@@ -24,7 +24,6 @@
   '''
 #}}}
 
-
 [[plugins]] # nvim-lua/plenary.nvim {{{
   repo = 'nvim-lua/plenary.nvim'
 # }}}
@@ -130,11 +129,19 @@ EOF
   repo = 'kyazdani42/nvim-web-devicons'
 # }}}
 
+[[plugins]] # SmiteshP/nvim-gps {{{
+  repo = 'SmiteshP/nvim-gps'
+  depends = ['nvim-treesitter']
+
+# }}}
+
 [[plugins]] # nvim-lualine/lualine.nvim {{{
   repo = 'nvim-lualine/lualine.nvim'
   on_event = "BufEnter"
   depends = ['nvim-web-devicons']
   hook_post_source  = '''lua <<EOF
+    local gps = require("nvim-gps")
+    gps.setup{depth = 0}
     require('lualine').setup {
         options = {
             icons_enabled = true,
@@ -143,9 +150,27 @@ EOF
             always_divide_middle = true,
             globalstatus = false,
         },
+        sections = {
+            lualine_c = {
+                { gps.get_location, cond = gps.is_available },
+            }
+        }
     }
 EOF
 '''
+# }}}
+
+[[plugins]] # folke/trouble.nvim {{{
+  repo = 'folke/trouble.nvim'
+  on_event = "BufEnter"
+  depends = ['nvim-web-devicons']
+  hook_post_source = '''lua <<EOF
+    require("trouble").setup {}
+EOF
+  '''
+
+
+# }}}
 
 
 [[plugins]] # akinsho/bufferline.nvi' {{{
@@ -172,7 +197,10 @@ EOF
 #}}}
 #}}}
 
+
+
 # Utilities {{{
+
 
     [[plugins]] # AndrewRadev/linediff.vim {{{
       repo = 'AndrewRadev/linediff.vim'
@@ -1735,12 +1763,12 @@ hook_post_source = '''
         vmap gs :OpenBrowserSearch -goole-scholar <C-R><C-W><CR>
       '''
  #}}}
-  [[plugins]] # lilydjwg/colorizer {{{
-    repo = 'lilydjwg/colorizer'
-    on_cmd = ['ColorHighlight']
-    hook_source = ''''
-        let g:colorizer_startup = 0
-        let g:colorizer_nomap = 1
+
+  [[plugins]] #  norcalli/nvim-colorizer.lua {{{
+    repo = 'norcalli/nvim-colorizer.lua'
+    if = 'has("nvim")'
+    hook_source = '''
+      require 'colorizer'.setup()
     '''
   #}}}
 #}}}
