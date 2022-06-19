@@ -577,6 +577,7 @@ endif
 " }}}
 
 " Finally ======================={{{
+ 
 " Colorscheme: {{{
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
@@ -590,6 +591,7 @@ elseif has('vim_starting')
         colorscheme default
     else
         try
+            set termguicolors
             colorscheme molokai
         catch
             colorscheme blue
@@ -597,7 +599,7 @@ elseif has('vim_starting')
     endif
 endif
 "}}}
- 
+
 if has('vim_starting')
     set t_Co=256
     syntax sync minlines=512

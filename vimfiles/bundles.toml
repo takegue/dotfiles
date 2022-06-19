@@ -131,14 +131,12 @@ EOF
 
 [[plugins]] # SmiteshP/nvim-gps {{{
   repo = 'SmiteshP/nvim-gps'
-  depends = ['nvim-treesitter']
-
 # }}}
 
 [[plugins]] # nvim-lualine/lualine.nvim {{{
   repo = 'nvim-lualine/lualine.nvim'
-  on_event = "BufEnter"
-  depends = ['nvim-web-devicons']
+  on_event = "VimEnter"
+  depends = ['nvim-web-devicons', 'nvim-gps']
   hook_post_source  = '''lua <<EOF
     local gps = require("nvim-gps")
     gps.setup{depth = 0}
@@ -152,6 +150,7 @@ EOF
         },
         sections = {
             lualine_c = {
+                { 'filename' },
                 { gps.get_location, cond = gps.is_available },
             }
         }
@@ -172,12 +171,12 @@ EOF
 
 # }}}
 
-
-[[plugins]] # akinsho/bufferline.nvi' {{{
+[[plugins]] # akinsho/bufferline.nvim' {{{
   repo = 'akinsho/bufferline.nvim'
   rev = 'v2.*'
   depends = ['nvim-web-devicons']
-  hook_add = '''lua <<EOF
+  on_event = 'VimEnter'
+  hook_post_source = '''lua <<EOF
     vim.opt.termguicolors = true
     require("bufferline").setup{}
 EOF
@@ -196,7 +195,6 @@ EOF
   repo = 'flazz/vim-colorschemes'
 #}}}
 #}}}
-
 
 
 # Utilities {{{
@@ -772,6 +770,7 @@ EOF
 
 [[plugins]] # mhinz/vim-signify {{{
   repo = 'mhinz/vim-signify'
+  if = 0
   hook_add = '''
     let g:signify_skip_filename_pattern = []
   '''
@@ -969,6 +968,8 @@ EOF
   [[plugins]] # williamboman/nvim-lsp-installer {{{
     repo = 'williamboman/nvim-lsp-installer'
     if = 'has("nvim")'
+    on_event = 'BufEnter'
+    depends = ['nvim-lspconfig']
     hook_post_source = '''lua <<EOF
       local lsp_installer = require"nvim-lsp-installer"
       lsp_installer.setup{}
@@ -983,16 +984,20 @@ EOF
 
   [[plugins]] # hrsh7th/cmp-nvim-lsp {{{
     repo = 'hrsh7th/cmp-nvim-lsp'
+    depends = ['nvim-cmp']
   # }}}
 
   [[plugins]] 
     repo = 'hrsh7th/cmp-buffer'
+    depends = ['nvim-cmp']
 
   [[plugins]] 
     repo = 'hrsh7th/cmp-path'
+    depends = ['nvim-cmp']
 
   [[plugins]] 
     repo = 'hrsh7th/cmp-cmdline'
+    depends = ['nvim-cmp']
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
@@ -1767,8 +1772,10 @@ hook_post_source = '''
   [[plugins]] #  norcalli/nvim-colorizer.lua {{{
     repo = 'norcalli/nvim-colorizer.lua'
     if = 'has("nvim")'
-    hook_source = '''
+    on_event = 'BufEnter'
+    hook_post_source = '''lua <<EOF
       require 'colorizer'.setup()
+EOF
     '''
   #}}}
 #}}}
