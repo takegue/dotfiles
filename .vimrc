@@ -488,9 +488,10 @@ augroup MyAutocmdGroup "{{{
   autocmd BufWinEnter * call tkngue#util#restore_curosr_position()
 
   " help, quickfix settings
-  autocmd FileType help,qf nnoremap <buffer> q <C-w>c
+  autocmd FileType nofile,help,qf nnoremap <buffer> q <C-w>c
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
+
 
   " MEMO: Shdo するさいに lcdしてしまうのがうざいのでdisabled
   " autocmd BufRead * call s:cd_project_dir()
