@@ -9,6 +9,7 @@ scriptencoding utf-8
 if !1 | finish | endif
 if !&compatible | set nocompatible | endif      " Disable vi compatible
 
+
 " Echo startup time on start:{{{
 if has('vim_starting') && has('reltime')
   " Shell: vim --startuptime filename -q; vim filename
@@ -347,6 +348,7 @@ function! s:additional_highlight() "{{{
   if !has('gui_running')
     highlight normal ctermbg=none
   endif
+  
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
   highlight CursorLine cterm=bold ctermfg=lightcyan ctermbg=None gui=bold
   highlight IncSearch cterm=bold ctermfg=green ctermbg=None gui=bold
