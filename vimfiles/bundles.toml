@@ -197,7 +197,6 @@ EOF
 #}}}
 #}}}
 
-
 # Utilities {{{
 
 
@@ -361,6 +360,7 @@ EOF
 
 
 # }}}
+
 #}}}
 
 # Unite plugins {{{
@@ -460,13 +460,6 @@ EOF
   ]
  #}}}
 
-[[plugins]] # tsukkee/unite-tag {{{
-  repo = 'tsukkee/unite-tag'
- #}}}
-
-[[plugins]] # Shougo/unite-outline {{{
-  repo = 'Shougo/unite-outline'
-# }}}
  #}}}
 
 [[plugins]] # Shougo/context_filetype.vim {{{
@@ -1171,15 +1164,6 @@ EOF
   repo = 'honza/vim-snippets'
  #}}}
 
-[[plugins]] # majutsushi/tagbar {{{
-  on_cmd = 'Tagbar'
-  repo = 'majutsushi/tagbar'
-
-  hook_add = '''
-    nnoremap <silent> ,q :TagbarToggle<CR>
-  '''
- #}}}
-
  #}}}
 
 # Programming Langauge / FileType Plugins {{{
@@ -1352,22 +1336,6 @@ EOF
 # }}}
 
  #}}}
-
-# }}}
-
-# PlantUML {{{
-
-[[plugins]] # scrooloose/vim-slumlord {{{
-  repo = 'scrooloose/vim-slumlord'
-  if = 1
-# }}}
-
-[[plugins]] # aklt/plantuml-syntax {{{
-  repo = 'aklt/plantuml-syntax'
-  if = 1
-
-# }}}
-
 
 # }}}
 
