@@ -57,14 +57,37 @@
         -- Instead of true it can also be a list of languages
         additional_vim_regex_highlighting = false,
       },
+      playground = {
+        enable = true,
+        disable = {},
+        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+        persist_queries = false, -- Whether the query persists across vim sessions
+        keybindings = {
+          toggle_query_editor = 'o',
+          toggle_hl_groups = 'i',
+          toggle_injected_languages = 't',
+          toggle_anonymous_nodes = 'a',
+          toggle_language_display = 'I',
+          focus_language = 'f',
+          unfocus_language = 'F',
+          update = 'R',
+          goto_node = '<cr>',
+          show_help = '?'
+      }
     }
+  }
 EOF
   '''
 # }}}
 
+[[plugins]] # nvim-treesitter/playground {{{
+  repo = 'nvim-treesitter/playground'
+  merged = false
+# }}}
+
 [[plugins]] # nvim-treesitter/nvim-treesitter-textobjects {{{
   repo = 'nvim-treesitter/nvim-treesitter-textobjects'
-  
+
   hook_source = '''lua <<EOF
     require('nvim-treesitter.configs').setup {
     textobjects = {
@@ -185,29 +208,34 @@ EOF
 
 # }}}
 
+  [[plugins]] # j-hui/fidget.nvim {{{
+    repo = 'j-hui/fidget.nvim'
+    if = 'has("nvim")'
+    on_event = 'VimEnter'
+    hook_post_source = '''lua <<EOF
+      require"fidget".setup{}
+EOF
+    '''
+# }}}
+
 # Colorschemes : {{{
 [[plugins]]
   repo = 'tomasr/molokai'
 
-[[plugins]] 
+[[plugins]]
   repo = 'NLKNguyen/papercolor-theme'
 
-[[plugins]] 
+[[plugins]]
   repo = 'flazz/vim-colorschemes'
 #}}}
+
 #}}}
 
 # Utilities {{{
 
-
     [[plugins]] # AndrewRadev/linediff.vim {{{
       repo = 'AndrewRadev/linediff.vim'
     # }}}
-
-    [[plugins]] # daisuzu/translategoogle.vim {{{
-      on_cmd = 'Trans'
-      repo = 'daisuzu/translategoogle.vim'
-    #}}}
 
     [[plugins]]# mattn/webapi-vim {{{{
       repo = 'mattn/webapi-vim'
@@ -325,7 +353,10 @@ EOF
             \   {
             \     '\(.\+\) if \(.\+\) else \(.\+\)' : {
             \        '\(\s*\)\(.\+\) = \(.\+\) if \(.\+\) else \(.\+\)' :
-            \             '\1if \4:\1    \2 = \3\1else:\1    \2 = \5'
+            \             '\1if \4:
+\1    \2 = \3
+\1else:
+\1    \2 = \5'
             \      }
             \   },
             \]
@@ -416,7 +447,7 @@ EOF
             \ -buffer-name=register unite:register<CR>
       nnoremap <silent> [denite]me :<C-u>Denite -start-filter output:message
             \ -buffer-name=messages <CR>
-      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq -start-filter 
+      nnoremap <silent> [denite]p :<C-u>Denite directory_rec:~/.ghq -start-filter
             \ -buffer-name=projects <CR>
       nnoremap <silent> [denite]o  :<C-u>Denite -start-filter outline
             \ -buffer-name=outline <CR>
@@ -824,12 +855,6 @@ EOF
   '''
 # }}}
 
-[[plugins]] # dannyob/quickfixstatus {{{
-  repo = 'dannyob/quickfixstatus'
-  # lazy = 1
-  # depends = ['jceb/vim-hier', 'dannyob/quickfixstatus']
-#}}}
-
   [[plugins]] # Konfekt/FastFold {{{
     repo = 'Konfekt/FastFold'
   # }}}
@@ -898,7 +923,7 @@ EOF
                 return
             endif
 
-            if neosnippet#expandable() 
+            if neosnippet#expandable()
                 return "\<Plug>(neosnippet_expand_or_jump)"
             endif
 
@@ -908,7 +933,7 @@ EOF
 
         function! Smart_TabComplete()
             if pumvisible()
-                return "\<C-n>" 
+                return "\<C-n>"
             endif
 
             let line = getline('.')                         " current line
@@ -977,48 +1002,53 @@ EOF
     '''
   # }}}
 
-  [[plugins]] 
-    repo = 'j-hui/fidget.nvim'
-    if = 'has("nvim")'
-    on_event = 'VimEnter'
-    hook_post_source = '''lua <<EOF
-      require"fidget".setup{}
-EOF
-    '''
-
   [[plugins]] # hrsh7th/cmp-nvim-lsp {{{
     repo = 'hrsh7th/cmp-nvim-lsp'
     depends = ['nvim-lspconfig']
 
   # }}}
 
-  [[plugins]] 
+  # nvim-cmp sources {{{
+  [[plugins]]
     repo = 'hrsh7th/cmp-buffer'
     depends = ['nvim-cmp']
 
-  [[plugins]] 
+  [[plugins]]
     repo = 'onsails/lspkind.nvim'
     if = 'has("nvim")'
 
-  [[plugins]] 
+  [[plugins]]
     repo = 'hrsh7th/cmp-path'
     depends = ['nvim-cmp']
 
-  [[plugins]] 
+  [[plugins]]
     repo = 'hrsh7th/cmp-cmdline'
     depends = ['nvim-cmp']
+  # }}}
 
-  [[plugins]] 
+  [[plugins]] # jose-elias-alvarez/null-ls.nvim {{{
+    repo = 'jose-elias-alvarez/null-ls.nvim'
+    depends = 'plenary.nvim'
+    on_event = "BufEnter"
+    hook_post_source = '''lua <<EOF
+      local null_ls = require("null-ls");
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.completion.spell,
+          null_ls.builtins.diagnostics.trail_space ,
+          null_ls.builtins.formatting.trim_whitespace
+        },
+      })
+EOF
+    '''
+  # }}}
+
+  [[plugins]]
     repo = 'github/copilot.vim'
     if = 'has("nvim")'
     hook_add = '''
       let g:copilot_assume_mapped = 1
     '''
-
-
-  # [[plugins]] 
-  #   repo = 'hrsh7th/cmp-copilot'
-  #   if = 'has("nvim")'
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
