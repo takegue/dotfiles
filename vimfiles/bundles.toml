@@ -174,7 +174,7 @@ EOF
         },
         sections = {
             lualine_c = {
-                { 'filename' },
+                { {'filename', file_status = false} },
                 { gps.get_location, cond = gps.is_available },
             }
         }
@@ -1035,7 +1035,7 @@ EOF
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       null_ls.setup({
         sources = {
-          null_ls.builtins.diagnostics.trail_space,
+          -- null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.formatting.trim_whitespace
         },
         on_attach = function(client, bufnr)
