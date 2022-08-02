@@ -52,8 +52,8 @@ function! tkngue#util#detect_project() abort
         endif
 
         return [
-              \ fnamemodify(l:result, ":p:h"), 
-              \ l:lang, 
+              \ fnamemodify(l:result, ":p:h"),
+              \ l:lang,
               \ fnamemodify(l:result, ":p:t")
               \ ]
       endfor
@@ -61,9 +61,9 @@ function! tkngue#util#detect_project() abort
       for l:dir in get(l:config, "directories", [])
         let l:result = finddir(l:dir, l:search_path)
         return [
-              \ fnamemodify(l:result, ":p:h:h"), 
-              \ l:lang, 
-              \ l:lang, 
+              \ fnamemodify(l:result, ":p:h:h"),
+              \ l:lang,
+              \ l:lang,
               \ ]
       endfor
     endfor
@@ -124,7 +124,7 @@ function! tkngue#util#open_junk_file(type) abort
   " execute "%d a"
   "
   let l:junk_basedir = $HOME . '/Dropbox/junks'
-  if exists("$JUNK")
+  if getenv("JUNK")
       let l:junk_basedir = $JUNK
   endif
   let l:junk_dir = l:junk_basedir . strftime('/%Y/%m')
@@ -273,4 +273,3 @@ function! tkngue#util#get_diff_files(rev) abort
   call setqflist(list)
   copen
 endfunction
-
