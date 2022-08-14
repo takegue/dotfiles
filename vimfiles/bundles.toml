@@ -581,12 +581,14 @@ EOF
 # }}}
 
 [[plugins]] # tamy0612/quickrun-job-runner.nvim {{{
-  repo = 'tamy0612/quickrun-job-runner.nvim'
+  repo = 'lambdalisue/vim-quickrun-neovim-job'
 # }}}
 
 [[plugins]] # thinca/vim-quickrun  {{{
   repo = 'thinca/vim-quickrun'
-  on_event = ['BufWritePost']
+  on_cmd = 'QuickRun'
+  on_map = {n = '<leader>r'}
+  depends = ['vim-quickrun-neovim-job']
 
   hook_source = '''
     let g:quickrun_config = deepcopy(g:quickrun#default_config)
@@ -596,7 +598,7 @@ EOF
           \   "hook/my_anime/wait" : 2,
           \   "hook/qfsigns_update/enable_exit":   1,
           \   "hook/qfsigns_update/priority_exit": 3,
-          \   "runner"                    : has("nvim") ? "nvim_job" : "job",
+          \   "runner"                    : has("nvim") ? "neovim_job" : "job",
           \   "outputter"                 : 'buffer_legacy',
           \   "outputter/buffer_legacy/split"   : 'bot %{winwidth(0) * 2 < winheight(0) * 5 ? "" : "vertical"} new',
           \   "outputter/buffer_legacy/close_on_empty" : 1,
@@ -618,7 +620,7 @@ EOF
           \      'cmdopt' : '-r plain2 -f %{&filetype}',
           \      'errorformat' : '%EDocument:\ %f,\t%CLine:%l\,\ Offset: %c,$C\t\t%s,%Z%m,%-G,%-G%m',
           \}})
-    let g:quickrun_config['runner'] = has('nvim') ? 'nvim_job' : has('job') ? 'job' : 'vimproc'
+
     let g:quickrun_config.jq = {
           \ 'command' : 'jq',
           \ 'exec' : '%c %o -f %s',
@@ -1152,8 +1154,6 @@ EOF
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
           { name = 'path' }
-        }, {
-          { name = 'cmdline' }
         })
     })
 
