@@ -14,7 +14,7 @@ END{for(key in min) print key, min[key]}
 ghq-list-historical-ordered() {
     join -a 1 -e 1000 -o 0 2.2 \
         <(ghq list | sort) \
-        <(cat ~/.zdirs | tee /tmp/hoge | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk "$_AWK_GROUP_BY_MIN" | sort) \
+        <(cat ~/.zdirs | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk "$_AWK_GROUP_BY_MIN" | sort) \
     | sort -k2n \
     | awk '{print $1}'
 }
