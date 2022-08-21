@@ -1,0 +1,25 @@
+[sqlfluff]
+templater = jinja
+sql_file_exts = .sql,.sql.j2,.dml,.ddl
+
+[sqlfluff:rules]
+tab_space_size = 2
+max_line_length = 120
+indent_unit = space
+comma_style = leading
+allow_scalar = True
+single_table_references = consistent
+unquoted_identifiers_policy = all
+
+[sqlfluff:indentation]
+indented_joins = false
+indented_using_on = true
+template_blocks_indent = false
+
+[sqlfluff:templater]
+unwrap_wrapped_queries = true
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = true
+
+#vim: ft=cfg
