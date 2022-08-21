@@ -1,7 +1,5 @@
 " Author: takegue
-" URL: https://github.com/TKNGUE/dotfiles
-" Description:
-"   This is 's vimrc
+" URL: https://github.com/takegue/dotfiles
 scriptencoding utf-8
 
 " Startup {{{ =======================
@@ -348,7 +346,7 @@ function! s:additional_highlight() "{{{
   if !has('gui_running')
     highlight normal ctermbg=none
   endif
-  
+
   highlight MatchParen term=inverse cterm=bold ctermfg=208 ctermbg=233 gui=bold guifg=#000000 guibg=#FD971F
   highlight CursorLine cterm=bold ctermfg=lightcyan ctermbg=None gui=bold
   highlight IncSearch cterm=bold ctermfg=green ctermbg=None gui=bold
@@ -399,7 +397,7 @@ endfunction
 function! s:cd_project_dir() abort
   let [l:path, l:lang, _] = tkngue#util#detect_project()
   if isdirectory(l:path)
-    echomsg "AutoCD: " . l:path 
+    echomsg "AutoCD: " . l:path
     exec "lcd " . l:path
   endif
 endfunction
@@ -579,7 +577,7 @@ endif
 " }}}
 
 " Finally ======================={{{
- 
+
 " Colorscheme: {{{
 " Check color
 " :so $VIMRUNTIME/syntax/colortest.vim
