@@ -1038,6 +1038,9 @@ EOF
         sources = {
           -- null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.formatting.trim_whitespace
+          null_ls.builtins.formatting.deno_fmt.with({
+            filetypes = { "typescript", "javascript", "json" }, -- only runs `deno fmt` for markdown
+          }),
         },
         on_attach = function(client, bufnr)
             if client.supports_method("textDocument/formatting") then
