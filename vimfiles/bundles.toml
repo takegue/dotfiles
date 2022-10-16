@@ -50,12 +50,12 @@
       highlight = {
         -- `false` will disable the whole extension
         enable = true,
-        disable = {},
+        -- disable = {},
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
         -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
+        -- additional_vim_regex_highlighting = false,
       },
       playground = {
         enable = true,
@@ -518,6 +518,7 @@ EOF
 # Vim constext filetype
   repo = 'osyo-manga/vim-precious'
   augroup = 'vim-precious'
+  if= 0
   on_ft = ['markdown', 'rst', 'help', 'toml']
   on_cmd = ['Precious']
   depends = ['context_filetype.vim', 'vim-textobj-user']
@@ -1036,11 +1037,10 @@ EOF
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
       null_ls.setup({
         sources = {
-          -- null_ls.builtins.diagnostics.trail_space,
-          null_ls.builtins.formatting.trim_whitespace
+          null_ls.builtins.formatting.trim_whitespace,
           null_ls.builtins.formatting.deno_fmt.with({
             filetypes = { "typescript", "javascript", "json" }, -- only runs `deno fmt` for markdown
-          }),
+          })
         },
         on_attach = function(client, bufnr)
             if client.supports_method("textDocument/formatting") then
@@ -1053,7 +1053,7 @@ EOF
                     end,
                 })
             end
-        end,
+        end
       })
 EOF
     '''
@@ -1241,89 +1241,6 @@ EOF
 
 [[plugins]]
   repo = 'Glench/Vim-Jinja2-Syntax'
-
-[[plugins]] # klen/python-mode {{{
-  repo = 'klen/python-mode'
-  build ='pip install pylint pyflakes pep8'
-  on_ft = ["python", "python3", "djangohtml"]
-
-  hook_post_source ='''
-    nnoremap <silent><F8> :<C-u>PymodeLintAuto<CR>
-    nnoremap <silent><expr><leader>R  ":<C-u>VimShellInteractive --split='bot split \| resize 20' python ". expand('%').'<CR>'
-  '''
-
-  hook_source = '''
-    if has('python3')
-      let g:pymode_python = 'python3'
-    elseif has('python')
-      let g:pymode_python = 'python'
-    else
-    endif
-    let g:pymode_lint_signs = 0
-
-    let g:pymode = 1
-    let g:pymode_warnings = 1
-    " let g:pymode_paths = ['shutil', 'datetime', 'time',
-    "       \ 'sys', 'itertools', 'collections', 'os', 'functools', 're']
-    let g:pymode_trim_whitespaces = 1
-    let g:pymode_options = 1
-    let g:pymode_options_colorcolumn = 1
-    let g:pymode_quickfix_minheight = 3
-    let g:pymode_quickfix_maxheight = 6
-    " let g:pymode_indent = []
-    let g:pymode_folding = 1
-    let g:pymode_motion = 1
-
-    let g:pymode_doc = 1
-    let g:pymode_doc_bind = 'K'
-    let g:jedi#goto_command = 'gd'
-    let g:pymode_virtualenv = 0
-    let g:pymode_virtualenv_path = $PYENV_ROOT. "/versions"
-
-    let g:pymode_run = 0            "QuickRunの方が優秀(asyncじゃない)
-    " let g:pymode_run_bind = '<leader>R'
-
-    let g:pymode_breakpoint = 1
-    let g:pymode_breakpoint_bind = '<leader>b'
-
-    "Check code on every save (every)
-    let g:pymode_lint = 1
-    let g:pymode_lint_unmodified = 0
-    let g:pymode_lint_on_fly = 0
-    let g:pymode_lint_message = 0
-    " let g:pymode_lint_ignore = "E501,W"
-    " let g:pymode_lint_select = "E501,W0011,W430"
-    let g:pymode_lint_cwindow = 0
-
-    let g:pymode_rope = 0
-
-    let g:pymode_syntax_slow_sync = 0
-    let g:pymode_syntax_all = 1
-    let g:pymode_syntax_print_as_function = 0
-    let g:pymode_syntax_highlight_equal_operator = g:pymode_syntax_all
-    let g:pymode_syntax_highlight_stars_operator = g:pymode_syntax_all
-    " Highlight 'self' keyword
-    let g:pymode_syntax_highlight_self           = g:pymode_syntax_all
-    " Highlight indent's errors
-    let g:pymode_syntax_indent_errors            = g:pymode_syntax_all
-    " Highlight space's errors
-    let g:pymode_syntax_space_errors             = g:pymode_syntax_all
-    " Highlight string formatting
-    let g:pymode_syntax_string_formatting        = g:pymode_syntax_all
-    let g:pymode_syntax_string_format            = g:pymode_syntax_all
-    let g:pymode_syntax_string_templates         = g:pymode_syntax_all
-    let g:pymode_syntax_doctests                 = g:pymode_syntax_all
-    " Highlight builtin objects (True, False, ...)
-    let g:pymode_syntax_builtin_objs             = g:pymode_syntax_all
-    " Highlight builtin types (str, list, ...)
-    let g:pymode_syntax_builtin_types            = g:pymode_syntax_all
-    " Highlight exceptions (TypeError, ValueError, ...)
-    let g:pymode_syntax_highlight_exceptions     = g:pymode_syntax_all
-    " Highlight docstrings as pythonDocstring (otherwise as pythonString)
-    let g:pymode_syntax_docstrings               = g:pymode_syntax_all
-  '''
-
- #}}}
 
 [[plugins]] # davidhalter/jedi-vim {{{
  # python plugin for vim
