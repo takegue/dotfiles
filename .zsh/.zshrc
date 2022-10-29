@@ -147,8 +147,6 @@ compinit; zinit cdreplay
 #                               GENERAL SETTINGS
 # -----------------------------------------------------------------------------
 export EDITOR=vim
-export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-export KCODE=UTF8        # KCODEにUTF-8を設定
 export AUTOFEATURE=true  # autotestでfeatureを動かす
 export LESSCHARSET=UTF-8
 export GREP_OPTION="--color auto"
