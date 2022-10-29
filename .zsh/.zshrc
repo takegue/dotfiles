@@ -127,7 +127,7 @@ zinit light sindresorhus/pure
 zbell_duration=5
 zbell_duration_email=12000
 # zinit ice id-as"zbell"
-zinit snippet https://gist.githubusercontent.com/TKNGUE/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
+zinit snippet https://gist.githubusercontent.com/takegue/aaeb57123ac97c649b34dfdc5f278b89/raw/ede9c19ed66907076ac0162deed8247a1c0e041e/zbell.zsh
 
 # A little more complex rustup configuration that uses Bin-Gem-Node annex
 # and installs the cargo completion provided with rustup, using for-syntax
