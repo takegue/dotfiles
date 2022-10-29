@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+tmp_gh="/tmp/ghnotify.$$"
+while true; do
+  watch -g -n 300 "echo ${prev}; gh notify -s 2>/dev/null | tee ${tmp_gh} | sha1sum"
+  if [[ $(cat "$tmp_gh" | grep -c "") > "${prev:-0}" ]]; then
+
+    wsl-notifier "GitHub Notify\", \"$(cat "$tmp_gh" | sed -r 's/\x1B\[(;?[0-9]{1,3})+[mGK]//g')"
+  fi
+  prev=$(cat "$tmp_gh" | grep -c "")
+done
