@@ -64,6 +64,7 @@ if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
 fi
 
 source "$HOME/.zinit/bin/zinit.zsh"
+MANPATH="${ZPFX}/man:${MANPATH}"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
@@ -83,7 +84,7 @@ zinit wait lucid for \
 
 # Install Deno
 zinit ice as"program" id-as"deno" pick"bin/deno"\
-    atclone"DENO_INSTALL=\$(pwd) sh deno; rm -f deno" atpull'%atclone' 
+    atclone"DENO_INSTALL=\$(pwd) sh deno; rm -f deno" atpull'%atclone'
 zinit snippet "https://deno.land/install.sh"
 
 # Install Google Cloud SDK
@@ -98,12 +99,13 @@ zinit wait lucid for \
     make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' sbin'' src"zhook.zsh" direnv/direnv \
     from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
+    from'gh-r' as"command" sbin"*/bin/gh -> gh" atclone'cp -av */share/man $ZPFX' atpull'%atclone' id-as'github-cli' cli/cli \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
-    from'gh-r' has'luajit' bpick"*.tar.gz" ver"stable" as'command' atclone='cp -av */share/man/ $ZPFX/man/' atpull'%atclone' sbin'*/bin/*' neovim/neovim
+    from'gh-r' has'luajit' bpick"*.tar.gz" ver"stable" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim
 
 zinit lucid as'null' sbin="bin/*" \
     atclone="cp shell/completion.zsh _fzf_completion; \
