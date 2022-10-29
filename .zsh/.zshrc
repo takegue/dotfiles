@@ -99,7 +99,7 @@ zinit wait lucid for \
     make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' sbin'' src"zhook.zsh" direnv/direnv \
     from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
-    from'gh-r' as"command" sbin"*/bin/gh -> gh" atclone'cp -av */share/man $ZPFX' atpull'%atclone' id-as'github-cli' cli/cli \
+    from'gh-r' as"command" sbin"*/bin/gh -> gh" atclone'cp -av */share/man $ZPFX; ./*/bin/gh completion -s zsh > _gh' atpull'%atclone' id-as'github-cli' cli/cli \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
@@ -108,7 +108,7 @@ zinit wait lucid for \
     from'gh-r' has'luajit' bpick"*.tar.gz" ver"stable" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim
 
 zinit lucid as'null' sbin="bin/*" \
-    atclone="cp shell/completion.zsh _fzf_completion; \
+    atclone="cp shell/completion.zsh _fzf; \
       cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
     src="shell/completion.zsh" \
     make"install" for \
