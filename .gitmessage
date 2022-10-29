@@ -1,10 +1,11 @@
-{COMMIT_TYPE}: Resolve #xxxx: 
+{COMMIT_TYPE}: Resolve #xxxx:
 
 Show your reason why you have changed
 
 #### {COMMIT_TYPE} for 1st lines
 
-# FIX      : Fixed bugs
+# Co-authored-by: Name <NAME@DOMAIN>
+# # FIX      : Fixed bugs
 # ADD      : Added a new feature
 # CHANGE   : Changed the existing feature's behavior
 # DEPRECATE: Deprecated feature
