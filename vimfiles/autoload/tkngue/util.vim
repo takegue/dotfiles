@@ -124,8 +124,9 @@ function! tkngue#util#open_junk_file(type) abort
   " execute "%d a"
   "
   let l:junk_basedir = $HOME . '/Dropbox/junks'
-  if getenv("JUNK")
-      let l:junk_basedir = $JUNK
+  if getenv("JUNK") != ''
+    let l:junk_basedir = getenv("JUNK")
+    echomsg l:junk_basedir
   endif
   let l:junk_dir = l:junk_basedir . strftime('/%Y/%m')
 
