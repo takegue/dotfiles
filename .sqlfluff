@@ -1,5 +1,7 @@
 [sqlfluff]
 sql_file_exts = .sql,.sql.j2,.dml,.ddl
+rules = core, L007, L011, L042, L055, L061
+exclude_rules = L045
 
 [sqlfluff:rules]
 tab_space_size = 2
@@ -18,4 +20,4 @@ template_blocks_indent = false
 [sqlfluff:templater:jinja]
 apply_dbt_builtins = true
 
-#vim: ft=cfg
+# vim: ft=cfg
