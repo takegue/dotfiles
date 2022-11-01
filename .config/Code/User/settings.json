@@ -1,5 +1,5 @@
 {
-    "editor.fontFamily": "'HackGen Nerd', 'Courier New', monospace",
+    "editor.fontFamily": "'HackGenNerd'",
     "terminal.integrated.allowMnemonics": true,
     "terminal.integrated.fontFamily": "'HackGenNerd'",
     "git.ignoreMissingGitWarning": true,
@@ -7,12 +7,37 @@
     "files.autoSave": "afterDelay",
     "terminal.integrated.defaultLocation": "editor",
     "terminal.integrated.fontSize": 10,
-    "window.zoomLevel": 3,
+    "window.zoomLevel": 2,
     "terminal.integrated.commandsToSkipShell": [
         "-workbench.action.quickOpen",
         "workbench.action.focusLeftGroup",
         "workbench.action.focusRightGroup",
-        "workbench.action.focusAvobeGroup",
-        "workbench.action.focusBelowGroup",
-    ]
+        "workbench.action.focusAboveGroup",
+        "workbench.action.focusBelowGroup"
+    ],
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "/usr/bin/zsh",
+            "args": ["-l"]
+        },
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "terminal.external.windowsExec": "C:\\WINDOWS\\Systete32\\cmd.exe",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.shellIntegration.enabled": false,
 }

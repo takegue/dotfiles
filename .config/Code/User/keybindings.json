@@ -89,6 +89,7 @@
         "command": "workbench.action.moveEditorRightInGroup"
     },
     {
+        "key": "ctrl+k ctrl+up",
         "key": "ctrl+shift+pagedown",
         "command": "-workbench.action.moveEditorRightInGroup"
     },
@@ -97,7 +98,6 @@
         "command": "workbench.action.focusAboveGroup"
     },
     {
-        "key": "ctrl+k ctrl+up",
         "command": "-workbench.action.focusAboveGroup"
     },
     {
@@ -123,5 +123,60 @@
     {
         "key": "ctrl+k ctrl+right",
         "command": "-workbench.action.focusRightGroup"
+    },
+    {
+        "key": "ctrl+s z",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    {
+        "key": "ctrl+s z",
+        "command": "workbench.action.minimizeOtherEditors"
+    },
+    {
+        "key": "ctrl+s x",
+        "command": "workbench.action.closeActiveEditor"
+    },
+    {
+        "key": "ctrl+f4",
+        "command": "-workbench.action.closeActiveEditor"
+    },
+    {
+        "key": "ctrl+s space",
+        "command": "workbench.action.evenEditorWidths"
+    },
+    {
+        "key": "ctrl+s oem_4",
+        "command": "workbench.action.terminal.focusFind",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "ctrl+f",
+        "command": "-workbench.action.terminal.focusFind",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "ctrl+v",
+        "command": "-workbench.action.terminal.paste",
+        "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "ctrl+v",
+        "command": "-editor.action.clipboardPasteAction"
+    },
+    {
+        "key": "ctrl+s space",
+        "command": "workbench.action.toggleEditorWidths"
+    },
+    {
+        "key": "ctrl+s j",
+        "command": "workbench.action.increaseViewHeight"
+    },
+    {
+        "key": "ctrl+s l",
+        "command": "workbench.action.increaseViewWidth"
+    },
+    {
+        "key": "ctrl+s k",
+        "command": "workbench.action.decreaseViewHeight"
     }
 ]
