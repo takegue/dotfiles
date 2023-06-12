@@ -1,4 +1,5 @@
 [sqlfluff]
+dialect = bigquery
 sql_file_exts = .sql,.sql.j2,.dml,.ddl
 rules = core, L007, L011, L042, L055, L061
 exclude_rules = L045
@@ -21,6 +22,6 @@ indented_using_on = true
 template_blocks_indent = false
 
 [sqlfluff:templater:jinja]
-apply_dbt_builtins = true
+apply_dbt_builtins = false
 
 # vim: ft=cfg
