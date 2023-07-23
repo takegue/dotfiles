@@ -1,22 +1,26 @@
 [sqlfluff]
+
 dialect = bigquery
 sql_file_exts = .sql,.sql.j2,.dml,.ddl
 rules = core, L007, L011, L042, L055, L061
-exclude_rules = L045
+exclude_rules = L045, LT05, LT01, LT02
+
+max_line_length = 120
 
 [sqlfluff:rules]
-tab_space_size = 2
-max_line_length = 120
-indent_unit = space
-comma_style = leading
 allow_scalar = True
 single_table_references = consistent
 unquoted_identifiers_policy = all
 
-[sqlfluff:rules:L010]
+[sqlfluff:layout:type]
+line_position = trailing
+
+[sqlfluff:rules:capitalisation.keywords]
 capitalisation_policy = lower
 
 [sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 2
 indented_joins = true
 indented_using_on = true
 template_blocks_indent = false

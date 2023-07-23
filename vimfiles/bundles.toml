@@ -223,6 +223,7 @@ EOF
 
   [[plugins]] # j-hui/fidget.nvim {{{
     repo = 'j-hui/fidget.nvim'
+    rev = 'legacy'
     if = 'has("nvim")'
     on_event = 'VimEnter'
     hook_post_source = '''lua <<EOF
@@ -1000,19 +1001,16 @@ EOF
     on_if = 'has("nvim")'
   # }}}
 
-  [[plugins]] # williamboman/nvim-lsp-installer {{{
-    repo = 'williamboman/nvim-lsp-installer'
+  [[plugins]] # williamboman/mason.nvim {{{
+    repo = 'williamboman/mason.nvim'
     if = 'has("nvim")'
-    on_event = 'BufEnter'
-    depends = ['nvim-lspconfig']
-    hook_post_source = '''lua <<EOF
-      local lsp_installer = require"nvim-lsp-installer"
-      lsp_installer.setup{}
+    hook_source = '''lua <<EOF
+      require"mason".setup{}
 
-      local lspconfig = require"lspconfig"
-      for _, server in ipairs(lsp_installer.get_installed_servers()) do
-        lspconfig[server.name].setup{}
-      end
+      -- local lspconfig = require"lspconfig"
+      -- for _, server in ipairs(mason.get_installed_servers()) do
+      --   lspconfig[server.name].setup{}
+      -- end
 EOF
     '''
   # }}}
@@ -1066,7 +1064,6 @@ EOF
                     group = augroup,
                     buffer = bufnr,
                     callback = function()
-                        vim.lsp.buf.formatting_seq_sync()
                     end,
                 })
             end
