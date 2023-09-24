@@ -97,7 +97,7 @@ zinit wait lucid for \
     sbin'' k4rthik/git-cal \
     make"!build" sbin'' x-motemen/ghq \
     make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' sbin'' src"zhook.zsh" direnv/direnv \
-    from"gh-r" sbin"bin/exa* -> exa" ogham/exa \
+    from"gh-r" sbin"eza -> eza" eza-community/eza \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
     from'gh-r' as"command" sbin"*/bin/gh -> gh" atclone'cp -av */share/man $ZPFX; ./*/bin/gh completion -s zsh > _gh' atpull'%atclone' id-as'github-cli' cli/cli \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
@@ -264,7 +264,7 @@ alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 
-(( $+commands[exa] )) && alias ls='exa'
+(( $+commands[eza] )) && alias ls='eza'
 (( $+commands[nvim] )) && alias vim='nvim' && export EDITOR=nvim
 (( $+commands[htop] )) && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
