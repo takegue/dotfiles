@@ -1,9 +1,8 @@
 [sqlfluff]
-
 dialect = bigquery
 sql_file_exts = .sql,.sql.j2,.dml,.ddl
-rules = core, L007, L011, L042, L055, L061
-exclude_rules = L045, LT05, LT01, LT02
+rules = core,L007,L011,L042,L055,L061
+exclude_rules = L045,LT05,LT01,LT02
 
 max_line_length = 120
 
@@ -12,7 +11,8 @@ allow_scalar = True
 single_table_references = consistent
 unquoted_identifiers_policy = all
 
-[sqlfluff:layout:type]
+[sqlfluff:layout:type:comma]
+spacing_before = touch
 line_position = trailing
 
 [sqlfluff:rules:capitalisation.keywords]
