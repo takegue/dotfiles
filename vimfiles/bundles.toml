@@ -1037,6 +1037,10 @@ EOF
   [[plugins]]
     repo = 'hrsh7th/cmp-cmdline'
     depends = ['nvim-cmp']
+
+  [[plugins]]
+    repo = 'petertriho/cmp-git'
+    depends = ['nvim-cmp']
   # }}}
 
   [[plugins]] # jose-elias-alvarez/null-ls.nvim {{{
@@ -1129,10 +1133,13 @@ EOF
         },
         sources = cmp.config.sources(
           {
+              { name = "git" }
+          },
+          {
               { name = 'nvim_lsp' }
           },
           {
-              { name = 'buffer' }
+              { name = 'buffer' },
           }
         ),
         formatting = {
@@ -1151,7 +1158,7 @@ EOF
     -- Set configuration for specific filetype.
     cmp.setup.filetype('gitcommit', {
         sources = cmp.config.sources({
-            { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+            { name = 'git' },
         }, {
             { name = 'buffer' },
         })
@@ -1175,8 +1182,14 @@ EOF
         })
     })
 
+    -- Setup Sources
+    require("cmp_git").setup()
+
     -- Setup lspconfig.
     -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+
+
 EOF
     '''
   # }}}
