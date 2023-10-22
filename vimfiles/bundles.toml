@@ -1084,6 +1084,7 @@ EOF
     repo = 'hrsh7th/nvim-cmp'
     on_event = 'VimEnter'
     if ='has("nvim")'
+    # if ='0'
     hook_post_source = '''lua <<EOF
 
     -- Setup nvim-cmp.
@@ -1108,23 +1109,22 @@ EOF
         },
         mapping = {
             ["<Tab>"] = cmp.mapping(function(fallback)
-
-            if vim.fn["neosnippet#expandable_or_jumpable"]() == 1 then
-              feedkey("<Plug>(neosnippet_jump_or_expand)", "")
-            elseif cmp.visible() then
-              cmp.select_next_item()
-            -- elseif has_words_before() then
-            --   cmp.complete()
-            else
-              fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-            end
-              end, { "i", "s" }),
+                if vim.fn["neosnippet#expandable_or_jumpable"]() == 1 then
+                  feedkey("<Plug>(neosnippet_jump_or_expand)", "")
+                elseif cmp.visible() then
+                  cmp.select_next_item()
+                elseif has_words_before() then
+                  cmp.complete()
+                else
+                  fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+                end
+              end, { "i", "n" }),
 
             ["<S-Tab>"] = cmp.mapping(function()
                 if cmp.visible() then
                     cmp.select_prev_item()
                 end
-            end, { "i", "s" }),
+            end, { "i" }),
 
         },
         sources = cmp.config.sources(
@@ -1169,7 +1169,9 @@ EOF
     cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-          { name = 'path' }
+        { name = 'path' }
+        }, {
+        { name = 'cmdline' }
         })
     })
 
