@@ -1043,6 +1043,12 @@ EOF
     depends = ['nvim-cmp']
   # }}}
 
+  [[plugins]]
+    repo = 'zbirenbaum/copilot-cmp'
+    depends = ['nvim-cmp']
+  # }}}
+
+
   [[plugins]] # jose-elias-alvarez/null-ls.nvim {{{
     repo = 'jose-elias-alvarez/null-ls.nvim'
     depends = 'plenary.nvim'
@@ -1077,11 +1083,21 @@ EOF
     '''
   # }}}
 
+  # [[plugins]]
+  #   repo = 'github/copilot.vim'
+  #   if = 'has("nvim")'
+  #   hook_add = '''
+  #     let g:copilot_assume_mapped = 1
+  #   '''
+
   [[plugins]]
-    repo = 'github/copilot.vim'
+    repo = 'zbirenbaum/copilot.lua'
     if = 'has("nvim")'
-    hook_add = '''
-      let g:copilot_assume_mapped = 1
+    hook_post_source = '''lua <<EOF
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
     '''
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
@@ -1102,7 +1118,14 @@ EOF
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
     end
 
+    require("copilot_cmp").setup()
     local lspkind = require('lspkind')
+    local has_words_before = function()
+      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+    end
+
     cmp.setup({
         experimental = {
           ghost_text = true
@@ -1112,17 +1135,19 @@ EOF
             documentation = cmp.config.window.bordered(),
         },
         mapping = {
-            ["<Tab>"] = cmp.mapping(function(fallback)
-                if vim.fn["neosnippet#expandable_or_jumpable"]() == 1 then
-                  feedkey("<Plug>(neosnippet_jump_or_expand)", "")
-                elseif cmp.visible() then
-                  cmp.select_next_item()
-                elseif has_words_before() then
-                  cmp.complete()
+            ["<Tab>"] = vim.schedule_wrap(function(fallback)
+                --if vim.fn["neosnippet#expandable_or_jumpable"]() == 1 then
+                --  feedkey("<Plug>(neosnippet_jump_or_expand)", "")
+                -- check if not empty suggetion by github copolot
+                -- elseif vim.fn["copilot#GetDisplayedSuggestion"]() then
+                --     vim.fn["copilot#Accept"]()
+                if cmp.visible() and has_words_before() then
+                  cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
                 else
                   fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
                 end
-              end, { "i", "n" }),
+              end),
+            ['<CR>'] = cmp.mapping.confirm { select = false },
 
             ["<S-Tab>"] = cmp.mapping(function()
                 if cmp.visible() then
@@ -1131,17 +1156,12 @@ EOF
             end, { "i" }),
 
         },
-        sources = cmp.config.sources(
-          {
-              { name = "git" }
-          },
-          {
-              { name = 'nvim_lsp' }
-          },
-          {
-              { name = 'buffer' },
-          }
-        ),
+        sources = {
+            { name = "git", group_index = 2 },
+            { name = "copilot", group_index = 2 },
+            { name = 'nvim_lsp', group_index = 2 },
+            { name = 'buffer', group_index = 2}
+        },
         formatting = {
             format = function (entry, vim_item)
                 if entry.source.name == "copilot" then
