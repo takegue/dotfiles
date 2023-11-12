@@ -25,6 +25,9 @@
     date = short
     decorate = full
 
+[commit]
+    verbose = true
+
 [diff]
     tool = vimdiff
     algorithm = patience
