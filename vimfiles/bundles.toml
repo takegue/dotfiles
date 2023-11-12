@@ -165,18 +165,18 @@ EOF
   repo = 'kyazdani42/nvim-web-devicons'
 # }}}
 
-[[plugins]] # SmiteshP/nvim-gps {{{
-  repo = 'SmiteshP/nvim-gps'
+[[plugins]] # SmiteshP/nvim-navic {{{
+  repo = 'SmiteshP/nvim-navic'
   on_if = 1
 # }}}
 
 [[plugins]] # nvim-lualine/lualine.nvim {{{
   repo = 'nvim-lualine/lualine.nvim'
   on_event = "VimEnter"
-  depends = ['nvim-web-devicons', 'nvim-gps']
+  depends = ['nvim-web-devicons', 'nvim-navic']
   hook_post_source  = '''lua <<EOF
-    local gps = require("nvim-gps")
-    gps.setup{depth = 0}
+    local navic = require("nvim-navic")
+    navic.setup{depth = 0}
     require('lualine').setup {
         options = {
             icons_enabled = true,
@@ -188,7 +188,7 @@ EOF
         sections = {
             lualine_c = {
                 { 'filename', path = 1 },
-                { gps.get_location, cond = gps.is_available },
+                { navic.get_location, cond = navic.is_available },
             }
         }
     }
