@@ -40,13 +40,6 @@ elseif has('gui_macvim')
 endif
 "}}}
 
-" Encodings: {{{
-" set encoding=utf8
-set termencoding=utf-8
-set fileencodings=utf-8,cp932,euc-jp
-set fileformats=unix,dos,mac
-" }}}
-
 " Display: {{{
 
 if exists('&ambiwidth')
@@ -75,26 +68,16 @@ set cindent
 set shiftwidth=4
 set softtabstop=4
 set wildmenu wildmode=longest,full
-
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
-set nofoldenable         " Disable folding at startup.
+set foldmethod=marker
+set foldlevel=1
 
 set display=lastline
 set cmdheight=2
 set pumheight=15
 
 set formatoptions+=tcqM1ro
-if v:version > 703 || v:version == 703 && has("patch541")
-  " Delete comment character when joining commented lines
-  set formatoptions+=j
-endif
-
-if v:version > 704 || v:version == 704 && has("patch786")
-  " Allow to make no-eol files.
-  set nofixeol
-endif
-
+set formatoptions+=j
+set nofixeol
 " デフォルト不可視文字は美しくないのでUnicodeで綺麗に
 set list lcs=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:~
 set fillchars=vert:\|
@@ -130,7 +113,6 @@ if has("cscope")
   nnoremap <Leader>n  :cscope find c <C-R><C-W><CR>
 endif
 "}}}
-
 
 " }}}
 
@@ -219,7 +201,6 @@ let mapleader=","
 let maplocalleader='\'
 
 nnoremap Q <nop>
-nnoremap C  "_C
 nnoremap G  Gzv
 
 "For Breaking off undo sequence.
@@ -234,35 +215,7 @@ inoremap <C-U> <C-g>u<C-U>
 nnoremap Y y$
 vnoremap v $h
 
-" カーソル下の単語を * で検索
-vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
-
-nnoremap g; g;zOzz
-nnoremap g, g,zOzz
-
-" 検索後にジャンプした際に検索単語を画面中央に持ってくる
-nnoremap * *N
-nnoremap # #N
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap g* g*N
-nnoremap g# g#N
-
-" Ctrl + hjkl でウィンドウ間を移動
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-nnoremap <silent> <C-W><C-z> :call tkngue#util#toggle_windowsize()<CR>
-nnoremap <silent> <C-W>z :call tkngue#util#toggle_windowsize()<CR>
-
 nnoremap <silent> <Space>o :call tkngue#util#open_folder_of_currentfile()<CR>
-
-if has('gui_running')
-  nnoremap <silent> <Space>.  :<C-u>tabnew $MYVIMRC<CR>:<C-u>vs $MYGVIMRC<CR>
-else
-  nnoremap <silent> <Space>.  :<C-u>e $MYVIMRC<CR>
-endif
 
 "バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
 cnoremap <expr> / getcmdtype() =~ '/' ? '\/' : '/'
@@ -358,23 +311,10 @@ function! s:additional_highlight() "{{{
   " echomsg 'called adiitoinal highlight'
 endfunction "}}}
 
-
-
 "}}}
 
 " Misc: {{{
-if has('nvim')
-  set shada=
-  " set shada=!,'50,<50,s10,h,:100,n/tmp/rdisk/nvim.shda,/20,
-  augroup user_shada
-      autocmd!
-      autocmd VimEnter * rshada ~/.local/share/nvim/shada/main.shada
-      autocmd VimEnter * set shada=!,'500,<50,s10,h
-  augroup END
-endif
 
-" w!! でスーパーユーザーとして保存（sudoが使える環境限定）
-cmap w!! w !sudo tee > /dev/null %
 " Open junk file
 command! -nargs=? -complete=filetype Memo
             \ call tkngue#util#open_junk_file('<args>')
@@ -393,7 +333,6 @@ function! s:openFTPluginFile()
   let l:ftpFileName = g:ftpPath . &filetype . ".vim"
   execute 'botright vsplit ' . l:ftpFileName
 endfunction
-
 
 function! s:cd_project_dir() abort
   let [l:path, l:lang, _] = tkngue#util#detect_project()
@@ -418,23 +357,12 @@ function! s:my_on_filetype() abort "{{{
   endif
 endfunction "}}}
 
-augroup office_format "{{{
-  autocmd!
-  autocmd BufRead *.{docx,xlsx,pptx,ppt,doc,xls,pdf}
-          \ set modifiable |
-          \ if tkngue#util#executable('tika') |
-          \   silent %d |  silent %read !tika --text %:p |
-          \ endif |
-          \ set readonly normal gg
-augroup END "}}}
-
 augroup TerminalSetting "{{{
   autocmd!
   autocmd TermOpen *
         \ setl nonumber
   autocmd TermOpen term://* startinsert
 augroup END "}}}
-
 
 augroup binaryfile "{{{
   autocmd!
@@ -467,7 +395,7 @@ augroup MyAutocmdGroup "{{{
   autocmd BufNewFile,BufRead *.todo
         \ set nonumber norelativenumber filetype=markdown
   " diff
-  autocmd  InsertLeave *
+  autocmd InsertLeave *
         \ if &diff | diffupdate | echo 'diff updated' | endif
   " large_file_config_for_smooth
   autocmd BufNewFile,BufRead * if &filetype != 'help' && line('$') > 10000 |
@@ -491,7 +419,6 @@ augroup MyAutocmdGroup "{{{
   autocmd FileType help nnoremap <buffer> <CR>  <C-]>
   autocmd FileType help nnoremap <buffer> <BS>  <C-o>
 
-
   " MEMO: Shdo するさいに lcdしてしまうのがうざいのでdisabled
   " autocmd BufRead * call s:cd_project_dir()
   autocmd VimEnter * if filereadable(expand("./.vimrc.local"))
@@ -503,14 +430,13 @@ augroup MyAutocmdGroup "{{{
 
   autocmd FileType,Syntax,BufNewFile,BufNew,BufRead *
         \ call s:my_on_filetype()
-
 augroup END
 "}}}
 
 "}}}
 
 "}}}
-"
+
 " Plugin Settings ============== {{{
 
 " Standard Vim plugins {{{
@@ -598,19 +524,16 @@ elseif has('vim_starting')
             colorscheme blue
         endtry
     endif
-endif
-"}}}
 
-if has('vim_starting')
     set t_Co=256
     syntax sync minlines=512
     filetype plugin indent off
     syntax off
 else
-  " THIS IS NOT BAD HACK
   call dein#call_hook('source')
   call dein#call_hook('post_source')
 endif
+"}}}
 
 "}}}
 

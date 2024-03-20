@@ -38,19 +38,26 @@
 
 [[plugins]] # nvim-tresitter/nvim-treesitter {{{
   repo = 'nvim-treesitter/nvim-treesitter'
-  hook_post_update = '''
-    TSUpdate
-  '''
-  hook_source = '''lua <<EOF
+  on_event = 'BufRead'
+  lua_source = '''
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    parser_config.sql_bigquery = {
+        install_info = {
+            -- url = "https://github.com/takegue/tree-sitter-sql-bigquery.git", -- local path or git repo
+            url = "~/.ghq/github.com/takegue/tree-sitter-sql-bigquery",
+            files = {"src/parser.c", "src/scanner.cc"},
+            branch = "main", -- default branch in case of git repo if different from master
+        },
+        filetype = "sql", -- if filetype does not match the parser name
+    }
+    vim.treesitter.language.register('sql_bigquery', 'sql') 
     require'nvim-treesitter.configs'.setup {
       -- A list of parser names, or "all"
-      ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript", "javascript"},
+      ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript", "javascript", "vimdoc", "sql_bigquery", "comment"},
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
       highlight = {
-        -- `false` will disable the whole extension
         enable = true,
-        -- disable = {},
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -77,19 +84,6 @@
     }
   }
 
-  local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-  parser_config.sql = {
-    install_info = {
-      url = "~/.ghq/github.com/takegue/tree-sitter-sql-bigquery", -- local path or git repo
-      files = {"src/parser.c", "src/scanner.cc"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
-      -- optional entries:
-      -- branch = "main", -- default branch in case of git repo if different from master
-      -- generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-      -- requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-    },
-    filetype = "sql", -- if filetype does not match the parser name
-  }
-EOF
   '''
 # }}}
 
@@ -100,6 +94,7 @@ EOF
 
 [[plugins]] # nvim-treesitter/nvim-treesitter-textobjects {{{
   repo = 'nvim-treesitter/nvim-treesitter-textobjects'
+  depends = ["nvim-treesitter"]
 
   hook_source = '''lua <<EOF
     require('nvim-treesitter.configs').setup {
@@ -1045,7 +1040,7 @@ EOF
 
   [[plugins]]
     repo = 'zbirenbaum/copilot-cmp'
-    depends = ['nvim-cmp']
+    depends = ['copilot.lua']
   # }}}
 
 
@@ -1083,17 +1078,10 @@ EOF
     '''
   # }}}
 
-  # [[plugins]]
-  #   repo = 'github/copilot.vim'
-  #   if = 'has("nvim")'
-  #   hook_add = '''
-  #     let g:copilot_assume_mapped = 1
-  #   '''
-
   [[plugins]]
     repo = 'zbirenbaum/copilot.lua'
-    if = 'has("nvim")'
-    hook_post_source = '''lua <<EOF
+    on_event = 'VimEnter'
+    lua_source = '''
       require("copilot").setup({
         suggestion = { enabled = false },
         panel = { enabled = false },
@@ -1102,6 +1090,7 @@ EOF
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
+    depends = ["lspkind.nvim", "copilot.lua"]
     on_event = 'VimEnter'
     if ='has("nvim")'
     # if ='0'

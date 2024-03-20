@@ -105,7 +105,7 @@ zinit wait lucid for \
     from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
     from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
-    from'gh-r' has'luajit' bpick"*.tar.gz" ver"stable" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim \
+    from'gh-r' has'luajit' bpick"*.tar.gz" ver"v0.9*" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim \
     from'gh-r' bpick"*.tar.gz" as'command' atclone='cp -av man/ $ZPFX/man1' atpull'%atclone' rhysd/actionlint
 
 zinit lucid as'null' sbin="bin/*" \
@@ -167,7 +167,6 @@ setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 setopt prompt_subst      # プロンプト定義内で変数置換やコマンド置換を扱う
 setopt notify            # バックグラウンドジョブの状態変化を即時報告する
 setopt equals            # =commandを`which command`と同じ処理にする
-
 autoload -Uz ls_abbrev
 
 DIRSTACKSIZE=200
