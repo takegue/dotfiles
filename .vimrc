@@ -7,7 +7,6 @@ scriptencoding utf-8
 if !1 | finish | endif
 if !&compatible | set nocompatible | endif      " Disable vi compatible
 
-
 " Echo startup time on start:{{{
 if has('vim_starting') && has('reltime')
   " Shell: vim --startuptime filename -q; vim filename
@@ -75,10 +74,12 @@ set winheight=8
 set cindent
 set shiftwidth=4
 set softtabstop=4
-set expandtab
 set wildmenu wildmode=longest,full
-set foldmethod=marker
-set foldlevel=1
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set nofoldenable         " Disable folding at startup.
+
 set display=lastline
 set cmdheight=2
 set pumheight=15
