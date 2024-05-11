@@ -307,7 +307,6 @@ add-zsh-hook preexec memo_cmd
 add-zsh-hook precmd render_info
 
 #### Export Configurations ####
-export PYTHONSTARTUP=~/.pythonstartup
 
 if [ -e "$HOME/Dropbox" ]; then
     alias todo="$EDITOR ~\/Dropbox\/.todo"
