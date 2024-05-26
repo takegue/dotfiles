@@ -1010,16 +1010,16 @@ EOF
   [[plugins]] # williamboman/mason.nvim {{{
     repo = 'williamboman/mason.nvim'
     if = 'has("nvim")'
-    hook_source = '''lua <<EOF
-      require"mason".setup{}
-
-      -- local lspconfig = require"lspconfig"
-      -- for _, server in ipairs(mason.get_installed_servers()) do
-      --   lspconfig[server.name].setup{}
-      -- end
-EOF
-    '''
+    lua_post_source = 'require"mason".setup{}'
   # }}}
+
+  [[plugins]] # williamboman/mason-lspconfig.nvim {{{
+    repo = 'williamboman/mason-lspconfig.nvim'
+    if = 'has("nvim")'
+	depends = ['mason.nvim']
+    lua_post_source = 'require"mason-lspconfig".setup{}'
+  # }}}
+
 
   [[plugins]] # hrsh7th/cmp-nvim-lsp {{{
     repo = 'hrsh7th/cmp-nvim-lsp'
@@ -1097,7 +1097,7 @@ EOF
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
-    depends = ["lspkind.nvim", "copilot-cmp", "cmp-git"]
+    depends = ["lspkind.nvim", "copilot-cmp", "cmp-git", "mason-lspconfig.nvim"]
     if ='has("nvim")'
     hook_post_source = '''lua <<EOF
 
@@ -1202,6 +1202,12 @@ EOF
     -- Setup lspconfig.
     -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+    -- auto lspconfig setting by mason-lspconfig
+    require('mason-lspconfig').setup_handlers {
+      function(server_name)
+	require('lspconfig')[server_name].setup {}
+      end,
+    }
 
 
 EOF
