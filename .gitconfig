@@ -98,6 +98,9 @@
             fi \
     }; f"
 
+	mkwt = "!f() { git worktree add \"$(git rev-parse --show-toplevel)+$@\"; }; f"
+	rmwt = "!f() { git worktree remove \"$(git rev-parse --show-toplevel)+$@\"; }; f"
+
 
 [commit]
     template = ~/.gitmessage

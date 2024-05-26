@@ -8,19 +8,24 @@
 #}}}
 
 # Appearence Plugins {{{
-[[plugins]] # vim-indent {{{
+[[plugins]] # shellRaining/hlchunk.nvim {{{
   on_if = 1
-  repo = 'nathanaelkane/vim-indent-guides'
-  hook_post_source= '''
-    let g:indent_guides_auto_colors = 0
-    hi IndentGuidesOdd  ctermbg=237
-    hi IndentGuidesEven ctermbg=None
-  '''
-  hook_source = '''
-      let g:indent_guides_enable_on_vim_startup = 1
-      let g:indent_guides_start_level = 2
-      let g:indent_guides_guide_size = 1
-      let g:indent_guides_default_mapping = 1
+  repo = 'shellRaining/hlchunk.nvim'
+  lua_post_source = '''
+    require('hlchunk').setup({
+    indent = {
+        chars = { "| " },
+        style = {
+            "#6F6F6F",
+        },
+    },
+    chunk = {
+        enable = false,
+        error_sign = true,
+        chars = {}
+    },
+    blank =  { enable = false},
+  })
   '''
 #}}}
 
@@ -38,8 +43,8 @@
 
 [[plugins]] # nvim-tresitter/nvim-treesitter {{{
   repo = 'nvim-treesitter/nvim-treesitter'
-  on_event = 'BufRead'
-  lua_source = '''
+  on_event = 'VimEnter'
+  lua_post_source = '''
     local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
     parser_config.sql_bigquery = {
         install_info = {
@@ -56,6 +61,9 @@
       ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript", "javascript", "vimdoc", "sql_bigquery", "comment"},
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
+      indent = {
+          enable = true
+      },
       highlight = {
         enable = true,
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -263,23 +271,26 @@ EOF
 [[plugins]] # kana/vim-textobj-datetime {{{
  # 日付オブジェクト#ada, add, adt
   repo = 'kana/vim-textobj-datetime'
-  on_if = 1
+  depends = ['vim-textobj-user']
 #}}}
 
 [[plugins]] # kana/vim-textobj-entire {{{
  # 全体オブジェクト
  # ae, ai
  repo = 'kana/vim-textobj-entire'
+ depends = ['vim-textobj-user']
 #}}}
 
 [[plugins]] # kana/vim-textobj-fold {{{
 # 降りたたみオブジェクト
 # az, iz
   repo = 'kana/vim-textobj-fold'
+  depends = ['vim-textobj-user']
  #}}}
 
 [[plugins]] # kana/vim-textobj-function {{{
   repo = 'kana/vim-textobj-function'
+  depends = ['vim-textobj-user']
   on_ft = ['cpp', 'java', 'vim']
  #}}}
 
@@ -287,12 +298,12 @@ EOF
 # URLオブジェクト
 # au, iu
   repo = 'mattn/vim-textobj-url'
-  on_if = 1
+  depends = ['vim-textobj-user']
 #}}}
 
 [[plugins]] # sgur/vim-textobj-parameter {{{
   repo = 'sgur/vim-textobj-parameter'
-  on_if = 1
+  depends = ['vim-textobj-user']
 #}}}
 
 # }}}
@@ -328,12 +339,12 @@ EOF
 
 [[plugins]] # emonkak/vim-operator-sort {{{
   repo = 'emonkak/vim-operator-sort'
-  on_if = 1
+  depends = ['vim-operator-user']
  #}}}
 
 [[plugins]] # kana/vim-operator-replace {{{
   repo = 'kana/vim-operator-replace'
-  on_if = 1
+  depends = ['vim-operator-user']
   hook_add = '''
     map _ <Plug>(operator-replace)
   '''
@@ -343,7 +354,7 @@ EOF
 
 [[plugins]] # michaeljsmith/vim-indent-object {{{
   repo = 'michaeljsmith/vim-indent-object'
-  on_if = 1
+  depends = ['vim-operator-user']
  #}}}
 
  #}}}
@@ -1019,7 +1030,6 @@ EOF
   # nvim-cmp sources {{{
   [[plugins]]
     repo = 'hrsh7th/cmp-buffer'
-    depends = ['nvim-cmp']
 
   [[plugins]]
     repo = 'onsails/lspkind.nvim'
@@ -1027,15 +1037,12 @@ EOF
 
   [[plugins]]
     repo = 'hrsh7th/cmp-path'
-    depends = ['nvim-cmp']
 
   [[plugins]]
     repo = 'hrsh7th/cmp-cmdline'
-    depends = ['nvim-cmp']
 
   [[plugins]]
     repo = 'petertriho/cmp-git'
-    depends = ['nvim-cmp']
   # }}}
 
   [[plugins]]
@@ -1046,7 +1053,7 @@ EOF
 
   [[plugins]] # jose-elias-alvarez/null-ls.nvim {{{
     repo = 'jose-elias-alvarez/null-ls.nvim'
-    depends = 'plenary.nvim'
+    depends = ['plenary.nvim']
     on_event = "BufEnter"
     hook_post_source = '''lua <<EOF
       local null_ls = require("null-ls");
@@ -1080,20 +1087,18 @@ EOF
 
   [[plugins]]
     repo = 'zbirenbaum/copilot.lua'
-    on_event = 'VimEnter'
-    lua_source = '''
-      require("copilot").setup({
-        suggestion = { enabled = false },
+    on_if = "1"
+    lua_post_source = '''
+    require("copilot").setup({
+	suggestion = { enabled = true },
         panel = { enabled = false },
       })
     '''
 
   [[plugins]] # hrsh7th/nvim-cmp {{{
     repo = 'hrsh7th/nvim-cmp'
-    depends = ["lspkind.nvim", "copilot.lua"]
-    on_event = 'VimEnter'
+    depends = ["lspkind.nvim", "copilot-cmp", "cmp-git"]
     if ='has("nvim")'
-    # if ='0'
     hook_post_source = '''lua <<EOF
 
     -- Setup nvim-cmp.
@@ -1192,7 +1197,7 @@ EOF
     })
 
     -- Setup Sources
-    require("cmp_git").setup()
+    -- require("cmp_git").setup()
 
     -- Setup lspconfig.
     -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -1254,20 +1259,7 @@ EOF
   repo = 'wannesm/wmgraphviz.vim'
 #}}}
 
-[[plugins]] # cespare/vim-toml {{{
-  repo = 'cespare/vim-toml'
-  on_ft = 'toml'
-#}}}
-
 # Vim: {{{
-  [[plugins]] # syngan/vim-vimlint {{{
-  # lint for vim script
-    repo = 'syngan/vim-vimlint'
-  on_ft = 'vim'
-  on_func = 'vimlint#vimlint'
-
-  #}}}
-
   [[plugins]] # vim-jp/vital.vim {{{
     on_ft = 'vim'
     repo = 'vim-jp/vital.vim'
@@ -1416,95 +1408,24 @@ hook_post_source = '''
   repo = 'junegunn/vim-easy-align'
  #}}}
 
-  # Latex {{{
-  [[plugins]] # lervag/vimtex {{{
-    repo = 'lervag/vimtex'
-    on_ft='tex'
 
-    hook_source = '''
-      let g:latex_fold_parts = [
-            \ "appendix",
-            \ "frontmatter",
-            \ "mainmatter",
-            \ "backmatter",
-            \ ]
-      let g:latex_fold_sections = [
-            \ "part",
-            \ "chapter",
-            \ "section",
-            \ "subsection",
-            \ "subsubsection",
-            \ ]
-
-    let g:latex_fold_enabled = 1
-    let g:latex_fold_automatic = 1
-    let g:latex_fold_envs = 1
-
-    let g:vimtex_quickfix_ignored_warnings = [
-        \ 'Underfull',
-        \ 'Overfull',
-        \ 'specifier changed to',
-      \ ]
-
-    let g:vimtex_compiler_latexmk = {
-    \ 'backend' : has('nvim') ? 'nvim' : "jobs",
-    \ 'background' : 1,
-    \ 'build_dir' : '',
-    \ 'callback' : 0,
-    \ 'continuous' : 1,
-    \ 'executable' : 'latexmk',
-    \ 'options' : [
-    \   '-pdfdvi',
-    \   '-verbose',
-    \   '-file-line-error',
-    \   '-synctex=1',
-    \   '-interaction=nonstopmode',
-    \ ],
-    \}
-
-    if has('unix') && executable('okular')
-      let g:vimtex_view_general_viewer = 'okular'
-      let g:vimtex_view_general_options = '--unique @pdf\#src:@line@tex'
-      let g:vimtex_view_general_options_latexmk = '--unique'
-    elseif has('mac')
-      let g:vimtex_view_general_viewer
-            \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-      let g:vimtex_view_general_options = '@line @pdf @tex'
-
-      let g:vimtex_latexmk_callback_hooks = ['UpdateSkim']
-      function! UpdateSkim(status)
-        if !a:status | return | endif
-
-        let l:out = b:vimtex.out()
-        let l:tex = expand('%:p')
-        let l:cmd = [g:vimtex_view_general_viewer, '-r']
-        if !empty(system('pgrep Skim'))
-          call extend(l:cmd, ['-g'])
-        endif
-        if has('nvim')
-          call jobstart(l:cmd + [line('.'), l:out, l:tex])
-        elseif has('job')
-          call job_start(l:cmd + [line('.'), l:out, l:tex])
-        else
-          call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
-        endif
-      endfunction
-    endif
-
-    if has('nvim') && tkngue#util#executable('nvr')
-      let g:vimtex_compiler_progname = 'nvr'
-      let g:vimtex_latexmk_callback = 0
-    endif
-
+[[plugins]] # Wansmer/treesj {{{
+  repo = 'Wansmer/treesj'
+  lua_post_source = '''
+    local tsj = require('treesj')
+    tsj.setup({
+        use_default_keymaps = true,
+	check_syntax_error = true,
+        max_join_length = 120,
+        cursor_behavior = 'hold',
+        notify = true,
+        dot_repeat = true,
+        on_error = nil,
+    })
+    vim.keymap.set('n', '<leader>m', require('treesj').toggle)
   '''
-  #}}}
 
-  [[plugins]] # kana/vim-smartchr {{{
-    repo = 'kana/vim-smartchr'
-  on_ft = 'tex'
  #}}}
-
-  # }}}
 
   # Markdown {{{
   [[plugins]] # rcmdnk/vim-markdown {{{
@@ -1559,7 +1480,7 @@ hook_post_source = '''
         on_if = 'finddir(".git", "./;/") != ""'
         # if = 1
         augroup = 'fugitive'
-        hook_add = '''
+        hook_post_source = '''
           function! ConfigOnGitRepository() "{{{
             let l:root_path = FugitiveGitDir()
             if empty(l:root_path)
