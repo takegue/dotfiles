@@ -77,29 +77,22 @@
     showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...origin/HEAD  | grep 'Merge pull request #' | head -n 1; }; f "
     # Merge GitHub pull request on top of the `master` branch
     mpr = "!f() { \
-            if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-                    git fetch origin refs/pull/$1/head:pr/$1 && \
-                    git rebase master pr/$1 && \
-                    git checkout master && \
-                    git merge pr/$1 && \
-                    git branch -D pr/$1 && \
-                    git commit --amend -m \"$(git log -1 --pretty=%B)  Closes #$1.\"; \
-            fi \
+		if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
+			git fetch origin refs/pull/$1/head:pr/$1 && \
+			git rebase master pr/$1 && \
+			git checkout master && \
+			git merge pr/$1 && \
+			git branch -D pr/$1 && \
+			git commit --amend -m \"$(git log -1 --pretty=%B)  Closes #$1.\"; \
+		fi \
     }; f"
 
-    wks = "!f() { \
-            if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-                    git fetch origin refs/pull/$1/head:pr/$1 && \
-                    git rebase master pr/$1 && \
-                    git checkout master && \
-                    git merge pr/$1 && \
-                    git branch -D pr/$1 && \
-                    git commit --amend -m \"$(git log -1 --pretty=%B)  Closes #$1.\"; \
-            fi \
-    }; f"
-
-	mkwt = "!f() { git worktree add \"$(git rev-parse --show-toplevel)+$@\"; }; f"
-	rmwt = "!f() { git worktree remove \"$(git rev-parse --show-toplevel)+$@\"; }; f"
+	mkwt = "!f() { \
+		DEST=\"$(git rev-parse --show-toplevel)+$@\"; \
+		git worktree prune; \
+		git worktree add \"$DEST\" \"$@\"; \
+		git ls-files -o | xargs -I {} cp -v {} ${DEST}; \
+	}; f"
 
 
 [commit]
