@@ -7,7 +7,7 @@
   '''
 #}}}
 
-# Appearence Plugins {{{
+# Appearance Plugins {{{
 [[plugins]] # shellRaining/hlchunk.nvim {{{
   on_if = 1
   repo = 'shellRaining/hlchunk.nvim'
@@ -46,16 +46,7 @@
   on_event = 'VimEnter'
   lua_post_source = '''
     local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-    parser_config.sql_bigquery = {
-        install_info = {
-            -- url = "https://github.com/takegue/tree-sitter-sql-bigquery.git", -- local path or git repo
-            url = "~/.ghq/github.com/takegue/tree-sitter-sql-bigquery",
-            files = {"src/parser.c", "src/scanner.cc"},
-            branch = "main", -- default branch in case of git repo if different from master
-        },
-        filetype = "sql", -- if filetype does not match the parser name
-    }
-    vim.treesitter.language.register('sql_bigquery', 'sql') 
+    -- vim.treesitter.language.register('sql_bigquery', 'sql') 
     require'nvim-treesitter.configs'.setup {
       -- A list of parser names, or "all"
       ensure_installed = { "c", "lua", "rust", "vim", "python", "typescript", "javascript", "vimdoc", "sql_bigquery", "comment"},
@@ -66,11 +57,6 @@
       },
       highlight = {
         enable = true,
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        -- additional_vim_regex_highlighting = false,
       },
       playground = {
         enable = true,
@@ -213,7 +199,7 @@ EOF
 
 [[plugins]] # akinsho/bufferline.nvim' {{{
   repo = 'akinsho/bufferline.nvim'
-  rev = 'v2.*'
+   rev = 'v4.*'
   depends = ['nvim-web-devicons']
   on_event = 'VimEnter'
   hook_post_source = '''lua <<EOF
@@ -1007,6 +993,11 @@ EOF
     on_if = 'has("nvim")'
   # }}}
 
+  [[plugins]] # williamboman/mason-lspconfig.nvim {{{
+    repo = 'williamboman/mason-lspconfig.nvim'
+    if = 'has("nvim")'
+  # }}}
+
   [[plugins]] # williamboman/mason.nvim {{{
     repo = 'williamboman/mason.nvim'
     if = 'has("nvim")'
@@ -1016,7 +1007,7 @@ EOF
   [[plugins]] # williamboman/mason-lspconfig.nvim {{{
     repo = 'williamboman/mason-lspconfig.nvim'
     if = 'has("nvim")'
-	depends = ['mason.nvim']
+    depends = ['mason.nvim']
     lua_post_source = 'require"mason-lspconfig".setup{}'
   # }}}
 
@@ -1201,16 +1192,13 @@ EOF
 
     -- Setup lspconfig.
     -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
     -- auto lspconfig setting by mason-lspconfig
     require('mason-lspconfig').setup_handlers {
       function(server_name)
-	require('lspconfig')[server_name].setup {}
+      require('lspconfig')[server_name].setup {}
       end,
     }
 
-
-EOF
     '''
   # }}}
 

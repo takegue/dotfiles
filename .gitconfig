@@ -32,8 +32,8 @@
     tool = vimdiff
     algorithm = patience
 
-[credential]
-    helper = "cache --timeout 1800"
+; [credential]
+;     helper = "cache --timeout 1800"
 
 [diff "office"]
     binary = true
@@ -57,7 +57,7 @@
     ; pushf = push --force-with-lease --force-if-includes
     pushf = push --force-with-lease
     # List contributors with number of commits
-    contributors = shortlog --summary --numbered
+    contributors = "!f() { git shortlog --summary --numbered $@; }; f"
     mainline = "!f() { git switch -C $(git rev-parse --abbrev-ref origin/HEAD | cut -d/ -f2) origin/HEAD; }; f"
 
 
@@ -87,12 +87,9 @@
 		fi \
     }; f"
 
-	mkwt = "!f() { \
-		DEST=\"$(git rev-parse --show-toplevel)+$@\"; \
-		git worktree prune; \
-		git worktree add \"$DEST\" \"$@\"; \
-		git ls-files -o | xargs -I {} cp -v {} ${DEST}; \
-	}; f"
+	mkwt = "!f() { git worktree add \"$(git rev-parse --show-toplevel)+$@\" "$@"; }; f"
+	rmwt = "!f() { git worktree remove \"$(git rev-parse --show-toplevel)+$@\"; }; f"
+	gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
 
 
 [commit]
@@ -103,8 +100,12 @@
 
 [rebase]
     autosquash = true
+    autostash = true
 
 [ghq]
     root = "~/.ghq"
 [pull]
     ff = only
+
+[rerere]
+	enabled = true

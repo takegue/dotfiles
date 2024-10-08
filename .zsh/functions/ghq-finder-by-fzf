@@ -12,15 +12,15 @@ END{for(key in min) print key, min[key]}
 '
 
 ghq-list-historical-ordered() {
-    join -a 1 -e 1000 -o 0 2.2 \
+    join -a 1 -e 1000 -o 0,2.2 \
         <(ghq list | sort) \
-        <(cat ~/.zdirs | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk "$_AWK_GROUP_BY_MIN" | sort) \
+        <(cat $DIRSTACKFILE | grep "$_GHQ_ROOT" | sed "s:$_GHQ_ROOT/::" | cut -d/ -f1,2,3 | nl | awk '{print $2,$1}' | awk "$_AWK_GROUP_BY_MIN" | sort) \
     | sort -k2n \
     | awk '{print $1}'
 }
 
 ghq-finder-by-fzf() {
-    local dir repository session current_session
+    local dir repository workspace session current_session current_window
     FZF=fzf
 
     dir="$_GHQ_ROOT/$(ghq-list-historical-ordered | $FZF --reverse +s +m --prompt='Project >')"
@@ -28,19 +28,28 @@ ghq-finder-by-fzf() {
     if [[ $dir != "$(ghq root)/" ]]; then
         if [[ ! -z ${TMUX} ]]; then
             repository=${dir##*/}
-            session=${repository//./-}
+            session=${repository%%+*}
+            workspace=$([[ ${repository#*+} != $session ]] && echo ${repository#*+} || echo "trunk")
             current_session=$(tmux list-sessions | grep 'attached' | cut -d":" -f1)
+            current_window=$(tmux list-windows | grep '(active)' | cut -d" " -f2)
 
+            # Switch session
             if [[ $current_session =~ ^[0-9]+$ ]]; then
                 tmux send-key -t "$current_session" "cd $dir" Enter
                 tmux rename-session $session
             else
-                tmux list-sessions | cut -d":" -f1 | grep "$session$" > /dev/null
-                if [[ $? != 0 ]]; then
-                    tmux new-session -d -c $dir -s $session
+                if ! { tmux list-sessions | cut -d":" -f1 | grep "$session$" > /dev/null; }; then
+                    tmux new-session -d -c $dir -s $session -n $workspace
                 fi
                 tmux switch-client -t $session
             fi
+
+            # Workspace management
+            if ! { tmux list-windows | cut -d" " -f2 | grep "$workspace" > /dev/null; }; then
+                tmux new-window -d -c $dir -n $workspace
+            fi
+            tmux select-window -t $workspace
+
         elif [[ ! -z ${VSCODE_IPC_HOOK_CLI} ]]; then
             code $dir
         else

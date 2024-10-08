@@ -314,7 +314,6 @@ endfunction "}}}
 "}}}
 
 " Misc: {{{
-
 " Open junk file
 command! -nargs=? -complete=filetype Memo
             \ call tkngue#util#open_junk_file('<args>')
