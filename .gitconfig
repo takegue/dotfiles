@@ -87,7 +87,7 @@
 		fi \
     }; f"
 
-	mkwt = "!f() { git worktree add \"$(git rev-parse --show-toplevel)+$@\" "$@"; }; f"
+	mkwt = "!f() { tgt=\"$(git rev-parse --show-toplevel)+$@\" git worktree add "$tgt" "$@"; rsync --files-from=<(git ls-files -o --ignored -x '*') . $tgt }; f"
 	rmwt = "!f() { git worktree remove \"$(git rev-parse --show-toplevel)+$@\"; }; f"
 	gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
 
