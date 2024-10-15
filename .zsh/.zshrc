@@ -81,7 +81,6 @@ zinit wait lucid for \
     zsh-users/zsh-history-substring-search \
     blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions
 
-
 # Install Deno
 zinit ice as"program" id-as"deno" pick"bin/deno"\
     atclone"DENO_INSTALL=\$(pwd) sh deno; rm -f deno" atpull'%atclone'
@@ -89,21 +88,20 @@ zinit snippet "https://deno.land/install.sh"
 
 # Install Google Cloud SDK
 zinit ice as'null' id-as"google-cloud-sdk.tar.gz" \
-    atclone'tar zxfa *.tar.gz && ./google-cloud-sdk/install.sh -q --path-update false --usage-reporting false' \
+    atclone'tar zxvf *.tar.gz && ./google-cloud-sdk/install.sh -q --path-update false --usage-reporting false' \
     src'google-cloud-sdk/path.zsh.inc' atpull'%atclone'
-zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-337.0.0-linux-x86_64.tar.gz?hl=ja"
+zinit snippet "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-\$(curl -sq https://raw.githubusercontent.com/google-github-actions/setup-cloud-sdk/main/data/versions.json | jq -r '.[-1]')-${OSNAME}-$(uname -m).tar.gz?hl=ja"
+ # google-cloud-cli-461.0.0-darwin-arm.tar.gz
+ # curl https://raw.githubusercontent.com/google-github-actions/setup-cloud-sdk/main/data/versions.json | jq -r '.[-1]'
 
 zinit wait lucid for \
     sbin'' k4rthik/git-cal \
     make"!build" sbin'' x-motemen/ghq \
     make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' sbin'' src"zhook.zsh" direnv/direnv \
-    from"gh-r" sbin"eza -> eza" eza-community/eza \
     from"gh-r" sbin"win32yank* -> win32yank" equalsraf/win32yank \
     from'gh-r' as"command" sbin"*/bin/gh -> gh" atclone'cp -av */share/man $ZPFX; ./*/bin/gh completion -s zsh > _gh' atpull'%atclone' id-as'github-cli' cli/cli \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
-    from'gh-r' has'kubectl' bpick'kustomize*' sbin'kustomize' kubernetes-sigs/kustomize \
-    from'gh-r' has'rustc' sbin'rust-analyzer* -> rust-analyzer' rust-analyzer/rust-analyzer \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
     from'gh-r' has'luajit' bpick"*.tar.gz" ver"v0.9*" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim \
     from'gh-r' bpick"*.tar.gz" as'command' atclone='cp -av man/ $ZPFX/man1' atpull'%atclone' rhysd/actionlint
@@ -263,12 +261,14 @@ alias rm='rm -i'
 alias sort="LC_ALL=C sort"
 alias uniq="LC_ALL=C uniq"
 
+(( $+commands[brew] )) && eval "$(/opt/homebrew/bin/brew shellenv)"
+(( $+commands[eza] )) && eval "$(direnv hook zsh)"
 (( $+commands[eza] )) && alias ls='eza'
 (( $+commands[nvim] )) && alias vim='nvim' && export EDITOR=nvim
 (( $+commands[htop] )) && alias top='htop'
 # [[ -x `which nvim 2>/dev/null` ]]  && alias vim='nvim'
 (( $+commands[pygmentize] )) && alias c='pygmentize -O style=monokai -f console256 -g'
-(( $+commands[hub] )) && alias git='hub'
+# (( $+commands[hub] )) && alias git='hub'
 
 # ------------------------------
 # Functions
@@ -324,3 +324,4 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
+
