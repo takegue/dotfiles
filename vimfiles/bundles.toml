@@ -399,6 +399,88 @@ EOF
 # }}}
 
 #}}}
+#
+# Telescope plugins {{{
+
+  [[plugins]] # nvim-telescope/telescope.nvim {{{
+    repo = 'nvim-telescope/telescope.nvim'
+    if = "has('nvim') && has('python3')"
+    depends = ['plenary.nvim', 'popup.nvim', 'telescope-frecency.nvim', 'telescope-fzf-native.nvim']
+
+    lua_post_source = '''
+    require("telescope").load_extension "frecency"
+    require('telescope').load_extension('fzf')
+
+    local actions = require 'telescope.actions'
+    local cycle = require "telescope.cycle"(
+            function()
+            local cwd = vim.fn.FugitiveGitDir(vim.fn.bufnr(""))
+            if cwd == "" then
+            require"telescope.utils".buffer_dir()
+            else
+            -- cwd = cwd:sub(1, -5)
+            require"telescope.utils".buffer_dir()
+            -- require"telescope.builtin".find_files { cwd = cwd, search_dirs = cwd, follow = true }
+            end
+            end,
+            require "telescope.builtin".buffers,
+            function()
+            local sorter = require 'telescope.config'.values.file_sorter()
+            require 'telescope'.extensions.frecency.frecency { sorter = sorter }
+            end
+            )
+    -- vim.keymap.set({"n", "i"}, "<leader>ff", function() cycle() end, opts)
+    require('telescope').setup{
+        defaults = {
+            -- Default configuration for telescope goes here:
+                -- config_key = value,
+            mappings = {
+                i = {
+                    ["<esc>"] = actions.close,
+                    ["<C-]>"] = function() cycle.next() end,
+                    ["<C-[>"] = function() cycle.next() end,
+                    ["<C-h>"] = actions.which_key,
+                    ["<C-s>"] = actions.select_horizontal,
+                    ["<C-Down>"] = require('telescope.actions').cycle_history_next,
+                    ["<C-Up>"] = require('telescope.actions').cycle_history_prev,
+                },
+            },
+        },
+                 extensions = {
+                     fzf = {
+                         fuzzy = true,                    -- false will only do exact matching
+                             override_generic_sorter = true,  -- override the generic sorter
+                             override_file_sorter = true,     -- override the file sorter
+                             case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                     }
+                 }
+	}
+    '''
+
+    hook_add = '''
+    nnoremap <leader>ff <cmd>Telescope find_files <cr>
+    nnoremap <leader>fgg <cmd>Telescope live_grep<cr>
+    nnoremap <leader>fb <cmd>Telescope buffers<cr>
+    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+    nnoremap <silent> <Space>. <cmd>Telescope git_files cwd=~/.dotfiles<CR>
+
+    cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Telescope help_tags<cr>' : 'h '
+    '''
+  # }}}
+
+  [[plugins]] # nvim-telescope/telescope-frecency.nvim {{{
+    repo = 'nvim-telescope/telescope-frecency.nvim'
+    if = "has('nvim') && has('python3')"
+  # }}}
+
+  [[plugins]] # nvim-telescope/telescope-fzf-native.nvim {{{
+    repo = 'nvim-telescope/telescope-fzf-native.nvim'
+    if = "has('nvim')"
+    build = 'make'
+  # }}}
+
+
+#}}}
 
 # Unite plugins {{{
 
@@ -437,10 +519,6 @@ EOF
     '''
 
     hook_add = '''
-      cnoremap <silent><expr> h<Space>  getcmdtype() == ':' && getcmdline() == '' ? 'Denite -start-filter help<CR>' : 'h '
-      nnoremap <silent> <Space>. :<C-u>Denite -start-filter -buffer-name=dotfiles file/rec/git:~/.dotfiles<CR>
-
-
       nnoremap [denite]    <Nop>
       nmap    <Leader>f  [denite]
       nnoremap  [denite]s  :<C-u>Denite -start-filter source<CR>
@@ -461,10 +539,8 @@ EOF
       nnoremap <silent> [denite]l :<C-u>Denite -start-filter  -buffer-name=search-lines line<CR>
       nnoremap <silent> [denite]gf :<C-u>Denite -start-filter -buffer-name=search-buffers grep:$buffers<CR>
       nnoremap <silent> [denite]gj :<C-u>Denite -start-filter -buffer-name=search-junks grep:$JUNK:-i<CR>
-      nnoremap <silent> [denite]gg :<C-u>Denite -start-filter -buffer-name=search-grep grep<CR>
       nnoremap <silent> [denite]gc :<C-u>Denite -start-filter -buffer-name=search-grep grep <CR><C-R><C-W><CR>
       nnoremap <silent> [denite]z :<C-u>Denite -silent fold -vertical -winwidth=40 -no-start-insert<CR>
-      nnoremap <silent> g<C-h>  :<C-u>DeniteWithCursorWord -start-filter -buffer-name=help help<CR>
 
       " Define mappings
       autocmd FileType denite call s:denite_my_settings()
@@ -521,7 +597,7 @@ EOF
 #}}}
 
 [[plugins]] # vim-precious {{{
-# Vim constext filetype
+ # Vim context filetype
   repo = 'osyo-manga/vim-precious'
   augroup = 'vim-precious'
   if= 0
@@ -1077,6 +1153,12 @@ EOF
   # }}}
 
   [[plugins]]
+    repo = 'pwntester/octo.nvim'
+    on_if = "1"
+    depends = ['telescope.nvim']
+    lua_post_source = 'require"octo".setup()'
+
+  [[plugins]]
     repo = 'zbirenbaum/copilot.lua'
     on_if = "1"
     lua_post_source = '''
@@ -1524,11 +1606,11 @@ hook_post_source = '''
       #}}}
 #
       [[plugins]]
-        repo = 'tommcdo/vim-fubitive'
-        depends = ['vim-fugitive']
-        hook_add = '''
-        '''
-
+        repo = 'lewis6991/gitsigns.nvim'
+				lua_post_source = '''
+						require('gitsigns').setup()
+				'''
+						
       [[plugins]]
         repo = 'tpope/vim-rhubarb'
         depends = ['vim-fugitive']

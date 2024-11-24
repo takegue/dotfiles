@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Delete all the runs for a given workflow
+# Usage: delete-runs.sh <repository> <workflow-name>
+
+set -oe pipefail
+
+REPOSITORY=$1
+WORKFLOW_NAME=$2
+
+# Validate arguments
+if [[ -z "$REPOSITORY" ]]; then
+  echo "Repository is required"
+  exit 1
+fi
+
+if [[ -z "$WORKFLOW_NAME" ]]; then
+  echo "Workflow name is required"
+  exit 1
+fi
+
+echo "Getting all completed runs for workflow $WORKFLOW_NAME in $REPOSITORY"
+
+RUNS=$(
+  gh run list --json "conclusion,databaseId" --jq '.[] | select(.conclusion != "") | .databaseId' -w "$2"
+)
+
+echo "Found $(echo "$RUNS" | wc -l) completed runs for workflow $WORKFLOW_NAME"
+
+for RUN in $RUNS; do
+  gh run delete --repo $REPOSITORY $RUN || echo "Failed to delete run $RUN"
+  sleep 0.1
+done

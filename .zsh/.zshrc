@@ -103,7 +103,7 @@ zinit wait lucid for \
     from'gh-r' has'kubectl' bpick'kubens*' sbin'kubens' id-as'kubens' ahmetb/kubectx \
     from'gh-r' has'kubectl' bpick'kubectx*' sbin'kubectx' id-as'kubectx' ahmetb/kubectx \
     from'gh-r' has'rustc' sbin'gctx* -> gctx' adamrodger/gcloud-ctx \
-    from'gh-r' has'luajit' bpick"*.tar.gz" ver"v0.9*" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim \
+    from'gh-r' has'luajit' bpick"*.tar.gz" ver"v0.10.2" as'command' atclone='cp -av */share/man/ $ZPFX/' atpull'%atclone' sbin'*/bin/*' neovim/neovim \
     from'gh-r' bpick"*.tar.gz" as'command' atclone='cp -av man/ $ZPFX/man1' atpull'%atclone' rhysd/actionlint
 
 zinit lucid as'null' sbin="bin/*" \
